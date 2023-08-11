@@ -29,21 +29,37 @@
 						</picture>
 						<div class="auth__wrapper">
 							<div class="auth__top">
-								<h1 class="auth__heading">Сброс пароля</h1>
-								<p class="auth__description">Укажите ваш номер телефона, <br>на который придет SMS с кодом входа.</p>
+								<h1 class="auth__heading">Вход сотрудника</h1>
+								<p class="auth__description">Корпоративный портал холдинга <br>“Аптека групп”</p>
 							</div>
-							<form action="#" class="auth-form auth__form">
+							<form action="#" class="auth-form auth__form is--error">
 								<div class="input-field auth-form__input">
 									<div class="input-field__inner">
-										<input type="text" class="input-field__input" placeholder="Например, +375 (29) 123-11-12">
+										<input type="text" class="input-field__input" placeholder="Логин" value="Iavanov_K_D">
 									</div>
 								</div>
-								<a href="index.html" class="auth-form__help">Вернуться к форме входа</a>
+								<div class="input-field auth-form__input">
+									<div class="input-field__inner">
+										<input type="password" class="input-field__input" placeholder="Пароль" value="qwerty">
+										<button class="input-field__visibility">
+											<svg class="input-field__visibility-icon input-field__visibility-icon--default">
+												<use xlink:href="img/sprite.svg#icon-eye"></use>
+											</svg>
+											<svg class="input-field__visibility-icon input-field__visibility-icon--active">
+												<use xlink:href="img/sprite.svg#icon-eye-slash"></use>
+											</svg>
+										</button>
+									</div>
+								</div>
+								<a href="restore-password.html" class="auth-form__help">Не удается войти?</a>
 								<div class="auth-form__bottom">
-									<span class="auth-form__error">Несуществующий номер телефона</span>
-									<button class="auth-form__btn btn">Отправить код</button>
+									<span class="auth-form__error">Несуществующий пользователь или пароль</span>
+									<button class="auth-form__btn btn">Войти</button>
 								</div>
 							</form>
+							<picture class="auth__img">
+								<img src="img/auth-bg-mobile.svg" alt="Image">
+							</picture>
 						</div>
 					</div>
 				</div>
