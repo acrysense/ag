@@ -1,0 +1,78 @@
+name: Build Pages + Release (Bitrix-ready)
+
+on:
+  push:
+    branches: [ main ]
+    tags:     [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-gh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+      - run: npm i
+      - name: Build for GitHub Pages
+        env:
+          MODE: gh
+          BASE: /NAME/
+          SITE_URL: https://acrysense.github.io
+          CANONICAL_BASE: https://acrysense.github.io/NAME/
+          CANONICAL_OFF: "0"
+        run: |
+          npm run prebuild || echo "no prebuild"
+          npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: ./dist }
+
+  deploy-pages:
+    needs: build-gh
+    runs-on: ubuntu-latest
+    environment: { name: github-pages }
+    steps:
+      - uses: actions/deploy-pages@v4
+
+  build-cms:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '22', cache: 'npm' }
+      - run: npm i
+      - name: Build for Bitrix (CMS)
+        env:
+          MODE: cms
+          BASE: /local/templates/NAME/dist/
+          CANONICAL_OFF: "1"
+        run: |
+          npm run prebuild || echo "no prebuild"
+          npm run build
+          cd dist && zip -r ../dist.zip . && cd ..
+      - name: Upload CMS dist (artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-cms
+          path: dist.zip
+          retention-days: 7
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-cms
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist-cms
+          path: .
+      - name: Create GitHub Release with dist.zip
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist.zip
+          generate_release_notes: true

@@ -1,0 +1,13 @@
+@use '@/assets/styles/base/mixins' as *;
+
+@layer components {
+    .main {
+        // for mobile-first
+        // @include up(tablet) {}
+        // @include up(desktop) {}
+        
+        // for desktop-fist
+        // @include only(tablet) {}
+        // @include only(mobile) {}
+    }
+}

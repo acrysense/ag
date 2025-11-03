@@ -1,0 +1,20 @@
+@layer base {
+	html {
+		font-size: 16px;
+	}
+
+	body {
+		font-family: 'Helvetica Neue', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+		line-height: 1;
+		color: #000000;
+	}
+
+	a {
+		transition: color 0.25s ease-in-out;
+	}
+
+	svg {
+		transition: color 0.25s ease-in-out;
+	}
+}
+
