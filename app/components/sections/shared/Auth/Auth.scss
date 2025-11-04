@@ -45,9 +45,9 @@
 
             @media screen and (hover: hover) {
                 &:hover {
-                    color: $color-blue-hover;
+                    color: $color-blue;
                     & > svg {
-                        color: $color-blue-hover;
+                        color: $color-blue;
                     }
                 }
             }
@@ -202,6 +202,11 @@
             @include prop-vw(font-size, 12, xl);
             font-weight: normal;
 
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 10, sm);
                 @include prop-vw(font-size, 12, sm);
