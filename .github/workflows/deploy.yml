@@ -22,9 +22,9 @@ jobs:
       - name: Build for GitHub Pages
         env:
           MODE: gh
-          BASE: /NAME/
+          BASE: /ag/
           SITE_URL: https://acrysense.github.io
-          CANONICAL_BASE: https://acrysense.github.io/NAME/
+          CANONICAL_BASE: https://acrysense.github.io/ag/
           CANONICAL_OFF: "0"
         run: |
           npm run prebuild || echo "no prebuild"
@@ -49,7 +49,7 @@ jobs:
       - name: Build for Bitrix (CMS)
         env:
           MODE: cms
-          BASE: /local/templates/NAME/dist/
+          BASE: /local/templates/ag/dist/
           CANONICAL_OFF: "1"
         run: |
           npm run prebuild || echo "no prebuild"
