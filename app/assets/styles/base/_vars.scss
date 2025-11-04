@@ -1,9 +1,16 @@
 // fonts
-$font-base: 'Helvetica Neue', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+$font-base: 'Inter Tight', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+$font-secondary: 'RFRufo';
 
 // colors
 $color-white: #FFFFFF;
 $color-full-black: #000000;
+$color-black: #0F1A24;
+$color-dark-grey: #737F8C;
+$color-grey: #D2DCE5;
+$color-blue: #0081FF;
+$color-blue-hover: #0D75DA;
+$color-red: #BC4141;
 
 // transition
 $transition-default: 0.25s ease-in-out;

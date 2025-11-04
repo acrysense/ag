@@ -2,5 +2,36 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
-    .btn {}
+    .btn {
+        display: block;
+        @include prop-vw(padding-block, 17, xl);
+        @include prop-vw(padding-inline, 26, xl);
+        @include prop-vw(font-size, 16, xl);
+        font-weight: 600;
+        line-height: 1;
+        text-align: center;
+        color: $color-white;
+        background: $color-blue;
+        border: none;
+        @include prop-vw(border-radius, 14, xl);
+        transition: color $transition-default, background $transition-default;
+        &:focus {
+            outline: none;
+        }
+        &[disabled] {
+            background: $color-blue-hover;
+        }
+
+        @media screen and (hover: hover) {
+            &:hover:not([disabled]) {
+                background: $color-blue-hover;
+            }
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-block, 17, sm);
+            @include prop-vw(padding-inline, 26, sm);
+            @include prop-vw(font-size, 16, sm);
+            @include prop-vw(border-radius, 14, sm);
+        }
+    }
 }

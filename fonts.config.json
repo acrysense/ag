@@ -4,8 +4,8 @@
         "varWght": "300 700"
     },
     "families": {
-        "HelveticaNeue": {
-            "cssFamily": "Helvetica Neue",
+        "InterTight": {
+            "cssFamily": "Inter Tight",
             "normal": { "varWght": "300 700" },
             "italic": { "varWght": "300 700" }
         }

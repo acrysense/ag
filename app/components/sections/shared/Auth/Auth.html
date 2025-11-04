@@ -1,0 +1,60 @@
+<section class="auth" data-module="Auth" data-path="sections/shared">
+    <div class="auth__wrap">
+        <a href="/" class="auth__back">
+            <svg aria-hidden="true" focusable="false" width="12" height="16">
+                <use href="#icon-arrow-back"></use>
+            </svg>
+            <span>Вернуться к порталу</span>
+        </a>
+        <div class="auth__main">
+            <picture class="auth__logotype">
+                <img src="/assets/images/logotype.svg" width="118" height="120" alt="AG">
+            </picture>
+            {{#if auth.recovery}}
+                <div class="auth__wrapper">
+                    <div class="auth__top">
+                        <span class="auth__title">Восстановление пароля</span>
+                        <span class="auth__description">Для восстановления доступа к порталу обратитесь <br>в техподдержу по адресу <a href="mailto:support@aptphg.by">support@aptphg.by</a></span>
+                    </div>
+                    {{> components/Button/Button props=(obj
+                        class='auth__btn'
+                        href="/login"
+                        text='К форме входа'
+                    )}}
+                </div>
+            {{else}}
+                <div class="auth__wrapper">
+                    <div class="auth__top">
+                        <span class="auth__title">Вход сотрудника</span>
+                        <span class="auth__description">Корпоративный портал холдинга <br>“Аптека групп”</span>
+                    </div>
+                    <form action="#" class="auth-form auth__form">
+                        {{> components/Field/Field props=(obj
+                            class='auth-form__input'
+                            id='login-name'
+                            name='login'
+                            type='tel'
+                            placeholder='Логин'
+                            required=true
+                        )}}
+                        {{> components/Field/Field props=(obj
+                            class='auth-form__input'
+                            id='login-password'
+                            name='password'
+                            type='password'
+                            placeholder='Пароль'
+                            required=true
+                        )}}
+                        <a href="/recovery" class="auth-form__link">Восстановление пароля</a>
+                        {{> components/Button/Button props=(obj
+                            class='auth__btn'
+                            type='button'
+                            text='Войти'
+                        )}}
+                    </form>
+                </div>
+            {{/if}}
+        </div>
+        <span class="auth__slogan">Вместе – мы команда!</span>
+    </div>
+</section>

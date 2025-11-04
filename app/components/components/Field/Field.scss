@@ -1,0 +1,80 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .field {
+        &.is--error {
+            .field {
+                &__input,
+                &__textarea {
+                    border-color: $color-red;
+                }
+                &__error {
+                    display: block;
+                }
+            }
+        }
+        &__control {
+            position: relative;
+            z-index: 1;
+        }
+        &__input,
+        &__textarea {
+            display: block;
+            @include prop-vw(padding-block, 13.5, xl);
+            @include prop-vw(padding-inline, 15, xl);
+            width: 100%;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1;
+            color: $color-black;
+            background: transparent;
+            @include border-all(1, solid, #E1E1E1, xl);
+            @include prop-vw(border-radius, 14, xl);
+            transition: background $transition-default, border $transition-default;
+            &::placeholder {
+                color: $color-dark-grey;
+                transition: color $transition-default;
+            }
+            &:focus {
+                outline: none;
+                border-color: $color-blue-hover;
+            }
+            &[disabled] {
+                background: rgba(#E1E1E1, 0.3);
+            }
+
+            @media screen and (hover: hover) {
+                &:hover:not([disabled]) {
+                    &::placeholder {
+                        color: rgba($color-black, 0.5);
+                    }
+                }
+            }
+			@include only(mobile) {
+                @include prop-vw(padding-block, 13.5, sm);
+                @include prop-vw(padding-inline, 15, sm);
+                @include prop-vw(font-size, 14, sm);
+                @include border-all(1, solid, #E1E1E1, sm);
+                @include prop-vw(border-radius, 14, sm);
+            }
+        }
+        &__textarea {
+            overflow: hidden;
+            resize: none;
+        }
+        &__error {
+            display: none;
+            @include prop-vw(margin-top, 2, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            color: $color-red;
+
+			@include only(mobile) {
+                @include prop-vw(margin-top, 2, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+    }
+}

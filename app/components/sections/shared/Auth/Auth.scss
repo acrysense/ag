@@ -1,0 +1,219 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .auth {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+
+        @include up(tablet) {
+            &::before {
+                content: '';
+                position: absolute;
+                @include prop-vw(right, -65, xl);
+                @include prop-vw(bottom, 100, xl);
+                display: block;
+                @include prop-vw(width, 815, xl);
+                @include prop-vw(height, 740, xl);
+                background-image: url(/assets/images/ag.svg);
+                background-repeat: no-repeat;
+                background-size: contain;
+                background-position: center center;
+            }
+        }
+
+        &__back {
+            position: absolute;
+            @include prop-vw(top, 40, xl);
+            @include prop-vw(left, 40, xl);
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(padding-top, 10, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            color: $color-black;
+            @include border-side(top, 1, solid, $color-black, xl);
+            & > svg {
+                @include prop-vw(min-width, 12, xl);
+                @include prop-vw(width, 12, xl);
+                @include prop-vw(height, 16, xl);
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue-hover;
+                    & > svg {
+                        color: $color-blue-hover;
+                    }
+                }
+            }
+            @include only(mobile) {
+                display: none;
+            }
+        }
+        &__wrap {
+            @include prop-vw(padding-top, 120, xl);
+            @include prop-vw(padding-bottom, 300, xl);
+            min-height: 100dvh;
+
+            @include only(mobile) {
+                @include prop-vw(padding-top, 30, sm);
+                @include prop-vw(padding-bottom, 110, sm);
+            }
+        }
+        &__main {
+            margin-right: auto;
+            margin-left: auto;
+            @include prop-vw(max-width, 440, xl);
+            width: 100%;
+            
+            @include only(mobile) {
+                max-width: none;
+            }
+        }
+        &__logotype {
+            display: block;
+            overflow: hidden;
+            margin-right: auto;
+            margin-left: auto;
+            @include prop-vw(margin-bottom, 40, xl);
+            @include prop-vw(min-width, 118, xl);
+            @include prop-vw(width, 118, xl);
+            @include prop-vw(height, 120, xl);
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+            
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 20, sm);
+                @include prop-vw(min-width, 99, sm);
+                @include prop-vw(width, 99, sm);
+                @include prop-vw(height, 100, sm);
+            }
+        }
+        &__wrapper {
+            @include up(tablet) {
+                @include prop-vw(padding, 40, xl);
+                background: $color-white;
+                @include prop-vw(border-radius, 20, xl);
+                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding, 10, sm);
+            }
+        }
+        &__top {
+            text-align: center;
+        }
+        &__title {
+            display: block;
+            margin-right: auto;
+            margin-left: auto;
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 26, xl);
+            font-weight: bold;
+            
+            @include only(mobile) {
+                @include prop-vw(font-size, 22, sm);
+            }
+        }
+        &__description {
+            display: block;
+            @include prop-vw(margin-top, 10, xl);
+            margin-right: auto;
+            margin-left: auto;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            a {
+                @media screen and (hover: hover) {
+                    &:hover {
+                        color: $color-blue-hover;
+                    }
+                }
+            }
+            
+            @include only(mobile) {
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__form {
+            @include prop-vw(margin-top, 40, xl);
+            width: 100%;
+            
+            @include only(mobile) {
+                @include prop-vw(margin-top, 40, sm);
+            }
+        }
+        &__btn {
+            @include prop-vw(margin-top, 40, xl);
+            width: 100%;
+            
+            @include only(mobile) {
+                @include prop-vw(margin-top, 40, sm);
+            }
+        }
+        &__slogan {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(padding, 64, xl);
+            width: 100%;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 32, xl);
+            font-style: normal;
+            font-weight: normal;
+            line-height: 1;
+            text-transform: uppercase;
+            text-align: center;
+            color: $color-dark-grey;
+            background: $color-grey;
+            
+            @include only(mobile) {
+                @include prop-vw(padding, 27, sm);
+                @include prop-vw(font-size, 26, sm);
+            }
+        }
+    }
+
+    .auth-form {
+        &__input + &__input {
+            @include prop-vw(margin-top, 10, xl);
+        }
+        &__link {
+            display: block;
+            @include prop-vw(margin-top, 10, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        &__btn {
+            @include prop-vw(margin-top, 20, xl);
+            width: 100%;
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+            }
+        }
+    }
+}

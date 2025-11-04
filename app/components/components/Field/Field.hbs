@@ -1,0 +1,40 @@
+<div class="field{{#if props.variant}} field--{{props.variant}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}">
+    <div class="field__control">
+        {{#if props.textarea}}
+            <textarea
+                class="field__textarea"
+                {{#if props.id}}id="{{props.id}}"{{/if}}
+                {{#if props.name}}name="{{props.name}}"{{/if}}
+                {{#if props.placeholder}}placeholder="{{props.placeholder}}"{{/if}}
+                {{#if props.disabled}}disabled{{/if}}
+                {{#if props.readonly}}readonly{{/if}}
+                {{#if props.required}}required{{/if}}
+                {{#if props.autocomplete}}autocomplete="{{props.autocomplete}}"{{/if}}
+                rows="{{default props.rows 1}}"
+                data-autosize
+                data-autosize-max-rows="{{default props.rows 6}}"
+                {{{attrs props.attrs}}}
+            >{{default props.value ''}}</textarea>
+        {{else}}
+            <input
+                class="field__input"
+                type="{{default props.type 'text'}}"
+                {{#if props.id}}id="{{props.id}}"{{/if}}
+                {{#if props.name}}name="{{props.name}}"{{/if}}
+                {{#if (isSet props.value)}}value="{{props.value}}"{{/if}}
+                {{#if props.placeholder}}placeholder="{{props.placeholder}}"{{/if}}
+                {{#if props.disabled}}disabled{{/if}}
+                {{#if props.readonly}}readonly{{/if}}
+                {{#if props.required}}required{{/if}}
+                {{#if props.autocomplete}}autocomplete="{{props.autocomplete}}"{{/if}}
+                {{#if props.mask}}data-mask="{{props.mask}}"{{/if}}
+                {{#if props.inputmode}}inputmode="{{props.inputmode}}"{{/if}}
+                {{{attrs props.attrs}}}
+            />
+        {{/if}}
+        {{#if (and props.link props.link.text props.link.href)}}
+            <a class="field__link" href="{{props.link.href}}">{{props.link.text}}</a>
+        {{/if}}
+    </div>
+    <span class="field__error" aria-hidden="true">{{default props.errorText 'Ошибка ввода'}}</span>
+</div>

@@ -3,6 +3,7 @@
 
 @forward '@/components/sections/home/Main/Main';
 
-// @forward '@/components/sections/shared/';
+@forward '@/components/sections/shared/Auth/Auth';
 
 @forward '@/components/components/Button/Button';
+@forward '@/components/components/Field/Field';
