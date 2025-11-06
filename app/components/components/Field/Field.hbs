@@ -1,4 +1,4 @@
-<div class="field{{#if props.variant}} field--{{props.variant}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}">
+<div class="field{{#if props.variant}} field--{{props.variant}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}" data-path="components" data-module="Field">
     <div class="field__control">
         {{#if props.textarea}}
             <textarea
@@ -31,9 +31,21 @@
                 {{#if props.inputmode}}inputmode="{{props.inputmode}}"{{/if}}
                 {{{attrs props.attrs}}}
             />
-        {{/if}}
-        {{#if (and props.link props.link.text props.link.href)}}
-            <a class="field__link" href="{{props.link.href}}">{{props.link.text}}</a>
+            {{#if (or (eq props.type 'password') props.togglePassword)}}
+                <button
+                    class="field__visibility"
+                    type="button"
+                    aria-label="Показать пароль"
+                    aria-pressed="false"
+                >
+                    <svg class="field__visibility-icon field__visibility-icon--hide"  aria-hidden="true" width="16" height="16">
+                        <use href="#icon-eye-slash"></use>
+                    </svg>
+                    <svg class="field__visibility-icon field__visibility-icon--show" aria-hidden="true" width="16" height="16">
+                        <use href="#icon-eye"></use>
+                    </svg>
+                </button>
+            {{/if}}
         {{/if}}
     </div>
     <span class="field__error" aria-hidden="true">{{default props.errorText 'Ошибка ввода'}}</span>

@@ -4,7 +4,7 @@
             <svg aria-hidden="true" focusable="false" width="12" height="16">
                 <use href="#icon-arrow-back"></use>
             </svg>
-            <span>Вернуться к порталу</span>
+            <span>К порталу</span>
         </a>
         <div class="auth__main">
             <picture class="auth__logotype">
@@ -28,12 +28,12 @@
                         <span class="auth__title">Вход сотрудника</span>
                         <span class="auth__description">Корпоративный портал холдинга <br>“Аптека групп”</span>
                     </div>
-                    <form action="#" class="auth-form auth__form">
+                    <form action="#" class="auth-form auth__form" novalidate data-success-href="/" data-demo="1" data-fake-delay="1200">
                         {{> components/Field/Field props=(obj
                             class='auth-form__input'
                             id='login-name'
                             name='login'
-                            type='tel'
+                            type='text'
                             placeholder='Логин'
                             required=true
                         )}}
@@ -43,12 +43,14 @@
                             name='password'
                             type='password'
                             placeholder='Пароль'
+                            togglePassword=true
                             required=true
                         )}}
                         <a href="/recovery" class="auth-form__link">Восстановление пароля</a>
+                        <span class="auth-form__error" data-form-error hidden></span>
                         {{> components/Button/Button props=(obj
-                            class='auth__btn'
-                            type='button'
+                            class='auth-form__btn'
+                            type='submit'
                             text='Войти'
                         )}}
                     </form>

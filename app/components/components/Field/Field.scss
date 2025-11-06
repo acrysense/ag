@@ -28,7 +28,7 @@
             font-weight: normal;
             line-height: 1;
             color: $color-black;
-            background: transparent;
+            background: $color-white;
             @include border-all(1, solid, #E1E1E1, xl);
             @include prop-vw(border-radius, 14, xl);
             transition: background $transition-default, border $transition-default;
@@ -63,16 +63,79 @@
             overflow: hidden;
             resize: none;
         }
+        &__visibility {
+            position: absolute;
+            top: 50%;
+            @include prop-vw(right, 15, xl);
+            z-index: 1;
+            transform: translate(0, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            @include prop-vw(width, 16, xl);
+            @include prop-vw(height, 16, xl);
+            font-size: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            transition: all $transition-default;
+            &:focus {
+                outline: none;
+            }
+            &.is--active {
+                .field {
+                    &__visibility-icon {
+                        &--show {
+                            opacity: 0;
+                        }
+                        &--hide {
+                            opacity: 1;
+                        }
+                    }
+                }
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    & > svg {
+                        color: $color-form-focus;
+                    }
+                }
+            }
+			@include only(mobile) {
+                @include prop-vw(right, 15, sm);
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+            }
+        }
+        &__visibility-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            @include prop-vw(width, 16, xl);
+            @include prop-vw(height, 16, xl);
+            color: $color-black;
+            &--hide {
+                opacity: 0;
+            }
+
+			@include only(mobile) {
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+            }
+        }
         &__error {
             display: none;
-            @include prop-vw(margin-top, 2, xl);
+            @include prop-vw(margin-top, 4, xl);
             width: fit-content;
             @include prop-vw(font-size, 12, xl);
             font-weight: normal;
             color: $color-red;
 
 			@include only(mobile) {
-                @include prop-vw(margin-top, 2, sm);
+                @include prop-vw(margin-top, 4, sm);
                 @include prop-vw(font-size, 12, sm);
             }
         }

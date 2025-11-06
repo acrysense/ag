@@ -52,17 +52,27 @@
                 }
             }
             @include only(mobile) {
-                display: none;
+                @include prop-vw(top, 20, sm);
+                @include prop-vw(left, 10, sm);
+                @include prop-vw(gap, 10, sm);
+                padding-top: 0;
+                @include prop-vw(font-size, 12, sm);
+                border-top: none;
+                & > svg {
+                    @include prop-vw(min-width, 12, sm);
+                    @include prop-vw(width, 12, sm);
+                    @include prop-vw(height, 16, sm);
+                }
             }
         }
         &__wrap {
             @include prop-vw(padding-top, 120, xl);
-            @include prop-vw(padding-bottom, 300, xl);
+            @include prop-vw(padding-bottom, 200, xl);
             min-height: 100dvh;
 
             @include only(mobile) {
-                @include prop-vw(padding-top, 30, sm);
-                @include prop-vw(padding-bottom, 110, sm);
+                @include prop-vw(padding-top, 76, sm);
+                @include prop-vw(padding-bottom, 100, sm);
             }
         }
         &__main {
@@ -212,13 +222,62 @@
                 @include prop-vw(font-size, 12, sm);
             }
         }
+        &__error {
+            display: block;
+            @include prop-vw(margin-top, 20, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            color: $color-red;
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
         &__btn {
+            position: relative;
+            z-index: 1;
             @include prop-vw(margin-top, 20, xl);
             width: 100%;
+            &[data-loading="true"] {
+                color: transparent;
+                &::after {
+                    content: "";
+                    position: absolute;
+                    inset: 0;
+                    z-index: 1;
+                    margin: auto;
+                    @include prop-vw(width, 24, xl);
+                    @include prop-vw(height, 24, xl);
+                    background-image: url(/assets/images/loader.svg);
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                    background-position: center center;
+                    animation: auth-spin .8s linear infinite;
+                }
+            }
 
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
+                &[data-loading="true"] {
+                    &::after {
+                        @include prop-vw(width, 24, sm);
+                        @include prop-vw(height, 24, sm);
+                    }
+                }
             }
+        }
+    }
+
+    @keyframes auth-spin {
+        to {
+            transform: rotate(360deg);
         }
     }
 }

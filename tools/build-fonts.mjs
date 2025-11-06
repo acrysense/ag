@@ -30,26 +30,56 @@ const isVariableFile = (base) => {
     )
 }
 
-const isItalicFile = (base) => /\bitalic\b/i.test(base)
+function tokens(base) {
+    return base
+        .replace(/\.(ttf|otf)$/i, '')
+        .replace(/\[.*?\]/g, '')
+        .replace(/([a-z])([A-Z])/g, '$1 $2')
+        .replace(/[_-]+/g, ' ')
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(Boolean);
+}
 
-const WEIGHT_TOKENS = [
-    { re: /\bthin\b/i,        w: 100 },
-    { re: /\b(extralight|ultralight)\b/i, w: 200 },
-    { re: /\blight\b/i,       w: 300 },
-    { re: /\bbook\b/i,        w: 350 },
-    { re: /\b(regular|normal)\b/i, w: 400 },
-    { re: /\bmedium\b/i,      w: 500 },
-    { re: /\b(semibold|demibold)\b/i, w: 600 },
-    { re: /\bbold\b/i,        w: 700 },
-    { re: /\b(extra|ultra)bold\b/i, w: 800 },
-    { re: /\b(black|heavy)\b/i, w: 900 }
-]
+const isItalicFile = (base) => {
+    const t = tokens(base);
+    return t.includes('italic');
+};
+
+const parseVarMin = (w) => {
+    if (typeof w !== 'string') return 400;
+    const m = w.trim().split(/\s+/)[0];
+    const n = parseInt(m, 10);
+    return Number.isFinite(n) ? n : 400;
+};
+
+const weightKey = (f) => f.kind === 'var' ? parseVarMin(f.wght) : (f.weight ?? 400);
+const styleKey  = (f) => (f.style === 'normal' ? 0 : 1);
+
+const byFamilyWeightStyle = (a, b) => {
+    const fam = a.cssFamily.localeCompare(b.cssFamily);
+    if (fam) return fam;
+    const wa = weightKey(a), wb = weightKey(b);
+    if (wa !== wb) return wa - wb;
+    return styleKey(a) - styleKey(b);
+};
 
 function guessWeight(base) {
-    for (const { re, w } of WEIGHT_TOKENS) {
-        if (re.test(base)) return w
-    }
-    return 400
+    const t = tokens(base);
+    const has = (x) => t.includes(x);
+
+    if (has('thin')) return 100;
+    if (has('extralight') || has('ultralight') || (has('extra') && has('light')) || (has('ultra') && has('light'))) return 200;
+    if (has('light')) return 300;
+    if (has('book')) return 350;
+    if (has('regular') || has('normal')) return 400;
+    if (has('medium')) return 500;
+    if (has('semibold') || has('demibold') || (has('semi') && has('bold'))) return 600;
+    if (has('bold')) return 700
+    if (has('extrabold') || has('ultrabold') || ((has('extra') || has('ultra')) && has('bold'))) return 800;
+    if (has('black') || has('heavy')) return 900;
+
+    return 400;
 }
 
 function normalizeBaseName(origBase) {
@@ -246,12 +276,12 @@ let css =
         Update sources in ${path.relative(process.cwd(), SRC)} and rerun the script.
         Mode: ${MAKE_WOFF ? 'legacy (woff + woff2 for static)' : 'modern (woff2 only)'} */` + NL + NL;
 
-const statics = faces.filter(x => x.kind === 'static');
+const statics = faces.filter(x => x.kind === 'static').sort(byFamilyWeightStyle);
 if (statics.length) {
     css += statics.map(f => emitStatic(f)).join(NL + NL) + NL + NL;
 }
 
-const vars = faces.filter(x => x.kind === 'var');
+const vars = faces.filter(x => x.kind === 'var').sort(byFamilyWeightStyle);
 if (vars.length) {
     css += '@supports (font-variation-settings: normal) {' + NL;
     css += vars.map(v => emitVar(v, TAB)).join(NL + NL) + NL;
