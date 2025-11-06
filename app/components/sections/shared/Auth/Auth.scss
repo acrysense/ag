@@ -67,12 +67,12 @@
         }
         &__wrap {
             @include prop-vw(padding-top, 120, xl);
-            @include prop-vw(padding-bottom, 200, xl);
+            @include prop-vw(padding-bottom, 140, xl);
             min-height: 100dvh;
 
             @include only(mobile) {
                 @include prop-vw(padding-top, 76, sm);
-                @include prop-vw(padding-bottom, 100, sm);
+                @include prop-vw(padding-bottom, 90, sm);
             }
         }
         &__main {
@@ -182,7 +182,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            @include prop-vw(padding, 64, xl);
+            @include prop-vw(padding, 42, xl);
             width: 100%;
             font-family: $font-secondary;
             @include prop-vw(font-size, 32, xl);
@@ -195,7 +195,7 @@
             background: $color-grey;
             
             @include only(mobile) {
-                @include prop-vw(padding, 27, sm);
+                @include prop-vw(padding, 23, sm);
                 @include prop-vw(font-size, 26, sm);
             }
         }
