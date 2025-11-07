@@ -1,0 +1,54 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer layout {
+    .sidebar {
+        @include prop-vw(padding-block, 20, xl);
+        @include prop-vw(padding-right, 95, xl);
+        @include prop-vw(padding-left, 30, xl);
+        @include minvh-minus(120, xl, 100vh);
+        @include prop-vw(max-width, 350, xl);
+        width: 100%;
+        @include border-side(right, 1, solid, $color-border, xl);
+
+        @include only(mobile) {
+            @include minvh-minus(146, sm, 100vh);
+        }
+
+        &__section {
+            @include prop-vw(padding-bottom, 10, xl);
+            @include border-side(bottom, 1, solid, $color-dark-grey, xl);
+        }
+        &__section + &__section {
+            @include prop-vw(margin-top, 30, xl);
+        }
+        &__label {
+            display: block;
+            @include prop-vw(margin-bottom, 10, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            text-transform: uppercase;
+            color: $color-dark-grey;
+        }
+        &__list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        &__link {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(padding-block, 10, xl);
+            width: 100%;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            & > svg {
+                @include prop-vw(min-width, 20, xl);
+                @include prop-vw(width, 20, xl);
+                @include prop-vw(height, 20, xl);
+            }
+        }
+    }
+}

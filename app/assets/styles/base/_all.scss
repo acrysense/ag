@@ -1,9 +1,11 @@
 @forward '@/components/layouts/Header/Header';
+@forward '@/components/layouts/Sidebar/Sidebar';
 @forward '@/components/layouts/Footer/Footer';
 
 @forward '@/components/sections/home/Main/Main';
 
 @forward '@/components/sections/shared/Auth/Auth';
 
+@forward '@/components/components/ProfileDropdown/ProfileDropdown';
 @forward '@/components/components/Button/Button';
 @forward '@/components/components/Field/Field';

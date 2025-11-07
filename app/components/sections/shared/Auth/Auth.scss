@@ -145,6 +145,7 @@
             font-weight: normal;
             line-height: 1.57142857143;
             a {
+                display: inline;
                 @media screen and (hover: hover) {
                     &:hover {
                         color: $color-blue-hover;

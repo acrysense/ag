@@ -1,5 +1,52 @@
 @use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
 
 @layer layout {
-    .header {}
+    .header {
+        @include border-side(bottom, 1, solid, $color-border, xl);
+
+        @include only(mobile) {
+            @include border-side(bottom, 1, solid, $color-border, sm);
+        }
+
+        &__wrapper {
+            display: flex;
+            justify-content: space-between;
+            @include prop-vw(padding-block, 9.5, xl);
+            width: 100%;
+
+            @include only(mobile) {
+                @include prop-vw(padding-block, 9.5, sm);
+            }
+        }
+        &__logotype {
+            display: block;
+            overflow: hidden;
+            @include prop-vw(min-width, 390, xl);
+            @include prop-vw(width, 390, xl);
+            @include prop-vw(height, 40, xl);
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+
+            @include only(mobile) {
+                @include prop-vw(min-width, 141, sm);
+                @include prop-vw(width, 141, sm);
+                @include prop-vw(height, 40, sm);
+            }
+        }
+        &__inner {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 15, xl);
+            width: fit-content;
+
+            @include only(mobile) {
+                @include prop-vw(gap, 15, sm);
+            }
+        }
+    }
 }

@@ -1,0 +1,145 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .profile-dropdown {
+        position: relative;
+        z-index: 1;
+        &.is-open {
+            .profile-dropdown {
+                &__trigger {
+                    & > svg {
+                        transform: rotate(180deg);
+                    }
+                }
+                &__panel {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                    pointer-events: auto;
+                }
+            }
+        }
+        &__trigger {
+            display: flex;
+            align-items: center;
+            padding: 0;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            transition: color $transition-default;
+            &:focus {
+                outline: none;
+            }
+            & > img {
+                display: block;
+                overflow: hidden;
+                @include prop-vw(min-width, 30, xl);
+                @include prop-vw(width, 30, xl);
+                @include prop-vw(height, 30, xl);
+                border-radius: 50%;
+            }
+            & > img ~ span {
+                @include prop-vw(margin-left, 10, xl);
+            }
+            & > svg {
+                @include prop-vw(margin-left, 5, xl);
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                transition: color $transition-default, transform $transition-fast;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
+            @include only(mobile) {
+                font-size: 0;
+                & > img {
+                    @include prop-vw(min-width, 30, sm);
+                    @include prop-vw(width, 30, sm);
+                    @include prop-vw(height, 30, sm);
+                }
+                & > img ~ span {
+                    margin-left: 0;
+                }
+                & > svg {
+                    @include prop-vw(margin-left, 5, sm);
+                    @include prop-vw(min-width, 16, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
+            }
+        }
+        &__panel {
+            @include prop-vw(padding, 20, xl);
+            @include prop-vw(min-width, 244, xl);
+            background: $color-white;
+            @include prop-vw(border-radius, 10, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transform: translateY(-6px) scale(.98);
+            transition: opacity $transition-fast, transform $transition-fast;
+            pointer-events: none;
+
+            @include only(mobile) {
+                @include prop-vw(padding, 20, sm);
+                @include prop-vw(min-width, 244, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
+        }
+        &__item {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 10, xl);
+            padding: 0;
+            width: 100%;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            transition: color $transition-default;
+            &:focus {
+                outline: none;
+            }
+            & > svg {
+                @include prop-vw(min-width, 20, xl);
+                @include prop-vw(width, 20, xl);
+                @include prop-vw(height, 20, xl);
+            }
+            
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                    & > svg {
+                        color: $color-blue;
+                    }
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+                @include prop-vw(font-size, 14, sm);
+                & > svg {
+                    @include prop-vw(min-width, 20, sm);
+                    @include prop-vw(width, 20, sm);
+                    @include prop-vw(height, 20, sm);
+                }
+            }
+        }
+        &__sep {
+            display: block;
+            @include prop-vw(margin-block, 20, xl);
+            @include prop-vw(height, 1, xl);
+            background: #D3D8DE;
+
+            @include only(mobile) {
+                @include prop-vw(margin-block, 20, sm);
+                @include prop-vw(height, 1, sm);
+            }
+        }
+    }
+}

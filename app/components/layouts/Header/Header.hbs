@@ -1,1 +1,20 @@
-<header class="header" data-module="Header" data-path="layouts"></header>
+<header class="header" data-module="Header" data-path="layouts">
+    <div class="container">
+        <div class="header__wrapper">
+            <picture class="header__logotype">
+                <source srcset="/assets/images/logotype-desktop.svg" media="(min-width: 744px)">
+                <img src="/assets/images/logotype-mobile.svg" width="390" height="40" alt="AG">
+            </picture>
+            <div class="header__inner">
+                {{> components/ProfileDropdown/ProfileDropdown props=(obj
+                    class='header__profile'
+                    items=(arr
+                        (obj icon='icon-settings' text='Настройки' href='/')
+                        (obj sep=true)
+                        (obj icon='icon-exit' text='Выход' action='logout')
+                    )
+                )}}
+            </div>
+        </div>
+    </div>
+</header>

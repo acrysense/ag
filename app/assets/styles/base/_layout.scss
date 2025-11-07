@@ -13,7 +13,13 @@
 		flex-direction: column;
 		min-height: 100svh;
 		&__content {
+			display: flex;
+			align-items: flex-start;
 			flex: 1 1 auto;
+		}
+		&__main {
+			@include prop-vw(max-width, 1570, xl);
+			width: 100%;
 		}
 	}
 
@@ -22,17 +28,13 @@
 
 		@include up(desktop) {
 			margin: 0 auto;
-			@include prop-vw(padding-right, 20, lg);
-			@include prop-vw(padding-left, 20, lg);
-			@include prop-vw(max-width, 1440, lg);
-		}
-		@include only(tablet) {
-			@include prop-vw(padding-right, 20, md);
-			@include prop-vw(padding-left, 20, md);
+			@include prop-vw(padding-right, 30, xl);
+			@include prop-vw(padding-left, 30, xl);
+			@include prop-vw(max-width, 1920, xl);
 		}
 		@include only(mobile) {
-			@include prop-vw(padding-right, 20, sm);
-			@include prop-vw(padding-left, 20, sm);
+			@include prop-vw(padding-right, 10, sm);
+			@include prop-vw(padding-left, 10, sm);
 		}
 	}
 }

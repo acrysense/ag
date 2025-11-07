@@ -8,7 +8,10 @@
 		<div class="wrapper">
 			{{> layouts/Header/Header }}
 			<main class="wrapper__content">
-				{{> sections/home/Main/Main }}
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					{{> sections/home/Main/Main }}
+				</div>
 			</main>
 			{{> layouts/Footer/Footer }}
 		</div>
