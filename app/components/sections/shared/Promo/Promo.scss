@@ -1,0 +1,148 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .promo {
+        @include prop-vw(margin-top, 20, xl);
+
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(padding-inline, 10, sm);
+        }
+
+        &__slider {
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+            @include prop-vw(border-radius, 20, xl);
+
+            .swiper-button-prev,
+            .swiper-button-next {
+                position: absolute;
+                top: 50%;
+                z-index: 10;
+                transform: translate(0, -50%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                padding: 0;
+                @include prop-vw(width, 40, xl);
+                @include prop-vw(height, 40, xl);
+                font-size: 0;
+                background: $color-white;
+                border: none;
+                border-radius: 50%;
+                &:focus {
+                    outline: none;
+                }
+                & > svg {
+                    @include prop-vw(min-width, 21, xl);
+                    @include prop-vw(width, 21, xl);
+                    @include prop-vw(height, 21, xl);
+                    color: $color-black;
+                }
+
+                @media screen and (hover: hover) {
+                    &:hover {
+                        & > svg {
+                            color: $color-blue-hover;
+                        }
+                    }
+                }
+            }
+            .swiper-button-disabled {
+                opacity: 0;
+            }
+            .swiper-button-lock {
+                display: none;
+            }
+            .swiper-button-prev {
+                @include prop-vw(left, 25, xl);
+            }
+            .swiper-button-next {
+                @include prop-vw(right, 25, xl);
+            }
+            .swiper-pagination {
+                position: absolute;
+                left: 50%;
+                @include prop-vw(bottom, 10, xl);
+                z-index: 10;
+                transform: translate(-50%, 0);
+                display: flex;
+                align-items: center;
+                @include prop-vw(gap, 5, xl);
+                width: fit-content;
+            }
+            .swiper-pagination-lock {
+                display: none;
+            }
+            .swiper-pagination-bullet {
+                display: block;
+                overflow: hidden;
+                margin: 0;
+                @include prop-vw(min-width, 10, xl);
+                @include prop-vw(width, 10, xl);
+                @include prop-vw(height, 10, xl);
+                opacity: 1;
+                background: $color-bg;
+                border-radius: 50%;
+                transition: background $transition-default;
+            }
+            .swiper-pagination-bullet-active {
+                background: $color-blue-hover;
+            }
+
+            @include only(mobile) {
+                @include prop-vw(border-radius, 10, sm);
+
+                .swiper-button-prev,
+                .swiper-button-next {
+                    @include prop-vw(width, 30, sm);
+                    @include prop-vw(height, 30, sm);
+                    & > svg {
+                        @include prop-vw(min-width, 16, sm);
+                        @include prop-vw(width, 16, sm);
+                        @include prop-vw(height, 16, sm);
+                    }
+                }
+                .swiper-button-prev {
+                    @include prop-vw(left, 10, sm);
+                }
+                .swiper-button-next {
+                    @include prop-vw(right, 10, sm);
+                }
+                .swiper-pagination {
+                    @include prop-vw(bottom, 5, sm);
+                    @include prop-vw(gap, 5, sm);
+                }
+                .swiper-pagination-bullet {
+                    @include prop-vw(min-width, 10, sm);
+                    @include prop-vw(width, 10, sm);
+                    @include prop-vw(height, 10, sm);
+                }
+            }
+        }
+        &__img {
+            position: relative;
+            z-index: 1;
+            display: block;
+            overflow: hidden;
+            width: 100%;
+            &::before {
+                content: '';
+                display: block;
+                padding-top: 41.38%;
+            }
+            img {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+    }
+}

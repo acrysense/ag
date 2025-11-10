@@ -6,6 +6,7 @@
         position: relative;
         z-index: 1;
         overflow: hidden;
+		background: #F5F8FA;
 
         @include up(tablet) {
             &::before {

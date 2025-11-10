@@ -1,0 +1,176 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .profile {
+        &__wrap {
+            @include prop-vw(padding, 25, xl);
+            width: 100%;
+            background: $color-white;
+            @include prop-vw(border-radius, 20, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+        }
+        &__top {
+            display: flex;
+            width: 100%;
+        }
+        &__img {
+            display: block;
+            overflow: hidden;
+            @include prop-vw(min-width, 180, xl);
+            @include prop-vw(width, 180, xl);
+            @include prop-vw(height, 180, xl);
+            background: $color-bg;
+            @include prop-vw(border-radius, 10, xl);
+            img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+        &__img + &__body {
+            @include prop-vw(margin-left, 20, xl);
+            @include prop-vw(max-width, 620, xl);
+            width: 100%;
+        }
+        &__body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 100%;
+        }
+        &__topping {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 100%;
+        }
+        &__topping + &__info {
+            @include prop-vw(margin-top, 20, xl);
+        }
+        &__title {
+            display: block;
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 26, xl);
+            font-weight: bold;
+        }
+        &__edit {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            @include prop-vw(min-width, 52, xl);
+            @include prop-vw(width, 52, xl);
+            @include prop-vw(height, 36, xl);
+            background: $color-bg;
+            border: none;
+            @include prop-vw(border-radius, 14, xl);
+            & > svg {
+                @include prop-vw(min-width, 20, xl);
+                @include prop-vw(width, 20, xl);
+                @include prop-vw(height, 20, xl);
+            }
+        }
+        &__info-item {
+            display: flex;
+            align-items: flex-start;
+            @include prop-vw(gap, 10, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-dark-grey;
+            & > svg {
+                @include prop-vw(margin-top, 3, xl);
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-dark-grey;
+            }
+        }
+        &__info-item + &__info-item {
+            @include prop-vw(margin-top, 10, xl);
+        }
+        &__trigger {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 5, xl);
+            @include prop-vw(margin-top, 10, xl);
+            padding: 0;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-blue;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            &:focus {
+                outline: none
+            }
+            & > svg {
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-blue;
+                transition: color $transition-default, transform $transition-default;
+            }
+            &[aria-expanded="true"] {
+                & > svg {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+        &__dropdown {
+            height: 0;
+            overflow: hidden;
+            transition: height .3s ease;
+            will-change: height;
+        }
+        &__dropdown-inner {
+            @include prop-vw(padding-top, 20, xl);
+            @include prop-vw(padding-left, 200, xl);
+        }
+        &__section + &__section {
+            @include prop-vw(margin-top, 40, xl);
+            @include prop-vw(padding-top, 40, xl);
+            @include border-side(top, 1, solid, $color-light-grey, xl);
+        }
+        &__subtitle {
+            display: block;
+            @include prop-vw(margin-bottom, 10, xl);
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 18, xl);
+            font-weight: bold;
+        }
+        &__details-item {
+            display: flex;
+            align-items: flex-start;
+            @include prop-vw(gap, 10, xl);
+            width: 100%;
+        }
+        &__details-item + &__details-item {
+            @include prop-vw(margin-top, 10, xl);
+        }
+        &__details-label {
+            display: block;
+            @include prop-vw(max-width, 190, xl);
+            width: 100%;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-dark-grey;
+        }
+        &__details-value {
+            display: block;
+            @include prop-vw(max-width, 420, xl);
+            width: 100%;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+        }
+    }
+}

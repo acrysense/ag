@@ -18,15 +18,27 @@
 			flex: 1 1 auto;
 		}
 		&__main {
-			@include prop-vw(max-width, 1570, xl);
 			width: 100%;
+			
+			@include up(tablet) {
+				@include prop-vw(padding-block, 20, xl);
+				@include prop-vw(max-width, 1570, xl);
+			}
+		}
+		&__container {
+			width: 100%;
+
+			@include up(tablet) {
+				@include prop-vw(padding-inline, 125, xl);
+				@include prop-vw(max-width, 1120, xl);
+			}
 		}
 	}
 
 	.container {
 		width: 100%;
 
-		@include up(desktop) {
+		@include up(tablet) {
 			margin: 0 auto;
 			@include prop-vw(padding-right, 30, xl);
 			@include prop-vw(padding-left, 30, xl);

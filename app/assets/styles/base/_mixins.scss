@@ -25,12 +25,12 @@ $vw-ranges: (
 	),
 	desktop1440: (
 		from: map.get($breakpoints, desktop),
-		to: map.get($breakpoints, cap),
+		to: null,
 		base: 1440,
 	),
 	desktop1920: (
 		from: map.get($breakpoints, desktop),
-		to: map.get($breakpoints, cap),
+		to: null,
 		base: 1920,
 	),
 );
@@ -83,15 +83,18 @@ $alias-bp: (
 	@return list.nth($order, $i + 1);
 }
 
-@function vw-clamp($valueAt, $baseWidth, $from, $to) {
+@function vw-clamp($valueAt, $baseWidth, $from, $to: null) {
 	$k: math.div($valueAt, $baseWidth) * 100vw;
 
 	$a: $valueAt * math.div($from, $baseWidth);
-	$b: $valueAt * math.div($to, $baseWidth);
 
+	@if $to == null {
+		@return max(#{$a}px, #{$k});
+	}
+
+	$b: $valueAt * math.div($to, $baseWidth);
 	$lower: if($a < $b, $a, $b);
 	$upper: if($a > $b, $a, $b);
-
 	@return clamp(#{$lower}px, #{$k}, #{$upper}px);
 }
 

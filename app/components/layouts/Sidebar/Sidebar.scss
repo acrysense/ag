@@ -3,16 +3,17 @@
 
 @layer layout {
     .sidebar {
-        @include prop-vw(padding-block, 20, xl);
+        @include prop-vw(padding-top, 20, xl);
         @include prop-vw(padding-right, 95, xl);
+        @include prop-vw(padding-bottom, 40, xl);
         @include prop-vw(padding-left, 30, xl);
         @include minvh-minus(120, xl, 100vh);
         @include prop-vw(max-width, 350, xl);
         width: 100%;
         @include border-side(right, 1, solid, $color-border, xl);
 
-        @include only(mobile) {
-            @include minvh-minus(146, sm, 100vh);
+        @include down(tablet) {
+            display: none;
         }
 
         &__section {
@@ -32,8 +33,8 @@
             color: $color-dark-grey;
         }
         &__list {
-            padding: 0;
             margin: 0;
+            padding: 0;
             list-style: none;
         }
         &__link {
@@ -44,10 +45,21 @@
             width: 100%;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
-            & > svg {
+            & > svg,
+            & > img {
                 @include prop-vw(min-width, 20, xl);
                 @include prop-vw(width, 20, xl);
                 @include prop-vw(height, 20, xl);
+            }
+            & > img {
+                display: block;
+                object-fit: contain;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
             }
         }
     }

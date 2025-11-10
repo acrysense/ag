@@ -1,0 +1,29 @@
+<section class="not-found" data-module="NotFound" data-path="sections/error">
+    {{#if notFound.error}}
+        <span class="not-found__decor">ERROR</span>
+        <div class="not-found__wrapper">
+            <span class="not-found__title">Ошибка соединения</span>
+            <p class="not-found__description">
+                Не удалось установить связь с сервером 1С. <br>
+                Попробуйте обновить страницу или зайти позднее. <br> 
+                Возможно, в настоящий момент, ведутся технические работы.
+            </p>
+            {{> components/Button/Button props=(obj
+                class='not-found__btn'
+                href="/"
+                text='На главную'
+            )}}
+        </div>
+    {{else}}
+        <span class="not-found__decor">404</span>
+        <div class="not-found__wrapper">
+            <span class="not-found__title">Страница не найдена</span>
+            <p class="not-found__description">Возможно, страница устарела или изменился её адрес.</p>
+            {{> components/Button/Button props=(obj
+                class='not-found__btn'
+                href="/"
+                text='На главную'
+            )}}
+        </div>
+    {{/if}}
+</section>

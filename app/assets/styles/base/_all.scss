@@ -2,9 +2,13 @@
 @forward '@/components/layouts/Sidebar/Sidebar';
 @forward '@/components/layouts/Footer/Footer';
 
-@forward '@/components/sections/home/Main/Main';
+@forward '@/components/sections/home/Profile/Profile';
+@forward '@/components/sections/home/News/News';
+
+@forward '@/components/sections/error/NotFound/NotFound';
 
 @forward '@/components/sections/shared/Auth/Auth';
+@forward '@/components/sections/shared/Promo/Promo';
 
 @forward '@/components/components/ProfileDropdown/ProfileDropdown';
 @forward '@/components/components/Button/Button';
