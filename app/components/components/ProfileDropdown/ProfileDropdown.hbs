@@ -6,23 +6,30 @@
             <use href="#icon-caret"></use>
         </svg>
     </button>
-    <div class="profile-dropdown__panel" role="menu" hidden>
-        {{#each props.items}}
-            {{#if this.sep}}
-                <div class="profile-dropdown__sep" role="none"></div>
-            {{else}}
-                {{#if this.href}}
-                    <a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="{{this.href}}" data-action="{{this.action}}">
-                        {{#if this.icon}}<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20"><use href="#{{this.icon}}"></use></svg>{{/if}}
-                        <span class="profile-dropdown__text">{{this.text}}</span>
-                    </a>
+    <div class="profile-dropdown__panel" role="menu">
+        <div class="profile-dropdown__wrap">
+            {{#each props.items}}
+                {{#if this.sep}}
+                    <div class="profile-dropdown__sep" role="none"></div>
                 {{else}}
-                    <button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="{{this.action}}">
-                        {{#if this.icon}}<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20"><use href="#{{this.icon}}"></use></svg>{{/if}}
-                        <span class="profile-dropdown__text">{{this.text}}</span>
-                    </button>
+                    {{#if this.href}}
+                        <a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="{{this.href}}" data-action="{{this.action}}">
+                            {{#if this.icon}}<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20"><use href="#{{this.icon}}"></use></svg>{{/if}}
+                            <span class="profile-dropdown__text">{{this.text}}</span>
+                        </a>
+                    {{else}}
+                        <button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="{{this.action}}">
+                            {{#if this.icon}}<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20"><use href="#{{this.icon}}"></use></svg>{{/if}}
+                            <span class="profile-dropdown__text">{{this.text}}</span>
+                        </button>
+                    {{/if}}
                 {{/if}}
-            {{/if}}
-        {{/each}}
+            {{/each}}
+            <button class="profile-dropdown__close" aria-label="Закрыть">
+                <svg aria-hidden="true" focusable="false" width="16" height="16">
+                    <use href="#icon-close"></use>
+                </svg>
+            </button>
+        </div>
     </div>
 </div>

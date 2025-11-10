@@ -6,7 +6,9 @@
         @include prop-vw(margin-top, 20, xl);
             
         @include only(mobile) {
-            @include prop-vw(margin-top, 20, sm);
+            margin-top: 0;
+            @include prop-vw(padding-block, 20, sm);
+            background: $color-white;
         }
 
         &__wrap {
@@ -133,7 +135,9 @@
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
             text-overflow: ellipsis;
+            letter-spacing: 0.04em;
             color: $color-dark-grey;
+            align-self: stretch;
             
             @include only(mobile) {
                 -webkit-line-clamp: 3;

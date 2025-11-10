@@ -6,6 +6,7 @@
         @include border-side(top, 1, solid, $color-border, xl);
         
         @include only(mobile) {
+            background: $color-white;
             @include border-side(top, 1, solid, $color-border, sm);
         }
 

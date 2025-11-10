@@ -6,8 +6,10 @@
         @include prop-vw(margin-top, 20, xl);
 
         @include only(mobile) {
-            @include prop-vw(margin-top, 20, sm);
+            margin-top: 0;
+            @include prop-vw(padding-top, 20, sm);
             @include prop-vw(padding-inline, 10, sm);
+            background: $color-white;
         }
 
         &__slider {

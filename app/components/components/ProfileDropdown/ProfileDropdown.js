@@ -3,76 +3,146 @@ export default (root) => {
     root.__dropdownBound = true;
 
     const trigger = root.querySelector('.profile-dropdown__trigger');
-    const panel = root.querySelector('.profile-dropdown__panel');
-    const items = () => [...panel.querySelectorAll('.profile-dropdown__item')];
+    const panel   = root.querySelector('.profile-dropdown__panel');
+    const wrap    = panel?.querySelector('.profile-dropdown__wrap');
+    const closeBtn= panel?.querySelector('.profile-dropdown__close');
+    if (!trigger || !panel || !wrap) return;
 
-    const place = (placement = (root.dataset.placement || 'bottom-end')) => {
+    const mql = window.matchMedia('(max-width: 743px)');
+    const isMobile = () => mql.matches;
+
+    trigger.setAttribute('aria-haspopup', 'menu');
+    trigger.setAttribute('aria-expanded', 'false');
+    panel.setAttribute('aria-hidden', 'true');
+
+    function place() {
+        if (isMobile()) {
+            panel.style.position = '';
+            panel.style.top = panel.style.right = panel.style.left = panel.style.bottom = '';
+            return;
+        }
+        const placement = String(root.dataset.placement || 'bottom-end');
         root.style.position = 'relative';
         panel.style.position = 'absolute';
-        panel.style.top = 'calc(100% + 8px)';
-        panel.style.left = placement.includes('start') ? '0' : 'auto';
-        panel.style.right = placement.includes('end') ? '0' : 'auto';
-    };
+        panel.style.top  = 'calc(100% + 8px)';
+        panel.style.left  = placement.indexOf('start') !== -1 ? '0'  : 'auto';
+        panel.style.right = placement.indexOf('end')   !== -1 ? '0'  : 'auto';
+    }
     place();
 
-    const open = () => {
-        if (root.classList.contains('is-open')) return;
+    let busy = false;
+    let openState = false;
+
+    const getDurMs = () => {
+        // берём макс из transition на панели (оверлей) и на wrap (сдвиг)
+        const cp = getComputedStyle(panel);
+        const cw = getComputedStyle(wrap);
+        const p = (parseFloat(cp.transitionDuration) || 0) + (parseFloat(cp.transitionDelay) || 0);
+        const w = (parseFloat(cw.transitionDuration) || 0) + (parseFloat(cw.transitionDelay) || 0);
+        return Math.max(p, w) * 1000;
+    };
+    const begin = () => { busy = true; };
+    const done  = () => { busy = false; };
+
+    const onDocDown = (e) => {
+        if (!isMobile() && !root.contains(e.target)) close();
+    };
+    const onDocKey  = (e) => {
+        if (!openState) return;
+        const items = [...panel.querySelectorAll('.profile-dropdown__item')];
+        const idx = items.indexOf(document.activeElement);
+
+        if (e.key === 'Escape') { e.preventDefault(); close(); trigger.focus({preventScroll:true}); }
+        else if (e.key === 'ArrowDown') { e.preventDefault(); (items[idx + 1] || items[0])?.focus(); }
+        else if (e.key === 'ArrowUp')   { e.preventDefault(); (items[idx - 1] || items[items.length - 1])?.focus(); }
+        else if (e.key === 'Tab') { close(); }
+    };
+
+    function open() {
+        if (openState || busy) return;
+        begin();
+        openState = true;
+
+        panel.removeAttribute('inert');
+        panel.setAttribute('aria-hidden', 'false');
         root.classList.add('is-open');
         trigger.setAttribute('aria-expanded', 'true');
-        panel.hidden = false;
 
-        const it = items()[0];
-        if (it) it.focus({ preventScroll: true });
+        const first = panel.querySelector('.profile-dropdown__item');
+        first?.focus?.({ preventScroll: true });
 
         document.addEventListener('pointerdown', onDocDown, true);
         document.addEventListener('keydown', onDocKey, true);
-        window.addEventListener('resize', close, { once: true });
-        window.addEventListener('scroll', close, { once: true });
-    };
 
-    const close = () => {
+        const onResize = () => { place(); };
+        window.addEventListener('resize', onResize);
+        open._onResize = onResize;
+
+        setTimeout(done, getDurMs());
+    }
+
+    function close() {
+        if (!openState) return;
+        begin();
+        openState = false;
+
+        const hadFocusInside = panel.contains(document.activeElement);
+        if (hadFocusInside) {
+            trigger.focus({ preventScroll: true });
+        }
+
+        panel.setAttribute('inert', '');
+
         root.classList.remove('is-open');
         trigger.setAttribute('aria-expanded', 'false');
-        panel.hidden = true;
+
+        requestAnimationFrame(() => {
+            panel.setAttribute('aria-hidden', 'true');
+        });
 
         document.removeEventListener('pointerdown', onDocDown, true);
         document.removeEventListener('keydown', onDocKey, true);
-    };
+        if (open._onResize) {
+            window.removeEventListener('resize', open._onResize);
+            open._onResize = null;
+        }
 
-    const toggle = () => (root.classList.contains('is-open') ? close() : open());
-
-    function onDocDown(e) {
-        if (!root.contains(e.target)) close();
+        setTimeout(() => {
+            panel.removeAttribute('inert');
+            done();
+        }, getDurMs());
     }
 
-    function onDocKey(e) {
-        if (!root.classList.contains('is-open')) return;
-
-        const list = items();
-        const idx = list.indexOf(document.activeElement);
-        if (e.key === 'Escape') { e.preventDefault(); close(); trigger.focus(); }
-        else if (e.key === 'ArrowDown') {
-            e.preventDefault(); (list[idx + 1] || list[0])?.focus();
-        }
-        else if (e.key === 'ArrowUp') {
-            e.preventDefault(); (list[idx - 1] || list[list.length - 1])?.focus();
-        }
-        else if (e.key === 'Tab') {
-            close();
-        }
-    }
+    const toggle = () => { if (!busy) (openState ? close() : open()); };
 
     trigger.addEventListener('click', (e) => { e.preventDefault(); toggle(); });
 
     panel.addEventListener('click', (e) => {
         const item = e.target.closest('.profile-dropdown__item');
-        if (!item) return;
-        const action = item.dataset.action;
-        if (action) {
-            const ev = new CustomEvent('dropdown:select', { bubbles: true, detail: { action }});
-            root.dispatchEvent(ev);
-            if (ev.defaultPrevented) { e.preventDefault(); }
+        if (item) {
+            const action = item.dataset.action;
+            if (action) {
+                const ev = new CustomEvent('dropdown:select', { bubbles: true, detail: { action } });
+                root.dispatchEvent(ev);
+                if (ev.defaultPrevented) e.preventDefault();
+            }
+            close();
+            return;
         }
+
+        if (isMobile() && !wrap.contains(e.target)) {
+            e.preventDefault();
+            close();
+        }
+    });
+
+    closeBtn?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
         close();
     });
+
+    mql.addEventListener?.('change', () => { close(); place(); });
+
+    root.classList.remove('is-open');
 };

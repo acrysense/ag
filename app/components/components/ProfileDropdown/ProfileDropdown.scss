@@ -4,21 +4,39 @@
 @layer components {
     .profile-dropdown {
         position: relative;
-        z-index: 1;
-        &.is-open {
-            .profile-dropdown {
-                &__trigger {
-                    & > svg {
-                        transform: rotate(180deg);
+        z-index: 200;
+
+        @include up(tablet) {
+            &.is-open {
+                .profile-dropdown {
+                    &__trigger {
+                        & > svg {
+                            transform: rotate(180deg);
+                        }
                     }
-                }
-                &__panel {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                    pointer-events: auto;
+                    &__panel {
+                        opacity: 1;
+                        transform: translateY(0) scale(1);
+                        pointer-events: auto;
+                    }
                 }
             }
         }
+        @include only(mobile) {
+            &.is-open {
+                .profile-dropdown {
+                    &__panel {
+                        opacity: 1;
+                        visibility: visible;
+                        pointer-events: auto;
+                    }
+                    &__wrap {
+                        transform: translate(0, 0);
+                    }
+                }
+            }
+        }
+
         &__trigger {
             display: flex;
             align-items: center;
@@ -75,20 +93,47 @@
             }
         }
         &__panel {
-            @include prop-vw(padding, 20, xl);
-            @include prop-vw(min-width, 244, xl);
-            background: $color-white;
-            @include prop-vw(border-radius, 10, xl);
-            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
-            opacity: 0;
-            transform: translateY(-6px) scale(.98);
-            transition: opacity $transition-fast, transform $transition-fast;
-            pointer-events: none;
-
+            @include up(tablet) {
+                @include prop-vw(padding, 20, xl);
+                @include prop-vw(min-width, 244, xl);
+                background: $color-white;
+                @include prop-vw(border-radius, 10, xl);
+                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+                opacity: 0;
+                transform: translateY(-6px) scale(.98);
+                transition: opacity $transition-fast, transform $transition-fast;
+                pointer-events: none;
+            }
             @include only(mobile) {
-                @include prop-vw(padding, 20, sm);
-                @include prop-vw(min-width, 244, sm);
-                @include prop-vw(border-radius, 10, sm);
+                position: fixed;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                overflow-x: hidden;
+                overflow-y: auto;
+                padding: 0;
+                min-height: 100dvh;
+                width: 100%;
+                background: rgba(#212121, 0.8);
+                opacity: 0;
+                visibility: hidden;
+                pointer-events: none;
+                transition: all 0.25s ease;
+            }
+        }
+        &__wrap {
+            @include only(mobile) {
+                transform: translate(-100%, 0);
+                @include prop-vw(padding-top, 20, sm);
+                @include prop-vw(padding-right, 85, sm);
+                @include prop-vw(padding-bottom, 50, sm);
+                @include prop-vw(padding-left, 10, sm);
+                min-height: 100dvh;
+                @include prop-vw(max-width, 320, sm);
+                width: 100%;
+                background: $color-white;
+                transition: transform $transition-vs;
             }
         }
         &__item {
@@ -139,6 +184,35 @@
             @include only(mobile) {
                 @include prop-vw(margin-block, 20, sm);
                 @include prop-vw(height, 1, sm);
+            }
+        }
+        &__close {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            &:focus {
+                outline: none
+            }
+
+            @include up(tablet) {
+                display: none;
+            }
+            @include only(mobile) {
+                @include prop-vw(top, 5, sm);
+                @include prop-vw(right, 5, sm);
+                @include prop-vw(width, 30, sm);
+                @include prop-vw(height, 30, sm);
+                & > svg {
+                    @include prop-vw(min-width, 16, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
             }
         }
     }

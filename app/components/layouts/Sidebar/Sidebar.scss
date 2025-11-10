@@ -12,16 +12,64 @@
         width: 100%;
         @include border-side(right, 1, solid, $color-border, xl);
 
-        @include down(tablet) {
-            display: none;
+        @include only(mobile) {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1000;
+            overflow-x: hidden;
+            overflow-y: auto;
+            padding: 0;
+            min-height: 100dvh;
+            max-width: none;
+            background: rgba(#212121, 0.8);
+            border: none;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            &.is-open {
+                opacity: 1;
+                visibility: visible;
+                pointer-events: auto;
+                .sidebar {
+                    &__wrap {
+                        transform: translate(0, 0);
+                    }
+                }
+            }
         }
 
+        &__wrap {
+            @include only(mobile) {
+                transform: translate(-100%, 0);
+                @include prop-vw(padding-top, 20, sm);
+                @include prop-vw(padding-right, 85, sm);
+                @include prop-vw(padding-bottom, 50, sm);
+                @include prop-vw(padding-left, 10, sm);
+                min-height: 100dvh;
+                @include prop-vw(max-width, 320, sm);
+                width: 100%;
+                background: $color-white;
+                transition: transform $transition-vs;
+            }
+        }
         &__section {
             @include prop-vw(padding-bottom, 10, xl);
             @include border-side(bottom, 1, solid, $color-dark-grey, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 10, sm);
+                @include border-side(bottom, 1, solid, $color-dark-grey, sm);
+            }
         }
         &__section + &__section {
             @include prop-vw(margin-top, 30, xl);
+            
+            @include only(mobile) {
+                @include prop-vw(margin-top, 30, sm);
+            }
         }
         &__label {
             display: block;
@@ -31,6 +79,11 @@
             font-weight: normal;
             text-transform: uppercase;
             color: $color-dark-grey;
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 10, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
         }
         &__list {
             margin: 0;
@@ -55,10 +108,56 @@
                 display: block;
                 object-fit: contain;
             }
+            &.is--active {
+                color: $color-blue;
+                & > svg {
+                    color: $color-blue;
+                }
+            }
 
             @media screen and (hover: hover) {
                 &:hover {
                     color: $color-blue;
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+                @include prop-vw(padding-block, 10, sm);
+                @include prop-vw(font-size, 14, sm);
+                & > svg,
+                & > img {
+                    @include prop-vw(min-width, 20, sm);
+                    @include prop-vw(width, 20, sm);
+                    @include prop-vw(height, 20, sm);
+                }
+            }
+        }
+        &__close {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            &:focus {
+                outline: none
+            }
+
+            @include up(tablet) {
+                display: none;
+            }
+            @include only(mobile) {
+                @include prop-vw(top, 5, sm);
+                @include prop-vw(right, 5, sm);
+                @include prop-vw(width, 30, sm);
+                @include prop-vw(height, 30, sm);
+                & > svg {
+                    @include prop-vw(min-width, 16, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
                 }
             }
         }
