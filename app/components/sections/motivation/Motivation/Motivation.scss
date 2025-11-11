@@ -1,0 +1,271 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .motivation {
+        &__wrap {
+            @include up(tablet) {
+                @include prop-vw(padding, 25, xl);
+                background: $color-white;
+                @include prop-vw(border-radius, 25, xl);
+                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(padding-bottom, 20, sm);
+            }
+        }
+        &__top {
+            @include prop-vw(margin-bottom, 40, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 20, sm);
+            }
+        }
+        &__heading {
+            display: block;
+            @include prop-vw(margin-bottom, 20, xl);
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 30, xl);
+            font-weight: bold;
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 20, sm);
+                @include prop-vw(font-size, 32, sm);
+            }
+        }
+        &__tabs {
+            @include prop-vw(margin-bottom, 40, xl);
+        }
+        &__help {
+            display: block;
+            @include prop-vw(margin-top, 5, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            color: $color-dark-grey;
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 5, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__description {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            @include prop-vw(margin-bottom, 40, xl);
+            width: 100%;
+        }
+        &__link {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            color: $color-blue;
+        }
+        &__section + &__section,
+        &__stats + &__stats,
+        &__stats + &__wrapper,
+        &__wrapper + &__stats,
+        &__table + &__table {
+            @include prop-vw(margin-top, 40, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+            }
+        }
+        &__table {
+            padding: 0;
+        }
+        &__wrapper {
+            @include prop-vw(padding, 20, xl);
+            @include border-all(1, solid, #EDEDED, xl);
+            @include prop-vw(border-radius, 20, xl);
+        }
+        &__subtitle {
+            display: block;
+            @include prop-vw(margin-bottom, 10, xl);
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 18, xl);
+            font-weight: bold;
+            line-height: 1.33333333333;
+        }
+    }
+
+    .beginner-end {
+        &__wrapper {
+            display: flex;
+            align-items: center;
+            width: fit-content;
+        }
+        &__item {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 5, xl);
+            width: fit-content;
+        }
+        &__item + &__item {
+            @include prop-vw(margin-left, 55, xl);
+            &::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                @include prop-vw(left, -20, xl);
+                z-index: 1;
+                transform: translate(-100%, -50%);
+                display: block;
+                @include prop-vw(width, 15, xl);
+                @include prop-vw(height, 1, xl);
+                background: #ADB4C1;
+            }
+        }
+        &__icon {
+            @include prop-vw(min-width, 15, xl);
+            @include prop-vw(width, 15, xl);
+            @include prop-vw(height, 15, xl);
+            color: $color-dark-grey;
+        }
+        &__date {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+        }
+    }
+
+    .tabs {
+        &__list {
+            display: flex;
+            align-items: center;
+            @include prop-vw(margin-bottom, 20, xl);
+            @include prop-vw(padding, 3, xl);
+            width: fit-content;
+            background: $color-bg;
+            @include prop-vw(border-radius, 10, xl);
+        }
+        &__item {
+            &.is--active {
+                .tabs {
+                    &__tab {
+                        color: $color-white;
+                        background: $color-blue;
+
+                        @media screen and (hover: hover) {
+                            &:hover {
+                                color: $color-white;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &__tab {
+            display: block;
+            @include prop-vw(padding-block, 8, xl);
+            @include prop-vw(padding-inline, 10, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1;
+            text-align: center;
+            color: #6C757D;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 10, xl);
+            transition: all $transition-default;
+            &:focus {
+                outline: none;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
+        }
+        &__wrapper {
+            display: none;
+            &.is--active {
+                display: block;
+            }
+        }
+    }
+    
+    .point-item {
+        &__header {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(margin-bottom, 40, xl);
+            width: fit-content;
+        }
+        &__icon {
+            @include prop-vw(min-width, 30, xl);
+            @include prop-vw(width, 30, xl);
+            @include prop-vw(height, 30, xl);
+        }
+        &__heading {
+            display: block;
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 18, xl);
+            font-weight: bold;
+            line-height: 1.33333333333;
+        }
+        &__address {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            color: $color-dark-grey;
+        }
+        &__items {
+            @include prop-vw(padding, 20, xl);
+            background: #F8F8F8;
+            @include prop-vw(border-radius, 20, xl);
+        }
+        &__row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            width: 100%;
+        }
+        &__row + &__row {
+            @include prop-vw(margin-top, 15, xl);
+        }
+        &__minimal {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            color: $color-dark-grey;
+        }
+        &__delimeter {
+            display: block;
+            flex: 1 1 auto;
+            @include prop-vw(margin-inline, 10, xl);
+            @include border-side(bottom, 1, dashed, $color-dark-grey, xl);
+        }
+        &__points {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+        }
+    }
+}

@@ -1,0 +1,239 @@
+<section class="coefficient" data-path="sections/coefficient">
+    <div class="coefficient__wrap">
+        <div class="coefficient__top">
+            <span class="coefficient__heading">Повышающий коэффициент</span>
+            <span class="coefficient__help">(% надбавки к окладу)</span>
+        </div>
+        {{#if coefficient.empty}}
+            <div class="coefficient__empty">
+                <p class="coefficient__description">Нед данных для отображения. Попробуйте зайти еще раз через некоторое время.</p>
+            </div>
+        {{else}}
+            <div class="coefficient__section">
+                <div class="coefficient-stats is-up coefficient__stats">
+                    <span class="coefficient-stats__label">Прогнозный повышающий коэффициент (% надбавки к окладу) <br>на следующий квартал</span>
+                    <span class="coefficient-stats__value">10%</span>
+                </div>
+                <div class="coefficient__wrapper">
+                    <div class="coefficient-table coefficient__table">
+                        <div class="coefficient-table__scroll">
+                            <div class="coefficient-table__head">
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__heading">Критерий</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Факт с начала квартала</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__heading">Коэффициент <br>(% надбавки к окладу) </span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Осталось <br>до порога 1 </span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Осталось <br>до порога 2 </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="coefficient-table__body">
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Средний чек по сумме с НДС</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">22,08 BYN</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__value">0%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">1,31</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">3,12</span>
+                                    </div>
+                                </div>
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Средний чек количество SKU</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">1,99</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__value">12%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">
+                                            <span class="coefficient-table__done"></span>
+                                        </span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--empty"></div>
+                                </div>
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Доля СТМ в личной выручке (ТО с НДС), %</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">3,89%</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__value">0%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">2,01</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--empty"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="coefficient-table coefficient__table">
+                        <div class="coefficient-table__scroll">
+                            <div class="coefficient-table__head">
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__heading">Критерий</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Факт с начала квартала</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__heading">Коэффициент <br>(% надбавки к окладу) </span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Осталось <br>до порога 1 </span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Осталось <br>до порога 2 </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="coefficient-table__body">
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Средний чек по сумме с НДС</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">22,08 BYN</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__value">0%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">1,31</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">3,12</span>
+                                    </div>
+                                </div>
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Средний чек количество SKU</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">1,99</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__value">12%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">
+                                            <span class="coefficient-table__done"></span>
+                                        </span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--empty"></div>
+                                </div>
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Доля СТМ в личной выручке (ТО с НДС)</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">3,89%</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--md">
+                                        <span class="coefficient-table__value">0%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">2,01</span>
+                                    </div>
+                                    <div class="coefficient-table__item coefficient-table__item--empty"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="coefficient__section">
+                <span class="coefficient__subtitle">Пороговые показатели, <br>используемые для расчёта повышающего коэффициента на следующий квартал:</span>
+                <div class="coefficient__wrapper">
+                    <div class="coefficient-table coefficient__table">
+                        <div class="coefficient-table__scroll">
+                            <div class="coefficient-table__head">
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__heading">Критерий</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Пороговые показатели</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__heading">Коэффициент <br>(% надбавки к окладу)</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="coefficient-table__body">
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Средний чек по сумме, BYN с НДС</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">от 18,00 до 20,00, BYN <br>равно и выше 20,00, BYN</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">10% <br>20%</span>
+                                    </div>
+                                </div>
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Средний чек количество SKU</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">равно и выше 1,75</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">12%</span>
+                                    </div>
+                                </div>
+                                <div class="coefficient-table__row">
+                                    <div class="coefficient-table__item coefficient-table__item--xl">
+                                        <span class="coefficient-table__value">Доля СТМ в личной выручке (ТО с НДС), %</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">равно и выше 5,5%</span>
+                                    </div>
+                                    <div class="coefficient-table__item">
+                                        <span class="coefficient-table__value">19%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="coefficient-stats coefficient__stats">
+                    <span class="coefficient-stats__label">Присвоенный повышающий коэффициент (% надбавки к окладу) <br>на текущий квартал</span>
+                    <span class="coefficient-stats__value">130%</span>
+                </div>
+                <div class="coefficient-stats is-up coefficient__stats">
+                    <span class="coefficient-stats__label">Динамика чеков, 2025 год к 2023 году</span>
+                    <span class="coefficient-stats__value">15%</span>
+                </div>
+                <div class="coefficient-stats is-down coefficient__stats">
+                    <span class="coefficient-stats__label">Динамика чеков, 2025 год к 2023 году</span>
+                    <span class="coefficient-stats__value">-9%</span>
+                </div>
+            </div>
+        {{/if}}
+    </div>
+</section>

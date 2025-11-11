@@ -5,6 +5,12 @@
 @forward '@/components/sections/home/Profile/Profile';
 @forward '@/components/sections/home/News/News';
 
+@forward '@/components/sections/coefficient/Coefficient/Coefficient';
+
+@forward '@/components/sections/motivation/Motivation/Motivation';
+
+@forward '@/components/sections/package/Package/Package';
+
 @forward '@/components/sections/error/NotFound/NotFound';
 
 @forward '@/components/sections/shared/Auth/Auth';

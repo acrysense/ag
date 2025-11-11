@@ -166,6 +166,7 @@
             background: transparent;
             border: none;
             border-radius: 0;
+            transition: color $transition-default;
             &:focus {
                 outline: none
             }
@@ -182,6 +183,14 @@
                 }
             }
             
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-blue-hover;
+					& > svg {
+						color: $color-blue-hover;
+					}
+				}
+			}
             @include only(mobile) {
                 @include prop-vw(gap, 5, sm);
                 @include prop-vw(margin-top, 10, sm);
@@ -283,10 +292,11 @@
                 display: none;
             }
             @include only(mobile) {
-                @include prop-vw(margin-block, 10, sm);
-                @include prop-vw(padding-block, 20, sm);
+                @include prop-vw(padding-block, 10, sm);
                 @include prop-vw(padding-inline, 10, sm);
                 background: $color-white;
+                @include border-side(top, 10, solid, $color-bg, sm);
+                @include border-side(bottom, 10, solid, $color-bg, sm);
             }
         }
         &__list {

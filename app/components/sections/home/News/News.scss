@@ -80,6 +80,19 @@
         &__main {
             display: block;
             width: 100%;
+
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-blue-hover;
+                    .news-card {
+                        &__img {
+                            img {
+                                transform: scale(1.075);
+                            }
+                        }
+                    }
+				}
+			}
         }
         &__img {
             position: relative;
@@ -101,6 +114,7 @@
                 width: 100%;
                 height: 100%;
                 object-fit: cover;
+                transition: transform $transition-vs;
             }
             
             @include only(mobile) {

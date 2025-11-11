@@ -1,0 +1,315 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .coefficient {
+        &__wrap {
+            @include up(tablet) {
+                @include prop-vw(padding, 25, xl);
+                background: $color-white;
+                @include prop-vw(border-radius, 25, xl);
+                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(padding-bottom, 20, sm);
+            }
+        }
+        &__top {
+            @include prop-vw(margin-bottom, 40, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 20, sm);
+            }
+        }
+        &__heading {
+            display: block;
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 30, xl);
+            font-weight: bold;
+
+            @include only(mobile) {
+                @include prop-vw(font-size, 32, sm);
+            }
+        }
+        &__help {
+            display: block;
+            @include prop-vw(margin-top, 5, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            color: $color-dark-grey;
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 5, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__description {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__section + &__section,
+        &__stats + &__stats,
+        &__stats + &__wrapper,
+        &__wrapper + &__stats,
+        &__table + &__table {
+            @include prop-vw(margin-top, 40, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+            }
+        }
+        &__subtitle {
+            display: block;
+            @include prop-vw(margin-bottom, 20, xl);
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 18, xl);
+            font-weight: bold;
+            line-height: 1.33333333333;
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 20, sm);
+                @include prop-vw(font-size, 18, sm);
+            }
+        }
+        &__wrapper {
+            overflow: hidden;
+            @include prop-vw(padding-block, 20, xl);
+            width: 100%;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 20, xl);
+
+            @include only(mobile) {
+                @include prop-vw(padding-block, 20, sm);
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 20, sm);
+            }
+        }
+    }
+    .coefficient-table {
+        @include prop-vw(padding-inline, 20, xl);
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        @include only(mobile) {
+            @include prop-vw(padding-inline, 20, sm);
+        }
+
+        &__scroll {
+            @include prop-vw(min-width, 778, xl);
+            width: 100%;
+
+            @include only(mobile) {
+                @include prop-vw(min-width, 778, sm);
+            }
+        }
+        &__body {
+            .coefficient-table {
+                &__row:last-child .coefficient-table__item:not(.coefficient-table__item--empty) {
+                    @include border-side(bottom, 1, solid, $color-border, xl);
+                }
+                &__item + .coefficient-table__item {
+                    @include border-side(left, 1, solid, $color-border, xl);
+                }
+                &__item {
+                    &:not(.coefficient-table__item--empty) {
+                        @include border-side(top, 1, solid, $color-border, xl);
+                    }
+                }
+            }
+
+            @include only(mobile) {
+                .coefficient-table {
+                    &__row:last-child .coefficient-table__item:not(.coefficient-table__item--empty) {
+                        @include border-side(bottom, 1, solid, $color-border, sm);
+                    }
+                    &__item + .coefficient-table__item {
+                        @include border-side(left, 1, solid, $color-border, sm);
+                    }
+                    &__item {
+                        &:not(.coefficient-table__item--empty) {
+                            @include border-side(top, 1, solid, $color-border, sm);
+                        }
+                    }
+                }
+            }
+        }
+        &__row {
+            display: flex;
+            width: 100%;
+        }
+        &__item {
+            flex: 1 1 auto;
+            @include prop-vw(width, 110, xl);
+            &--sm {
+                @include prop-vw(max-width, 76, xl);
+                @include prop-vw(width, 76, xl);
+            }
+            &--md {
+                @include prop-vw(width, 160, xl);
+            }
+            &--xl {
+                @include prop-vw(width, 270, xl);
+            }
+            &--light-green {
+                background: #E8F5E9;
+            }
+            &--green {
+                background: rgba(#63AC39, 0.2);
+            }
+            &--yellow {
+                background: rgba(#FFCC00, 0.2);
+            }
+            &--empty {
+                border: none;
+            }
+
+            @include only(mobile) {
+                @include prop-vw(width, 110, sm);
+                &--sm {
+                    @include prop-vw(max-width, 76, sm);
+                    @include prop-vw(width, 76, sm);
+                }
+                &--md {
+                    @include prop-vw(width, 160, sm);
+                }
+                &--xl {
+                    @include prop-vw(width, 270, sm);
+                }
+            }
+        }
+        &__heading {
+            display: flex;
+            align-items: center;
+            @include prop-vw(padding, 10, xl);
+            @include prop-vw(min-height, 60, xl);
+            width: 100%;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: 600;
+            line-height: 1.25;
+            color: $color-dark-grey;
+
+            @include only(mobile) {
+                @include prop-vw(padding, 10, sm);
+                @include prop-vw(min-height, 60, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        &__value {
+            display: flex;
+            align-items: center;
+            @include prop-vw(padding, 10, xl);
+            @include prop-vw(min-height, 40, xl);
+            width: 100%;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            line-height: 1.25;
+            b, strong {
+                font-weight: 600;
+            }
+            
+            @include only(mobile) {
+                @include prop-vw(padding, 10, sm);
+                @include prop-vw(min-height, 40, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        &__done {
+            display: block;
+            @include prop-vw(min-width, 16, xl);
+            @include prop-vw(width, 16, xl);
+            @include prop-vw(height, 16, xl);
+            background-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.2063 13.838C7.16488 13.838 7.12391 13.8294 7.08597 13.8128C7.04802 13.7962 7.01392 13.7719 6.98581 13.7415L1.04071 7.31064C1.00108 7.26776 0.97481 7.21427 0.96511 7.15669C0.955411 7.09912 0.962706 7.03997 0.986103 6.98648C1.0095 6.93299 1.04798 6.88748 1.09684 6.85552C1.14571 6.82356 1.20282 6.80653 1.26121 6.80653H4.12285C4.16581 6.80654 4.20828 6.81576 4.24738 6.83357C4.28647 6.85139 4.3213 6.87738 4.3495 6.9098L6.33637 9.19563C6.5511 8.73662 6.96677 7.97236 7.6962 7.04108C8.77456 5.66431 10.7803 3.63951 14.212 1.81167C14.2784 1.77634 14.3555 1.76718 14.4283 1.78597C14.501 1.80477 14.5641 1.85017 14.605 1.91319C14.6459 1.97622 14.6617 2.0523 14.6493 2.12641C14.6369 2.20052 14.5971 2.26728 14.5378 2.31349C14.5247 2.32373 13.2016 3.36569 11.6788 5.27422C10.2774 7.03054 8.4144 9.90239 7.49769 13.6099C7.48159 13.675 7.44413 13.7329 7.3913 13.7743C7.33847 13.8156 7.27331 13.8381 7.20621 13.8381L7.2063 13.838Z" fill="%23169E23"/></svg>');
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-position: center center;
+            
+            @include only(mobile) {
+                @include prop-vw(min-width, 16, sm);
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+            }
+        }
+    }
+
+    .coefficient-stats {
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
+        @include prop-vw(padding-bottom, 5, xl);
+        @include border-side(bottom, 2, solid, $color-dark-grey, xl);
+        &.is-up {
+            border-color: $color-green;
+            .coefficient-stats {
+                &__value {
+                    color: $color-green;
+                }
+            }
+        }
+        &.is-down {
+            border-color: $color-red;
+            .coefficient-stats {
+                &__value {
+                    color: $color-red;
+                }
+            }
+        }
+
+        @include only(mobile) {
+            flex-direction: column;
+            @include prop-vw(padding-bottom, 5, sm);
+            @include border-side(bottom, 2, solid, $color-dark-grey, sm);
+            &.is-up {
+                border-color: $color-green;
+            }
+            &.is-down {
+                border-color: $color-red;
+            }
+        }
+        
+        &__label {
+            display: block;
+            @include prop-vw(max-width, 537, xl);
+            width: 100%;
+            @include prop-vw(font-size, 16, xl);
+            font-weight: normal;
+            line-height: 1.25;
+
+            @include only(mobile) {
+                max-width: none;
+                @include prop-vw(font-size, 14, sm);
+                br {
+                    display: none;
+                }
+            }
+        }
+        &__value {
+            display: block;
+            @include prop-vw(margin-left, 20, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 40, xl);
+            font-weight: normal;
+            line-height: 1;
+            text-transform: uppercase;
+            color: $color-dark-grey;
+            
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+                margin-right: auto;
+                margin-left: auto;
+                max-width: none;
+                @include prop-vw(font-size, 30, sm);
+                text-align: center;
+            }
+        }
+    }
+}

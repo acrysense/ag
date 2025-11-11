@@ -27,6 +27,9 @@
 				@include prop-vw(padding-block, 20, xl);
 				@include prop-vw(max-width, 1570, xl);
 			}
+            @include only(mobile) {
+				background: $color-white;
+			}
 		}
 		&__container {
 			width: 100%;
@@ -35,6 +38,42 @@
 				@include prop-vw(margin-left, 50, xl);
 				@include prop-vw(padding-inline, 125, xl);
 				@include prop-vw(max-width, 1120, xl);
+			}
+		}
+		&__back {
+			display: flex;
+			align-items: center;
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(margin-bottom, 20, xl);
+			width: fit-content;
+			@include prop-vw(font-size, 14, xl);
+			font-weight: normal;
+			& > svg {
+				@include prop-vw(min-width, 20, xl);
+				@include prop-vw(width, 20, xl);
+				@include prop-vw(height, 20, xl);
+			}
+
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-blue-hover;
+					& > svg {
+						color: $color-blue-hover;
+					}
+				}
+			}
+			@include only(mobile) {
+				@include prop-vw(margin-top, 20, sm);
+				@include prop-vw(margin-bottom, 20, sm);
+				@include prop-vw(margin-left, 10, sm);
+				@include prop-vw(font-size, 14, sm);
+				color: $color-dark-grey;
+				& > svg {
+					@include prop-vw(min-width, 16, sm);
+					@include prop-vw(width, 16, sm);
+					@include prop-vw(height, 16, sm);
+					color: $color-dark-grey;
+				}
 			}
 		}
 	}

@@ -1,0 +1,1361 @@
+<section class="motivation" data-path="sections/motivation">
+    <div class="motivation__wrap">
+        <h3 class="motivation__heading">Мотивация</h3>
+        <div class="tabs">
+            <div class="tabs__list">
+                <div class="tabs__item is--active">
+                    <button class="tabs__tab">Текущий месяц</button>
+                </div>
+                <div class="tabs__item">
+                    <button class="tabs__tab">Предыдущий месяц</button>
+                </div>
+            </div>
+            <div class="tabs__wrapper is--active">
+                {{#if motivation.empty}}
+                    <div class="motivation__top">
+                        <div class="beginner-end motivation__beginner-end">
+                            <div class="beginner-end__wrapper">
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="motivation__empty">
+                        <p class="motivation__description">Нед данных для отображения. Попробуйте зайти еще раз через некоторое время.</p>
+                    </div>
+                {{else}}
+                    <div class="motivation__top">
+                        <div class="beginner-end motivation__beginner-end">
+                            <div class="beginner-end__wrapper">
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="motivation__link">Список СТМ для Мотивации</a>
+                    </div>
+                    <div class="motivation__section">
+                        <div class="coefficient-stats is-up motivation__stats">
+                            <span class="coefficient-stats__label">Премия, итого:</span>
+                            <span class="coefficient-stats__value">878.20 BYN</span>
+                        </div>
+                    </div>
+                    <div class="motivation__section">
+                        <div class="motivation__wrapper">
+                            <div class="motivation__section">
+                                <div class="point-item">
+                                    <div class="point-item__header">
+                                        <svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
+                                            <use href="#icon-pharmacy"></use>
+                                        </svg>
+                                        <div class="point-item__info">
+                                            <h3 class="point-item__heading">Аптека №12 первой категории</h3>
+                                            <span class="point-item__address">Витебск, пр. Фрунзе, 71a</span>
+                                        </div>
+                                    </div>
+                                    <div class="point-item__items">
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Товарооборот аптеки с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">58470.63 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Отработанное время</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">44.5 ч</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">1470.25 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Процент премирования за ЛВ apteka.by</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">0.5%</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">8.70 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ (ранги) для ЛС и остальных товаров с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">677.50 BYN</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для ЛС:</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для остальных товаров (БАД, ТНП, ИМТ, ИМН):</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="motivation__section">
+                        <div class="motivation__wrapper">
+                            <div class="motivation__section">
+                                <div class="point-item">
+                                    <div class="point-item__header">
+                                        <svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
+                                            <use href="#icon-pharmacy"></use>
+                                        </svg>
+                                        <div class="point-item__description">
+                                            <h3 class="point-item__heading">Аптека №4</h3>
+                                            <span class="point-item__address">Витебск, пр. Фрунзе, 71a</span>
+                                        </div>
+                                    </div>
+                                    <div class="point-item__items">
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Товарооборот аптеки с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">58470.63 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Отработанное время</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">44.5 ч</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">1470.25 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Процент премирования за ЛВ apteka.by</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">0.5%</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">8.70 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ (ранги) для ЛС и остальных товаров с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">677.50 BYN</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для ЛС:</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для остальных товаров (БАД, ТНП, ИМТ, ИМН):</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+            <div class="tabs__wrapper">
+                {{#if motivation.empty}}
+                    <div class="motivation__top">
+                        <div class="beginner-end motivation__beginner-end">
+                            <div class="beginner-end__wrapper">
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="motivation__empty">
+                        <p class="motivation__description">Нед данных для отображения. Попробуйте зайти еще раз через некоторое время.</p>
+                    </div>
+                {{else}}
+                    <div class="motivation__top">
+                        <div class="beginner-end motivation__beginner-end">
+                            <div class="beginner-end__wrapper">
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                                <div class="beginner-end__item">
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-сalendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="#" class="motivation__link">Список СТМ для Мотивации</a>
+                    </div>
+                    <div class="motivation__section">
+                        <div class="coefficient-stats is-up motivation__stats">
+                            <span class="coefficient-stats__label">Премия, итого:</span>
+                            <span class="coefficient-stats__value">878.20 BYN</span>
+                        </div>
+                    </div>
+                    <div class="motivation__section">
+                        <div class="motivation__wrapper">
+                            <div class="motivation__section">
+                                <div class="point-item">
+                                    <div class="point-item__header">
+                                        <svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
+                                            <use href="#icon-pharmacy"></use>
+                                        </svg>
+                                        <div class="point-item__info">
+                                            <h3 class="point-item__heading">Аптека №12 первой категории</h3>
+                                            <span class="point-item__address">Витебск, пр. Фрунзе, 71a</span>
+                                        </div>
+                                    </div>
+                                    <div class="point-item__items">
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Товарооборот аптеки с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">58470.63 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Отработанное время</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">44.5 ч</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">1470.25 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Процент премирования за ЛВ apteka.by</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">0.5%</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">8.70 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ (ранги) для ЛС и остальных товаров с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">677.50 BYN</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для ЛС:</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для остальных товаров (БАД, ТНП, ИМТ, ИМН):</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="motivation__section">
+                        <div class="motivation__wrapper">
+                            <div class="motivation__section">
+                                <div class="point-item">
+                                    <div class="point-item__header">
+                                        <svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
+                                            <use href="#icon-pharmacy"></use>
+                                        </svg>
+                                        <div class="point-item__description">
+                                            <h3 class="point-item__heading">Аптека №4</h3>
+                                            <span class="point-item__address">Витебск, пр. Фрунзе, 71a</span>
+                                        </div>
+                                    </div>
+                                    <div class="point-item__items">
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Товарооборот аптеки с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">58470.63 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Отработанное время</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">44.5 ч</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">1470.25 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Процент премирования за ЛВ apteka.by</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">0.5%</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ apteka.by, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">8.70 BYN</strong>
+                                        </div>
+                                        <div class="point-item__row">
+                                            <div class="point-item__minimal">Сумма премии за ЛВ (ранги) для ЛС и остальных товаров с учетом бронирования, без НДС</div>
+                                            <div class="point-item__delimeter"></div>
+                                            <strong class="point-item__points">677.50 BYN</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для ЛС:</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="motivation__section">
+                                <h3 class="motivation__subtitle">Для остальных товаров (БАД, ТНП, ИМТ, ИМН):</h3>
+                                <div class="coefficient-table coefficient-table--grey motivation__table">
+                                    <div class="coefficient-table__scroll">
+                                        <div class="coefficient-table__head">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__heading">Ранг</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Процент премирования, <br>% от ТО без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма ЛВ по рангам для ЛС, <br>без НДС </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__heading">Сумма премии за ЛВ для ЛС, <br>без НДС </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="coefficient-table__body">
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">1</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">2</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">3</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">4</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--light-green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--green">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">6</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">19%</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">5000 BYN</span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md coefficient-table__item--yellow">
+                                                    <span class="coefficient-table__value">30 BYN</span>
+                                                </div>
+                                            </div>
+                                            <div class="coefficient-table__row">
+                                                <div class="coefficient-table__item coefficient-table__item--sm">
+                                                    <span class="coefficient-table__value">
+                                                        <b>ИТОГО</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>1.91%</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>20 000.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                                <div class="coefficient-table__item coefficient-table__item--md">
+                                                    <span class="coefficient-table__value">
+                                                        <b>275.00 BYN</b>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
+        </div>
+    </div>
+</section>
