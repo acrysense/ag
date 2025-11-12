@@ -51,7 +51,7 @@
             
             @include only(mobile) {
                 @include prop-vw(margin-left, 10, sm);
-                @include prop-vw(max-width, 250, sm);
+                @include prop-vw(max-width, 265, sm);
             }
         }
         &__body {
