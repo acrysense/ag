@@ -1,6 +1,6 @@
 {{#if props.href}}
     <a
-        class="btn{{#if props.variant}} btn--{{props.variant}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}"
+        class="btn{{#if props.variant}} btn--{{props.variant}}{{/if}}{{#if props.size}} btn--{{props.size}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}"
         href="{{props.href}}"
         {{#if props.target}}target="{{props.target}}"{{/if}}
         {{#if props.download}}download{{/if}}
@@ -8,7 +8,7 @@
     >{{default props.text ''}}</a>
 {{else}}
     <button
-        class="btn{{#if props.variant}} btn--{{props.variant}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}"
+        class="btn{{#if props.variant}} btn--{{props.variant}}{{/if}}{{#if props.size}} btn--{{props.size}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}"
         type="{{default props.type 'button'}}"
         {{#if props.disabled}}disabled{{/if}}
         {{{attrs props.attrs}}}

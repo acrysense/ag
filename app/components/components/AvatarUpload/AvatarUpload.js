@@ -9,7 +9,7 @@ export default (root) => {
 	const btnChoose = root.querySelector('.avatar-uploader__choose');
 	const btnRemove = root.querySelector('.avatar-uploader__remove');
 
-	const placeholder = root.dataset.placeholder || '/assets/images/avatar-placeholder.jpg';
+	const placeholder = root.dataset.placeholder || '';
 	const maxMb = parseFloat(root.dataset.maxMb || '5') || 5;
 	const maxBytes = maxMb * 1024 * 1024;
 

@@ -23,12 +23,14 @@
             width: 100%;
         }
         &__img {
+            position: relative;
+            z-index: 1;
             display: block;
             overflow: hidden;
             @include prop-vw(min-width, 180, xl);
             @include prop-vw(width, 180, xl);
             @include prop-vw(height, 180, xl);
-            background: $color-bg;
+            background: #D2DCE5;
             @include prop-vw(border-radius, 10, xl);
             img {
                 display: block;
@@ -42,6 +44,25 @@
                 @include prop-vw(width, 80, sm);
                 @include prop-vw(height, 80, sm);
                 @include prop-vw(border-radius, 10, sm);
+            }
+        }
+        &__placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            display: block;
+            overflow: hidden;
+            @include prop-vw(font-size, 30, xl);
+            font-weight: normal;
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: $color-white;
+
+            @include only(mobile) {
+                @include prop-vw(font-size, 20, sm);
             }
         }
         &__img + &__body {

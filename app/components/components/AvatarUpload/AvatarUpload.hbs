@@ -1,14 +1,13 @@
 <div class="avatar-uploader{{#if props.class}} {{props.class}}{{/if}}"
 	data-module="AvatarUpload"
 	data-path="components"
-	data-placeholder="{{default props.placeholder '/assets/images/avatar-placeholder.jpg'}}"
 	data-max-mb="{{default props.maxMb 5}}"
 >
 	{{#if props.label}}
 		<span class="avatar-uploader__label">{{props.label}}</span>
 	{{/if}}
 	<div class="avatar-uploader__box">
-		<picture class="avatar-uploader__preview">
+		<div class="avatar-uploader__preview">
 			<img
 				class="avatar-uploader__img"
 				src="{{default props.src (default '' '')}}"
@@ -17,7 +16,8 @@
 				decoding="async"
 				loading="lazy"
 			/>
-		</picture>
+			<span class="avatar-uploader__placeholder">ВМ</span>
+		</div>
 
         <div class="avatar-uploader__controls">
             <button class="avatar-uploader__choose" type="button">Загрузить новое фото</button>

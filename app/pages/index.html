@@ -5,12 +5,17 @@
 		<script type="module" src="/app.js"></script>
 	</head>
 	<body class="bg-light">
+		{{> components/TopNotice/TopNotice props=(obj
+			key='2025-11-13'
+			text='Сообщение-растяжка для всех сотрудников компании. У нас важные новости.'
+		)}}
 		<div class="wrapper">
 			{{> layouts/Header/Header }}
 			<main class="wrapper__content">
 				{{> layouts/Sidebar/Sidebar }}
 				<div class="wrapper__main">
 					<div class="wrapper__container">
+						<div class="wrapper__banr"></div>
 						{{> sections/home/Profile/Profile }}
 						{{> sections/shared/Promo/Promo }}
 						{{> sections/home/News/News }}

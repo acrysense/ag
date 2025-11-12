@@ -92,6 +92,33 @@
                 }
             }
         }
+        &__placeholder {
+            display: block;
+            overflow: hidden;
+            @include prop-vw(margin-right, 10, xl);
+            @include prop-vw(padding-inline, 2, xl);
+            @include prop-vw(min-width, 30, xl);
+            @include prop-vw(width, 30, xl);
+            @include prop-vw(height, 30, xl);
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            @include prop-vw(line-height, 30, xl);
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: $color-white;
+            background: $color-grey;
+            border-radius: 50%;
+
+            @include only(mobile) {
+                @include prop-vw(margin-right, 5, sm);
+                @include prop-vw(min-width, 30, sm);
+                @include prop-vw(width, 30, sm);
+                @include prop-vw(height, 30, sm);
+                @include prop-vw(font-size, 12, sm);
+                @include prop-vw(line-height, 30, sm);
+            }
+        }
         &__panel {
             @include up(tablet) {
                 @include prop-vw(padding, 20, xl);

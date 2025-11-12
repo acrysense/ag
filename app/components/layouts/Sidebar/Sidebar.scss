@@ -4,7 +4,7 @@
 @layer layout {
     .sidebar {
         @include prop-vw(padding-top, 20, xl);
-        @include prop-vw(padding-right, 95, xl);
+        @include prop-vw(padding-right, 19, xl);
         @include prop-vw(padding-bottom, 40, xl);
         @include prop-vw(padding-left, 30, xl);
         @include minvh-minus(120, xl, 100vh);
@@ -57,10 +57,13 @@
         }
         &__section {
             @include prop-vw(padding-bottom, 10, xl);
+            @include prop-vw(max-width, 225, xl);
+            width: 100%;
             @include border-side(bottom, 1, solid, $color-dark-grey, xl);
 
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 10, sm);
+                max-width: none;
                 @include border-side(bottom, 1, solid, $color-dark-grey, sm);
             }
         }
@@ -131,6 +134,37 @@
                     @include prop-vw(height, 20, sm);
                 }
             }
+        }
+        &__banr {
+            position: relative;
+            z-index: 1;
+            display: block;
+            overflow: hidden;
+            @include prop-vw(margin-top, 80, xl);
+            width: 100%;
+            background: #F9DBDB;
+            @include prop-vw(border-radius, 20, xl);
+            &::before {
+                content: '';
+                display: block;
+                padding-top: 150%;
+            }
+            & > * {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            @include only(mobile) {
+                display: none;
+            }
+        }
+        &__banr + &__banr {
+            @include prop-vw(margin-top, 40, xl);
         }
         &__close {
             position: absolute;

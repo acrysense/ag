@@ -131,12 +131,16 @@
             }
         }
         &__title {
-            display: block;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;  
+            -webkit-line-clamp: 2;
+            overflow: hidden;
             width: fit-content;
             font-family: $font-secondary;
             @include prop-vw(font-size, 18, xl);
             font-weight: bold;
             line-height: 1.33333333333;
+            text-overflow: ellipsis;
             
             @include only(mobile) {
                 @include prop-vw(font-size, 18, sm);
@@ -145,13 +149,13 @@
         &__description {
             display: -webkit-box;
             -webkit-box-orient: vertical;  
-            -webkit-line-clamp: 614;
+            -webkit-line-clamp: 5;
             overflow: hidden;
             @include prop-vw(margin-top, 10, xl);
             width: fit-content;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
-            line-height: 1.57142857143;
+            line-height: 1.46666666667;
             text-overflow: ellipsis;
             color: $color-dark-grey;
             align-self: stretch;

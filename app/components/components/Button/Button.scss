@@ -18,6 +18,11 @@
         &:focus {
             outline: none;
         }
+        &--sm {
+            @include prop-vw(padding-block, 16, xl);
+            @include prop-vw(padding-inline, 24, xl);
+            @include prop-vw(font-size, 14, xl);
+        }
         &--secondary {
             color: $color-black;
             background: $color-bg;
@@ -40,6 +45,11 @@
             @include prop-vw(padding-inline, 26, sm);
             @include prop-vw(font-size, 16, sm);
             @include prop-vw(border-radius, 14, sm);
+            &--sm {
+                @include prop-vw(padding-block, 16, sm);
+                @include prop-vw(padding-inline, 24, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
         }
     }
 }

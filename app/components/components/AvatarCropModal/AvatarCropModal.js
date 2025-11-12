@@ -26,8 +26,8 @@ export function openAvatarCropModal(file) {
 					</div>
 				</div>
 				<div class="avatar-crop-modal__actions">
-					<button class="btn avatar-crop-modal__action" type="button" data-save>Сохранить</button>
-					<button class="btn btn--secondary avatar-crop-modal__action" type="button" data-cancel>Вернуться назад</button>
+					<button class="btn btn--sm avatar-crop-modal__action" type="button" data-save>Сохранить</button>
+					<button class="btn btn--sm btn--secondary avatar-crop-modal__action" type="button" data-cancel>Вернуться назад</button>
 				</div>
 			</div>
 		`;

@@ -34,7 +34,8 @@
             @include prop-vw(min-width, 180, xl);
             @include prop-vw(width, 180, xl);
             @include prop-vw(height, 180, xl);
-            background: #D3D8DE;
+            font-size: 0;
+            background: #D2DCE5;
             @include prop-vw(border-radius, 10, xl);
 
             @include only(mobile) {
@@ -44,11 +45,40 @@
                 @include prop-vw(border-radius, 10, sm);
             }
         }
+        &__placeholder {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            @include prop-vw(font-size, 30, xl);
+            font-weight: normal;
+            text-align: center;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: $color-white;
+            background: #D2DCE5;
+            @include prop-vw(border-radius, 10, xl);
+
+            @include only(mobile) {
+                @include prop-vw(font-size, 20, sm);
+            }
+        }
         &__img {
+            position: relative;
+            z-index: 2;
             display: block;
             width: 100%;
             height: 100%;
             object-fit: cover;
+            opacity: 0;
+            &[data-value-src] {
+                opacity: 1;
+            }
         }
         &__choose {
             display: block;

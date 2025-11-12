@@ -1,4 +1,4 @@
-<section class="profile-edit" data-path="sections/profile">
+<section class="profile-edit" data-module="ProfileEdit" data-path="sections/profile">
     <div class="profile-edit__wrap">
         <span class="profile-edit__heading">Редактирование профиля</span>
         <div class="profile-edit__section">
@@ -20,7 +20,7 @@
                     label='Пароль'
                     help='Ничего не вводите в поле пароля, если не хотите его изменить.'
                     class='profile-edit__input'
-                    id='profile-password'
+                    id='profile-password-new'
                     name='password'
                     type='password'
                     placeholder=''
@@ -31,7 +31,7 @@
                     variant="toggle"
                     label='Новый пароль'
                     class='profile-edit__input'
-                    id='profile-password-repeat'
+                    id='profile-password-confirm'
                     name='password'
                     type='password'
                     placeholder=''
@@ -46,20 +46,21 @@
 				class='profile-edit__avatar'
 				name='avatar'
 				deleteName='avatar_delete'
-				maxMb=5
 			)}}
         </div>
         <div class="profile-edit__section">
             <div class="profile-edit__buttons">
                 {{> components/Button/Button props=(obj
+                    size='sm'
                     class='profile-edit__btn'
                     type='submit'
                     text='Сохранить'
                 )}}
                 {{> components/Button/Button props=(obj
                     variant='secondary'
+                    size='sm'
                     class='profile-edit__btn'
-                    type='submit'
+                    type='button'
                     text='Отмена'
                 )}}
             </div>

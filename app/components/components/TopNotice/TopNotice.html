@@ -1,0 +1,16 @@
+<div class="top-notice{{#if props.class}} {{props.class}}{{/if}}"
+	data-module="TopNotice"
+	data-path="components"
+	data-key="{{default props.key 'global'}}"
+	role="region"
+	aria-label="Объявление"
+>
+	<div class="top-notice__container">
+		<p class="top-notice__text">{{default props.text ''}}</p>
+		<button class="top-notice__close" type="button" aria-label="Закрыть">
+			<svg aria-hidden="true" focusable="false" width="16" height="16">
+				<use href="#icon-close"></use>
+			</svg>
+		</button>
+	</div>
+</div>
