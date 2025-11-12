@@ -4,8 +4,8 @@
         "varWght": "300 700"
     },
     "families": {
-        "InterTight": {
-            "cssFamily": "Inter Tight",
+        "Inter": {
+            "cssFamily": "Inter",
             "normal": { "varWght": "300 700" },
             "italic": { "varWght": "300 700" }
         }
