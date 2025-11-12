@@ -1,6 +1,6 @@
 <section class="package" data-module="Package" data-path="sections/package">
-    <div class="motivation__wrap">
-        <h3 class="motivation__heading">Пакетное предложение 3</h3>
+    <div class="package__wrap">
+        <h3 class="package__heading">Пакетное предложение 3</h3>
         <div class="tabs">
             <div class="tabs__list">
                 <div class="tabs__item is--active">
@@ -12,16 +12,18 @@
             </div>
             <div class="tabs__wrapper is--active">
                 {{#if package.empty}}
-                    <div class="motivation__top">
-                        <div class="beginner-end motivation__beginner-end">
+                    <div class="package__top">
+                        <div class="beginner-end package__beginner-end">
                             <div class="beginner-end__wrapper">
                                 <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Начало:</span>
                                     <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
                                         <use href="#icon-calendar"></use>
                                     </svg>
                                     <div class="beginner-end__date">01.01.2025</div>
                                 </div>
                                 <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Окончание:</span>
                                     <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
                                         <use href="#icon-calendar"></use>
                                     </svg>
@@ -30,20 +32,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="motivation__empty">
-                        <p class="motivation__description">Нед данных для отображения. Попробуйте зайти еще раз через некоторое время.</p>
+                    <div class="package__empty">
+                        <p class="package__description">Нед данных для отображения. Попробуйте зайти еще раз через некоторое время.</p>
                     </div>
                 {{else}}
-                    <div class="motivation__top">
-                        <div class="beginner-end motivation__beginner-end">
+                    <div class="package__top">
+                        <div class="beginner-end package__beginner-end">
                             <div class="beginner-end__wrapper">
                                 <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Начало:</span>
                                     <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
                                         <use href="#icon-calendar"></use>
                                     </svg>
                                     <div class="beginner-end__date">01.01.2025</div>
                                 </div>
                                 <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Окончание:</span>
                                     <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
                                         <use href="#icon-calendar"></use>
                                     </svg>
@@ -52,19 +56,19 @@
                             </div>
                         </div>
                     </div>
-                    <div class="motivation__section">
-                        <div class="coefficient-stats is-up motivation__stats">
+                    <div class="package__section">
+                        <div class="coefficient-stats is-up package__stats">
                             <span class="coefficient-stats__label">План Пакетного предложения выполнен <br>Ваша премия</span>
                             <span class="coefficient-stats__value">500.00 BYN</span>
                         </div>
                     </div>
-                    <div class="motivation__section">
-                        <div class="coefficient-stats motivation__stats">
+                    <div class="package__section">
+                        <div class="coefficient-stats package__stats">
                             <span class="coefficient-stats__label">План Пакетного предложения выполнен <br>Ваша премия</span>
                             <span class="coefficient-stats__value">200.00 BYN</span>
                         </div>
                     </div>
-                    <div class="motivation__section">
+                    <div class="package__section">
                         <div class="n-coefficient-progress n-coefficient__progress">
                             <span class="n-coefficient-progress__title">Прогресс выполнения Пакетного предложения</span>
                             <div class="n-coefficient-progress__bar" style="--percent: 51%;">
@@ -72,7 +76,9 @@
                                 <span class="n-coefficient-progress__value" data-target="51.6">0%</span>
                             </div>
                         </div>
-                        <div class="n-coefficient__wrapper n-coefficient__wrapper--package">
+                    </div>
+                    <div class="package__section">
+                        <div class="package__wrapper">
                             <div class="n-package-filter n-coefficient__filter">
                                 <div class="n-package-filter__search">
                                     <input class="n-package-filter__search-input" type="text" placeholder="Найти по коду или названию">
@@ -358,7 +364,360 @@
                     </div>
                 {{/if}}
             </div>
-            <div class="tabs__wrapper"></div>
+            <div class="tabs__wrapper">
+                {{#if package.empty}}
+                    <div class="package__top">
+                        <div class="beginner-end package__beginner-end">
+                            <div class="beginner-end__wrapper">
+                                <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Начало:</span>
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-calendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                                <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Окончание:</span>
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-calendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="package__empty">
+                        <p class="package__description">Нед данных для отображения. Попробуйте зайти еще раз через некоторое время.</p>
+                    </div>
+                {{else}}
+                    <div class="package__top">
+                        <div class="beginner-end package__beginner-end">
+                            <div class="beginner-end__wrapper">
+                                <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Начало:</span>
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-calendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                                <div class="beginner-end__item">
+                                    <span class="beginner-end__label">Окончание:</span>
+                                    <svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+                                        <use href="#icon-calendar"></use>
+                                    </svg>
+                                    <div class="beginner-end__date">01.01.2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="package__section">
+                        <div class="coefficient-stats is-up package__stats">
+                            <span class="coefficient-stats__label">План Пакетного предложения выполнен <br>Ваша премия</span>
+                            <span class="coefficient-stats__value">500.00 BYN</span>
+                        </div>
+                    </div>
+                    <div class="package__section">
+                        <div class="coefficient-stats package__stats">
+                            <span class="coefficient-stats__label">План Пакетного предложения выполнен <br>Ваша премия</span>
+                            <span class="coefficient-stats__value">200.00 BYN</span>
+                        </div>
+                    </div>
+                    <div class="package__section">
+                        <div class="n-coefficient-progress n-coefficient__progress">
+                            <span class="n-coefficient-progress__title">Прогресс выполнения Пакетного предложения</span>
+                            <div class="n-coefficient-progress__bar" style="--percent: 80%;">
+                                <div class="n-coefficient-progress__fill"></div>
+                                <span class="n-coefficient-progress__value" data-target="80.6">0%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="package__section">
+                        <div class="package__wrapper">
+                            <div class="n-package-filter n-coefficient__filter">
+                                <div class="n-package-filter__search">
+                                    <input class="n-package-filter__search-input" type="text" placeholder="Найти по коду или названию">
+                                </div>
+                                <div class="n-package-filter__tabs">
+                                    <button class="n-package-filter__tab is--active" data-work="all">Все</button>
+                                    <button class="n-package-filter__tab" data-work="in-work">В работе</button>
+                                </div>
+                            </div>
+                            <div class="n-package-table n-coefficient__table">
+                                <div class="n-package-table__scroll">
+                                    <div class="n-package-table__head">
+                                        <div class="n-package-table__row">
+                                            <div class="n-package-table__item n-package-table__item--sm">
+                                                <span class="n-package-table__heading">Код</span>
+                                            </div>
+                                            <div class="n-package-table__item n-package-table__item--lg">
+                                                <span class="n-package-table__heading">Название</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__heading">Факт <br>продаж, <br>уп. </span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__heading">План <br>продаж, <br>уп. </span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__heading">Осталось <br>до плана, <br>уп. </span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__heading">Факт <br>от плана, <br>% </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="n-package-table__body">
+                                        <div class="n-package-table__row">
+                                            <span class="n-package-table__cell">Противокашлевые препараты</span>
+                                        </div>
+                                        <div class="n-package-table__row">
+                                            <div class="n-package-table__item n-package-table__item--sm">
+                                                <button class="n-package-table__trigger">
+                                                    <svg class="plus" aria-hidden="true" focusable="false" width="20" height="20">
+                                                        <use href="#icon-circle-plus"></use>
+                                                    </svg>
+                                                    <svg class="minus" aria-hidden="true" focusable="false" width="20" height="20">
+                                                        <use href="#icon-circle-minus"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="n-package-table__item n-package-table__item--lg">
+                                                <span class="n-package-table__value">БРОНХИПРЕТ</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">3</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">10</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value" data-work-value="8,000">8,0000</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">30,00%</span>
+                                            </div>
+                                        </div>
+                                        <div class="n-package-table__row-group">
+                                            <div class="n-package-table__row">
+                                                <div class="n-package-table__item n-package-table__item--sm">
+                                                    <span class="n-package-table__value">2012082</span>
+                                                </div>
+                                                <div class="n-package-table__item n-package-table__item--lg">
+                                                    <span class="n-package-table__value">БРОНХИПРЕТ (раствор для приема внутрь фл. 100 мл No1) Bionorica SE-Германия</span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value" data-work-value="8"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                            </div>
+                                            <div class="n-package-table__row">
+                                                <div class="n-package-table__item n-package-table__item--sm">
+                                                    <span class="n-package-table__value">087322</span>
+                                                </div>
+                                                <div class="n-package-table__item n-package-table__item--lg">
+                                                    <span class="n-package-table__value">БРОНХИПРЕТ (раствор для приема внутрь фл. 20 мл No1) Bionorica </span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value" data-work-value="8"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                            </div>
+                                            <div class="n-package-table__row">
+                                                <div class="n-package-table__item n-package-table__item--sm">
+                                                    <span class="n-package-table__value">12087</span>
+                                                </div>
+                                                <div class="n-package-table__item n-package-table__item--lg">
+                                                    <span class="n-package-table__value">БРОНХИПРЕТ (раствор для приема внутрь фл. 100 мл No1) Bionorica SE-Германия</span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value" data-work-value="8"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="n-package-table__row">
+                                            <div class="n-package-table__item n-package-table__item--sm">
+                                                <span class="n-package-table__value">2012082</span>
+                                            </div>
+                                            <div class="n-package-table__item n-package-table__item--lg">
+                                                <span class="n-package-table__value">FeelinGood (БАД) (Комплекс витаминов группы В (Vitamin B complex) табл. 0,19 г No30) Pharma Market Solutions SIA-Латвия</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">5</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">60</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value" data-work-value="7">7</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">12%</span>
+                                            </div>
+                                        </div>
+                                        <div class="n-package-table__row n-package-table__row--green">
+                                            <div class="n-package-table__item n-package-table__item--sm">
+                                                <span class="n-package-table__value">2012087</span>
+                                            </div>
+                                            <div class="n-package-table__item n-package-table__item--lg">
+                                                <span class="n-package-table__value">Good (БАД) (Комплекс витаминов группы В (Vitamin B complex) табл. 0,19 г No30) Pharma Market Solutions SIA-Латвия</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">200</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">10</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value" data-work-value="0">
+                                                    <span class="n-package-table__done"></span>
+                                                </span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">30%</span>
+                                            </div>
+                                        </div>
+                                        <div class="n-package-table__row">
+                                            <div class="n-package-table__item n-package-table__item--sm">
+                                                <span class="n-package-table__value">2012087</span>
+                                            </div>
+                                            <div class="n-package-table__item n-package-table__item--lg">
+                                                <span class="n-package-table__value">FeelinGood (БАД) (Комплекс витаминов группы В (Vitamin B complex) табл. 0,19 г No30) Pharma Market Solutions SIA-Латвия</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">44</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">12</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value" data-work-value="0,8000">2</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">15%</span>
+                                            </div>
+                                        </div>
+                                        <div class="n-package-table__row">
+                                            <div class="n-package-table__item n-package-table__item--sm">
+                                                <button class="n-package-table__trigger">
+                                                    <svg class="plus" aria-hidden="true" focusable="false" width="20" height="20">
+                                                        <use href="#icon-circle-plus"></use>
+                                                    </svg>
+                                                    <svg class="minus" aria-hidden="true" focusable="false" width="20" height="20">
+                                                        <use href="#icon-circle-minus"></use>
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                            <div class="n-package-table__item n-package-table__item--lg">
+                                                <span class="n-package-table__value">ГЕРБИОН</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">3</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">10</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value" data-work-value="8">8,0000</span>
+                                            </div>
+                                            <div class="n-package-table__item">
+                                                <span class="n-package-table__value">30,00%</span>
+                                            </div>
+                                        </div>
+                                        <div class="n-package-table__row-group">
+                                            <div class="n-package-table__row">
+                                                <div class="n-package-table__item n-package-table__item--sm">
+                                                    <span class="n-package-table__value">2012082</span>
+                                                </div>
+                                                <div class="n-package-table__item n-package-table__item--lg">
+                                                    <span class="n-package-table__value">ГЕРБИОН (раствор для приема внутрь фл. 100 мл No1) Bionorica SE-Германия</span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value" data-work-value="8"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                            </div>
+                                            <div class="n-package-table__row">
+                                                <div class="n-package-table__item n-package-table__item--sm">
+                                                    <span class="n-package-table__value">087322</span>
+                                                </div>
+                                                <div class="n-package-table__item n-package-table__item--lg">
+                                                    <span class="n-package-table__value">ГЕРБИОН (раствор для приема внутрь фл. 20 мл No1) Bionorica </span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value" data-work-value="8"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                            </div>
+                                            <div class="n-package-table__row">
+                                                <div class="n-package-table__item n-package-table__item--sm">
+                                                    <span class="n-package-table__value">12087</span>
+                                                </div>
+                                                <div class="n-package-table__item n-package-table__item--lg">
+                                                    <span class="n-package-table__value">ГЕРБИОН (раствор для приема внутрь фл. 100 мл No1) Bionorica SE-Германия</span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value" data-work-value="8"></span>
+                                                </div>
+                                                <div class="n-package-table__item">
+                                                    <span class="n-package-table__value"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="n-package-table__no-results">Ничего не найдено</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {{/if}}
+            </div>
         </div>
     </div>
 </section>
