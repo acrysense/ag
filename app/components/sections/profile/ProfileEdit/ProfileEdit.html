@@ -1,0 +1,68 @@
+<section class="profile-edit" data-path="sections/profile">
+    <div class="profile-edit__wrap">
+        <span class="profile-edit__heading">Редактирование профиля</span>
+        <div class="profile-edit__section">
+            <div class="profile-edit__data">
+                {{> components/Field/Field props=(obj
+                    class='profile-edit__input'
+                    label='Логин'
+                    help='Логин нельзя изменить'
+                    id='profile-name'
+                    name='login'
+                    type='text'
+                    placeholder=''
+                    value='vladislava_89'
+                    required=true
+                    disabled=true
+                )}}
+                {{> components/Field/Field props=(obj
+                    variant="toggle"
+                    label='Пароль'
+                    help='Ничего не вводите в поле пароля, если не хотите его изменить.'
+                    class='profile-edit__input'
+                    id='profile-password'
+                    name='password'
+                    type='password'
+                    placeholder=''
+                    togglePassword=true
+                    required=true
+                )}}
+                {{> components/Field/Field props=(obj
+                    variant="toggle"
+                    label='Новый пароль'
+                    class='profile-edit__input'
+                    id='profile-password-repeat'
+                    name='password'
+                    type='password'
+                    placeholder=''
+                    togglePassword=true
+                    required=true
+                )}}
+            </div>
+        </div>
+        <div class="profile-edit__section">
+            {{> components/AvatarUpload/AvatarUpload props=(obj
+                label='Фотография профиля'
+				class='profile-edit__avatar'
+				name='avatar'
+				deleteName='avatar_delete'
+				maxMb=5
+			)}}
+        </div>
+        <div class="profile-edit__section">
+            <div class="profile-edit__buttons">
+                {{> components/Button/Button props=(obj
+                    class='profile-edit__btn'
+                    type='submit'
+                    text='Сохранить'
+                )}}
+                {{> components/Button/Button props=(obj
+                    variant='secondary'
+                    class='profile-edit__btn'
+                    type='submit'
+                    text='Отмена'
+                )}}
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light">
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__container">
+                        <a href="/" class="wrapper__back">
+                            <svg aria-hidden="true" focusable="false" width="16" height="16">
+                                <use href="#icon-arrow-back-thin"></use>
+                            </svg>
+                            <span>Назад</span>
+                        </a>
+						{{> sections/profile/ProfileEdit/ProfileEdit }}
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

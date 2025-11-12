@@ -121,7 +121,7 @@
                 }
             }
             @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
+                @include prop-vw(gap, 15, sm);
                 @include prop-vw(padding-block, 10, sm);
                 @include prop-vw(font-size, 14, sm);
                 & > svg,

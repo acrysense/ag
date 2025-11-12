@@ -18,6 +18,10 @@
         &:focus {
             outline: none;
         }
+        &--secondary {
+            color: $color-black;
+            background: $color-bg;
+        }
         &[disabled] {
             background: $color-dark-grey;
         }
@@ -27,6 +31,7 @@
 
         @media screen and (hover: hover) {
             &:hover:not([disabled]) {
+                color: $color-white;
                 background: $color-blue-hover;
             }
         }

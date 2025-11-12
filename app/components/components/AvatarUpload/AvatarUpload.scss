@@ -1,0 +1,102 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .avatar-uploader {
+        &__label {
+            display: block;
+            @include prop-vw(margin-bottom, 10, xl);
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 18, xl);
+            font-weight: bold;
+            line-height: 1.33333333333;
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 10, sm);
+                @include prop-vw(font-size, 18, sm);
+            }
+        }
+        &__box {
+            display: flex;
+            align-items: flex-end;
+            @include prop-vw(gap, 40, xl);
+
+            @include only(mobile) {
+                @include prop-vw(gap, 20, sm);
+            }
+        }
+        &__preview {
+            position: relative;
+            z-index: 1;
+            display: block;
+            overflow: hidden;
+            @include prop-vw(min-width, 180, xl);
+            @include prop-vw(width, 180, xl);
+            @include prop-vw(height, 180, xl);
+            background: #D3D8DE;
+            @include prop-vw(border-radius, 10, xl);
+
+            @include only(mobile) {
+                @include prop-vw(min-width, 160, sm);
+                @include prop-vw(width, 160, sm);
+                @include prop-vw(height, 160, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
+        }
+        &__img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        &__choose {
+            display: block;
+            padding: 0;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            text-align: left;
+            color: $color-blue;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            transition: color $transition-default;
+            &:focus {
+                outline: none;
+            }
+
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__remove {
+            display: block;
+            @include prop-vw(margin-top, 20, xl);
+            padding: 0;
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            text-align: left;
+            color: $color-red;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            transition: color $transition-default;
+            &:focus {
+                outline: none;
+            }
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        &__input {
+            position: absolute; inset: 0; width: 1px; height: 1px; opacity: 0; pointer-events: none;
+        }
+        &.has-value .avatar-uploader__remove[hidden] {
+            display: none !important;
+        }
+    }
+}

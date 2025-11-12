@@ -146,11 +146,6 @@
             display: flex;
             align-items: center;
             width: fit-content;
-
-            @include only(mobile) {
-                flex-direction: column;
-                align-items: flex-start;
-            }
         }
         &__item {
             position: relative;
@@ -165,34 +160,36 @@
             }
         }
         &__item + &__item {
-            @include up(tablet) {
-                @include prop-vw(margin-left, 55, xl);
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 50%;
-                    @include prop-vw(left, -20, xl);
-                    z-index: 1;
-                    transform: translate(-100%, -50%);
-                    display: block;
-                    @include prop-vw(width, 15, xl);
-                    @include prop-vw(height, 1, xl);
-                    background: #ADB4C1;
-                }
+            @include prop-vw(margin-left, 55, xl);
+            &::before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                @include prop-vw(left, -30, xl);
+                z-index: 1;
+                transform: translate(-100%, -50%);
+                display: block;
+                @include prop-vw(width, 15, xl);
+                @include prop-vw(height, 1, xl);
+                background: #ADB4C1;
             }
+
             @include only(mobile) {
-                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(margin-left, 55, sm);
+                &::before {
+                    @include prop-vw(left, -20, sm);
+                    @include prop-vw(width, 15, sm);
+                    @include prop-vw(height, 1, sm);
+                }
             }
         }
         &__label {
-            display: block;
+            display: none;
             width: fit-content;
+            @include prop-vw(font-size, 13, xl);
             font-weight: normal;
             color: $color-dark-grey;
 
-            @include up(tablet) {
-                display: none;
-            }
             @include only(mobile) {
                 @include prop-vw(font-size, 13, sm);
             }

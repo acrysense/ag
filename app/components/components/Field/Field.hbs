@@ -1,4 +1,9 @@
 <div class="field{{#if props.variant}} field--{{props.variant}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}" data-path="components" data-module="Field">
+    {{#if props.label}}
+		<label class="field__label" {{#if props.id}}for="{{props.id}}"{{/if}}>
+			{{props.label}}
+        </label>
+	{{/if}}
     <div class="field__control">
         {{#if props.textarea}}
             <textarea
@@ -48,5 +53,10 @@
             {{/if}}
         {{/if}}
     </div>
+    {{#if props.help}}
+		<span class="field__help">
+			{{props.help}}
+        </span>
+	{{/if}}
     <span class="field__error" aria-hidden="true">{{default props.errorText 'Ошибка ввода'}}</span>
 </div>

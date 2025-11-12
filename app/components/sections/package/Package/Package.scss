@@ -116,7 +116,7 @@
             }
         }
         &__table {
-            padding: 0;
+            padding: 0 !important;
         }
         &__wrapper {
             @include up(tablet) {
@@ -220,13 +220,12 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        @include prop-vw(padding, 20, xl);
+        @include prop-vw(margin-bottom, 20, xl);
 
         @include only(mobile) {
             flex-direction: column-reverse;
             align-items: flex-start;
             @include prop-vw(margin-bottom, 20, sm);
-            padding: 0;
             @include prop-vw(padding-bottom, 20, sm);
             &::before {
                 content: '';
@@ -286,7 +285,7 @@
             @include prop-vw(padding-block, 3, xl);
             @include prop-vw(padding-inline, 4, xl);
             width: fit-content;
-            background: #F2F4F7;
+            background: $color-bg;
             @include prop-vw(border-radius, 10, xl);
 
             @include only(mobile) {

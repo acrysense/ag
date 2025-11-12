@@ -32,6 +32,19 @@
             }
         }
 
+        &__label {
+            display: block;
+            @include prop-vw(margin-bottom, 2, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+
+			@include only(mobile) {
+                @include prop-vw(margin-bottom, 2, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
         &__control {
             position: relative;
             z-index: 1;
@@ -59,7 +72,9 @@
                 border-color: $color-form-focus;
             }
             &[disabled] {
-                background: rgba(#E1E1E1, 0.3);
+                color: $color-dark-grey;
+                background: #F3F6FC;
+                border-color: $color-border;
             }
 
             @media screen and (hover: hover) {
@@ -144,16 +159,29 @@
                 @include prop-vw(height, 16, sm);
             }
         }
+        &__help {
+            display: block;
+            @include prop-vw(margin-top, 2, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            color: $color-dark-grey;
+
+			@include only(mobile) {
+                @include prop-vw(margin-top, 2, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
         &__error {
             display: none;
-            @include prop-vw(margin-top, 4, xl);
+            @include prop-vw(margin-top, 2, xl);
             width: fit-content;
             @include prop-vw(font-size, 12, xl);
             font-weight: normal;
             color: $color-red;
 
 			@include only(mobile) {
-                @include prop-vw(margin-top, 4, sm);
+                @include prop-vw(margin-top, 2, sm);
                 @include prop-vw(font-size, 12, sm);
             }
         }

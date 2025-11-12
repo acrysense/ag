@@ -1,0 +1,38 @@
+<div class="avatar-uploader{{#if props.class}} {{props.class}}{{/if}}"
+	data-module="AvatarUpload"
+	data-path="components"
+	data-placeholder="{{default props.placeholder '/assets/images/avatar-placeholder.jpg'}}"
+	data-max-mb="{{default props.maxMb 5}}"
+>
+	{{#if props.label}}
+		<span class="avatar-uploader__label">{{props.label}}</span>
+	{{/if}}
+	<div class="avatar-uploader__box">
+		<picture class="avatar-uploader__preview">
+			<img
+				class="avatar-uploader__img"
+				src="{{default props.src (default '' '')}}"
+				alt="Фото профиля"
+				width="360" height="360"
+				decoding="async"
+				loading="lazy"
+			/>
+		</picture>
+
+        <div class="avatar-uploader__controls">
+            <button class="avatar-uploader__choose" type="button">Загрузить новое фото</button>
+            <button class="avatar-uploader__remove" type="button" hidden>Удалить фотографию</button>
+        </div>
+
+		<input
+			class="avatar-uploader__input"
+			type="file"
+			name="{{default props.name 'avatar'}}"
+			accept="{{default props.accept 'image/*'}}"
+		/>
+
+		{{#if props.hint}}
+			<span class="avatar-uploader__hint">{{props.hint}}</span>
+		{{/if}}
+	</div>
+</div>

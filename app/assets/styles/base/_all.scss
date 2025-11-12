@@ -5,6 +5,8 @@
 @forward '@/components/sections/home/Profile/Profile';
 @forward '@/components/sections/home/News/News';
 
+@forward '@/components/sections/profile/ProfileEdit/ProfileEdit';
+
 @forward '@/components/sections/coefficient/Coefficient/Coefficient';
 
 @forward '@/components/sections/motivation/Motivation/Motivation';
@@ -19,3 +21,5 @@
 @forward '@/components/components/ProfileDropdown/ProfileDropdown';
 @forward '@/components/components/Button/Button';
 @forward '@/components/components/Field/Field';
+@forward '@/components/components/AvatarUpload/AvatarUpload';
+@forward '@/components/components/AvatarCropModal/AvatarCropModal';
