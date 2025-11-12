@@ -77,6 +77,13 @@
                 color: $color-white;
             }
 
+            @media screen and (hover: hover) {
+                &:hover {
+                    & > svg {
+                        color: $color-blue;
+                    }
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 24, sm);
                 @include prop-vw(width, 24, sm);

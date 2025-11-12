@@ -1,0 +1,94 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .accordion {
+        &__item {
+            @include prop-vw(padding-left, 20, xl);
+            @include border-side(left, 1, solid, $color-blue-hover, xl);
+            &.is-open {
+                .accordion {
+                    &__toggle {
+                        -webkit-text-stroke: 0.8px;
+                        & > svg {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+            }
+
+            @include only(mobile) {
+                @include prop-vw(padding-left, 20, sm);
+                @include border-side(left, 1, solid, $color-blue-hover, sm);
+            }
+        }
+        &__item + &__item {
+            @include prop-vw(margin-top, 20, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-top, 20, sm);
+            }
+        }
+        &__toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 10, xl);
+            padding: 0;
+            @include prop-vw(padding-block, 5, xl);
+            width: 100%;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            transition: color $transition-default;
+            &:focus {
+                outline: none;
+            }
+            & > svg {
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-blue-hover;
+                transition: color $transition-default, transform $transition-default;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue-hover;
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+                @include prop-vw(padding-block, 5, sm);
+                @include prop-vw(font-size, 14, sm);
+                & > svg {
+                    @include prop-vw(min-width, 16, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
+            }
+        }
+        &__panel {
+            overflow: hidden;
+            height: 0;
+            transition: height .25s ease;
+            @include prop-vw(padding-inline, 17, xl);
+            &::before {
+                content: '';
+                display: block;
+                width: 100%;
+                @include prop-vw(height, 5, xl);
+            }
+
+            @include only(mobile) {
+                padding-left: 0;
+                &::before {
+                    @include prop-vw(height, 5, sm);
+                }
+            }
+        }
+    }
+}

@@ -6,8 +6,8 @@
 	</head>
 	<body class="bg-light">
 		{{> components/TopNotice/TopNotice props=(obj
-			key='2025-11-13'
-			text='Сообщение-растяжка для всех сотрудников компании. У нас важные новости.'
+			key='2025-11-19'
+			html='Сообщение-растяжка для всех сотрудников компании. У нас важные <a href="#">новости</a>.'
 		)}}
 		<div class="wrapper">
 			{{> layouts/Header/Header }}
@@ -19,6 +19,8 @@
 						{{> sections/home/Profile/Profile }}
 						{{> sections/shared/Promo/Promo }}
 						{{> sections/home/News/News }}
+						<div class="wrapper__banr wrapper__banr--mobile"></div>
+						<div class="wrapper__banr wrapper__banr--mobile"></div>
 					</div>
 				</div>
 			</main>

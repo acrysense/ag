@@ -64,16 +64,28 @@
                 object-fit: cover;
             }
 			
+            @include up(tablet) {
+				&--mobile {
+					display: none;
+				}
+			}
 			@include only(mobile) {
 				border-radius: 0;
 			}
 		}
 		&__banr + *,
-		& + &__banr {
+		* + &__banr {
 			@include prop-vw(margin-top, 20, xl);
 
 			@include only(mobile) {
 				margin-top: 0;
+			}
+		}
+		&__banr + &__banr {
+			@include prop-vw(margin-top, 20, xl);
+
+            @include only(mobile) {
+				@include prop-vw(margin-top, 10, sm);
 			}
 		}
 		&__back {

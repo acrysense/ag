@@ -1,0 +1,107 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+	.toasts {
+		position: fixed;
+        @include prop-vw(right, 40, xl);
+        @include prop-vw(bottom, 120, xl);
+		display: flex;
+		flex-direction: column;
+        @include prop-vw(gap, 20, xl);
+		z-index: 4000;
+		pointer-events: none;
+
+        @include only(mobile) {
+            @include prop-vw(right, 20, sm);
+            @include prop-vw(bottom, 80, sm);
+            @include prop-vw(gap, 20, sm);
+        }
+	}
+
+	.toast {
+		pointer-events: auto;
+		display: grid;
+		grid-template-columns: 1fr auto;
+        align-items: flex-start;
+        @include prop-vw(gap, 20, xl);
+        @include prop-vw(max-width, 400, xl);
+        @include prop-vw(min-width, 400, xl);
+        width: 100%;
+        @include prop-vw(padding-block, 12, xl);
+        @include prop-vw(padding-inline, 15, xl);
+        color: $color-white;
+		transform: translateY(10px);
+		opacity: 0;
+		transition: transform .2s ease, opacity .2s ease;
+
+		&.is-in { transform: translateY(0); opacity: 1; }
+		&.is-out { transform: translateY(10px); opacity: 0; }
+
+		&--success { background: var(--toast-success, $color-green); }
+		&--error   { background: var(--toast-error,   $color-red); }
+
+        @include only(mobile) {
+            @include prop-vw(gap, 20, sm);
+            @include prop-vw(max-width, 320, sm);
+            @include prop-vw(min-width, 320, sm);
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 15, sm);
+        }
+	}
+
+	.toast__text {
+        display: block;
+        width: fit-content;
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1.57142857143;
+
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
+    }
+
+	.toast__close {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        @include prop-vw(min-width, 24, xl);
+        @include prop-vw(width, 24, xl);
+        @include prop-vw(height, 24, xl);
+        font-size: 0;
+        background: transparent;
+		border: 0;
+        border-radius: 0;
+		cursor: pointer;
+		transition: background .15s ease;
+        &:focus {
+            outline: none;
+        }
+        & > svg {
+            @include prop-vw(min-width, 16, xl);
+            @include prop-vw(width, 16, xl);
+            @include prop-vw(height, 16, xl);
+            color: $color-white;
+        }
+
+		@media screen and (hover: hover) {
+            &:hover {
+                & > svg {
+                    color: $color-grey;
+                }
+            }
+        }
+        @include only(mobile) {
+            @include prop-vw(min-width, 24, sm);
+            @include prop-vw(width, 24, sm);
+            @include prop-vw(height, 24, sm);
+            & > svg {
+                @include prop-vw(min-width, 16, sm);
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+            }
+        }
+	}
+}

@@ -13,12 +13,16 @@
 
 @forward '@/components/sections/package/Package/Package';
 
+@forward '@/components/sections/news/NewsInner/NewsInner';
+
 @forward '@/components/sections/error/NotFound/NotFound';
 
 @forward '@/components/sections/shared/Auth/Auth';
 @forward '@/components/sections/shared/Promo/Promo';
 
 @forward '@/components/components/TopNotice/TopNotice';
+@forward '@/components/components/Toasts/Toasts';
+@forward '@/components/components/Accordion/Accordion';
 @forward '@/components/components/ProfileDropdown/ProfileDropdown';
 @forward '@/components/components/Button/Button';
 @forward '@/components/components/Field/Field';
