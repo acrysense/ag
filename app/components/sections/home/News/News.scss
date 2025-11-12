@@ -68,7 +68,8 @@
     }
 
     .news-card {
-        display: block;
+        display: flex;
+        flex-direction: column;
         @include prop-vw(padding-bottom, 10, xl);
         @include border-side(bottom, 1, solid, $color-light-grey, xl);
             
@@ -78,6 +79,7 @@
         }
 
         &__main {
+            flex: 1 1 auto;
             display: block;
             width: 100%;
 
@@ -134,6 +136,7 @@
             font-family: $font-secondary;
             @include prop-vw(font-size, 18, xl);
             font-weight: bold;
+            line-height: 1.33333333333;
             
             @include only(mobile) {
                 @include prop-vw(font-size, 18, sm);
@@ -142,12 +145,13 @@
         &__description {
             display: -webkit-box;
             -webkit-box-orient: vertical;  
-            -webkit-line-clamp: 11;
+            -webkit-line-clamp: 614;
             overflow: hidden;
             @include prop-vw(margin-top, 10, xl);
             width: fit-content;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
+            line-height: 1.57142857143;
             text-overflow: ellipsis;
             color: $color-dark-grey;
             align-self: stretch;
