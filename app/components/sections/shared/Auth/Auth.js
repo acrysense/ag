@@ -1,129 +1,129 @@
 import { applyMasks } from '@/utils/masks'
 
 export default (root) => {
-    const form = root.querySelector('.auth-form');
-    if (!form || form.__bound) return;
-    form.__bound = true;
+	if (!root) return;
 
-    applyMasks(root);
+	const form = root.querySelector('.auth-form');
+	if (!form || form.__bound) return;
+	form.__bound = true;
 
-    const btn = form.querySelector('button[type="submit"], .auth__btn');
-    const formError = form.querySelector('[data-form-error]');
+	applyMasks(root);
 
-    const by = (name) => form.elements.namedItem(name);
-    const fieldOf = (el) => el?.closest('.field');
+	const fieldOf = (el) => el?.closest('.field');
+	const setFieldError = (input, msg) => {
+		if (!input) return;
+		const f = fieldOf(input);
+		input.toggleAttribute('aria-invalid', !!msg);
+		f?.classList.toggle('is--error', !!msg);
+		const m = f?.querySelector('.field__error');
+		if (m) { m.textContent = msg || ''; m.hidden = !msg; }
+	};
+	const setFormError = (msg) => {
+		const n = form.querySelector('[data-form-error]');
+		if (!n) return;
+		n.textContent = msg || '';
+		n.hidden = !msg;
+	};
+	const setLoading = (on) => {
+		const btn = form.querySelector('button[type="submit"], .auth__btn, .auth-form__btn');
+		if (!btn) return;
+		btn.dataset.loading = on ? 'true' : 'false';
+		btn.toggleAttribute('disabled', on);
+		btn.setAttribute('aria-busy', on ? 'true' : 'false');
+	};
 
-    const setFieldError = (input, msg) => {
-        const field = fieldOf(input);
-        if (!field) return;
-        input.setAttribute('aria-invalid', msg ? 'true' : 'false');
-        field.classList.toggle('is--error', !!msg);
-        const m = field.querySelector('.field__error');
-        if (m) { m.textContent = msg || ''; m.hidden = !msg; }
-    };
-    const setFormError = (msg) => {
-        if (!formError) return;
-        formError.textContent = msg || '';
-        formError.hidden = !msg;
-    };
-    const setLoading = (on) => {
-        if (!btn) return;
-        btn.dataset.loading = on ? 'true' : 'false';
-        btn.toggleAttribute('disabled', on);
-        btn.setAttribute('aria-busy', on ? 'true' : 'false');
-    };
+	const loginEl = form.querySelector('[name="login"],[name="USER_LOGIN"]');
+	const passEl  = form.querySelector('[name="password"],[name="USER_PASSWORD"]');
 
-    const validators = {
-        login: (v) => v.trim().length >= 2 ? '' : 'Введите логин',
-        password: (v) => v.trim().length >= 4 ? '' : 'Минимум 4 символа',
-    };
-    const validateOne = (name) => {
-        const input = by(name); if (!input) return true;
-        const rule = validators[name];
-        const msg = rule ? rule(input.value)
-                        : (input.validity.valid ? '' : input.validationMessage);
-        setFieldError(input, msg);
-        return !msg;
-    };
-    const watch = (input) => {
-        if (!input) return;
-        input.addEventListener('blur', () => validateOne(input.name));
-        input.addEventListener('input', () => {
-            if (fieldOf(input)?.classList.contains('is--error')) validateOne(input.name);
-        });
-    };
-    watch(by('login')); watch(by('password'));
+	const validateLogin = () => {
+		const v = (loginEl?.value || '').trim();
+		const msg = v.length >= 2 ? '' : 'Введите логин';
+		setFieldError(loginEl, msg);
+		return !msg;
+	};
+	const validatePass = () => {
+		const v = passEl?.value || '';
+		const msg = v.trim().length >= 4 ? '' : 'Минимум 4 символа';
+		setFieldError(passEl, msg);
+		return !msg;
+	};
+	const validateAll = () => {
+		let ok = true;
+		if (loginEl && !validateLogin()) ok = false;
+		if (passEl && !validatePass()) ok = false;
+		return ok;
+	};
 
-    const fetchAdapter = async (payload) => {
-        const url = form.dataset.endpoint;
-        const method = (form.dataset.method || 'POST').toUpperCase();
-        const res = await fetch(url, {
-            method,
-            headers: { 'Content-Type': 'application/json' },
-            body: method === 'GET' ? undefined : JSON.stringify(payload),
-        });
-        const data = await res.json().catch(() => ({}));
+	loginEl?.addEventListener('blur', validateLogin);
+	passEl?.addEventListener('blur', validatePass);
+	loginEl?.addEventListener('input', () => fieldOf(loginEl)?.classList.contains('is--error') && validateLogin());
+	passEl?.addEventListener('input', () => fieldOf(passEl)?.classList.contains('is--error') && validatePass());
 
-        if (data?.errors && typeof data.errors === 'object') {
-            Object.entries(data.errors).forEach(([k, v]) => setFieldError(by(k), String(v)));
-        }
-        if (!res.ok || data?.ok === false) {
-            throw new Error(data?.error || `HTTP ${res.status}`);
-        }
-        return data;
-    };
+	const fetchAdapter = async (payload) => {
+		const url = form.dataset.endpoint;
+		const method = (form.dataset.method || 'POST').toUpperCase();
+		const res = await fetch(url, {
+			method,
+			headers: { 'Content-Type': 'application/json' },
+			body: method === 'GET' ? undefined : JSON.stringify(payload),
+			credentials: 'same-origin'
+		});
+		const data = await res.json().catch(() => ({}));
 
-    const eventAdapter = async (payload) => {
-        return new Promise((resolve, reject) => {
-            const ev = new CustomEvent('auth:submit', {
-                bubbles: true, cancelable: true,
-                detail: { ...payload, resolve, reject }
-            });
-            const handled = root.dispatchEvent(ev) && ev.defaultPrevented;
-            if (!handled) reject(new Error('__NO_HANDLER__'));
-        });
-    };
+		if (data?.errors && typeof data.errors === 'object') {
+			if (loginEl && data.errors.login) setFieldError(loginEl, String(data.errors.login));
+			if (passEl  && data.errors.password) setFieldError(passEl,  String(data.errors.password));
+		}
+		if (!res.ok || data?.ok === false) {
+			throw new Error(data?.error || `HTTP ${res.status}`);
+		}
+		return data;
+	};
 
-    const fakeAdapter = async (payload) => {
-        const ms = Number(form.dataset.fakeDelay || 1500);
-        await new Promise(r => setTimeout(r, ms));
-        if (payload.login === 'demo' && payload.password === 'demo') return { ok: true };
-        throw new Error('Логин и пароль не совпадают');
-    };
+	const fakeAdapter = async (payload) => {
+		const ms = Number(form.dataset.fakeDelay || 1200);
+		await new Promise(r => setTimeout(r, ms));
+		if (payload.login === 'demo' && payload.password === 'demo') return { ok: true };
+		throw new Error('Неверный логин или пароль');
+	};
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        setFormError('');
-        const ok = ['login', 'password'].every(validateOne);
-        if (!ok) {
-            form.querySelector('.field.is--error .field__input')?.focus();
-            return;
-        }
+	form.addEventListener('submit', async (e) => {
+		setFormError('');
 
-        setLoading(true);
-            const payload = {
-            login: by('login').value.trim(),
-            password: by('password').value,
-        };
+		if (!validateAll()) {
+			e.preventDefault();
+			(loginEl || passEl)?.focus?.({ preventScroll: true });
+			return;
+		}
 
-        const adapters = [];
-        if (form.dataset.endpoint) adapters.push(fetchAdapter);
-        adapters.push(eventAdapter);
-        if (form.dataset.demo === '1') adapters.push(fakeAdapter);
+		const useAjax = !!form.dataset.endpoint || form.dataset.demo === '1';
 
-        let lastErr;
-        for (const run of adapters) {
-            try {
-                await run(payload);
-                location.assign(form.dataset.successHref || '/');
-                setLoading(false);
-                return;
-            } catch (err) {
-                if (String(err.message) === '__NO_HANDLER__') continue;
-                lastErr = err;
-            }
-        }
-        setFormError(lastErr?.message || 'Ошибка авторизации');
-        setLoading(false);
-    });
+		if (!useAjax) {
+			return;
+		}
+
+		e.preventDefault();
+		setLoading(true);
+
+		const payload = {
+			login: (loginEl?.value || '').trim(),
+			password: passEl?.value || ''
+		};
+
+		try {
+			const adapters = [];
+			if (form.dataset.endpoint) adapters.push(fetchAdapter);
+			if (form.dataset.demo === '1') adapters.push(fakeAdapter);
+
+			let data;
+			for (const run of adapters) { data = await run(payload); break; }
+
+			const goto = (data && data.redirect) || form.dataset.successHref || '/';
+			location.assign(goto);
+		} catch (err) {
+			setFormError(err?.message || 'Ошибка авторизации');
+		} finally {
+			setLoading(false);
+		}
+	});
 };
