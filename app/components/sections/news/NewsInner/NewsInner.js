@@ -28,13 +28,16 @@ export default async (root) => {
 	const mountMobile = () => {
 		destroy();
 		thumbsEl?.classList.add('is-hidden');
+
 		main = new Swiper(mainEl, {
-			modules: [Pagination, Keyboard, A11y],
+			modules: [Navigation, Pagination, Keyboard, A11y],
 			slidesPerView: 1,
 			spaceBetween: 0,
 			pagination: pagEl ? { el: pagEl, clickable: true } : undefined,
+			navigation: (prevEl && nextEl) ? { prevEl, nextEl } : undefined,
 			keyboard: { enabled: true },
 			a11y: { enabled: true },
+			on: { init(){ mainEl.dataset.swiperInited = '1'; } },
 		});
 	};
 

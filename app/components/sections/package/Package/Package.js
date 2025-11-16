@@ -35,12 +35,12 @@ function initProgress(root) {
 function initPackageBlocks(root) {
 	const tables = root.querySelectorAll('.n-package-table');
 	tables.forEach((table) => {
-		const scope = table.closest('.n-coefficient__wrapper') || root;
+		const wrapper = table.closest('.package__wrapper') || table.parentElement || table;
 
-		const tabs = scope.querySelectorAll('.n-package-filter__tab');
-		const search = scope.querySelector('.n-package-filter__search-input');
+		const tabs = wrapper.querySelectorAll('.n-package-filter__tab');
+		const search = wrapper.querySelector('.n-package-filter__search-input');
 		const body = table.querySelector('.n-package-table__body');
-		const noResults = table.querySelector('.n-package-table__no-results');
+		const noResults	= table.querySelector('.n-package-table__no-results');
 		if (!body) return;
 
 		body.querySelectorAll('.n-package-table__value').forEach((cell) => {
@@ -92,10 +92,9 @@ function initPackageBlocks(root) {
 							const workValueC = parseWorkValue(workCellC);
 							const passWorkC = currentWorkFilter === 'all' || (currentWorkFilter === 'in-work' && workValueC > 0);
 							const passSearchC = child.textContent.toLowerCase().includes(currentSearchTerm);
-
 							const showChild = passWorkC && passSearchC;
-							child.style.display = showChild ? '' : 'none';
 
+							child.style.display = showChild ? '' : 'none';
 							if (showChild) {
 								passAnyChild = true;
 								if (regex) {
@@ -123,7 +122,8 @@ function initPackageBlocks(root) {
 						if (!passAnyChild) parentRow.classList.remove('is--active', 'is--open');
 						i++;
 					}
-				} else if (el.classList.contains('n-package-table__row')) {
+				}
+				else if (el.classList.contains('n-package-table__row')) {
 					const row = el;
 					const workCell = row.querySelector('[data-work-value]');
 					const workValue = parseWorkValue(workCell);
