@@ -1,0 +1,28 @@
+<div class="pv" id="photo-viewer" role="dialog" aria-modal="true" hidden>
+	<div class="pv__overlay" data-pv-close></div>
+	<div class="pv__window" role="document">
+		<button class="pv__close" type="button" aria-label="Закрыть" data-pv-close>
+			<svg width="20" height="20" aria-hidden="true">
+                <use href="#icon-close"></use>
+            </svg>
+		</button>
+		<div class="pv__stage">
+			<div class="pv__thumbs swiper" aria-label="Миниатюры">
+				<div class="swiper-wrapper"></div>
+			</div>
+			<div class="pv__main swiper">
+				<div class="swiper-wrapper"></div>
+				<button class="pv__nav pv__nav--prev" type="button" aria-label="Назад">
+					<svg width="20" height="20" aria-hidden="true">
+                        <use href="#icon-arrow-prev"></use>
+                    </svg>
+				</button>
+				<button class="pv__nav pv__nav--next" type="button" aria-label="Вперёд">
+					<svg width="20" height="20" aria-hidden="true">
+                        <use href="#icon-arrow-next"></use>
+                    </svg>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

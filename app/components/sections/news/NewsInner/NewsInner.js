@@ -1,27 +1,27 @@
 import { getSwiper } from '@/utils/swiper';
+import { bindLightbox, init as initPV } from '@/components/components/PhotoViewer/PhotoViewer';
 
 export default async (root) => {
 	if (!root || root.__galleryBound) return;
 	root.__galleryBound = true;
 
-	const block    = root.querySelector('.news-inner__gallery');
+	const block = root.querySelector('.news-inner__gallery');
 	if (!block) return;
 
-	const mainEl   = block.querySelector('.gallery__main');
+	const mainEl = block.querySelector('.gallery__main');
 	const thumbsEl = block.querySelector('.gallery__thumbs');
-	const prevEl   = block.querySelector('.gallery__nav--prev');
-	const nextEl   = block.querySelector('.gallery__nav--next');
-	const pagEl    = block.querySelector('.gallery__pagination');
+	const prevEl = block.querySelector('.gallery__nav--prev');
+	const nextEl = block.querySelector('.gallery__nav--next');
 
 	const { Swiper, mods } = await getSwiper();
-	const { Navigation, Pagination, Thumbs, FreeMode, Keyboard, A11y } = mods;
+	const { Navigation, Thumbs, FreeMode, Keyboard, A11y } = mods;
 
 	const mobileMax = parseInt(block.dataset.mobileMax || '743', 10);
 	const mql = window.matchMedia(`(max-width:${mobileMax}px)`);
 
 	let main, thumbs;
 	const destroy = () => {
-		if (main)   { main.destroy(true, true);   main = null; }
+		if (main) { main.destroy(true, true); main = null; }
 		if (thumbs) { thumbs.destroy(true, true); thumbs = null; }
 	};
 
@@ -30,10 +30,9 @@ export default async (root) => {
 		thumbsEl?.classList.add('is-hidden');
 
 		main = new Swiper(mainEl, {
-			modules: [Navigation, Pagination, Keyboard, A11y],
+			modules: [Navigation, Keyboard, A11y],
 			slidesPerView: 1,
 			spaceBetween: 0,
-			pagination: pagEl ? { el: pagEl, clickable: true } : undefined,
 			navigation: (prevEl && nextEl) ? { prevEl, nextEl } : undefined,
 			keyboard: { enabled: true },
 			a11y: { enabled: true },
@@ -71,7 +70,6 @@ export default async (root) => {
 		if (slidesCount <= 1) {
 			prevEl?.setAttribute('hidden', '');
 			nextEl?.setAttribute('hidden', '');
-			pagEl?.setAttribute('hidden', '');
 			thumbsEl?.setAttribute('hidden', '');
 			destroy();
 			return;
@@ -86,4 +84,8 @@ export default async (root) => {
 		mql.removeEventListener?.('change', apply);
 		destroy();
 	};
+
+	initPV();
+	const galleryView = root.querySelector('.news-inner__gallery');
+	if (galleryView) bindLightbox(galleryView);
 };

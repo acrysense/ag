@@ -1,0 +1,250 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .pv {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        max-height: 100dvh;
+        width: 100%;
+        height: 100%;
+        background: $color-white;
+
+        &__overlay {
+            position: absolute;
+            inset: 0;
+        }
+
+        &__window {
+	        position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        &__close {
+            position: absolute;
+            @include prop-vw(top, 16, xl);
+            @include prop-vw(right, 16, xl);
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            @include prop-vw(width, 24, xl);
+            @include prop-vw(height, 24, xl);
+            font-size: 0;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            & > svg {
+                @include prop-vw(min-width, 20, xl);
+                @include prop-vw(width, 20, xl);
+                @include prop-vw(height, 20, xl);
+            }
+            &:focus {
+                outline: none;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    & > svg {
+                        color: $color-blue;
+                    }
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(top, 16, sm);
+                @include prop-vw(right, 8, sm);
+                @include prop-vw(width, 24, sm);
+                @include prop-vw(height, 24, sm);
+                & > svg {
+                    @include prop-vw(min-width, 20, sm);
+                    @include prop-vw(width, 20, sm);
+                    @include prop-vw(height, 20, sm);
+                }
+            }
+        }
+
+        &__stage {
+            display: flex;
+
+            @include only(mobile) {
+                flex-direction: column-reverse;
+            }
+        }
+
+        &__thumbs {
+            overflow: hidden;
+            @include prop-vw(padding, 20, xl);
+            @include prop-vw(min-width, 140, xl);
+            @include prop-vw(width, 140, xl);
+            .swiper-slide{
+                width: 100%;
+                @include prop-vw(height, 100, xl);
+                cursor: pointer;
+                &.swiper-slide-thumb-active {
+                    .pv__thumb{ 
+                        border-color: $color-form-focus;
+                    }
+                }
+            }
+
+            @include only(mobile) {
+                @include prop-vw(padding, 20, sm);
+                min-width: auto;
+                width: 100%;
+                @include prop-vw(height, 100, sm);
+                .swiper-slide{
+                    @include prop-vw(width, 60, sm);
+                    @include prop-vw(height, 60, sm);
+                }
+            }
+        }
+
+        &__thumb {
+            position: relative;
+            z-index: 1;
+            display: block;
+            width: 100%;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 10, xl);
+            transition: border $transition-default;
+            &::before {
+                content: '';
+                display: block;
+                padding-top: 100%;
+            }
+            img {
+                position: absolute;
+                inset: 0;
+                z-index: 1;
+                display: block;
+                @include prop-vw(padding-block, 22, xl);
+                @include prop-vw(padding-inline, 2, xl);
+                width: 100%;
+                height: 100%;
+                object-fit: cover
+            }
+
+            @include only(mobile) {
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 10, sm);
+                img {
+                    @include prop-vw(padding-block, 14, sm);
+                    @include prop-vw(padding-inline, 2, sm);
+                }
+            }
+        }
+
+        &__main {
+            position: relative;
+            z-index: 1;
+            @include prop-vw(max-width, 1780, xl);
+            max-height: 100dvh;
+            width: 100%;
+            height: 100%;
+            .swiper,
+            .swiper-wrapper,
+            .swiper-slide {
+                height: 100%;
+                min-height: 0;
+            }
+            .swiper-slide {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            @include only(mobile) {
+                max-width: none;
+                @include prop-minus(min-height, min(100svh, 100dvh), 100, sm);
+                @include prop-minus(max-height, min(100svh, 100dvh), 100, sm);
+            }
+        }
+
+        &__img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(padding-block, 187, xl);
+            @include prop-vw(padding-inline, 256, xl);
+            max-height: 100dvh;
+            width: 100%;
+            height: 100%;
+            img {
+                display: block;
+                max-width: 100%;
+                @include prop-minus(max-height, min(100svh, 100dvh), 374, xl);
+                width: auto;
+                height: auto;
+                object-fit: contain;
+                object-position: center center;
+            }
+
+            @media screen and (min-width: 744px) and (max-height: 599px) {
+                @include prop-vw(padding-block, 117, xl);
+                img {
+                    @include prop-minus(max-height, min(100svh, 100dvh), 234, xl);
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 100, sm);
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-minus(min-height, min(100svh, 100dvh), 100, sm);
+                @include prop-minus(max-height, min(100svh, 100dvh), 100, sm);
+                width: 100%;
+                height: 100%;
+                img {
+                    @include prop-minus(max-height, min(100svh, 100dvh), 200, sm);
+                }
+            }
+        }
+
+        &__nav {
+            position: absolute;
+            top: 50%;
+            z-index: 50;
+            transform: translate(0, -50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            @include prop-vw(width, 40, xl);
+            @include prop-vw(height, 40, xl);
+            font-size: 0;
+            background: $color-bg;
+            border: none;
+            border-radius: 50%;
+            transition: background $transition-default;
+            & > svg {
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-black;
+            }
+            &:focus {
+                outline: none;
+            }
+            &--prev {
+                @include prop-vw(left, 20, xl);
+            }
+            &--next {
+                @include prop-vw(right, 20, xl);
+            }
+
+            @media screen and (hover: hover) {
+                &:hover:not(.swiper-button-disabled) {
+                    background: #F2F5FF;
+                    & > svg {
+                        color: $color-blue;
+                    }
+                }
+            }
+            @include only(mobile) {
+                display: none;
+            }
+        }
+    }
+}
