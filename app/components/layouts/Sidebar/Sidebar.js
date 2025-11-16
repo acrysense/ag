@@ -2,16 +2,16 @@ export default (root) => {
 	if (!root || root.__bound) return;
 	root.__bound = true;
 
-	const wrap     = root.querySelector('.sidebar__wrap');
+	const wrap = root.querySelector('.sidebar__wrap');
 	const btnClose = root.querySelector('.sidebar__close');
-	const docEl    = document.documentElement;
-	const body     = document.body;
+	const docEl = document.documentElement;
+	const body = document.body;
 
 	const mql = window.matchMedia('(max-width: 743px)');
 	const isMobile = () => mql.matches;
 
 	let isOpen = false;
-	let busy   = false;
+	let busy = false;
 
 	const lockScroll = (on) => {
 		const v = on ? 'hidden' : '';
@@ -28,7 +28,7 @@ export default (root) => {
 	};
 
 	const start = () => { busy = true;  root.dataset.sidebarBusy = '1'; };
-	const end   = () => { busy = false; delete root.dataset.sidebarBusy; };
+	const end = () => { busy = false; delete root.dataset.sidebarBusy; };
 
 	const afterTransition = (cb) => {
 		const d = parseFloat(getComputedStyle(wrap).transitionDuration || '0') * 1000;
@@ -99,49 +99,11 @@ export default (root) => {
 	isOpen = false;
 	reflect();
 
-	const norm = (p) => {
-		try {
-			const u = new URL(p, location.origin);
-			let x = u.pathname.replace(/\/+$/,'');
-			return x === '' ? '/' : x;
-		} catch { return ''; }
-	};
-
-	const markActiveLinks = () => {
-		const cur = norm(location.pathname);
-
-		root.querySelectorAll('.sidebar__link').forEach(a => {
-			a.classList.remove('is--active');
-			a.closest('.sidebar__item')?.classList.remove('is--active');
-			a.removeAttribute('aria-current');
-
-			const href = a.getAttribute('href') || '';
-			if (!href || href === '#' || /^https?:\/\//i.test(href)) return;
-
-			const path  = norm(href);
-			const exact = a.dataset.active === 'exact' || path === '/';
-
-			const match = exact
-				? cur === path
-				: (cur === path || cur.startsWith(path + '/'));
-
-			if (match) {
-				a.classList.add('is--active');
-				a.closest('.sidebar__item')?.classList.add('is--active');
-				a.setAttribute('aria-current', 'page');
-			}
-		});
-	};
-
-	markActiveLinks();
-	window.addEventListener('popstate', markActiveLinks);
-
 	root.__dispose = () => {
 		document.removeEventListener('sidebar:open', onOpen);
 		document.removeEventListener('sidebar:close', onClose);
 		document.removeEventListener('sidebar:toggle', onToggle);
 		window.removeEventListener('resize', onResize);
 		mql.removeEventListener?.('change', onResize);
-		window.removeEventListener('popstate', markActiveLinks);
 	};
 };
