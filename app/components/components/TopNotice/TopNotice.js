@@ -4,14 +4,21 @@ export default (root) => {
 
 	const btn = root.querySelector('.top-notice__close');
 	const key = root.dataset.key || 'global';
-	const storeKey = `topNotice:${key}`;
+	const storeKey = `topNotice:${key}:date`;
+	const today = (() => {
+		const d = new Date();
+		const y = d.getFullYear();
+		const m = String(d.getMonth() + 1).padStart(2, '0');
+		const dd = String(d.getDate()).padStart(2, '0');
+		return `${y}-${m}-${dd}`;
+	})();
 
 	const setH = () => root.style.setProperty('--h', root.scrollHeight + 'px');
 
 	const hide = () => {
 		root.classList.add('is-hidden');
 		root.setAttribute('aria-hidden', 'true');
-		try { localStorage.setItem(storeKey, '1'); } catch {}
+		try { localStorage.setItem(storeKey, today); } catch {}
 	};
 
 	const show = () => {
@@ -20,7 +27,9 @@ export default (root) => {
 		setH();
 	};
 
-	if (localStorage.getItem(storeKey) === '1') {
+	let v = null;
+	try { v = localStorage.getItem(storeKey); } catch {}
+	if (v === '1' || v === today) {
 		root.classList.add('is-hidden');
 		root.setAttribute('aria-hidden', 'true');
 	} else {
