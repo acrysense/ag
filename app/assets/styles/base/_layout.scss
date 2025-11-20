@@ -27,6 +27,9 @@
 				@include prop-vw(padding-block, 20, xl);
 				@include prop-vw(max-width, 1570, xl);
 			}
+			@include only(desktop) {
+				@include prop-vw(padding-block, 20, lg);
+			}
             @include only(mobile) {
 				background: $color-white;
 			}
@@ -34,7 +37,17 @@
 		&__container {
 			width: 100%;
 
-			@include up(tablet) {
+			@include up(desktop) {
+				@include prop-vw(margin-left, 50, xl);
+				@include prop-vw(padding-inline, 125, xl);
+				@include prop-vw(max-width, 1120, xl);
+			}
+			@include only(desktop) {
+				@include prop-vw(margin-left, 50, lg);
+				@include prop-vw(padding-inline, 45, lg);
+				@include prop-vw(max-width, 820, lg);
+			}
+			@include only(tablet) {
 				@include prop-vw(margin-left, 50, xl);
 				@include prop-vw(padding-inline, 125, xl);
 				@include prop-vw(max-width, 1120, xl);
