@@ -9,6 +9,8 @@ $breakpoints: (
 	mobile: 0,
 	tablet: 744,
 	desktop: 1024,
+	lg: 1440,
+	xl: 1920,
 	cap: $fluid-cap,
 );
 
@@ -49,6 +51,8 @@ $alias-range: (
 $alias-bp: (
 	sm: mobile,
 	md: tablet,
+	lg: lg,
+	xl: xl,
 );
 
 @function _range-key($k) {
@@ -72,7 +76,7 @@ $alias-bp: (
 }
 
 @function _next-bp-key($k) {
-	$order: (mobile, tablet, desktop, cap);
+	$order: (mobile, tablet, desktop, lg, xl, cap);
 	$i: list.index($order, _bp-key($k));
 	@if $i == null {
 		@error 'Unknown breakpoint `#{$k}`';

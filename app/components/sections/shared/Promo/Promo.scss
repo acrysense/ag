@@ -5,6 +5,9 @@
     .promo {
         @include prop-vw(margin-top, 20, xl);
 
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+        }
         @include only(mobile) {
             margin-top: 0;
             @include prop-vw(padding-top, 20, sm);
@@ -95,6 +98,35 @@
                 background: $color-blue-hover;
             }
 
+            @include only(desktop) {
+                @include prop-vw(border-radius, 20, lg);
+
+                .swiper-button-prev,
+                .swiper-button-next {
+                    @include prop-vw(width, 40, lg);
+                    @include prop-vw(height, 40, lg);
+                    & > svg {
+                        @include prop-vw(min-width, 21, lg);
+                        @include prop-vw(width, 21, lg);
+                        @include prop-vw(height, 21, lg);
+                    }
+                }
+                .swiper-button-prev {
+                    @include prop-vw(left, 25, lg);
+                }
+                .swiper-button-next {
+                    @include prop-vw(right, 25, lg);
+                }
+                .swiper-pagination {
+                    @include prop-vw(bottom, 10, lg);
+                    @include prop-vw(gap, 5, lg);
+                }
+                .swiper-pagination-bullet {
+                    @include prop-vw(min-width, 10, lg);
+                    @include prop-vw(width, 10, lg);
+                    @include prop-vw(height, 10, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(border-radius, 10, sm);
 

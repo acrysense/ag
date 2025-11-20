@@ -22,6 +22,15 @@
             }
         }
 
+        @include only(desktop) {
+            &--toggle {
+                .field {
+                    &__input {
+                        @include prop-vw(padding-right, 40, lg);
+                    }
+                }
+            }
+        }
         @include only(mobile) {
             &--toggle {
                 .field {
@@ -40,6 +49,10 @@
             font-weight: normal;
             line-height: 1.57142857143;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 2, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
 			@include only(mobile) {
                 @include prop-vw(margin-bottom, 2, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -83,6 +96,13 @@
                         color: rgba($color-black, 0.5);
                     }
                 }
+            }
+            @include only(desktop) {
+                @include prop-vw(padding-block, 12.75, lg);
+                @include prop-vw(padding-inline, 15, lg);
+                @include prop-vw(font-size, 16, lg);
+                @include border-all(1, solid, #E1E1E1, lg);
+                @include prop-vw(border-radius, 14, lg);
             }
 			@include only(mobile) {
                 @include prop-vw(padding-block, 12.75, sm);
@@ -136,6 +156,11 @@
                     }
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(right, 12, lg);
+                @include prop-vw(width, 24, lg);
+                @include prop-vw(height, 24, lg);
+            }
 			@include only(mobile) {
                 @include prop-vw(right, 12, sm);
                 @include prop-vw(width, 24, sm);
@@ -154,6 +179,10 @@
                 opacity: 0;
             }
 
+            @include only(desktop) {
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
 			@include only(mobile) {
                 @include prop-vw(width, 16, sm);
                 @include prop-vw(height, 16, sm);
@@ -167,6 +196,10 @@
             font-weight: normal;
             color: $color-dark-grey;
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 2, lg);
+                @include prop-vw(font-size, 12, lg);
+            }
 			@include only(mobile) {
                 @include prop-vw(margin-top, 2, sm);
                 @include prop-vw(font-size, 12, sm);
@@ -180,6 +213,10 @@
             font-weight: normal;
             color: $color-red;
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 2, lg);
+                @include prop-vw(font-size, 12, lg);
+            }
 			@include only(mobile) {
                 @include prop-vw(margin-top, 2, sm);
                 @include prop-vw(font-size, 12, sm);

@@ -12,6 +12,10 @@
             font-weight: bold;
             line-height: 1.33333333333;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 10, lg);
+                @include prop-vw(font-size, 18, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 10, sm);
                 @include prop-vw(font-size, 18, sm);
@@ -22,6 +26,9 @@
             align-items: flex-end;
             @include prop-vw(gap, 40, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 20, sm);
             }
@@ -38,6 +45,11 @@
             background: #D2DCE5;
             @include prop-vw(border-radius, 10, xl);
 
+            @include only(desktop) {
+                @include prop-vw(min-width, 180, lg);
+                @include prop-vw(width, 180, lg);
+                @include prop-vw(height, 180, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 160, sm);
                 @include prop-vw(width, 160, sm);
@@ -64,6 +76,10 @@
             background: #D2DCE5;
             @include prop-vw(border-radius, 10, xl);
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 30, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 20, sm);
             }
@@ -96,6 +112,9 @@
                 outline: none;
             }
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }
@@ -117,6 +136,10 @@
                 outline: none;
             }
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+                @include prop-vw(font-size, 12, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 @include prop-vw(font-size, 12, sm);

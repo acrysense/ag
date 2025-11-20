@@ -52,6 +52,19 @@
                     }
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(top, 40, lg);
+                @include prop-vw(left, 40, lg);
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(padding-top, 10, lg);
+                @include prop-vw(font-size, 12, lg);
+                border-top: none;
+                & > svg {
+                    @include prop-vw(min-width, 12, lg);
+                    @include prop-vw(width, 12, lg);
+                    @include prop-vw(height, 16, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(top, 20, sm);
                 @include prop-vw(left, 10, sm);
@@ -71,6 +84,10 @@
             @include prop-vw(padding-bottom, 140, xl);
             min-height: 100dvh;
 
+            @include only(desktop) {
+                @include prop-vw(padding-top, 120, lg);
+                @include prop-vw(padding-bottom, 140, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-top, 76, sm);
                 @include prop-vw(padding-bottom, 90, sm);
@@ -82,6 +99,9 @@
             @include prop-vw(max-width, 440, xl);
             width: 100%;
             
+            @include only(desktop) {
+                @include prop-vw(max-width, 440, lg);
+            }
             @include only(mobile) {
                 max-width: none;
             }
@@ -102,6 +122,12 @@
                 object-fit: contain;
             }
             
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+                @include prop-vw(min-width, 118, lg);
+                @include prop-vw(width, 118, lg);
+                @include prop-vw(height, 120, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(min-width, 99, sm);
@@ -132,6 +158,9 @@
             @include prop-vw(font-size, 26, xl);
             font-weight: bold;
             
+            @include only(desktop) {
+                @include prop-vw(font-size, 26, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 22, sm);
             }
@@ -154,6 +183,10 @@
                 }
             }
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 10, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -163,6 +196,9 @@
             @include prop-vw(margin-top, 40, xl);
             width: 100%;
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 40, sm);
             }
@@ -171,6 +207,9 @@
             @include prop-vw(margin-top, 40, xl);
             width: 100%;
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 40, sm);
             }
@@ -196,6 +235,10 @@
             color: $color-dark-grey;
             background: $color-grey;
             
+            @include only(desktop) {
+                @include prop-vw(padding, 42, lg);
+                @include prop-vw(font-size, 32, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding, 23, sm);
                 @include prop-vw(font-size, 26, sm);
@@ -206,6 +249,13 @@
     .auth-form {
         &__input + &__input {
             @include prop-vw(margin-top, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-top, 10, sm);
+            }
         }
         &__link {
             display: block;
@@ -218,6 +268,10 @@
                 &:hover {
                     color: $color-blue;
                 }
+            }
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(font-size, 12, lg);
             }
             @include only(mobile) {
                 @include prop-vw(margin-top, 10, sm);
@@ -236,6 +290,10 @@
                 &:hover {
                     color: $color-blue;
                 }
+            }
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+                @include prop-vw(font-size, 12, lg);
             }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
@@ -265,6 +323,15 @@
                 }
             }
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+                &[data-loading="true"] {
+                    &::after {
+                        @include prop-vw(width, 24, lg);
+                        @include prop-vw(height, 24, lg);
+                    }
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 &[data-loading="true"] {

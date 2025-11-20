@@ -24,6 +24,10 @@
             @include prop-vw(font-size, 30, xl);
             font-weight: bold;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+                @include prop-vw(font-size, 30, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 40, sm);
                 @include prop-vw(font-size, 30, sm);
@@ -37,6 +41,11 @@
             @include prop-vw(padding-top, 40, xl);
             @include border-side(top, 1, solid, #D3D8DE, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+                @include prop-vw(padding-top, 40, lg);
+                @include border-side(top, 1, solid, #D3D8DE, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 40, sm);
                 @include prop-vw(padding-top, 40, sm);
@@ -47,6 +56,9 @@
             @include prop-vw(max-width, 500, xl);
             width: 100%;
 
+            @include only(desktop) {
+                @include prop-vw(max-width, 500, lg);
+            }
             @include only(mobile) {
                 max-width: none;
             }
@@ -57,6 +69,9 @@
         &__input + &__input {
             @include prop-vw(margin-top, 12, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 12, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 12, sm);
             }
@@ -67,6 +82,9 @@
             flex-wrap: wrap;
             @include prop-vw(gap, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 20, sm);
             }

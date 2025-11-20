@@ -6,6 +6,9 @@
         background: $color-white;
         @include border-side(bottom, 1, solid, $color-border, xl);
 
+        @include only(desktop) {
+            @include border-side(bottom, 1, solid, $color-border, lg);
+        }
         @include only(mobile) {
             @include border-side(bottom, 1, solid, $color-border, sm);
         }
@@ -16,6 +19,9 @@
             @include prop-vw(padding-block, 9.5, xl);
             width: 100%;
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 9.5, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 9.5, sm);
             }
@@ -33,6 +39,11 @@
                 object-fit: contain;
             }
 
+            @include only(desktop) {
+                @include prop-vw(min-width, 390, lg);
+                @include prop-vw(width, 390, lg);
+                @include prop-vw(height, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 141, sm);
                 @include prop-vw(width, 141, sm);
@@ -45,6 +56,9 @@
             @include prop-vw(gap, 15, xl);
             width: fit-content;
 
+            @include only(desktop) {
+                @include prop-vw(gap, 15, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 15, sm);
             }

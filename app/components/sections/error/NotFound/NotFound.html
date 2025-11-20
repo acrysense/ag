@@ -1,12 +1,10 @@
 <section class="not-found" data-module="NotFound" data-path="sections/error">
     {{#if notFound.error}}
-        <span class="not-found__decor">ERROR</span>
+        <span class="not-found__decor">NO DATA</span>
         <div class="not-found__wrapper">
-            <span class="not-found__title">Ошибка соединения</span>
+            <span class="not-found__title">Нет данных для отображения</span>
             <p class="not-found__description">
-                Не удалось установить связь с сервером 1С. <br>
-                Попробуйте обновить страницу или зайти позднее. <br> 
-                Возможно, в настоящий момент, ведутся технические работы.
+                Вероятно, информация в этом разделе пока есть только для сотрудников аптек.
             </p>
             {{> components/Button/Button props=(obj
                 class='not-found__btn'

@@ -18,6 +18,9 @@
         &__top {
             @include prop-vw(margin-bottom, 40, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
             }
@@ -29,6 +32,9 @@
             @include prop-vw(font-size, 30, xl);
             font-weight: bold;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 30, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 32, sm);
             }
@@ -41,6 +47,10 @@
             font-weight: normal;
             color: $color-dark-grey;
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 5, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 5, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -52,6 +62,9 @@
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }
@@ -63,6 +76,9 @@
         &__table + &__table {
             @include prop-vw(margin-top, 40, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
             }
@@ -76,6 +92,10 @@
             font-weight: bold;
             line-height: 1.33333333333;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 20, lg);
+                @include prop-vw(font-size, 18, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(font-size, 18, sm);
@@ -88,6 +108,11 @@
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 20, lg);
+                @include border-all(1, solid, $color-border, lg);
+                @include prop-vw(border-radius, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 20, sm);
                 @include border-all(1, solid, $color-border, sm);
@@ -100,6 +125,9 @@
         overflow-x: auto;
         overflow-y: hidden;
 
+        @include only(desktop) {
+            @include prop-vw(padding-inline, 20, lg);
+        }
         @include only(mobile) {
             @include prop-vw(padding-inline, 20, sm);
         }
@@ -108,6 +136,9 @@
             @include prop-vw(min-width, 778, xl);
             width: 100%;
 
+            @include only(desktop) {
+                @include prop-vw(min-width, 778, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 778, sm);
             }
@@ -127,6 +158,21 @@
                 }
             }
 
+            @include only(desktop) {
+                .coefficient-table {
+                    &__row:last-child .coefficient-table__item:not(.coefficient-table__item--empty) {
+                        @include border-side(bottom, 1, solid, $color-border, lg);
+                    }
+                    &__item + .coefficient-table__item {
+                        @include border-side(left, 1, solid, $color-border, lg);
+                    }
+                    &__item {
+                        &:not(.coefficient-table__item--empty) {
+                            @include border-side(top, 1, solid, $color-border, lg);
+                        }
+                    }
+                }
+            }
             @include only(mobile) {
                 .coefficient-table {
                     &__row:last-child .coefficient-table__item:not(.coefficient-table__item--empty) {
@@ -173,6 +219,19 @@
                 border: none;
             }
 
+            @include only(desktop) {
+                @include prop-vw(width, 110, lg);
+                &--sm {
+                    @include prop-vw(max-width, 76, lg);
+                    @include prop-vw(width, 76, lg);
+                }
+                &--md {
+                    @include prop-vw(width, 160, lg);
+                }
+                &--xl {
+                    @include prop-vw(width, 270, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(width, 110, sm);
                 &--sm {
@@ -198,6 +257,11 @@
             line-height: 1.25;
             color: $color-dark-grey;
 
+            @include only(desktop) {
+                @include prop-vw(padding, 10, lg);
+                @include prop-vw(min-height, 60, lg);
+                @include prop-vw(font-size, 12, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding, 10, sm);
                 @include prop-vw(min-height, 60, sm);
@@ -217,6 +281,11 @@
                 font-weight: 600;
             }
             
+            @include only(desktop) {
+                @include prop-vw(padding, 10, lg);
+                @include prop-vw(min-height, 40, lg);
+                @include prop-vw(font-size, 12, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding, 10, sm);
                 @include prop-vw(min-height, 40, sm);
@@ -233,6 +302,11 @@
             background-size: contain;
             background-position: center center;
             
+            @include only(desktop) {
+                @include prop-vw(min-width, 16, lg);
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 16, sm);
                 @include prop-vw(width, 16, sm);
@@ -264,6 +338,10 @@
             }
         }
 
+        @include only(desktop) {
+            @include prop-vw(padding-bottom, 5, lg);
+            @include border-side(bottom, 2, solid, $color-dark-grey, lg);
+        }
         @include only(mobile) {
             flex-direction: column;
             @include prop-vw(padding-bottom, 5, sm);
@@ -284,6 +362,10 @@
             font-weight: normal;
             line-height: 1.25;
 
+            @include only(desktop) {
+                @include prop-vw(max-width, 537, lg);
+                @include prop-vw(font-size, 16, lg);
+            }
             @include only(mobile) {
                 max-width: none;
                 @include prop-vw(font-size, 14, sm);
@@ -302,6 +384,10 @@
             text-transform: uppercase;
             color: $color-dark-grey;
             
+            @include only(desktop) {
+                @include prop-vw(margin-left, 20, lg);
+                @include prop-vw(font-size, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 margin-right: auto;

@@ -5,6 +5,9 @@
     .news {
         @include prop-vw(margin-top, 20, xl);
             
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+        }
         @include only(mobile) {
             margin-top: 0;
             @include prop-vw(padding-block, 20, sm);
@@ -25,6 +28,9 @@
         &__top {
             @include prop-vw(margin-bottom, 40, xl);
             
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
             }
@@ -36,6 +42,9 @@
             @include prop-vw(font-size, 30, xl);
             font-weight: bold;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 30, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 32, sm);
             }
@@ -75,6 +84,9 @@
 			justify-content: center;
             @include prop-vw(margin-top, 50, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 50, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 50, sm);
             }
@@ -86,6 +98,11 @@
             color: $color-blue;
 			animation: news-spin .8s linear infinite;
 
+            @include only(desktop) {
+                @include prop-vw(min-width, 24, lg);
+                @include prop-vw(width, 24, lg);
+                @include prop-vw(height, 24, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 24, sm);
                 @include prop-vw(width, 24, sm);
@@ -96,6 +113,9 @@
 			width: 100%;
             @include prop-vw(height, 1, xl);
 
+            @include only(desktop) {
+                @include prop-vw(height, 1, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(height, 1, sm);
             }
@@ -107,7 +127,11 @@
         flex-direction: column;
         @include prop-vw(padding-bottom, 10, xl);
         @include border-side(bottom, 1, solid, $color-light-grey, xl);
-            
+        
+        @include only(desktop) {
+            @include prop-vw(padding-bottom, 10, lg);
+            @include border-side(bottom, 1, solid, $color-light-grey, lg);
+        }
         @include only(mobile) {
             @include prop-vw(padding-bottom, 10, sm);
             @include border-side(bottom, 1, solid, $color-light-grey, sm);
@@ -154,6 +178,9 @@
                 transition: transform $transition-vs;
             }
             
+            @include only(desktop) {
+                @include prop-vw(border-radius, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(border-radius, 10, sm);
             }
@@ -161,6 +188,9 @@
         &__img + &__body {
             @include prop-vw(margin-top, 10, xl);
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 10, sm);
             }
@@ -177,6 +207,9 @@
             line-height: 1.33333333333;
             text-overflow: ellipsis;
             
+            @include only(desktop) {
+                @include prop-vw(font-size, 18, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 18, sm);
             }
@@ -195,6 +228,10 @@
             color: $color-dark-grey;
             align-self: stretch;
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 -webkit-line-clamp: 3;
                 @include prop-vw(margin-top, 10, sm);
@@ -207,6 +244,9 @@
             justify-content: space-between;
             @include prop-vw(margin-top, 20, xl);
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+            }
             @include only(mobile) {
                 flex-direction: column-reverse;
                 @include prop-vw(margin-top, 20, sm);
@@ -218,6 +258,9 @@
             flex-wrap: wrap;
             @include prop-vw(gap, 10, xl);
             
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(margin-top, 10, sm);
@@ -268,6 +311,14 @@
                     }
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(gap, 5, lg);
+                @include prop-vw(min-width, 60, lg);
+                @include prop-vw(width, 60, lg);
+                @include prop-vw(height, 36, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 5, sm);
                 @include prop-vw(min-width, 60, sm);
@@ -285,6 +336,11 @@
             @include prop-vw(width, 16, xl);
             @include prop-vw(height, 16, xl);
             
+            @include only(desktop) {
+                @include prop-vw(min-width, 16, lg);
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 16, sm);
                 @include prop-vw(width, 16, sm);
@@ -305,6 +361,11 @@
                 color: $color-blue-hover;
             }
             
+            @include only(desktop) {
+                @include prop-vw(min-width, 16, lg);
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 16, sm);
                 @include prop-vw(width, 16, sm);
@@ -318,6 +379,9 @@
             font-weight: normal;
             color: $color-dark-grey;
             
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }

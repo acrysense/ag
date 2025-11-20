@@ -12,6 +12,11 @@
 		z-index: 4000;
 		pointer-events: none;
 
+        @include only(desktop) {
+            @include prop-vw(right, 40, lg);
+            @include prop-vw(bottom, 120, lg);
+            @include prop-vw(gap, 20, lg);
+        }
         @include only(mobile) {
             @include prop-vw(right, 20, sm);
             @include prop-vw(bottom, 80, sm);
@@ -39,8 +44,15 @@
 		&.is-out { transform: translateY(10px); opacity: 0; }
 
 		&--success { background: var(--toast-success, $color-green); }
-		&--error   { background: var(--toast-error,   $color-red); }
+		&--error { background: var(--toast-error, $color-red); }
 
+        @include only(desktop) {
+            @include prop-vw(gap, 20, lg);
+            @include prop-vw(max-width, 400, lg);
+            @include prop-vw(min-width, 400, lg);
+            @include prop-vw(padding-block, 12, lg);
+            @include prop-vw(padding-inline, 15, lg);
+        }
         @include only(mobile) {
             @include prop-vw(gap, 20, sm);
             @include prop-vw(max-width, 320, sm);
@@ -57,6 +69,9 @@
         font-weight: normal;
         line-height: 1.57142857143;
 
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
         @include only(mobile) {
             @include prop-vw(font-size, 14, sm);
         }
@@ -91,6 +106,16 @@
                 & > svg {
                     color: $color-grey;
                 }
+            }
+        }
+        @include only(desktop) {
+            @include prop-vw(min-width, 24, lg);
+            @include prop-vw(width, 24, lg);
+            @include prop-vw(height, 24, lg);
+            & > svg {
+                @include prop-vw(min-width, 16, lg);
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
             }
         }
         @include only(mobile) {

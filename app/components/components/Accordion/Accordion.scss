@@ -17,6 +17,10 @@
                 }
             }
 
+            @include only(desktop) {
+                @include prop-vw(padding-left, 20, lg);
+                @include border-side(left, 1, solid, $color-blue-hover, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-left, 20, sm);
                 @include border-side(left, 1, solid, $color-blue-hover, sm);
@@ -25,6 +29,9 @@
         &__item + &__item {
             @include prop-vw(margin-top, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
             }
@@ -60,6 +67,16 @@
                     color: $color-blue-hover;
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(padding-block, 5, lg);
+                @include prop-vw(font-size, 14, lg);
+                & > svg {
+                    @include prop-vw(min-width, 16, lg);
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(padding-block, 5, sm);
@@ -83,6 +100,12 @@
                 @include prop-vw(height, 5, xl);
             }
 
+            @include only(desktop) {
+                @include prop-vw(padding-inline, 17, lg);
+                &::before {
+                    @include prop-vw(height, 5, lg);
+                }
+            }
             @include only(mobile) {
                 padding-left: 0;
                 &::before {

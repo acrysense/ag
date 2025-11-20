@@ -5,6 +5,9 @@
     .footer {
         @include border-side(top, 1, solid, $color-border, xl);
         
+        @include only(desktop) {
+            @include border-side(top, 1, solid, $color-border, lg);
+        }
         @include only(mobile) {
             background: $color-white;
             @include border-side(top, 1, solid, $color-border, sm);
@@ -16,6 +19,9 @@
             justify-content: space-between;
             @include prop-vw(padding-block, 22, xl);
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 22, lg);
+            }
             @include only(mobile) {
                 flex-direction: column;
                 @include prop-vw(padding-block, 20, sm);
@@ -38,6 +44,9 @@
                 }
             }
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }

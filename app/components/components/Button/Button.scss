@@ -40,6 +40,17 @@
                 background: $color-blue-hover;
             }
         }
+        @include only(desktop) {
+            @include prop-vw(padding-block, 17, lg);
+            @include prop-vw(padding-inline, 26, lg);
+            @include prop-vw(font-size, 16, lg);
+            @include prop-vw(border-radius, 14, lg);
+            &--sm {
+                @include prop-vw(padding-block, 16, lg);
+                @include prop-vw(padding-inline, 24, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
+        }
         @include only(mobile) {
             @include prop-vw(padding-block, 17, sm);
             @include prop-vw(padding-inline, 26, sm);

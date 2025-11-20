@@ -18,6 +18,9 @@
         &__top {
             @include prop-vw(margin-bottom, 40, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
             }
@@ -30,6 +33,10 @@
             @include prop-vw(font-size, 30, xl);
             font-weight: bold;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 20, lg);
+                @include prop-vw(font-size, 30, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(font-size, 32, sm);
@@ -38,6 +45,9 @@
         &__tabs {
             @include prop-vw(margin-bottom, 40, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 40, sm);
             }
@@ -50,6 +60,10 @@
             font-weight: normal;
             color: $color-dark-grey;
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 5, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 5, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -61,6 +75,9 @@
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }
@@ -74,6 +91,9 @@
             @include prop-vw(margin-bottom, 40, xl);
             width: 100%;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+            }
             @include only(mobile) {
                 flex-direction: column;
                 @include prop-vw(padding-bottom, 20, sm);
@@ -99,6 +119,9 @@
             font-weight: normal;
             color: $color-blue;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -111,6 +134,9 @@
         &__table + &__table {
             @include prop-vw(margin-top, 40, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
             }
@@ -134,6 +160,10 @@
             font-weight: bold;
             line-height: 1.33333333333;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 10, lg);
+                @include prop-vw(font-size, 18, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 10, sm);
                 @include prop-vw(font-size, 18, sm);
@@ -151,6 +181,10 @@
             line-height: 1;
             color: #0F1A24;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 5, lg);
+                @include prop-vw(font-size, 16, lg);
+            }
             @media screen and (max-width: 767px) {
                 @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(font-size, 16, sm);
@@ -166,6 +200,10 @@
             background: #F3F6FC;
             @include prop-vw(border-radius, 8, xl);
 
+            @include only(desktop) {
+                @include prop-vw(height, 30, lg);
+                @include prop-vw(border-radius, 8, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(height, 30, sm);
                 @include prop-vw(border-radius, 8, sm);
@@ -208,6 +246,9 @@
                     background-clip: text;
             animation: valueProgress 1.15s ease-out forwards;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 16, sm);
             }
@@ -222,6 +263,9 @@
         justify-content: space-between;
         @include prop-vw(margin-bottom, 20, xl);
 
+        @include only(desktop) {
+            @include prop-vw(margin-bottom, 20, lg);
+        }
         @include only(mobile) {
             flex-direction: column-reverse;
             align-items: flex-start;
@@ -244,6 +288,9 @@
             @include prop-vw(max-width, 340, xl);
             width: 100%;
 
+            @include only(desktop) {
+                @include prop-vw(max-width, 340, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 max-width: none;
@@ -271,6 +318,13 @@
                 border-color: $color-blue;
             }
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 8, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 12, lg);
+                @include border-all(1, solid, #E1E1E1, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 8, sm);
                 @include prop-vw(padding-inline, 10, sm);
@@ -288,6 +342,11 @@
             background: $color-bg;
             @include prop-vw(border-radius, 10, xl);
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 3, lg);
+                @include prop-vw(padding-inline, 4, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 3, sm);
                 @include prop-vw(padding-inline, 4, sm);
@@ -327,6 +386,12 @@
                     color: $color-blue;
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(padding-block, 8.5, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 13, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 8.5, sm);
                 @include prop-vw(padding-inline, 10, sm);
@@ -341,6 +406,9 @@
         overflow-x: auto;
         overflow-y: hidden;
 
+        @include only(desktop) {
+            @include prop-vw(padding-inline, 20, lg);
+        }
         @include only(mobile) {
             padding: 0;
         }
@@ -349,6 +417,9 @@
             @include prop-vw(min-width, 778, xl);
             width: 100%;
 
+            @include only(desktop) {
+                @include prop-vw(min-width, 778, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 778, sm);
             }
@@ -361,6 +432,14 @@
                 @include border-side(left, 1, solid, transparent, xl);
             }
 
+            @include only(desktop) {
+                .n-package-table__item:not(.n-package-table__item--empty) {
+                    @include border-side(top, 1, solid, #E1E1E1, lg);
+                }
+                .n-package-table__item + .n-package-table__item {
+                    @include border-side(left, 1, solid, transparent, lg);
+                }
+            }
             @include only(mobile) {
                 .n-package-table__item:not(.n-package-table__item--empty) {
                     border-top: none;
@@ -381,6 +460,17 @@
                 @include border-side(left, 1, solid, #E1E1E1, xl);
             }
 
+            @include only(desktop) {
+                .n-package-table__item:not(.n-package-table__item--empty) {
+                    @include border-side(top, 1, solid, #E1E1E1, lg);
+                }
+                .n-package-table__row:last-child .n-package-table__item:not(.n-package-table__item--empty) {
+                    @include border-side(bottom, 1, solid, #E1E1E1, lg);
+                }
+                .n-package-table__item + .n-package-table__item {
+                    @include border-side(left, 1, solid, #E1E1E1, lg);
+                }
+            }
             @include only(mobile) {
                 .n-package-table__item:not(.n-package-table__item--empty) {
                     @include border-side(top, 1, solid, #E1E1E1, sm);
@@ -434,6 +524,13 @@
                 }
             }
 
+            @include only(desktop) {
+                .n-package-table {
+                    &__value {
+                        @include prop-vw(padding-block, 25, lg);
+                    }
+                }
+            }
             @include only(mobile) {
                 .n-package-table {
                     &__value {
@@ -469,6 +566,16 @@
                 border: none;
             }
 
+            @include only(desktop) {
+                @include prop-vw(width, 110, lg);
+                &--sm {
+                    @include prop-vw(max-width, 80, lg);
+                    @include prop-vw(width, 80, lg);
+                }
+                &--lg {
+                    @include prop-vw(width, 260, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(width, 110, sm);
                 &--sm {
@@ -514,6 +621,16 @@
                 outline: none;
             }
 
+            @include only(desktop) {
+                @include prop-vw(margin-right, 10, lg);
+                @include prop-vw(min-width, 20, lg);
+                @include prop-vw(width, 20, lg);
+                @include prop-vw(height, 20, lg);
+                & > svg {
+                    @include prop-vw(width, 20, lg);
+                    @include prop-vw(height, 20, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(margin-right, 10, sm);
                 @include prop-vw(min-width, 20, sm);
@@ -539,6 +656,12 @@
             line-height: 1.53846153846;
             color: #575F76;
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 5, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(min-height, 30, lg);
+                @include prop-vw(font-size, 13, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 5, sm);
                 @include prop-vw(padding-inline, 10, sm);
@@ -559,6 +682,12 @@
             background: #F3F6FC;
             @include border-side(top, 1, solid, #E1E1E1, xl);
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 8, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 13, lg);
+                @include border-side(top, 1, solid, #E1E1E1, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 8, sm);
                 @include prop-vw(padding-inline, 10, sm);
@@ -579,6 +708,12 @@
                 font-weight: 600;
             }
 
+            @include only(desktop) {
+                @include prop-vw(padding-block, 12, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(min-height, 40, lg);
+                @include prop-vw(font-size, 13, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(padding-block, 12, sm);
                 @include prop-vw(padding-inline, 10, sm);
@@ -596,6 +731,11 @@
             background-size: contain;
             background-position: center center;
 
+            @include only(desktop) {
+                @include prop-vw(min-width, 20, lg);
+                @include prop-vw(width, 20, lg);
+                @include prop-vw(height, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 20, sm);
                 @include prop-vw(width, 20, sm);
@@ -610,6 +750,10 @@
             @include prop-vw(line-height, 40, xl);
             color: #B60000;
             
+            @include only(desktop) {
+                @include prop-vw(font-size, 13, lg);
+                @include prop-vw(line-height, 40, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 13, sm);
                 @include prop-vw(line-height, 40, sm);

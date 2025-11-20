@@ -4,14 +4,22 @@
 @layer layout {
     .sidebar {
         @include prop-vw(padding-top, 20, xl);
-        @include prop-vw(padding-right, 19, xl);
         @include prop-vw(padding-bottom, 40, xl);
-        @include prop-vw(padding-left, 30, xl);
+        @include prop-vw(padding-inline, 30, xl);
         @include minvh-minus(120, xl, 100vh);
         @include prop-vw(max-width, 350, xl);
         width: 100%;
         @include border-side(right, 1, solid, $color-border, xl);
 
+        @include only(desktop) {
+            @include prop-vw(padding-top, 20, lg);
+            @include prop-vw(padding-bottom, 40, lg);
+            @include prop-vw(padding-inline, 30, lg);
+            @include minvh-minus(120, lg, 100vh);
+            @include prop-vw(max-width, 350, lg);
+            width: 100%;
+            @include border-side(right, 1, solid, $color-border, lg);
+        }
         @include only(mobile) {
             position: fixed;
             top: 0;
@@ -61,6 +69,11 @@
             width: 100%;
             @include border-side(bottom, 1, solid, $color-dark-grey, xl);
 
+            @include only(desktop) {
+                @include prop-vw(padding-bottom, 10, lg);
+                @include prop-vw(max-width, 225, lg);
+                @include border-side(bottom, 1, solid, $color-dark-grey, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 10, sm);
                 max-width: none;
@@ -70,6 +83,9 @@
         &__section + &__section {
             @include prop-vw(margin-top, 30, xl);
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 30, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 30, sm);
             }
@@ -83,6 +99,10 @@
             text-transform: uppercase;
             color: $color-dark-grey;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 10, lg);
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 10, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -123,6 +143,17 @@
                     color: $color-blue;
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(padding-block, 10, lg);
+                @include prop-vw(font-size, 14, lg);
+                & > svg,
+                & > img {
+                    @include prop-vw(min-width, 20, lg);
+                    @include prop-vw(width, 20, lg);
+                    @include prop-vw(height, 20, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 15, sm);
                 @include prop-vw(padding-block, 10, sm);
@@ -141,8 +172,8 @@
             display: block;
             overflow: hidden;
             @include prop-vw(margin-top, 80, xl);
+            @include prop-vw(max-width, 250, xl);
             width: 100%;
-            background: #F9DBDB;
             @include prop-vw(border-radius, 20, xl);
             &::before {
                 content: '';
@@ -159,12 +190,21 @@
                 object-fit: cover;
             }
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 80, lg);
+                @include prop-vw(max-width, 250, lg);
+                @include prop-vw(border-radius, 20, lg);
+            }
             @include only(mobile) {
                 display: none;
             }
         }
         &__banr + &__banr {
             @include prop-vw(margin-top, 40, xl);
+
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+            }
         }
         &__close {
             position: absolute;

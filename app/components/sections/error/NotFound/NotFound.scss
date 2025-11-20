@@ -5,6 +5,9 @@
     .not-found {
         @include prop-vw(padding-top, 100, xl);
 
+        @include only(desktop) {
+            @include prop-vw(padding-top, 100, lg);
+        }
         @include only(mobile) {
             @include prop-vw(padding-top, 40, sm);
         }
@@ -12,18 +15,22 @@
         &__decor {
             display: block;
             margin-right: auto;
-            @include prop-vw(margin-bottom, 10, xl);
+            @include prop-vw(margin-bottom, 30, xl);
             margin-left: auto;
             width: fit-content;
             font-family: $font-secondary;
-            @include prop-vw(font-size, 240, xl);
+            @include prop-vw(font-size, 198, xl);
             font-weight: bold;
             text-transform: uppercase;
             color: $color-grey;
 
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 30, lg);
+                @include prop-vw(font-size, 198, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
-                @include prop-vw(font-size, 120, sm);
+                @include prop-vw(font-size, 100, sm);
             }
         }
         &__wrapper {
@@ -49,6 +56,9 @@
             @include prop-vw(font-size, 26, xl);
             font-weight: bold;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 26, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 24, sm);
             }
@@ -74,6 +84,10 @@
                 }
             }
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(font-size, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -86,6 +100,10 @@
             @include prop-vw(min-width, 130, xl);
             width: fit-content;
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 40, lg);
+                @include prop-vw(min-width, 130, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 @include prop-vw(min-width, 130, sm);

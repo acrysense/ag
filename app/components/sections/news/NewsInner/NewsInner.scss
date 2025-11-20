@@ -89,6 +89,7 @@
                 }
             }
 
+            @include only(desktop) {}
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
                 & > * {
@@ -132,6 +133,9 @@
         &__files {
             @include prop-vw(margin-top, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
             }
@@ -160,6 +164,15 @@
                     }
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(gap, 5, lg);
+                @include prop-vw(font-size, 14, lg);
+                & > svg {
+                    @include prop-vw(min-width, 20, lg);
+                    @include prop-vw(width, 20, lg);
+                    @include prop-vw(height, 20, lg);
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 5, sm);
                 @include prop-vw(font-size, 14, sm);
@@ -173,6 +186,9 @@
         &__file + &__file {
             @include prop-vw(margin-top, 10, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+            }
             @include only(mobile) {
                @include prop-vw(margin-top, 10, sm); 
             }
@@ -184,6 +200,10 @@
             @include prop-vw(gap, 20, xl);
             @include prop-vw(margin-top, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+                @include prop-vw(margin-top, 20, lg);
+            }
             @include only(mobile) {
                 flex-direction: column;
                 align-items: flex-start;
@@ -197,6 +217,9 @@
             flex-wrap: wrap;
             @include prop-vw(gap, 10, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
             }
@@ -241,6 +264,15 @@
                     }
                 }
             }
+            @include only(desktop) {
+                @include prop-vw(gap, 5, lg);
+                @include prop-vw(padding-inline, 12, lg);
+                @include prop-vw(min-width, 40, lg);
+                @include prop-vw(width, 40, lg);
+                @include prop-vw(height, 36, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 5, sm);
                 @include prop-vw(padding-inline, 12, sm);
@@ -258,6 +290,11 @@
             @include prop-vw(width, 16, xl);
             @include prop-vw(height, 16, xl);
             
+            @include only(desktop) {
+                @include prop-vw(min-width, 16, lg);
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 16, sm);
                 @include prop-vw(width, 16, sm);
@@ -278,6 +315,11 @@
                 color: $color-blue-hover;
             }
             
+            @include only(desktop) {
+                @include prop-vw(min-width, 16, lg);
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(min-width, 16, sm);
                 @include prop-vw(width, 16, sm);
@@ -292,6 +334,9 @@
             line-height: 1.57142857143;
             color: $color-dark-grey;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }
@@ -299,6 +344,9 @@
         &__gallery {
             @include prop-vw(margin-top, 20, xl);
             
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
             }
@@ -306,6 +354,9 @@
         &__comments {
             @include prop-vw(margin-top, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(margin-top, 20, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
                 @include border-side(top, 10, solid, $color-bg, sm);
@@ -321,7 +372,6 @@
                 @include prop-vw(border-radius, 20, xl);
                 box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
             }
-
             @include only(mobile) {
                 @include prop-vw(padding-block, 20, sm);
                 @include prop-vw(padding-inline, 10, sm);
@@ -336,7 +386,10 @@
             font-weight: bold;
             line-height: 1.07692307692;
 
-
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 20, lg);
+                @include prop-vw(font-size, 26, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(font-size, 24, sm);
@@ -350,8 +403,73 @@
             font-weight: normal;
             line-height: 1.57142857143;
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__new {
+            @include up(tablet) {
+                @include prop-vw(padding, 25, xl);
+                background: $color-white;
+                @include prop-vw(border-radius, 20, xl);
+                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 20, sm);
+                @include prop-vw(padding-inline, 10, sm);
+            }
+
+            .reviews-reply-header {
+                display: block;
+                @include prop-vw(margin-bottom, 20, xl);
+                padding: 0 !important;
+                width: fit-content;
+                font-family: $font-secondary;
+                @include prop-vw(font-size, 26, xl);
+                font-weight: bold;
+                line-height: 1.07692307692;
+
+
+                @include only(mobile) {
+                    @include prop-vw(margin-bottom, 20, sm);
+                    @include prop-vw(font-size, 24, sm);
+                    line-height: 1.20833333333;
+                }
+            }
+            .reviews-reply-buttons {
+                display: flex;
+                align-items: center;
+                @include prop-vw(gap, 10, xl);
+                margin-left: auto;
+                padding: 0 !important;
+                width: fit-content;
+                input[name="send_button"],
+                input[name="view_button"] {
+                    display: block;
+                    @include prop-vw(padding-block, 11, xl);
+                    @include prop-vw(padding-inline, 12, xl);
+                    @include prop-vw(min-width, 98, xl);
+                    width: fit-content;
+                    @include prop-vw(font-size, 14, xl);
+                    font-weight: normal;
+                    line-height: 1;
+                    text-align: center;
+                    color: $color-white;
+                    background: $color-blue;
+                    border: none;
+                    @include prop-vw(border-radius, 14, xl);
+                    &:focus {
+                        outline: none;
+                    }
+                }
+            }
+            .bxhtmled-area-cnt,
+            .bxhtmled-iframe-cnt {
+                max-width: 100% !important;
+                width: 100% !important;
             }
         }
     }
@@ -534,5 +652,271 @@
         .swiper-pagination-bullet-active {
             background: $color-blue-hover;
         }
+    }
+
+    .comments__new {
+        max-width: 900px;
+        margin: 0 auto;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #111827;
+    }
+    .comments__new .reviews-reply-header {
+        margin-bottom: 12px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        border: 0;
+    }
+    .comments__new .reviews-reply-header span {
+        font-size: 20px;
+        font-weight: 600;
+    }
+    .comments__new .reviews-reply-field-text {
+        margin-bottom: 16px;
+    }
+    .comments__new .feed-add-post[data-bx-html-editable="Y"] {
+        background: #f9fafb;
+        border-radius: 16px;
+        padding: 16px 18px 18px;
+        border: 1px solid #e5e7eb;
+    }
+    .comments__new .feed-add-post-dnd-notice {
+        display: none;
+    }
+    .comments__new .bx-html-editor {
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        overflow: hidden;
+        background: #fff;
+    }
+    .comments__new .bxhtmled-toolbar-cnt,
+    .comments__new .main-post-form-toolbar {
+        display: none;
+    }
+    .comments__new .bxhtmled-area-cnt {
+        height: 140px !important;
+    }
+    .comments__new .bx-editor-iframe {
+        background: #fff;
+    }
+    .comments__new .feed-add-post-buttons {
+        margin-top: 14px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+    }
+    .comments__new .ui-btn {
+        border-radius: 999px;
+        font-size: 14px;
+        line-height: 1.2;
+        padding: 8px 18px;
+    }
+    .comments__new .ui-btn-primary {
+        background: #2563eb;
+        border-color: #2563eb;
+    }
+    .comments__new .ui-btn-primary:hover {
+        background: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+    .comments__new .ui-btn-link {
+        color: #6b7280;
+    }
+    .comments__new .reviews-reply-field-settings,
+    .comments__new .reviews-reply-field-upload {
+        margin-top: 12px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+    .comments__new .reviews-reply-field-setting {
+        margin-bottom: 4px;
+    }
+    .comments__new .reviews-reply-buttons {
+        display: none;
+    }
+    .comments__new .reviews-post-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        padding: 18px 20px 16px;
+        display: block;
+    }
+    .comments__new .reviews-post-table thead,
+    .comments__new .reviews-post-table tbody,
+    .comments__new .reviews-post-table tr,
+    .comments__new .reviews-post-table td {
+        display: block;
+        width: 100%;
+        border: 0;
+        padding: 0;
+    }
+    .comments__new .reviews-post-table thead td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 10px;
+    }
+    .comments__new .reviews-post-table .review-rating {
+        order: 2;
+        font-size: 13px;
+        color: #9ca3af;
+    }
+    .comments__new .reviews-post-table .ilike,
+    .comments__new .reviews-post-table .bx-ilike-button\> {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .comments__new .reviews-post-table .bx-ilike-left-wrap,
+    .comments__new .reviews-post-table .bx-ilike-left {
+        display: none;
+    }
+    .comments__new .reviews-post-table .bx-ilike-text {
+        display: none;
+    }
+    .comments__new .reviews-post-table .bx-ilike-right {
+        position: relative;
+        padding-left: 20px;
+    }
+    .comments__new .reviews-post-table .bx-ilike-right::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        border-radius: 999px;
+        border: 1.5px solid #ef4444;
+    }
+    .comments__new .reviews-post-table b {
+        font-weight: 600;
+        font-size: 14px;
+        color: #111827;
+    }
+    .comments__new .reviews-post-table .message-post-date {
+        margin-left: auto;
+        font-size: 13px;
+        color: #9ca3af;
+    }
+    .comments__new .reviews-text {
+        margin-top: 4px;
+        font-size: 14px;
+        line-height: 1.55;
+        color: #111827;
+    }
+    .comments__new .feed-wrap {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e5e7eb;
+    }
+    .comments__new .feed-comments-block {
+        margin: 0;
+    }
+    .comments__new .feed-com-block-outer {
+        margin-top: 10px;
+    }
+    .comments__new .feed-com-block {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        background: #f9fafb;
+        border-radius: 12px;
+        padding: 10px 12px;
+    }
+    .comments__new .feed-com-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .comments__new .feed-com-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: inherit;
+    }
+    .comments__new .feed-com-main-content {
+        flex: 1;
+    }
+    .comments__new .feed-com-name {
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 500;
+        color: #111827;
+        margin-bottom: 2px;
+    }
+    .comments__new .feed-com-user-box {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        color: #9ca3af;
+    }
+    .comments__new .feed-com-time {
+        font-size: 12px;
+        color: #9ca3af;
+    }
+    .comments__new .feed-com-text-inner-inner {
+        margin-top: 4px;
+        font-size: 14px;
+        line-height: 1.5;
+        color: #111827;
+    }
+    .comments__new .feed-com-informers-bottom {
+        margin-top: 6px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 13px;
+    }
+    .comments__new .feed-com-reply {
+        color: #2563eb;
+        text-decoration: none;
+    }
+    .comments__new .feed-com-reply:hover {
+        text-decoration: underline;
+    }
+    .comments__new .feed-post-more-link {
+        color: #6b7280;
+        font-size: 13px;
+    }
+    .comments__new .feed-com-add-box-outer {
+        margin-top: 10px;
+        display: flex;
+        gap: 10px;
+    }
+    .comments__new .feed-com-add-box-outer .feed-com-avatar {
+        margin-top: 2px;
+    }
+    .comments__new .feed-com-add-box {
+        flex: 1;
+    }
+    .comments__new .feed-com-footer {
+        border-radius: 999px;
+        border: 1px dashed #d1d5db;
+        padding: 8px 14px;
+        cursor: text;
+    }
+    .comments__new .feed-com-add-link {
+        font-size: 14px;
+        color: #9ca3af;
+        text-decoration: none;
+    }
+    .comments__new .feed-com-add-link:hover {
+        color: #6b7280;
+    }
+    .comments__new .blog-comment-edit.feed-com-add-block.blog-post-edit {
+        margin-top: 4px;
+    }
+    .comments__new .comments-form {
+        margin-top: 0;
     }
 }

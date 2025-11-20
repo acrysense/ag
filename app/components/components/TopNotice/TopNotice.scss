@@ -24,6 +24,11 @@
             @include prop-vw(padding-block, 18, xl);
             @include prop-vw(padding-inline, 30, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+                @include prop-vw(padding-block, 18, lg);
+                @include prop-vw(padding-inline, 30, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(padding, 10, sm);
@@ -50,6 +55,9 @@
                 }
             }
 
+            @include only(desktop) {
+                @include prop-vw(font-size, 16, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
             }
@@ -82,6 +90,16 @@
                     & > svg {
                         color: $color-blue;
                     }
+                }
+            }
+            @include only(desktop) {
+                @include prop-vw(min-width, 24, lg);
+                @include prop-vw(width, 24, lg);
+                @include prop-vw(height, 24, lg);
+                & > svg {
+                    @include prop-vw(min-width, 16, lg);
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
                 }
             }
             @include only(mobile) {
