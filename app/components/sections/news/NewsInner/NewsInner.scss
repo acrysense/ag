@@ -716,6 +716,28 @@
             @include prop-vw(margin-bottom, 20, sm);
         }
     }
+    .comments__wrap .forum-notify-text {
+        @include prop-vw(font-size, 12, xl);
+        font-weight: normal;
+        color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 12, sm);
+        }
+    }
+    .comments__wrap .forum-notify-bar {
+        @include prop-vw(margin-bottom, 20, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-bottom, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-bottom, 20, sm);
+        }
+    }
     .comments__wrap .reviews-reply-header span {
         display: block;
         width: fit-content;
@@ -958,6 +980,7 @@
     .comments__wrap .reviews-post-table .review-rating {
         order: 1;
     }
+    .comments__wrap .record-4844-296786_1mP9S4-new
     .comments__wrap .ilike {
         position: relative;
         z-index: 1;
@@ -1397,7 +1420,8 @@
             @include prop-vw(margin-top, 1.5, sm);
         }
     }
-    .comments__wrap .feed-com-block-cover + .feed-com-block-cover {
+    .comments__wrap .feed-com-block-cover + .feed-com-block-cover,
+    .comments__wrap .feed-com-block-cover + div:not([class]) {
         @include prop-vw(margin-top, 20, xl);
 
         @include only(desktop) {
