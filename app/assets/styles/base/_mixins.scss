@@ -107,11 +107,16 @@ $alias-bp: (
 	@return vw-clamp($n, _rv($range, base), _rv($range, from), _rv($range, to));
 }
 
-@mixin prop-vw($prop, $valueAt, $range) {
+@mixin prop-vw($prop, $valueAt, $range, $important: false) {
 	$base: _rv($range, base);
 	$from: _rv($range, from);
 	$to: _rv($range, to);
-	#{$prop}: vw-clamp($valueAt, $base, $from, $to);
+
+	@if $important {
+		#{$prop}: vw-clamp($valueAt, $base, $from, $to) !important;
+	} @else {
+		#{$prop}: vw-clamp($valueAt, $base, $from, $to);
+	}
 }
 
 @mixin up($key) {

@@ -49,7 +49,7 @@ jobs:
       - name: Build for Bitrix (CMS)
         env:
           MODE: cms
-          BASE: /local/templates/ag/dist/
+          BASE: /bitrix/templates/auth/
           CANONICAL_OFF: "1"
         run: |
           npm run prebuild || echo "no prebuild"

@@ -4,6 +4,8 @@
 @layer components {
     .news-inner {
         &__wrap {
+            width: 100%;
+
             @include up(tablet) {
                 @include prop-vw(padding, 25, xl);
                 background: $color-white;
@@ -63,9 +65,8 @@
                 }
             }
             img {
-                display: block;
+                display: inline-block;
                 overflow: hidden;
-                width: 100%;
                 @include prop-vw(border-radius, 10, xl);
             }
             figcaption {
@@ -89,7 +90,44 @@
                 }
             }
 
-            @include only(desktop) {}
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+                & > * {
+                    @include prop-vw(margin-bottom, 20, lg);
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+                h1 {
+                    @include prop-vw(font-size, 30, lg);
+                }
+                h2 {
+                    @include prop-vw(font-size, 26, lg);
+                }
+                h3 {
+                    @include prop-vw(font-size, 22, lg);
+                }
+                h4, h5, h6 {
+                    @include prop-vw(font-size, 18, lg);
+                }
+                img {
+                    @include prop-vw(border-radius, 10, lg);
+                }
+                figcaption {
+                    @include prop-vw(margin-top, 5, lg);
+                    @include prop-vw(font-size, 12, lg);
+                }
+                blockquote {
+                    @include prop-vw(padding, 20, lg);
+                    @include border-side(left, 5, solid, $color-blue-hover, lg);
+                }
+                ul, ol {
+                    @include prop-vw(padding-left, 20, lg);
+                    li {
+                        @include prop-vw(font-size, 14, lg);
+                    }
+                }
+            }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
                 & > * {
@@ -366,6 +404,8 @@
 
     .comments {
         &__wrap {
+            color: $color-black;
+
             @include up(tablet) {
                 @include prop-vw(padding, 25, xl);
                 background: $color-white;
@@ -449,20 +489,28 @@
                 input[name="send_button"],
                 input[name="view_button"] {
                     display: block;
-                    @include prop-vw(padding-block, 11, xl);
-                    @include prop-vw(padding-inline, 12, xl);
+                    @include prop-vw(padding-top, 9, xl, true);
+                    @include prop-vw(padding-bottom, 13, xl, true);
+                    @include prop-vw(padding-inline, 12, xl, true);
                     @include prop-vw(min-width, 98, xl);
                     width: fit-content;
-                    @include prop-vw(font-size, 14, xl);
+                    @include prop-vw(font-size, 14, xl, true);
                     font-weight: normal;
                     line-height: 1;
                     text-align: center;
                     color: $color-white;
                     background: $color-blue;
                     border: none;
-                    @include prop-vw(border-radius, 14, xl);
+                    @include prop-vw(border-radius, 14, xl, true);
                     &:focus {
                         outline: none;
+                    }
+
+                    @media screen and (hover: hover) {
+                        &:hover:not([disabled]) {
+                            color: $color-white;
+                            background: $color-blue-hover;
+                        }
                     }
                 }
             }
@@ -654,269 +702,413 @@
         }
     }
 
-    .comments__new {
-        max-width: 900px;
-        margin: 0 auto;
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-        color: #111827;
-    }
-    .comments__new .reviews-reply-header {
-        margin-bottom: 12px;
+    .comments__wrap .reviews-reply-header {
         padding: 0;
         display: flex;
         align-items: center;
-        gap: 4px;
+        @include prop-vw(margin-bottom, 20, xl);
         border: 0;
+
+        @include only(desktop) {
+            @include prop-vw(margin-bottom, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-bottom, 20, sm);
+        }
     }
-    .comments__new .reviews-reply-header span {
-        font-size: 20px;
-        font-weight: 600;
+    .comments__wrap .reviews-reply-header span {
+        display: block;
+        width: fit-content;
+        font-family: $font-secondary;
+        @include prop-vw(font-size, 26, xl);
+        font-weight: bold;
+        line-height: 1.07692307692;
+        color: $color-black;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 26, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 24, sm);
+            line-height: 1.20833333333;
+        }
     }
-    .comments__new .reviews-reply-field-text {
-        margin-bottom: 16px;
+    .comments__wrap .reviews-reply-field.reviews-reply-field-text {
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        @include border-all(1, solid, $color-border, xl);
+        @include prop-vw(border-radius, 14, xl);
     }
-    .comments__new .feed-add-post[data-bx-html-editable="Y"] {
-        background: #f9fafb;
-        border-radius: 16px;
-        padding: 16px 18px 18px;
-        border: 1px solid #e5e7eb;
+    .comments__wrap .feed-add-post[data-bx-html-editable="Y"] {
+        overflow: hidden;
+        background: transparent;
+        @include border-all(1, solid, $color-border, xl);
+        @include prop-vw(border-radius, 14, xl);
     }
-    .comments__new .feed-add-post-dnd-notice {
-        display: none;
+    .comments__wrap .main-post-form-toolbar {
+        display: none !important;
     }
-    .comments__new .bx-html-editor {
+    .comments__wrap .feed-add-post-dnd-notice {
+        display: none !important;
+    }
+    .comments__wrap .bx-html-editor {
         border-radius: 12px;
         border: 1px solid #e5e7eb;
         overflow: hidden;
         background: #fff;
     }
-    .comments__new .bxhtmled-toolbar-cnt,
-    .comments__new .main-post-form-toolbar {
+    .comments__wrap .bxhtmled-toolbar-cnt,
+    .comments__wrap .main-post-form-toolbar {
         display: none;
     }
-    .comments__new .bxhtmled-area-cnt {
+    .comments__wrap .bxhtmled-area-cnt {
         height: 140px !important;
     }
-    .comments__new .bx-editor-iframe {
+    .comments__wrap .bx-editor-iframe {
         background: #fff;
     }
-    .comments__new .feed-add-post-buttons {
-        margin-top: 14px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 8px;
+    .comments__wrap .feed-add-post-buttons {
+        display: flex !important;
+        justify-content: flex-end !important;
+        @include prop-vw(gap, 10, xl, true);
+        @include prop-vw(padding, 5, xl, true);
     }
-    .comments__new .ui-btn {
-        border-radius: 999px;
-        font-size: 14px;
-        line-height: 1.2;
-        padding: 8px 18px;
+    .comments__wrap .ui-btn {
+        display: block !important;
+        margin: 0 !important;
+        @include prop-vw(padding-top, 9, xl, true);
+        @include prop-vw(padding-bottom, 13, xl, true);
+        @include prop-vw(padding-inline, 12, xl, true);
+        @include prop-vw(min-width, 98, xl, true);
+        width: fit-content !important;
+        height: auto !important;
+        @include prop-vw(font-size, 14, xl, true);
+        font-weight: normal !important;
+        line-height: 1 !important;
+        text-align: center !important;
+        text-transform: none !important;
+        color: $color-white !important;
+        background: $color-blue !important;
+        border: none !important;
+        @include prop-vw(border-radius, 14, xl, true);
+        &:focus {
+            outline: none;
+        }
+        &:hover {
+            color: $color-white !important;
+        }
+
+        @media screen and (hover: hover) {
+            &:hover:not([disabled]) {
+                color: $color-white;
+                background: $color-blue-hover;
+            }
+        }
     }
-    .comments__new .ui-btn-primary {
-        background: #2563eb;
-        border-color: #2563eb;
+    .comments__wrap .ui-btn-link {
+        color: $color-black !important;
+        background: $color-bg !important;
+        &:hover {
+            color: $color-black !important;
+        }
+
+        @media screen and (hover: hover) {
+            &:hover:not([disabled]) {
+                color: $color-white;
+                background: $color-blue-hover;
+            }
+        }
     }
-    .comments__new .ui-btn-primary:hover {
-        background: #1d4ed8;
-        border-color: #1d4ed8;
-    }
-    .comments__new .ui-btn-link {
-        color: #6b7280;
-    }
-    .comments__new .reviews-reply-field-settings,
-    .comments__new .reviews-reply-field-upload {
-        margin-top: 12px;
-        font-size: 13px;
-        color: #6b7280;
-    }
-    .comments__new .reviews-reply-field-setting {
-        margin-bottom: 4px;
-    }
-    .comments__new .reviews-reply-buttons {
+    .comments__wrap .reviews-reply-field-settings,
+    .comments__wrap .reviews-reply-field-upload {
         display: none;
     }
-    .comments__new .reviews-post-table {
+    .comments__wrap .reviews-reply-field-setting {
+        margin-bottom: 4px;
+    }
+    .comments__wrap .reviews-reply-buttons {
+        display: none;
+    }
+    .comments__wrap .reviews-post-table {
         width: 100%;
         border-collapse: collapse;
-        margin-top: 20px;
-        background: #fff;
-        border-radius: 18px;
-        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-        padding: 18px 20px 16px;
+        @include prop-vw(margin-top, 20, xl);
+        @include prop-vw(padding-bottom, 10, xl);
+        @include border-side(bottom, 1, solid, $color-grey, xl);
         display: block;
     }
-    .comments__new .reviews-post-table thead,
-    .comments__new .reviews-post-table tbody,
-    .comments__new .reviews-post-table tr,
-    .comments__new .reviews-post-table td {
+    .comments__wrap .reviews-post-table thead,
+    .comments__wrap .reviews-post-table tbody,
+    .comments__wrap .reviews-post-table tr,
+    .comments__wrap .reviews-post-table td {
         display: block;
         width: 100%;
         border: 0;
         padding: 0;
     }
-    .comments__new .reviews-post-table thead td {
+    .comments__wrap .reviews-post-table thead td {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 10px;
+        @include prop-vw(gap, 20, xl);
+        @include prop-vw(margin-bottom, 10, xl);
     }
-    .comments__new .reviews-post-table .review-rating {
+    .comments__wrap .reviews-post-table .review-rating {
         order: 2;
         font-size: 13px;
         color: #9ca3af;
     }
-    .comments__new .reviews-post-table .ilike,
-    .comments__new .reviews-post-table .bx-ilike-button\> {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-    }
-    .comments__new .reviews-post-table .bx-ilike-left-wrap,
-    .comments__new .reviews-post-table .bx-ilike-left {
-        display: none;
-    }
-    .comments__new .reviews-post-table .bx-ilike-text {
-        display: none;
-    }
-    .comments__new .reviews-post-table .bx-ilike-right {
+    .comments__wrap .ilike {
         position: relative;
-        padding-left: 20px;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0;
+        @include prop-vw(padding-inline, 12, xl);
+        @include prop-vw(min-width, 60, xl);
+        @include prop-vw(height, 36, xl);
+        background: $color-bg;
+        @include prop-vw(border-radius, 14, xl);
     }
-    .comments__new .reviews-post-table .bx-ilike-right::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 14px;
-        height: 14px;
-        border-radius: 999px;
-        border: 1.5px solid #ef4444;
+    .comments__wrap .bx-ilike-left-wrap.bx-you-like-button-like.bx-you-like-button {}
+    .comments__wrap .bx-ilike-right-wrap {
+        display: block;
+        @include prop-vw(padding-left, 21, xl);
     }
-    .comments__new .reviews-post-table b {
-        font-weight: 600;
-        font-size: 14px;
-        color: #111827;
+    .comments__wrap .reviews-post-reply-buttons {
+        @include prop-vw(margin-top, 10, xl);
+        @include prop-vw(font-size, 12, xl);
+        font-weight: normal;
+        line-height: 1.16666666667;
+        color: $color-dark-grey;
     }
-    .comments__new .reviews-post-table .message-post-date {
+    .comments__wrap .blog-comment-edit.feed-com-add-block.blog-post-edit[style*="display: block"] + .feed-com-footer {
+        display: none;
+    }
+    .comments__wrap .bx-ilike-right {
+        display: block;
         margin-left: auto;
-        font-size: 13px;
-        color: #9ca3af;
+        width: fit-content;
+        height: auto;
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1;
+        color: $color-black;
     }
-    .comments__new .reviews-text {
-        margin-top: 4px;
-        font-size: 14px;
-        line-height: 1.55;
-        color: #111827;
+    .comments__wrap .reviews-post-table .bx-ilike-left-wrap,
+    .comments__wrap .reviews-post-table .bx-ilike-left {
+        display: none;
     }
-    .comments__new .feed-wrap {
-        margin-top: 10px;
-        padding-top: 10px;
-        border-top: 1px solid #e5e7eb;
+    .comments__wrap .reviews-post-table .bx-ilike-text {
+        display: none;
     }
-    .comments__new .feed-comments-block {
+    .comments__wrap .reviews-post-table .bx-ilike-right::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        @include prop-vw(left, 12, xl);
+        z-index: 1;
+        transform: translate(0, -50%);
+        display: block;
+        @include prop-vw(min-width, 16, xl);
+        @include prop-vw(width, 16, xl);
+        @include prop-vw(height, 16, xl);
+        background-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_3021_307)"><path d="M14.8326 2.32094C14.0435 1.4255 12.9487 0.932373 11.75 0.932373C10.0641 0.932373 8.99678 1.93925 8.39828 2.78394C8.243 3.00312 8.11091 3.2229 8 3.42972C7.88909 3.2229 7.75703 3.00312 7.60172 2.78394C7.00322 1.93925 5.93587 0.932373 4.25 0.932373C3.05131 0.932373 1.95653 1.42553 1.16734 2.32097C0.414594 3.17515 0 4.31915 0 5.54222C0 6.87356 0.519781 8.11184 1.63578 9.43909C2.63319 10.6253 4.06809 11.8481 5.72969 13.264C6.34884 13.7916 6.98912 14.3372 7.67078 14.9337L7.69125 14.9516C7.77962 15.029 7.88981 15.0676 8 15.0676C8.11019 15.0676 8.22038 15.0289 8.30875 14.9516L8.32922 14.9337C9.01087 14.3372 9.65116 13.7917 10.2704 13.2639C11.9319 11.8481 13.3668 10.6254 14.3642 9.43909C15.4802 8.11181 16 6.87356 16 5.54222C16 4.31915 15.5854 3.17515 14.8326 2.32094ZM9.66228 12.5504C9.12853 13.0052 8.57922 13.4733 8 13.9769C7.42081 13.4734 6.87147 13.0053 6.33763 12.5504C3.08578 9.77934 0.9375 7.94869 0.9375 5.54222C0.9375 4.54753 1.26891 3.62365 1.87069 2.94081C2.47937 2.25022 3.32434 1.86987 4.25 1.86987C5.53528 1.86987 6.36613 2.66169 6.83675 3.32594C7.25891 3.92169 7.47919 4.52225 7.55431 4.75278C7.58496 4.84684 7.64458 4.92879 7.72463 4.9869C7.80469 5.04501 7.90108 5.07631 8 5.07631C8.09892 5.07631 8.19531 5.04501 8.27537 4.9869C8.35542 4.92879 8.41504 4.84684 8.44569 4.75278C8.52081 4.52225 8.74109 3.92169 9.16325 3.3259C9.63387 2.66169 10.4647 1.86987 11.75 1.86987C12.6757 1.86987 13.5206 2.25022 14.1293 2.94081C14.7311 3.62365 15.0625 4.54753 15.0625 5.54222C15.0625 7.94869 12.9142 9.77934 9.66228 12.5504Z" fill="%230D75DA"/></g><defs><clipPath id="clip0_3021_307"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center
+    }
+    .comments__wrap .reviews-post-table .bx-ilike-right::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        @include prop-vw(left, 12, xl);
+        z-index: 1;
+        transform: translate(0, -50%);
+        display: block;
+        @include prop-vw(min-width, 16, xl);
+        @include prop-vw(width, 16, xl);
+        @include prop-vw(height, 16, xl);
+        background-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_3021_335)"><path d="M11.75 0.9375C10.8818 0.9375 10.0858 1.21262 9.38416 1.75525C8.7115 2.27547 8.26366 2.93806 8 3.41987C7.73634 2.93803 7.2885 2.27547 6.61584 1.75525C5.91422 1.21262 5.11822 0.9375 4.25 0.9375C1.82713 0.9375 0 2.91928 0 5.54731C0 8.3865 2.27947 10.329 5.73028 13.2697C6.31628 13.7692 6.9805 14.3352 7.67088 14.9389C7.76188 15.0186 7.87875 15.0625 8 15.0625C8.12125 15.0625 8.23813 15.0186 8.32913 14.939C9.01956 14.3352 9.68375 13.7691 10.2701 13.2694C13.7205 10.329 16 8.3865 16 5.54731C16 2.91928 14.1729 0.9375 11.75 0.9375Z" fill="%230D75DA"/></g><defs><clipPath id="clip0_3021_335"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center center
+    }
+    .comments__wrap .reviews-post-table thead {
+        @include border-side(bottom, 1, solid, $color-grey, xl);
+    }
+    .comments__wrap .reviews-post-table b {
+        display: block;
+        width: fit-content;
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1.57142857143;
+        color: $color-dark-grey;
+    }
+    .comments__wrap .reviews-post-table .message-post-date {
+        margin-left: auto;
+        @include prop-vw(font-size, 12, xl);
+        font-weight: normal;
+        line-height: 1.16666666667;
+        color: $color-dark-grey;
+    }
+    .comments__wrap .reviews-text {
+        @include prop-vw(margin-top, 20, xl);
+        @include prop-vw(font-size, 14, xl);
+        line-height: 1.57142857143;
+        color: $color-black;
+    }
+    .comments__wrap .feed-wrap {
+        @include prop-vw(margin-top, 20, xl);
+    }
+    .comments__wrap .feed-comments-block {
         margin: 0;
     }
-    .comments__new .feed-com-block-outer {
-        margin-top: 10px;
-    }
-    .comments__new .feed-com-block {
+    .comments__wrap .feed-com-block {
         display: flex;
         align-items: flex-start;
-        gap: 10px;
-        background: #f9fafb;
-        border-radius: 12px;
-        padding: 10px 12px;
+        @include prop-vw(gap, 10, xl);
+        @include prop-vw(padding-left, 40, xl);
     }
-    .comments__new .feed-com-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 999px;
-        background: #e5e7eb;
-        overflow: hidden;
+    .comments__wrap .feed-com-avatar {
         flex-shrink: 0;
+        overflow: hidden;
+        @include prop-vw(min-width, 36, xl, true);
+        @include prop-vw(width, 36, xl, true);
+        @include prop-vw(height, 36, xl);
+        background: $color-grey;
+        border-radius: 50%;
     }
-    .comments__new .feed-com-avatar img {
+    .comments__wrap .feed-com-avatar img {
         width: 100%;
         height: 100%;
         object-fit: cover;
         border-radius: inherit;
     }
-    .comments__new .feed-com-main-content {
+    .comments__wrap .feed-com-main-content {
         flex: 1;
     }
-    .comments__new .feed-com-name {
+    .comments__wrap .forum-upload-file-attach {
+        display: none !important;
+    }
+    .comments__wrap .feed-com-name.feed-author-name {
+        display: none;
+    }
+    .comments__wrap .feed-com-user-box .feed-com-name.feed-author-name {
+        display: block;
+    }
+    .comments__wrap .feed-post-more-text,
+    .comments__wrap .feed-com-reply {
+        display: block;
+        width: fit-content;
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1.57142857143;
+        color: $color-black;
+    }
+    .comments__wrap .feed-post-more-text {
+        color: $color-dark-grey;
+    }
+    .comments__wrap .feed-com-name {
         display: inline-block;
-        font-size: 14px;
-        font-weight: 500;
-        color: #111827;
-        margin-bottom: 2px;
+        width: fit-content;
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1.57142857143;
+        color: $color-dark-grey;
     }
-    .comments__new .feed-com-user-box {
+    .comments__wrap .feed-com-user-box {
+        position: relative;
+        z-index: 1;
+        @include prop-vw(padding-bottom, 10, xl);
+        &::before {
+            content: '';
+            position: absolute;
+            @include prop-vw(left, -78, xl);
+            bottom: 0;
+            z-index: 1;
+            display: block;
+            width: 100%;
+            @include prop-vw(height, 1, xl);
+            background: $color-grey;
+            pointer-events: none;
+        }
+    }
+    .comments__wrap .feed-com-time {
+        display: block;
+        width: fit-content;
+        @include prop-vw(font-size, 12, xl);
+        font-weight: normal;
+        line-height: 1.16666666667;
+        color: $color-dark-grey;
+    }
+    .comments__wrap .feed-com-text-inner-inner {
+        display: block;
+        @include prop-vw(margin-top, 20, xl);
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1.57142857143;
+        color: $color-black;
+    }
+    .comments__wrap .feed-com-informers-bottom {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 12px;
-        color: #9ca3af;
+        @include prop-vw(gap, 10, xl);
+        @include prop-vw(margin-top, 20, xl);
+        @include prop-vw(margin-left, 86, xl);
     }
-    .comments__new .feed-com-time {
-        font-size: 12px;
-        color: #9ca3af;
-    }
-    .comments__new .feed-com-text-inner-inner {
-        margin-top: 4px;
-        font-size: 14px;
-        line-height: 1.5;
-        color: #111827;
-    }
-    .comments__new .feed-com-informers-bottom {
-        margin-top: 6px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        font-size: 13px;
-    }
-    .comments__new .feed-com-reply {
-        color: #2563eb;
+    .comments__wrap .feed-com-reply {
+        color: $color-black;
         text-decoration: none;
     }
-    .comments__new .feed-com-reply:hover {
-        text-decoration: underline;
+    .comments__wrap .feed-com-block-cover .bxhtmled-toolbar-cnt,
+    .comments__wrap .feed-com-block-cover .main-post-form-toolbar {
+        display: none;
     }
-    .comments__new .feed-post-more-link {
+    .comments__wrap .feed-com-reply,
+    .comments__wrap .feed-post-more-link,
+    .comments__wrap .reviews-button-small {
+        @media screen and (hover: hover) {
+            &:hover {
+                color: $color-blue;
+            }
+        }
+    }
+    .comments__wrap .feed-post-more-link {
         color: #6b7280;
         font-size: 13px;
     }
-    .comments__new .feed-com-add-box-outer {
-        margin-top: 10px;
+    .comments__wrap .feed-com-add-box-outer {
         display: flex;
-        gap: 10px;
+        @include prop-vw(gap, 10, xl);
+        @include prop-vw(margin-top, 20, xl);
     }
-    .comments__new .feed-com-add-box-outer .feed-com-avatar {
-        margin-top: 2px;
+    .comments__wrap .feed-com-add-box-outer .feed-com-avatar {
+        @include prop-vw(margin-top, 6, xl);
     }
-    .comments__new .feed-com-add-box {
+    .comments__wrap .feed-com-block-cover + .feed-com-block-cover {
+        @include prop-vw(margin-top, 20, xl);
+    }
+    .comments__wrap .feed-com-add-box {
         flex: 1;
     }
-    .comments__new .feed-com-footer {
-        border-radius: 999px;
-        border: 1px dashed #d1d5db;
-        padding: 8px 14px;
+    .comments__wrap .feed-com-footer {
+        @include border-all(1, solid, $color-grey, xl);
+        @include prop-vw(border-radius, 14, xl);
+        @include prop-vw(padding-block, 12, xl);
+        @include prop-vw(padding-inline, 14, xl);
         cursor: text;
     }
-    .comments__new .feed-com-add-link {
+    .comments__wrap .feed-com-add-link {
         font-size: 14px;
         color: #9ca3af;
         text-decoration: none;
     }
-    .comments__new .feed-com-add-link:hover {
+    .comments__wrap .feed-com-add-link:hover {
         color: #6b7280;
     }
-    .comments__new .blog-comment-edit.feed-com-add-block.blog-post-edit {
-        margin-top: 4px;
-    }
-    .comments__new .comments-form {
+    .comments__wrap .comments-form {
         margin-top: 0;
     }
 }
