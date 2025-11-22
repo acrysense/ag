@@ -489,8 +489,8 @@
                 input[name="send_button"],
                 input[name="view_button"] {
                     display: block;
-                    @include prop-vw(padding-top, 9, xl, true);
-                    @include prop-vw(padding-bottom, 13, xl, true);
+                    @include prop-vw(padding-top, 10, xl, true);
+                    @include prop-vw(padding-bottom, 12, xl, true);
                     @include prop-vw(padding-inline, 12, xl, true);
                     @include prop-vw(min-width, 98, xl);
                     width: fit-content;
@@ -736,14 +736,28 @@
     .comments__wrap .reviews-reply-field.reviews-reply-field-text {
         @include prop-vw(font-size, 14, xl);
         font-weight: normal;
-        @include border-all(1, solid, $color-border, xl);
-        @include prop-vw(border-radius, 14, xl);
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .comments__wrap .feed-add-post[data-bx-html-editable="Y"] {
         overflow: hidden;
         background: transparent;
         @include border-all(1, solid, $color-border, xl);
         @include prop-vw(border-radius, 14, xl);
+
+        @include only(desktop) {
+            @include border-all(1, solid, $color-border, lg);
+            @include prop-vw(border-radius, 14, lg);
+        }
+        @include only(mobile) {
+            @include border-all(1, solid, $color-border, sm);
+            @include prop-vw(border-radius, 14, sm);
+        }
     }
     .comments__wrap .main-post-form-toolbar {
         display: none !important;
@@ -752,17 +766,41 @@
         display: none !important;
     }
     .comments__wrap .bx-html-editor {
-        border-radius: 12px;
-        border: 1px solid #e5e7eb;
-        overflow: hidden;
-        background: #fff;
+        overflow: hidden !important;
+        @include prop-vw(margin-bottom, -27, xl);
+        border: none !important;
+        border-radius: 0 !important;
+
+        @include only(desktop) {
+            @include prop-vw(margin-bottom, -27, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-bottom, -27, sm);
+        }
     }
     .comments__wrap .bxhtmled-toolbar-cnt,
     .comments__wrap .main-post-form-toolbar {
         display: none;
     }
     .comments__wrap .bxhtmled-area-cnt {
-        height: 140px !important;
+        @include prop-vw(height, 99, xl, true);
+
+        @include only(desktop) {
+            @include prop-vw(height, 99, lg, true);
+        }
+        @include only(mobile) {
+            @include prop-vw(height, 99, sm, true);
+        }
+    }
+    .comments__wrap .bxhtmled-area-cnt {
+        @include prop-vw(top, 12, xl, true);
+
+        @include only(desktop) {
+            @include prop-vw(top, 12, lg, true);
+        }
+        @include only(mobile) {
+            @include prop-vw(top, 12, sm, true);
+        }
     }
     .comments__wrap .bx-editor-iframe {
         background: #fff;
@@ -772,12 +810,21 @@
         justify-content: flex-end !important;
         @include prop-vw(gap, 10, xl, true);
         @include prop-vw(padding, 5, xl, true);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 10, lg, true);
+            @include prop-vw(padding, 5, lg, true);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm, true);
+            @include prop-vw(padding, 5, sm, true);
+        }
     }
     .comments__wrap .ui-btn {
         display: block !important;
         margin: 0 !important;
-        @include prop-vw(padding-top, 9, xl, true);
-        @include prop-vw(padding-bottom, 13, xl, true);
+        @include prop-vw(padding-top, 10, xl, true);
+        @include prop-vw(padding-bottom, 12, xl, true);
         @include prop-vw(padding-inline, 12, xl, true);
         @include prop-vw(min-width, 98, xl, true);
         width: fit-content !important;
@@ -804,6 +851,22 @@
                 background: $color-blue-hover;
             }
         }
+        @include only(desktop) {
+            @include prop-vw(padding-top, 10, lg, true);
+            @include prop-vw(padding-bottom, 12, lg, true);
+            @include prop-vw(padding-inline, 12, lg, true);
+            @include prop-vw(min-width, 98, lg, true);
+            @include prop-vw(font-size, 14, lg, true);
+            @include prop-vw(border-radius, 14, lg, true);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-top, 10, sm, true);
+            @include prop-vw(padding-bottom, 12, sm, true);
+            @include prop-vw(padding-inline, 12, sm, true);
+            @include prop-vw(min-width, 98, sm, true);
+            @include prop-vw(font-size, 14, sm, true);
+            @include prop-vw(border-radius, 14, sm, true);
+        }
     }
     .comments__wrap .ui-btn-link {
         color: $color-black !important;
@@ -819,12 +882,31 @@
             }
         }
     }
+    .comments__wrap .feed-com-all {
+        display: block;
+        @include prop-vw(margin-top, 20, xl);
+        width: fit-content;
+        @include prop-vw(font-size, 14, xl);
+        line-height: 1.57142857143;
+        color: $color-dark-grey;
+
+        @media screen and (hover: hover) {
+            &:hover {
+                color: $color-blue;
+            }
+        }
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(font-size, 14, sm);
+        }
+    }
     .comments__wrap .reviews-reply-field-settings,
     .comments__wrap .reviews-reply-field-upload {
         display: none;
-    }
-    .comments__wrap .reviews-reply-field-setting {
-        margin-bottom: 4px;
     }
     .comments__wrap .reviews-reply-buttons {
         display: none;
@@ -836,6 +918,17 @@
         @include prop-vw(padding-bottom, 10, xl);
         @include border-side(bottom, 1, solid, $color-grey, xl);
         display: block;
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(padding-bottom, 10, lg);
+            @include border-side(bottom, 1, solid, $color-grey, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(padding-bottom, 10, sm);
+            @include border-side(bottom, 1, solid, $color-grey, sm);
+        }
     }
     .comments__wrap .reviews-post-table thead,
     .comments__wrap .reviews-post-table tbody,
@@ -852,11 +945,18 @@
         justify-content: space-between;
         @include prop-vw(gap, 20, xl);
         @include prop-vw(margin-bottom, 10, xl);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 20, lg);
+            @include prop-vw(margin-bottom, 10, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 20, sm);
+            @include prop-vw(margin-bottom, 10, sm);
+        }
     }
     .comments__wrap .reviews-post-table .review-rating {
-        order: 2;
-        font-size: 13px;
-        color: #9ca3af;
+        display: none;
     }
     .comments__wrap .ilike {
         position: relative;
@@ -870,11 +970,31 @@
         @include prop-vw(height, 36, xl);
         background: $color-bg;
         @include prop-vw(border-radius, 14, xl);
+
+        @include only(desktop) {
+            @include prop-vw(padding-inline, 12, lg);
+            @include prop-vw(min-width, 60, lg);
+            @include prop-vw(height, 36, lg);
+            @include prop-vw(border-radius, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-inline, 12, sm);
+            @include prop-vw(min-width, 60, sm);
+            @include prop-vw(height, 36, sm);
+            @include prop-vw(border-radius, 14, sm);
+        }
     }
     .comments__wrap .bx-ilike-left-wrap.bx-you-like-button-like.bx-you-like-button {}
     .comments__wrap .bx-ilike-right-wrap {
         display: block;
         @include prop-vw(padding-left, 21, xl);
+
+        @include only(desktop) {
+            @include prop-vw(padding-left, 21, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-left, 21, sm);
+        }
     }
     .comments__wrap .reviews-post-reply-buttons {
         @include prop-vw(margin-top, 10, xl);
@@ -882,9 +1002,39 @@
         font-weight: normal;
         line-height: 1.16666666667;
         color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 10, lg);
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 10, sm);
+            @include prop-vw(font-size, 12, sm);
+        }
     }
     .comments__wrap .blog-comment-edit.feed-com-add-block.blog-post-edit[style*="display: block"] + .feed-com-footer {
         display: none;
+    }
+    .comments__wrap .feed-hidden-post[style*="max-height: none"] {
+        @include prop-vw(font-size, 14, xl);
+        line-height: 1.57142857143;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
+    }
+    .comments__wrap .feed-hidden-post[style*="max-height: none"] .feed-com-block-cover {
+        @include prop-vw(margin-top, 20, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+        }
     }
     .comments__wrap .bx-ilike-right {
         display: block;
@@ -895,6 +1045,13 @@
         font-weight: normal;
         line-height: 1;
         color: $color-black;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .comments__wrap .reviews-post-table .bx-ilike-left-wrap,
     .comments__wrap .reviews-post-table .bx-ilike-left {
@@ -917,7 +1074,20 @@
         background-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_3021_307)"><path d="M14.8326 2.32094C14.0435 1.4255 12.9487 0.932373 11.75 0.932373C10.0641 0.932373 8.99678 1.93925 8.39828 2.78394C8.243 3.00312 8.11091 3.2229 8 3.42972C7.88909 3.2229 7.75703 3.00312 7.60172 2.78394C7.00322 1.93925 5.93587 0.932373 4.25 0.932373C3.05131 0.932373 1.95653 1.42553 1.16734 2.32097C0.414594 3.17515 0 4.31915 0 5.54222C0 6.87356 0.519781 8.11184 1.63578 9.43909C2.63319 10.6253 4.06809 11.8481 5.72969 13.264C6.34884 13.7916 6.98912 14.3372 7.67078 14.9337L7.69125 14.9516C7.77962 15.029 7.88981 15.0676 8 15.0676C8.11019 15.0676 8.22038 15.0289 8.30875 14.9516L8.32922 14.9337C9.01087 14.3372 9.65116 13.7917 10.2704 13.2639C11.9319 11.8481 13.3668 10.6254 14.3642 9.43909C15.4802 8.11181 16 6.87356 16 5.54222C16 4.31915 15.5854 3.17515 14.8326 2.32094ZM9.66228 12.5504C9.12853 13.0052 8.57922 13.4733 8 13.9769C7.42081 13.4734 6.87147 13.0053 6.33763 12.5504C3.08578 9.77934 0.9375 7.94869 0.9375 5.54222C0.9375 4.54753 1.26891 3.62365 1.87069 2.94081C2.47937 2.25022 3.32434 1.86987 4.25 1.86987C5.53528 1.86987 6.36613 2.66169 6.83675 3.32594C7.25891 3.92169 7.47919 4.52225 7.55431 4.75278C7.58496 4.84684 7.64458 4.92879 7.72463 4.9869C7.80469 5.04501 7.90108 5.07631 8 5.07631C8.09892 5.07631 8.19531 5.04501 8.27537 4.9869C8.35542 4.92879 8.41504 4.84684 8.44569 4.75278C8.52081 4.52225 8.74109 3.92169 9.16325 3.3259C9.63387 2.66169 10.4647 1.86987 11.75 1.86987C12.6757 1.86987 13.5206 2.25022 14.1293 2.94081C14.7311 3.62365 15.0625 4.54753 15.0625 5.54222C15.0625 7.94869 12.9142 9.77934 9.66228 12.5504Z" fill="%230D75DA"/></g><defs><clipPath id="clip0_3021_307"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>');
         background-repeat: no-repeat;
         background-size: contain;
-        background-position: center center
+        background-position: center center;
+
+        @include only(desktop) {
+            @include prop-vw(left, 12, lg);
+            @include prop-vw(min-width, 16, lg);
+            @include prop-vw(width, 16, lg);
+            @include prop-vw(height, 16, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(left, 12, sm);
+            @include prop-vw(min-width, 16, sm);
+            @include prop-vw(width, 16, sm);
+            @include prop-vw(height, 16, sm);
+        }
     }
     .comments__wrap .reviews-post-table .bx-ilike-right::after {
         content: '';
@@ -933,10 +1103,30 @@
         background-image: url('data:image/svg+xml,<svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(%23clip0_3021_335)"><path d="M11.75 0.9375C10.8818 0.9375 10.0858 1.21262 9.38416 1.75525C8.7115 2.27547 8.26366 2.93806 8 3.41987C7.73634 2.93803 7.2885 2.27547 6.61584 1.75525C5.91422 1.21262 5.11822 0.9375 4.25 0.9375C1.82713 0.9375 0 2.91928 0 5.54731C0 8.3865 2.27947 10.329 5.73028 13.2697C6.31628 13.7692 6.9805 14.3352 7.67088 14.9389C7.76188 15.0186 7.87875 15.0625 8 15.0625C8.12125 15.0625 8.23813 15.0186 8.32913 14.939C9.01956 14.3352 9.68375 13.7691 10.2701 13.2694C13.7205 10.329 16 8.3865 16 5.54731C16 2.91928 14.1729 0.9375 11.75 0.9375Z" fill="%230D75DA"/></g><defs><clipPath id="clip0_3021_335"><rect width="16" height="16" fill="white"/></clipPath></defs></svg>');
         background-repeat: no-repeat;
         background-size: contain;
-        background-position: center center
+        background-position: center center;
+
+        @include only(desktop) {
+            @include prop-vw(left, 12, lg);
+            @include prop-vw(min-width, 16, lg);
+            @include prop-vw(width, 16, lg);
+            @include prop-vw(height, 16, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(left, 12, sm);
+            @include prop-vw(min-width, 16, sm);
+            @include prop-vw(width, 16, sm);
+            @include prop-vw(height, 16, sm);
+        }
     }
     .comments__wrap .reviews-post-table thead {
         @include border-side(bottom, 1, solid, $color-grey, xl);
+
+        @include only(desktop) {
+            @include border-side(bottom, 1, solid, $color-grey, lg);
+        }
+        @include only(mobile) {
+            @include border-side(bottom, 1, solid, $color-grey, sm);
+        }
     }
     .comments__wrap .reviews-post-table b {
         display: block;
@@ -945,6 +1135,13 @@
         font-weight: normal;
         line-height: 1.57142857143;
         color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .comments__wrap .reviews-post-table .message-post-date {
         margin-left: auto;
@@ -952,15 +1149,38 @@
         font-weight: normal;
         line-height: 1.16666666667;
         color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 12, sm);
+        }
     }
     .comments__wrap .reviews-text {
         @include prop-vw(margin-top, 20, xl);
         @include prop-vw(font-size, 14, xl);
         line-height: 1.57142857143;
         color: $color-black;
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .comments__wrap .feed-wrap {
         @include prop-vw(margin-top, 20, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+        }
     }
     .comments__wrap .feed-comments-block {
         margin: 0;
@@ -970,6 +1190,15 @@
         align-items: flex-start;
         @include prop-vw(gap, 10, xl);
         @include prop-vw(padding-left, 40, xl);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 10, lg);
+            @include prop-vw(padding-left, 40, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(padding-left, 20, sm);
+        }
     }
     .comments__wrap .feed-com-avatar {
         flex-shrink: 0;
@@ -979,6 +1208,17 @@
         @include prop-vw(height, 36, xl);
         background: $color-grey;
         border-radius: 50%;
+
+        @include only(desktop) {
+            @include prop-vw(min-width, 36, lg, true);
+            @include prop-vw(width, 36, lg, true);
+            @include prop-vw(height, 36, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(min-width, 36, sm, true);
+            @include prop-vw(width, 36, sm, true);
+            @include prop-vw(height, 36, sm);
+        }
     }
     .comments__wrap .feed-com-avatar img {
         width: 100%;
@@ -999,16 +1239,26 @@
         display: block;
     }
     .comments__wrap .feed-post-more-text,
-    .comments__wrap .feed-com-reply {
+    .comments__wrap .feed-com-reply,
+    .comments__wrap .feed-post-more-link {
         display: block;
         width: fit-content;
-        @include prop-vw(font-size, 14, xl);
+        @include prop-vw(font-size, 12, xl);
         font-weight: normal;
-        line-height: 1.57142857143;
-        color: $color-black;
-    }
-    .comments__wrap .feed-post-more-text {
+        line-height: 1;
         color: $color-dark-grey;
+
+        @media screen and (hover: hover) {
+            &:hover {
+                color: $color-blue;
+            }
+        }
+        @include only(desktop) {
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 12, sm);
+        }
     }
     .comments__wrap .feed-com-name {
         display: inline-block;
@@ -1017,6 +1267,13 @@
         font-weight: normal;
         line-height: 1.57142857143;
         color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .comments__wrap .feed-com-user-box {
         position: relative;
@@ -1034,6 +1291,21 @@
             background: $color-grey;
             pointer-events: none;
         }
+
+        @include only(desktop) {
+            @include prop-vw(padding-bottom, 10, lg);
+            &::before {
+                @include prop-vw(left, -34.5, lg);
+                @include prop-vw(height, 1, lg);
+            }
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-bottom, 10, sm);
+            &::before {
+                @include prop-vw(left, -46, sm);
+                @include prop-vw(height, 1, sm);
+            }
+        }
     }
     .comments__wrap .feed-com-time {
         display: block;
@@ -1042,6 +1314,13 @@
         font-weight: normal;
         line-height: 1.16666666667;
         color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 12, sm);
+        }
     }
     .comments__wrap .feed-com-text-inner-inner {
         display: block;
@@ -1050,6 +1329,15 @@
         font-weight: normal;
         line-height: 1.57142857143;
         color: $color-black;
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .comments__wrap .feed-com-informers-bottom {
         display: flex;
@@ -1057,9 +1345,19 @@
         @include prop-vw(gap, 10, xl);
         @include prop-vw(margin-top, 20, xl);
         @include prop-vw(margin-left, 86, xl);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 10, lg);
+            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(margin-left, 86, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(margin-left, 66, sm);
+        }
     }
     .comments__wrap .feed-com-reply {
-        color: $color-black;
         text-decoration: none;
     }
     .comments__wrap .feed-com-block-cover .bxhtmled-toolbar-cnt,
@@ -1075,23 +1373,50 @@
             }
         }
     }
-    .comments__wrap .feed-post-more-link {
-        color: #6b7280;
-        font-size: 13px;
-    }
     .comments__wrap .feed-com-add-box-outer {
         display: flex;
         @include prop-vw(gap, 10, xl);
         @include prop-vw(margin-top, 20, xl);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 10, lg);
+            @include prop-vw(margin-top, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(margin-top, 20, sm);
+        }
     }
     .comments__wrap .feed-com-add-box-outer .feed-com-avatar {
-        @include prop-vw(margin-top, 6, xl);
+        @include prop-vw(margin-top, 1.5, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 1.5, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 1.5, sm);
+        }
     }
     .comments__wrap .feed-com-block-cover + .feed-com-block-cover {
         @include prop-vw(margin-top, 20, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 20, sm);
+        }
     }
     .comments__wrap .feed-com-add-box {
         flex: 1;
+        @include prop-minus(max-width, 100%, 56, xl);
+
+        @include only(desktop) {
+            @include prop-minus(max-width, 100%, 56, lg);
+        }
+        @include only(mobile) {
+            @include prop-minus(max-width, 100%, 56, sm);
+        }
     }
     .comments__wrap .feed-com-footer {
         @include border-all(1, solid, $color-grey, xl);
@@ -1099,16 +1424,42 @@
         @include prop-vw(padding-block, 12, xl);
         @include prop-vw(padding-inline, 14, xl);
         cursor: text;
+
+        @include only(desktop) {
+            @include border-all(1, solid, $color-grey, lg);
+            @include prop-vw(border-radius, 14, lg);
+            @include prop-vw(padding-block, 12, lg);
+            @include prop-vw(padding-inline, 14, lg);
+        }
+        @include only(mobile) {
+            @include border-all(1, solid, $color-grey, sm);
+            @include prop-vw(border-radius, 14, sm);
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 14, sm);
+        }
     }
     .comments__wrap .feed-com-add-link {
-        font-size: 14px;
-        color: #9ca3af;
-        text-decoration: none;
+        display: block;
+        width: 100%;
+        @include prop-vw(font-size, 12, xl);
+        font-weight: normal;
+        line-height: 1;
+        color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 12, sm);
+        }
     }
     .comments__wrap .feed-com-add-link:hover {
-        color: #6b7280;
+        color: $color-dark-grey;
     }
     .comments__wrap .comments-form {
         margin-top: 0;
+    }
+    .comments__wrap .reviews-reply-field.reviews-reply-field-text .ui-btn.ui-btn-sm.ui-btn-link {
+        display: none !important;
     }
 }
