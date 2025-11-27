@@ -89,6 +89,41 @@
                     line-height: 1.57142857143;
                 }
             }
+            .table-scroll {
+                max-width: 100%;
+                overflow-x: auto;
+            }
+            table {
+                width: 100%;
+                @include prop-vw(min-width, 820, xl);
+                border-collapse: collapse;
+                @include prop-vw(font-size, 12, xl);
+                line-height: 1.16666666667;
+                color: $color-black;
+            }
+            table colgroup col:nth-child(1) {
+                @include prop-vw(width, 76, xl);
+            }
+            table colgroup col:nth-child(n + 2) {
+                @include prop-vw(width, 235, xl);
+            }
+            table th,
+            table td {
+                @include prop-vw(padding-block, 12.75, xl);
+                @include prop-vw(padding-inline, 10, xl);
+                text-align: left;
+                @include border-side(bottom, 1, solid, $color-border, xl);
+            }
+            table tbody td + td {
+                @include border-side(left, 1, solid, $color-border, xl);
+            }
+            table thead th {
+                font-weight: 600;
+                color: $color-dark-grey;
+            }
+            table tbody tr:last-child td {
+                border-bottom: 0;
+            }
 
             @include only(desktop) {
                 @include prop-vw(font-size, 14, lg);
@@ -127,6 +162,25 @@
                         @include prop-vw(font-size, 14, lg);
                     }
                 }
+                table {
+                    @include prop-vw(min-width, 820, lg);
+                    @include prop-vw(font-size, 12, lg);
+                }
+                table colgroup col:nth-child(1) {
+                    @include prop-vw(width, 76, lg);
+                }
+                table th,
+                table td {
+                    @include prop-vw(padding-block, 12.75, lg);
+                    @include prop-vw(padding-inline, 10, lg);
+                    @include border-side(bottom, 1, solid, $color-border, lg);
+                }
+                table tbody td + td {
+                    @include border-side(left, 1, solid, $color-border, lg);
+                }
+                table tbody tr:last-child td {
+                    border-bottom: 0;
+                }
             }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
@@ -141,7 +195,7 @@
                 }
                 h2 {
                     @include prop-vw(font-size, 24, sm);
-                line-height: 1.20833333333;
+                    line-height: 1.20833333333;
                 }
                 h3 {
                     @include prop-vw(font-size, 22, sm);
@@ -165,6 +219,25 @@
                     li {
                         @include prop-vw(font-size, 14, sm);
                     }
+                }
+                table {
+                    @include prop-vw(min-width, 820, sm);
+                    @include prop-vw(font-size, 12, sm);
+                }
+                table colgroup col:nth-child(1) {
+                    @include prop-vw(width, 76, sm);
+                }
+                table th,
+                table td {
+                    @include prop-vw(padding-block, 12.75, sm);
+                    @include prop-vw(padding-inline, 10, sm);
+                    @include border-side(bottom, 1, solid, $color-border, sm);
+                }
+                table tbody td + td {
+                    @include border-side(left, 1, solid, $color-border, sm);
+                }
+                table tbody tr:last-child td {
+                    border-bottom: 0;
                 }
             }
         }
@@ -450,76 +523,6 @@
                 @include prop-vw(font-size, 14, sm);
             }
         }
-        &__new {
-            @include up(tablet) {
-                @include prop-vw(padding, 25, xl);
-                background: $color-white;
-                @include prop-vw(border-radius, 20, xl);
-                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
-            }
-            @include only(mobile) {
-                @include prop-vw(padding-block, 20, sm);
-                @include prop-vw(padding-inline, 10, sm);
-            }
-
-            .reviews-reply-header {
-                display: block;
-                @include prop-vw(margin-bottom, 20, xl);
-                padding: 0 !important;
-                width: fit-content;
-                font-family: $font-secondary;
-                @include prop-vw(font-size, 26, xl);
-                font-weight: bold;
-                line-height: 1.07692307692;
-
-
-                @include only(mobile) {
-                    @include prop-vw(margin-bottom, 20, sm);
-                    @include prop-vw(font-size, 24, sm);
-                    line-height: 1.20833333333;
-                }
-            }
-            .reviews-reply-buttons {
-                display: flex;
-                align-items: center;
-                @include prop-vw(gap, 10, xl);
-                margin-left: auto;
-                padding: 0 !important;
-                width: fit-content;
-                input[name="send_button"],
-                input[name="view_button"] {
-                    display: block;
-                    @include prop-vw(padding-top, 10, xl, true);
-                    @include prop-vw(padding-bottom, 12, xl, true);
-                    @include prop-vw(padding-inline, 12, xl, true);
-                    @include prop-vw(min-width, 98, xl);
-                    width: fit-content;
-                    @include prop-vw(font-size, 14, xl, true);
-                    font-weight: normal;
-                    line-height: 1;
-                    text-align: center;
-                    color: $color-white;
-                    background: $color-blue;
-                    border: none;
-                    @include prop-vw(border-radius, 14, xl, true);
-                    &:focus {
-                        outline: none;
-                    }
-
-                    @media screen and (hover: hover) {
-                        &:hover:not([disabled]) {
-                            color: $color-white;
-                            background: $color-blue-hover;
-                        }
-                    }
-                }
-            }
-            .bxhtmled-area-cnt,
-            .bxhtmled-iframe-cnt {
-                max-width: 100% !important;
-                width: 100% !important;
-            }
-        }
     }
 
     .gallery {
@@ -738,6 +741,28 @@
             @include prop-vw(margin-bottom, 20, sm);
         }
     }
+    .comments__wrap .feed-add-error {
+        @include prop-vw(margin-bottom, 10, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-bottom, 10, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-bottom, 10, sm);
+        }
+    }
+    .comments__wrap .feed-add-info-text {
+        @include prop-vw(font-size, 12, xl);
+        font-weight: normal;
+        color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 12, sm);
+        }
+    }
     .comments__wrap .reviews-reply-header span {
         display: block;
         width: fit-content;
@@ -826,6 +851,17 @@
     }
     .comments__wrap .bx-editor-iframe {
         background: #fff;
+    }
+    .comments__wrap .reviews-reply-form .feed-add-post-buttons {
+        display: none !important;
+    }
+    .comments__wrap .reviews-reply-form .reviews-reply-buttons {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 100;
+        width: 100%;
     }
     .comments__wrap .feed-add-post-buttons {
         display: flex !important;
@@ -931,8 +967,69 @@
         display: none;
     }
     .comments__wrap .reviews-reply-buttons {
-        display: none;
+        display: flex !important;
+        justify-content: flex-end !important;
+        @include prop-vw(gap, 10, xl, true);
+        @include prop-vw(padding, 5, xl, true);
+        input[name="send_button"],
+        input[name="view_button"] {
+            display: block;
+            @include prop-vw(padding-top, 10, xl, true);
+            @include prop-vw(padding-bottom, 12, xl, true);
+            @include prop-vw(padding-inline, 12, xl, true);
+            @include prop-vw(min-width, 98, xl);
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl, true);
+            font-weight: normal;
+            line-height: 1;
+            text-align: center;
+            color: $color-white;
+            background: $color-blue;
+            border: none;
+            @include prop-vw(border-radius, 14, xl, true);
+            &:focus {
+                outline: none;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover:not([disabled]) {
+                    color: $color-white;
+                    background: $color-blue-hover;
+                }
+            }
+        }
+        input[name="view_button"] {
+            display: none !important;
+        }
+
+        @include only(desktop) {
+            @include prop-vw(gap, 10, lg, true);
+            @include prop-vw(padding, 5, lg, true);
+            input[name="send_button"],
+            input[name="view_button"] {
+                @include prop-vw(padding-top, 10, lg, true);
+                @include prop-vw(padding-bottom, 12, lg, true);
+                @include prop-vw(padding-inline, 12, lg, true);
+                @include prop-vw(min-width, 98, lg);
+                @include prop-vw(font-size, 14, lg, true);
+                @include prop-vw(border-radius, 14, lg, true);
+            }
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm, true);
+            @include prop-vw(padding, 5, sm, true);
+            input[name="send_button"],
+            input[name="view_button"] {
+                @include prop-vw(padding-top, 10, sm, true);
+                @include prop-vw(padding-bottom, 12, sm, true);
+                @include prop-vw(padding-inline, 12, sm, true);
+                @include prop-vw(min-width, 98, sm);
+                @include prop-vw(font-size, 14, sm, true);
+                @include prop-vw(border-radius, 14, sm, true);
+            }
+        }
     }
+    
     .comments__wrap .reviews-post-table {
         width: 100%;
         border-collapse: collapse;
@@ -980,13 +1077,12 @@
     .comments__wrap .reviews-post-table .review-rating {
         order: 1;
     }
-    .comments__wrap .record-4844-296786_1mP9S4-new
     .comments__wrap .ilike {
         position: relative;
         z-index: 1;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: center;
         padding: 0;
         @include prop-vw(padding-inline, 12, xl);
         @include prop-vw(min-width, 60, xl);
@@ -1007,7 +1103,16 @@
             @include prop-vw(border-radius, 14, sm);
         }
     }
-    .comments__wrap .bx-ilike-left-wrap.bx-you-like-button-like.bx-you-like-button {}
+    .comments__wrap .bx-ilike-left-wrap.bx-you-like-button-like.bx-you-like-button + .bx-ilike-right-wrap {
+        .bx-ilike-right {
+            &::before {
+                display: none;
+            }
+            &::after {
+                display: block;
+            }
+        }
+    }
     .comments__wrap .bx-ilike-right-wrap {
         display: block;
         @include prop-vw(padding-left, 21, xl);
@@ -1078,7 +1183,10 @@
     }
     .comments__wrap .reviews-post-table .bx-ilike-left-wrap,
     .comments__wrap .reviews-post-table .bx-ilike-left {
-        display: none;
+        position: absolute;
+        inset: 0;
+        z-index: 10;
+        cursor: pointer;
     }
     .comments__wrap .reviews-post-table .bx-ilike-text {
         display: none;
@@ -1119,7 +1227,7 @@
         @include prop-vw(left, 12, xl);
         z-index: 1;
         transform: translate(0, -50%);
-        display: block;
+        display: none;
         @include prop-vw(min-width, 16, xl);
         @include prop-vw(width, 16, xl);
         @include prop-vw(height, 16, xl);
