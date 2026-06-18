@@ -1,69 +1,69 @@
-let scrollTop = 0;
-const FIX_SELECTOR = '[data-fix]';
-const HTML = document.documentElement;
+const FIXED_SELECTOR = '[data-fix]'
 
-function computePageHeight() {
-    const b = document.body;
-    const h = document.documentElement;
-    return Math.max(
-        h.scrollHeight, h.offsetHeight, h.clientHeight,
-        b ? Math.max(b.scrollHeight, b.offsetHeight, b.clientHeight) : 0
-    );
+let lockDepth = 0
+let scrollY = 0
+let savedBodyStyles = null
+let savedFixedStyles = []
+
+function releaseLock() {
+	if (lockDepth === 0) return
+	lockDepth -= 1
+	if (lockDepth > 0) return
+
+	const html = document.documentElement
+	const body = document.body
+
+	body.classList.remove('is-locked')
+	html.classList.remove('is-locked')
+	body.style.top = savedBodyStyles?.top || ''
+	body.style.paddingRight = savedBodyStyles?.paddingRight || ''
+
+	for (const { el, paddingRight } of savedFixedStyles) {
+		if (el.isConnected) el.style.paddingRight = paddingRight
+	}
+
+	savedBodyStyles = null
+	savedFixedStyles = []
+	window.scrollTo(0, scrollY)
 }
-
-function applyGradientHeight(pageH) {
-    if (!(HTML.classList.contains('bg-gradient-y') || HTML.classList.contains('bg-gradient-x'))) return;
-    const footerH = parseFloat(getComputedStyle(HTML).getPropertyValue('--footer-h')) || 0;
-    const gradH = Math.max(0, pageH - footerH);
-    HTML.style.setProperty('--grad-h', `${gradH}px`);
-}
-
-function measureAndApply() {
-    const pageH = computePageHeight();
-    applyGradientHeight(pageH);
-    return pageH;
-}
-
-window.addEventListener('load', measureAndApply);
-window.addEventListener('resize', measureAndApply);
 
 export function lockBody() {
-    const b = document.body;
-    if (b.classList.contains('is-locked')) return;
+	lockDepth += 1
+	if (lockDepth === 1) {
+		const html = document.documentElement
+		const body = document.body
+		const scrollbarWidth = Math.max(0, window.innerWidth - html.clientWidth)
 
-    measureAndApply();
+		scrollY = window.scrollY || html.scrollTop || 0
+		savedBodyStyles = {
+			top: body.style.top,
+			paddingRight: body.style.paddingRight,
+		}
+		savedFixedStyles = [...document.querySelectorAll(FIXED_SELECTOR)].map((el) => ({
+			el,
+			paddingRight: el.style.paddingRight,
+		}))
 
-    scrollTop = window.pageYOffset || HTML.scrollTop || 0;
-    const pad = window.innerWidth - HTML.clientWidth;
+		body.style.top = `-${scrollY}px`
+		if (scrollbarWidth > 0) {
+			body.style.paddingRight = `${(Number.parseFloat(getComputedStyle(body).paddingRight) || 0) + scrollbarWidth}px`
+			for (const { el } of savedFixedStyles) {
+				el.style.paddingRight = `${(Number.parseFloat(getComputedStyle(el).paddingRight) || 0) + scrollbarWidth}px`
+			}
+		}
 
-    b.style.top = `-${scrollTop}px`;
-    b.classList.add('is-locked');
-    HTML.classList.add('is-locked');
+		body.classList.add('is-locked')
+		html.classList.add('is-locked')
+	}
 
-    if (pad > 0) {
-        b.style.paddingRight = `${pad}px`;
-        document.querySelectorAll(FIX_SELECTOR).forEach((el) => {
-            if (el && el.style) el.style.paddingRight = `${pad}px`;
-        });
-    }
+	let released = false
+	return () => {
+		if (released) return
+		released = true
+		releaseLock()
+	}
 }
 
 export function unlockBody() {
-    const b = document.body;
-    if (!b.classList.contains('is-locked')) return;
-
-    const y = Math.abs(parseInt(b.style.top || '0', 10)) || 0;
-
-    b.classList.remove('is-locked');
-    HTML.classList.remove('is-locked');
-
-    b.style.top = '';
-    b.style.paddingRight = '';
-    document.querySelectorAll(FIX_SELECTOR).forEach((el) => {
-        if (el && el.style) el.style.paddingRight = '';
-    });
-
-    window.scrollTo(0, y);
-
-    requestAnimationFrame(measureAndApply);
+	releaseLock()
 }

@@ -1,5 +1,5 @@
-import { mountTabs } from '@/utils/tabs';
+import { mountTabs } from '@/utils/tabs'
 
 export default (root) => {
-	mountTabs(root);
-};
+	return mountTabs(root)
+}
