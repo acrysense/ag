@@ -1,304 +1,148 @@
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import fg from 'fast-glob'
-import ttf2woff2 from 'ttf2woff2'
-import ttf2woffModule from 'ttf2woff'
 
-const ttf2woff = ttf2woffModule.default || ttf2woffModule
-
-const SRC = path.resolve('app/assets/fonts')
-const OUT = path.resolve('public/fonts')
-const STYLES_OUT = path.resolve('app/assets/styles/base/_fonts.generated.scss')
-const CONFIG_PATH = path.resolve('fonts.config.json')
-
-const MAKE_WOFF   = process.env.LEGACY === '1'
-const VAR_SUFFIX  = 'Var'
-const STRIP_PT_SIZE = true
-
-function normalizeBase(s){ if(!s) return '/'; if(!s.startsWith('/')) s='/'+s; if(!s.endsWith('/')) s+='/'; return s; }
-const BASE = normalizeBase(process.env.BASE || '/');
-
-const ensureDir = (p) => fs.mkdir(p, { recursive: true })
-
-const isVariableFile = (base) => {
-    const s = base.toLowerCase()
-    return (
-        /\[.*\bwght\b.*\]/.test(s) ||
-        /variablefont(?:[_-]|$)/.test(s) ||
-        /variable(?:[_-]|$)/.test(s) ||
-        /\bvf(?:[_-]|$)/.test(s)
-    )
-}
-
-function tokens(base) {
-    return base
-        .replace(/\.(ttf|otf)$/i, '')
-        .replace(/\[.*?\]/g, '')
-        .replace(/([a-z])([A-Z])/g, '$1 $2')
-        .replace(/[_-]+/g, ' ')
-        .toLowerCase()
-        .split(/\s+/)
-        .filter(Boolean);
-}
-
-const isItalicFile = (base) => {
-    const t = tokens(base);
-    return t.includes('italic');
-};
-
-const parseVarMin = (w) => {
-    if (typeof w !== 'string') return 400;
-    const m = w.trim().split(/\s+/)[0];
-    const n = parseInt(m, 10);
-    return Number.isFinite(n) ? n : 400;
-};
-
-const weightKey = (f) => f.kind === 'var' ? parseVarMin(f.wght) : (f.weight ?? 400);
-const styleKey  = (f) => (f.style === 'normal' ? 0 : 1);
-
-const byFamilyWeightStyle = (a, b) => {
-    const fam = a.cssFamily.localeCompare(b.cssFamily);
-    if (fam) return fam;
-    const wa = weightKey(a), wb = weightKey(b);
-    if (wa !== wb) return wa - wb;
-    return styleKey(a) - styleKey(b);
-};
-
-function guessWeight(base) {
-    const t = tokens(base);
-    const has = (x) => t.includes(x);
-
-    if (has('thin')) return 100;
-    if (has('extralight') || has('ultralight') || (has('extra') && has('light')) || (has('ultra') && has('light'))) return 200;
-    if (has('light')) return 300;
-    if (has('book')) return 350;
-    if (has('regular') || has('normal')) return 400;
-    if (has('medium')) return 500;
-    if (has('semibold') || has('demibold') || (has('semi') && has('bold'))) return 600;
-    if (has('bold')) return 700
-    if (has('extrabold') || has('ultrabold') || ((has('extra') || has('ultra')) && has('bold'))) return 800;
-    if (has('black') || has('heavy')) return 900;
-
-    return 400;
-}
-
-function normalizeBaseName(origBase) {
-    let name = origBase.replace(/\.(ttf|otf)$/i, '')
-    name = name.replace(/\[.*?\]/g, '')
-    name = name
-        .replace(/[-_ ]?VariableFont[_-].*$/i, '')
-        .replace(/[-_ ]?Variable[_-]?.*$/i, '')
-        .replace(/[-_ ]?VF[_-]?.*$/i, '')
-    if (STRIP_PT_SIZE) name = name.replace(/([_-])\d+pt\b/ig, '')
-    name = name.replace(/,/g, '').replace(/[ ]{2,}/g, ' ').trim()
-    name = name.replace(/[_ ]+/g, '-').replace(/-+/g, '-')
-    return name
-}
-
-function outName(base) {
-    const variable = isVariableFile(base)
-    let clean = normalizeBaseName(path.basename(base))
-    if (variable) {
-        if (/[-]Italic$/i.test(clean)) clean = clean.replace(/[-]Italic$/i, `-${VAR_SUFFIX}-Italic`)
-        else clean = `${clean}-${VAR_SUFFIX}`
-    }
-    return clean
-}
-
-const toWebPath = (relDir, filename) => {
-    const dir = relDir && relDir !== '.' ? relDir.split(path.sep).join('/') + '/' : ''
-    return `${BASE}fonts/${dir}${filename}`
-}
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const SRC = path.join(ROOT, 'app/assets/fonts')
+const OUT = path.join(ROOT, 'public/fonts')
+const STYLES_OUT = path.join(ROOT, 'app/assets/styles/base/_fonts.generated.scss')
+const CONFIG_PATH = path.join(ROOT, 'fonts.config.json')
 
 async function readConfig() {
-    try {
-        const raw = await fs.readFile(CONFIG_PATH, 'utf8')
-        const parsed = JSON.parse(raw)
-        return {
-            defaults: {
-                display: parsed?.defaults?.display ?? 'swap',
-                varWght: parsed?.defaults?.varWght ?? '300 700'
-            },
-            families: parsed?.families ?? {}
-        }
-    } catch {
-        return { defaults: { display: 'swap', varWght: '300 700' }, families: {} }
-    }
+	try {
+		const config = JSON.parse(await fs.readFile(CONFIG_PATH, 'utf8'))
+		return {
+			defaults: {
+				display: config.defaults?.display || 'swap',
+				varWght: config.defaults?.varWght || '300 700',
+			},
+			families: config.families || {},
+		}
+	} catch {
+		return { defaults: { display: 'swap', varWght: '300 700' }, families: {} }
+	}
 }
 
-function pickCssFamily(cfg, folderName) {
-    const fam = cfg.families?.[folderName]
-    return fam?.cssFamily || folderName
+function tokens(fileName) {
+	return fileName
+		.replace(/\.woff2?$/i, '')
+		.replace(/\[.*?]/g, '')
+		.replace(/([a-z])([A-Z])/g, '$1 $2')
+		.replace(/[_-]+/g, ' ')
+		.toLowerCase()
+		.split(/\s+/)
+		.filter(Boolean)
 }
 
-function pickVarRange(cfg, folderName, italic) {
-    const fam = cfg.families?.[folderName]
-    if (fam) {
-        const key = italic ? 'italic' : 'normal'
-        if (fam[key]?.varWght)   return fam[key].varWght
-        if (fam.normal?.varWght) return fam.normal.varWght
-        if (fam.italic?.varWght) return fam.italic.varWght
-    }
-    return cfg.defaults.varWght
+function guessWeight(fileName) {
+	const values = tokens(fileName)
+	const has = (value) => values.includes(value)
+
+	if (has('thin')) return 100
+	if (has('extralight') || has('ultralight') || (has('extra') && has('light'))) return 200
+	if (has('light')) return 300
+	if (has('book')) return 350
+	if (has('medium')) return 500
+	if (has('semibold') || has('demibold') || (has('semi') && has('bold'))) return 600
+	if (has('extrabold') || has('ultrabold') || (has('extra') && has('bold'))) return 800
+	if (has('black') || has('heavy')) return 900
+	if (has('bold')) return 700
+	return 400
 }
 
-const files = await fg(['**/*.{ttf,otf,TTF,OTF}'], { cwd: SRC, absolute: true })
+function isVariable(fileName) {
+	const name = fileName.toLowerCase()
+	return (
+		/\[.*wght.*]/.test(name) || /(?:variablefont|variable|[-_](?:vf|var))(?:[-_.]|$)/.test(name)
+	)
+}
+
+function isItalic(fileName) {
+	return tokens(fileName).includes('italic')
+}
+
+function webPath(relativePath) {
+	return `/fonts/${relativePath.split(path.sep).join('/')}`
+}
+
+async function copy(file, target) {
+	await fs.mkdir(path.dirname(target), { recursive: true })
+	await fs.copyFile(file, target)
+}
+
+function emitFace({ family, sourceWoff2, sourceWoff, style, weight, display }) {
+	const sources = [`url("${sourceWoff2}") format("woff2")`]
+	if (sourceWoff) sources.push(`url("${sourceWoff}") format("woff")`)
+
+	return [
+		'@font-face {',
+		`\tfont-family: "${family}";`,
+		`\tsrc: ${sources.join(',\n\t\t')};`,
+		`\tfont-weight: ${weight};`,
+		`\tfont-style: ${style};`,
+		`\tfont-display: ${display};`,
+		'}',
+	].join('\n')
+}
+
+async function writeStyles(content) {
+	await fs.mkdir(path.dirname(STYLES_OUT), { recursive: true })
+	await fs.writeFile(STYLES_OUT, `${content.trimEnd()}\n`)
+}
+
+const config = await readConfig()
+const files = await fg('**/*.woff2', { cwd: SRC, absolute: true, caseSensitiveMatch: false })
+
+await fs.rm(OUT, { recursive: true, force: true })
 
 if (!files.length) {
-    await writeStub('No font sources found');
-    process.exit(0);
+	await writeStyles('/* AUTOGENERATED: no WOFF2 font sources found. */')
+	console.log('Fonts: no WOFF2 sources, generated a CSS stub')
+	process.exit(0)
 }
 
-const cfg = await readConfig()
+const faces = []
 
-let converted = 0
-let skipped = 0
-const fontFaces = []
+for (const file of files.sort()) {
+	const relativePath = path.relative(SRC, file)
+	const relativeDir = path.dirname(relativePath)
+	const folder =
+		relativeDir === '.'
+			? path.basename(file, path.extname(file)).split(/[-_]/)[0]
+			: relativeDir.split(path.sep)[0]
+	const family = config.families[folder]?.cssFamily || folder
+	const fileName = path.basename(file)
+	const style = isItalic(fileName) ? 'italic' : 'normal'
+	const variable = isVariable(fileName)
+	const targetWoff2 = path.join(OUT, relativePath)
 
-for (const abs of files) {
-    const rel    = path.relative(SRC, abs)
-    const relDir = path.dirname(rel)
-    const base   = path.basename(abs)
+	await copy(file, targetWoff2)
 
-    const variable = isVariableFile(base)
-    const italic   = isItalicFile(base)
-    const outBase  = outName(base)
+	const siblingWoff = file.replace(/\.woff2$/i, '.woff')
+	let sourceWoff = null
+	try {
+		await fs.access(siblingWoff)
+		const relativeWoff = relativePath.replace(/\.woff2$/i, '.woff')
+		await copy(siblingWoff, path.join(OUT, relativeWoff))
+		sourceWoff = webPath(relativeWoff)
+	} catch {}
 
-    const outDir = path.join(OUT, relDir)
-    await ensureDir(outDir)
+	const familyConfig = config.families[folder]
+	const variableWeight =
+		familyConfig?.[style]?.varWght || familyConfig?.normal?.varWght || config.defaults.varWght
 
-    const srcStat = await fs.stat(abs)
-
-    const w2Path = path.join(outDir, `${outBase}.woff2`)
-    let needW2 = true
-    try {
-        const w2Stat = await fs.stat(w2Path)
-        if (w2Stat.mtimeMs >= srcStat.mtimeMs && w2Stat.size > 0) needW2 = false
-    } catch {}
-    if (needW2) {
-        const buf = await fs.readFile(abs)
-        const w2 = ttf2woff2(buf)
-        await fs.writeFile(w2Path, Buffer.from(w2))
-        converted++
-    } else {
-        skipped++
-    }
-
-    let w1WebUrl = null
-    if (MAKE_WOFF && !variable) {
-        const w1Path = path.join(outDir, `${outBase}.woff`)
-        let needW1 = true
-        try {
-            const w1Stat = await fs.stat(w1Path)
-            if (w1Stat.mtimeMs >= srcStat.mtimeMs && w1Stat.size > 0) needW1 = false
-        } catch {}
-        if (needW1) {
-            const buf = await fs.readFile(abs)
-            const w1  = Buffer.from(ttf2woff(buf).buffer)
-            await fs.writeFile(w1Path, w1)
-            converted++
-        } else {
-            skipped++
-        }
-        w1WebUrl = toWebPath(relDir, `${outBase}.woff`)
-    }
-
-    const folderFamily = (relDir && relDir.split(path.sep)[0]) || normalizeBaseName(base).split('-')[0]
-    const cssFamily    = pickCssFamily(cfg, folderFamily)
-
-    const urlW2 = toWebPath(relDir, `${outBase}.woff2`)
-
-    if (variable) {
-        fontFaces.push({
-            kind: 'var',
-            cssFamily,
-            fileWoff2: urlW2,
-            style: italic ? 'italic' : 'normal',
-            wght: pickVarRange(cfg, folderFamily, italic)
-        })
-    } else {
-        fontFaces.push({
-            kind: 'static',
-            cssFamily,
-            fileWoff2: urlW2,
-            fileWoff: w1WebUrl,
-            style: italic ? 'italic' : 'normal',
-            weight: guessWeight(base)
-        })
-    }
+	faces.push(
+		emitFace({
+			family,
+			sourceWoff2: webPath(relativePath),
+			sourceWoff,
+			style,
+			weight: variable ? variableWeight : guessWeight(fileName),
+			display: config.defaults.display,
+		})
+	)
 }
 
-function uniqueOrder(arr, keyFn) {
-    const seen = new Set();
-    const out = [];
-    for (const it of arr) {
-        const key = keyFn(it);
-        if (!seen.has(key)) { seen.add(key); out.push(it); }
-    }
-    return out;
-}
-
-const faces = uniqueOrder(fontFaces, (f) => JSON.stringify(f));
-
-const TAB = '\t';
-const NL  = '\n';
-
-const emitStatic = (f, pad = '') => {
-    const srcParts = [`url("${f.fileWoff2}") format("woff2")`];
-    if (f.fileWoff) srcParts.push(`url("${f.fileWoff}") format("woff")`);
-    const src = srcParts.length === 1
-        ? srcParts[0] + ';'
-        : srcParts[0] + ',' + NL + pad + TAB + '     ' + srcParts[1] + ';';
-
-    return [
-        `${pad}@font-face {`,
-        `${pad}${TAB}font-family: "${f.cssFamily}";`,
-        `${pad}${TAB}src: ${src}`,
-        `${pad}${TAB}font-weight: ${f.weight};`,
-        `${pad}${TAB}font-style: ${f.style};`,
-        `${pad}${TAB}font-display: ${cfg.defaults.display};`,
-        `${pad}}`,
-    ].join(NL);
-};
-
-const emitVar = (v, pad = '') => [
-    `${pad}@font-face {`,
-    `${pad}${TAB}font-family: "${v.cssFamily}";`,
-    `${pad}${TAB}src: url("${v.fileWoff2}") format("woff2-variations");`,
-    `${pad}${TAB}font-weight: ${v.wght};`,
-    `${pad}${TAB}font-style: ${v.style};`,
-    `${pad}${TAB}font-display: ${cfg.defaults.display};`,
-    `${pad}}`,
-].join(NL);
-
-let css =
-    `/* ⚠️ AUTOGENERATED. Do not edit.
-        Update sources in ${path.relative(process.cwd(), SRC)} and rerun the script.
-        Mode: ${MAKE_WOFF ? 'legacy (woff + woff2 for static)' : 'modern (woff2 only)'} */` + NL + NL;
-
-const statics = faces.filter(x => x.kind === 'static').sort(byFamilyWeightStyle);
-if (statics.length) {
-    css += statics.map(f => emitStatic(f)).join(NL + NL) + NL + NL;
-}
-
-const vars = faces.filter(x => x.kind === 'var').sort(byFamilyWeightStyle);
-if (vars.length) {
-    css += '@supports (font-variation-settings: normal) {' + NL;
-    css += vars.map(v => emitVar(v, TAB)).join(NL + NL) + NL;
-    css += '}' + NL;
-}
-
-await fs.mkdir(path.dirname(STYLES_OUT), { recursive: true });
-await fs.writeFile(STYLES_OUT, css.trimEnd());
-
-async function writeStub(reason = 'no fonts') {
-    const banner = `/* ⚠️ AUTOGENERATED (stub): ${reason}.
-        Update fonts in ${path.relative(process.cwd(), SRC)} and re-run the script. */\n`;
-    const stub = `${banner}\n`;
-    await fs.mkdir(path.dirname(STYLES_OUT), { recursive: true });
-    await fs.writeFile(STYLES_OUT, stub);
-    console.log(`Stub CSS → ${path.relative(process.cwd(), STYLES_OUT)}`);
-}
-
-console.log(`Fonts CSS → ${path.relative(process.cwd(), STYLES_OUT)}`)
-console.log(`Fonts: ${converted} built, ${skipped} up-to-date → ${path.relative(process.cwd(), OUT)}`)
+await writeStyles(`/* AUTOGENERATED from app/assets/fonts. */\n\n${faces.join('\n\n')}`)
+console.log(`Fonts: copied ${files.length} WOFF2 source(s) and generated @font-face CSS`)

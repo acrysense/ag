@@ -1,7 +1,11 @@
-@use '@/assets/styles/base/mixins' as *;
-@use '@/assets/styles/base/vars' as *;
+@use "@/assets/styles/base/mixins" as *;
+@use "@/assets/styles/base/vars" as *;
 
 @layer layout {
+	html.is-locked {
+		overflow: hidden;
+	}
+
 	body.is-locked {
 		position: fixed;
 		inset: 0;
@@ -9,9 +13,9 @@
 	}
 
 	.bg-light {
-		background: #F5F8FA;
+		background: #f5f8fa;
 	}
-	
+
 	.wrapper {
 		display: flex;
 		flex-direction: column;
@@ -22,7 +26,7 @@
 		}
 		&__main {
 			width: 100%;
-			
+
 			@include up(tablet) {
 				@include prop-vw(padding-block, 20, xl);
 				@include prop-vw(max-width, 1570, xl);
@@ -30,7 +34,7 @@
 			@include only(desktop) {
 				@include prop-vw(padding-block, 20, lg);
 			}
-            @include only(mobile) {
+			@include only(mobile) {
 				background: $color-white;
 			}
 		}
@@ -54,32 +58,32 @@
 			}
 		}
 		&__banr {
-            position: relative;
-            z-index: 1;
-            display: block;
-            overflow: hidden;
-            width: 100%;
-            @include prop-vw(border-radius, 20, xl);
+			position: relative;
+			z-index: 1;
+			display: block;
+			overflow: hidden;
+			width: 100%;
+			@include prop-vw(border-radius, 20, xl);
 			box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
-            &::before {
-                content: '';
-                display: block;
-                padding-top: 22.989%;
-            }
-            & > * {
-                position: absolute;
-                inset: 0;
-                z-index: 1;
-                display: block;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-			
-            @include only(desktop) {
+			&::before {
+				content: "";
+				display: block;
+				padding-top: 22.989%;
+			}
+			& > * {
+				position: absolute;
+				inset: 0;
+				z-index: 1;
+				display: block;
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			@include only(desktop) {
 				@include prop-vw(border-radius, 20, lg);
 			}
-            @include up(tablet) {
+			@include up(tablet) {
 				&--mobile {
 					display: none;
 				}
@@ -92,7 +96,7 @@
 		* + &__banr {
 			@include prop-vw(margin-top, 20, xl);
 
-            @include only(desktop) {
+			@include only(desktop) {
 				@include prop-vw(margin-top, 20, lg);
 			}
 			@include only(mobile) {
@@ -102,10 +106,10 @@
 		&__banr + &__banr {
 			@include prop-vw(margin-top, 20, xl);
 
-            @include only(desktop) {
+			@include only(desktop) {
 				@include prop-vw(margin-top, 20, lg);
 			}
-            @include only(mobile) {
+			@include only(mobile) {
 				@include prop-vw(margin-top, 10, sm);
 			}
 		}
@@ -131,7 +135,7 @@
 					}
 				}
 			}
-            @include only(desktop) {
+			@include only(desktop) {
 				@include prop-vw(gap, 10, lg);
 				@include prop-vw(margin-bottom, 20, lg);
 				@include prop-vw(font-size, 14, lg);

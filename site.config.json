@@ -2,7 +2,7 @@
 	"template": "ag",
 
 	"siteName": "AG",
-	"siteUrl": "https://example.com",
+	"siteUrl": "",
 
 	"lang": "ru",
 
@@ -13,8 +13,19 @@
 	],
 
 	"link": [
-		{ "rel": "preload", "href": "/fonts/Inter/Inter-Var.woff2", "as": "font", "type": "font/woff2", "crossorigin": "anonymous" },
-		{ "rel": "icon", "type": "image/png", "href": "/favicon/favicon-96x96.png", "sizes": "96x96" },
+		{
+			"rel": "preload",
+			"href": "/fonts/Inter/Inter-Var.woff2",
+			"as": "font",
+			"type": "font/woff2",
+			"crossorigin": "anonymous"
+		},
+		{
+			"rel": "icon",
+			"type": "image/png",
+			"href": "/favicon/favicon-96x96.png",
+			"sizes": "96x96"
+		},
 		{ "rel": "icon", "type": "image/svg+xml", "href": "/favicon/favicon.svg" },
 		{ "rel": "shortcut icon", "href": "/favicon/favicon.ico" },
 		{ "rel": "apple-touch-icon", "sizes": "180x180", "href": "/favicon/apple-touch-icon.png" },
@@ -24,7 +35,7 @@
 	"seoDefaults": {
 		"title": "AG",
 		"description": "Стартовый проект на Vite: быстрый и гибкий старт.",
-		"ogImage": "/og/default.jpg",
+		"ogImage": "",
 		"twitterCard": "summary_large_image"
 	}
 }
