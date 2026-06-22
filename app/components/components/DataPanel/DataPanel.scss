@@ -1,0 +1,147 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+// Reusable "white card panel" with a header (title + export action) and a
+// rounded create button. Namespaced so it can be reused on other pages
+// without clashing with generic .card / .button / .table.
+@layer components {
+    .data-panel {
+        @include prop-vw(padding, 20, xl);
+        background: $color-white;
+        @include prop-vw(border-radius, 20, xl);
+        box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.03);
+
+        @include only(desktop) {
+            @include prop-vw(padding, 20, lg);
+            @include prop-vw(border-radius, 20, lg);
+        }
+        @include only(mobile) {
+            position: relative;
+            z-index: 1;
+            @include prop-vw(padding-block, 20, sm);
+            @include prop-vw(padding-inline, 10, sm);
+            border-radius: 0;
+            &::before {
+                content: '';
+                display: block;
+                position: absolute;
+                @include prop-vw(top, -10, sm);
+                right: 0;
+                left: 0;
+                z-index: -1;
+                display: block;
+                width: 100%;
+                @include prop-vw(height, 10, sm);
+                background: #F5F8FA;
+            }
+        }
+
+        &__header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 16, xl);
+            @include prop-vw(margin-bottom, 40, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 16, lg);
+                @include prop-vw(margin-bottom, 40, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 12, sm);
+                @include prop-vw(margin-bottom, 20, sm);
+            }
+        }
+        &__title {
+            display: block;
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 26, xl);
+            font-weight: bold;
+            line-height: 1.07692307692;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 26, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 22, sm);
+                line-height: 1.09090909091;
+            }
+        }
+        &__export {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-blue;
+            white-space: nowrap;
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue-hover;
+                }
+            }
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__divider {
+            @include prop-vw(margin-block, 20, xl);
+            height: 1px;
+            width: 100%;
+            background: $color-border;
+
+            @include only(desktop) {
+                @include prop-vw(margin-block, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-block, 16, sm);
+            }
+        }
+    }
+
+    .panel-create {
+        display: inline-flex;
+        align-items: center;
+        @include prop-vw(gap, 12, xl);
+        padding: 0;
+        @include prop-vw(font-size, 16, xl);
+        font-weight: normal;
+        color: $color-blue;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        & > svg {
+            flex-shrink: 0;
+            @include prop-vw(width, 28, xl);
+            @include prop-vw(height, 28, xl);
+        }
+
+        @media screen and (hover: hover) {
+            &:hover {
+                color: $color-blue-hover;
+            }
+        }
+        @include only(desktop) {
+            @include prop-vw(gap, 12, lg);
+            @include prop-vw(font-size, 16, lg);
+            & > svg {
+                @include prop-vw(width, 28, lg);
+                @include prop-vw(height, 28, lg);
+            }
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(font-size, 16, sm);
+            & > svg {
+                @include prop-vw(width, 26, sm);
+                @include prop-vw(height, 26, sm);
+            }
+        }
+    }
+}

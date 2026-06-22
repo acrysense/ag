@@ -9,6 +9,9 @@
 
 @forward '@/components/sections/coefficient/Coefficient/Coefficient';
 
+@forward '@/components/sections/employee/Employee/Employee';
+@forward '@/components/sections/employee/EmployeeSide/EmployeeSide';
+
 @forward '@/components/sections/motivation/Motivation/Motivation';
 
 @forward '@/components/sections/package/Package/Package';
@@ -29,3 +32,8 @@
 @forward '@/components/components/AvatarUpload/AvatarUpload';
 @forward '@/components/components/AvatarCropModal/AvatarCropModal';
 @forward '@/components/components/PhotoViewer/PhotoViewer';
+@forward '@/components/components/DataPanel/DataPanel';
+@forward '@/components/components/TasksPanel/TasksPanel';
+@forward '@/components/components/VisitsPanel/VisitsPanel';
+@forward '@/components/components/DataTable/DataTable';
+@forward '@/components/components/HeaderSearch/HeaderSearch';

@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light employees-page" data-header-search>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__double">
+                        <div class="wrapper__left">
+                            <div class="filter-chips" data-filter-chips hidden>
+                                <div class="filter-chips__list" data-filter-chips-list></div>
+                                <button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
+                            </div>
+
+                            <section class="data-panel employees-table" data-data-table data-module="DataTable" data-path="components">
+                                <div class="data-panel__header">
+                                    <h1 class="data-panel__title">Сотрудники аптек</h1>
+                                    <a href="/" class="data-panel__export">Экспорт в Excel</a>
+                                </div>
+
+                                <div class="data-table__scroll">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+                                                <th class="data-table__th data-table__th--center" data-sort-key="category" data-sort-type="text">Кат.</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Индекс</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Количество чеков</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Ср. чек</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="stm" data-sort-type="number">Доля СТМ</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="fill" data-sort-type="number">Наполняемость чека</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="rank" data-sort-type="number">Доля товаров 4-6 ранга</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="penetration" data-sort-type="number">Пенетрация карт лояльности</th>
+                                                <th class="data-table__th" data-sort-key="region" data-sort-type="text">Регион</th>
+                                                <th class="data-table__th" data-sort-key="brand" data-sort-type="text">Бренд</th>
+                                                <th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="months" data-sort-type="number">Мес. в кат.</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Василевская М.В.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">1,31</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №14</a></td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Ковш Т.А.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td" data-filter-key="region">Витебская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">Добрыя лекі</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Эконом №8</a></td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Зайцева Д.М.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--a">A</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td" data-filter-key="region">Витебская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">Эконом</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Эконом №9</a></td>
+                                                <td class="data-table__td data-table__td--num">3</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Волкова Ю.Г.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--d">D</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td" data-filter-key="region">Брестская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Аптека ADEL №14, Кобирин</a></td>
+                                                <td class="data-table__td data-table__td--num">2</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Северная Т.В.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td" data-filter-key="region">Витебская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №123</a></td>
+                                                <td class="data-table__td data-table__td--num">2</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Василевская М.В.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">1,31</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №14</a></td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Ковш Т.А.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">Добрыя лекі</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Эконом №13</a></td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Зайцева Д.М.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--a">A</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td" data-filter-key="region">Гродненская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">Эконом</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Эконом №9</a></td>
+                                                <td class="data-table__td data-table__td--num">3</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Волкова Ю.Г.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--d">D</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №14</a></td>
+                                                <td class="data-table__td data-table__td--num">2</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Северная Т.В.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №210</a></td>
+                                                <td class="data-table__td data-table__td--num">2</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Василевская М.В.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">1,31</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td data-table__td--num">134</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №14</a></td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Ковш Т.А.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td data-table__td--num">249</td>
+                                                <td class="data-table__td" data-filter-key="region">Могилевска обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">Добрыя лекі</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Эконом №22</a></td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Зайцева Д.М.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--a">A</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td data-table__td--num">98034</td>
+                                                <td class="data-table__td" data-filter-key="region">Брестская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">Эконом</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">Эконом №9</a></td>
+                                                <td class="data-table__td data-table__td--num">3</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Волкова Ю.Г.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--d">D</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td data-table__td--num">1</td>
+                                                <td class="data-table__td" data-filter-key="region">Минск</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №14</a></td>
+                                                <td class="data-table__td data-table__td--num">2</td>
+                                            </tr>
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">Северная Т.В.</a></td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--b">B</span></td>
+                                                <td class="data-table__td data-table__td--num">2,01</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td data-table__td--num">89</td>
+                                                <td class="data-table__td" data-filter-key="region">Брестская обл.</td>
+                                                <td class="data-table__td" data-filter-key="brand">ADEL</td>
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">ADEL №83</a></td>
+                                                <td class="data-table__td data-table__td--num">2</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+                                </div>
+
+                                <div class="data-table__footer">
+                                    <nav class="ui-pagination" aria-label="Страницы">
+                                        <button type="button" class="ui-pagination__item">1</button>
+                                        <button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+                                        <button type="button" class="ui-pagination__item">3</button>
+                                        <button type="button" class="ui-pagination__item">4</button>
+                                        <span class="ui-pagination__dots">…</span>
+                                        <button type="button" class="ui-pagination__item">22</button>
+                                        <button type="button" class="ui-pagination__item">23</button>
+                                        <button type="button" class="ui-pagination__item">24</button>
+                                        <button type="button" class="ui-pagination__item">25</button>
+                                        <button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+                                    </nav>
+
+                                    <div class="data-table__total">
+                                        <span class="data-table__total-text">Всего: 835</span>
+                                        <div class="page-size" data-page-size>
+                                            <button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+                                                <span data-page-size-value>20</span>
+                                                <svg aria-hidden="true" focusable="false" width="16" height="16">
+                                                    <use href="#icon-caret"></use>
+                                                </svg>
+                                            </button>
+                                            <div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+                                                <button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+                                                <button type="button" class="page-size__option" role="option" data-value="50">50</button>
+                                                <button type="button" class="page-size__option" role="option" data-value="100">100</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+						</div>
+					</div>
+				</main>
+				{{> layouts/Footer/Footer }}
+			</div>
+		</body>
+</html>

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light employee-page">
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__double">
+                        <div class="wrapper__left">
+                            <a href="/" class="wrapper__back">
+                                <svg aria-hidden="true" focusable="false" width="16" height="16">
+                                    <use href="#icon-arrow-back-thin"></use>
+                                </svg>
+                                <span>Назад</span>
+                            </a>
+
+                            {{> sections/employee/Employee/Employee }}
+
+                            {{> components/TasksPanel/TasksPanel }}
+                            {{> components/VisitsPanel/VisitsPanel }}
+                        </div>
+                        <div class="wrapper__right">
+                            {{> sections/employee/EmployeeSide/EmployeeSide }}
+                        </div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

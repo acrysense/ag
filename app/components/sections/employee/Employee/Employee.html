@@ -1,0 +1,273 @@
+<section class="employee" data-module="Employee" data-path="sections/employee">
+    <div class="employee__card">
+        <div class="employee__profile">
+            <div class="employee__left">
+                <div class="employee__avatar">
+                    <img src="/assets/images/ava.jpg" alt="Иванов Марьян Сергеевич">
+                </div>
+                <span class="employee__mobile-rating"><b>B</b>, 0.83</span>
+            </div>
+            <div class="employee__info">
+                <h1 class="employee__name">Иванов Марьян Сергеевич</h1>
+                <div class="employee__rows">
+                    <div class="employee__row">
+                        <span class="employee__label">Должность:</span>
+                        <span class="employee__value">Фармацевт</span>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Место работы:</span>
+                        <span class="employee__value">Склад</span>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Розничная компаний:</span>
+                        <span class="employee__value">ООО &ldquo;Аптека групп&rdquo;</span>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Принят на работу:</span>
+                        <span class="employee__value">12.08.2000</span>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Ставка:</span>
+                        <span class="employee__value">1.25</span>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Пол:</span>
+                        <span class="employee__value">Мужской</span>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Пол:</span>
+                        <span class="employee__value">12.08.2000</span>
+                    </div>
+                </div>
+                <div class="employee__divider"></div>
+                <div class="employee__links">
+                    <div class="employee__row">
+                        <span class="employee__label">Аптека:</span>
+                        <a href="/" class="employee__link">Аптека ADEL №50, Минск</a>
+                    </div>
+                    <div class="employee__row">
+                        <span class="employee__label">Менеджер:</span>
+                        <a href="/" class="employee__link">Петров А.И</a>
+                    </div>
+                </div>
+            </div>
+            <div class="employee__rating">
+                <div class="employee__rating-body">
+                    <span class="employee__rating-value">0.83</span>
+                    <span class="employee__rating-date">12.04.2026</span>
+                </div>
+                <span class="employee__rating-grade">B</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="employee-kpi employee__kpi">
+        <h2 class="employee-kpi__heading">Прогресс по KPI</h2>
+        <div class="employee-kpi__controls">
+            <div class="employee-kpi__sort" data-kpi-sort>
+                <button type="button" class="employee-kpi__sort-trigger" data-kpi-sort-trigger aria-haspopup="listbox" aria-expanded="false">
+                    <span data-kpi-sort-value>Сортировать по</span>
+                    <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                </button>
+                <div class="employee-kpi__sort-panel" data-kpi-sort-panel role="listbox" aria-hidden="true">
+                    <button type="button" class="employee-kpi__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+                    <button type="button" class="employee-kpi__sort-option" role="option" data-sort="name" data-dir="asc">Название (А–Я)</button>
+                    <button type="button" class="employee-kpi__sort-option" role="option" data-sort="name" data-dir="desc">Название (Я–А)</button>
+                </div>
+            </div>
+            <button type="button" class="employee-kpi__ctrl is-active" data-kpi-view="list" aria-label="Список" aria-pressed="true">
+                <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg>
+            </button>
+            <button type="button" class="employee-kpi__ctrl" data-kpi-view="table" aria-label="Таблица" aria-pressed="false">
+                <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg>
+            </button>
+        </div>
+
+        <div class="employee-kpi__grid-scroll">
+        <div class="employee-kpi__grid" role="table" aria-label="Прогресс по KPI">
+            <div class="employee-kpi__head" role="row">
+                <span class="employee-kpi__col" role="columnheader">Показатель</span>
+                <span class="employee-kpi__col" role="columnheader">Факт</span>
+                <span class="employee-kpi__col" role="columnheader">Медиана</span>
+                <span class="employee-kpi__col" role="columnheader">Прогресс, %</span>
+                <span class="employee-kpi__col" role="columnheader">Вес, %</span>
+            </div>
+            <div class="employee-kpi__row" role="row">
+                <span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Средний чек</span>
+                <span class="employee-kpi__cell" role="cell">30.50</span>
+                <span class="employee-kpi__cell" role="cell">0%</span>
+                <span class="employee-kpi__cell" role="cell">
+                    <span class="employee-kpi__progress">
+                        <span class="employee-kpi__badge employee-kpi__badge--green">100</span>
+                        <span class="employee-kpi__track">
+                            <span class="employee-kpi__bar employee-kpi__bar--green" style="width: 100%"></span>
+                        </span>
+                    </span>
+                </span>
+                <span class="employee-kpi__cell" role="cell">30</span>
+            </div>
+            <div class="employee-kpi__row" role="row">
+                <span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Наполняемость чека</span>
+                <span class="employee-kpi__cell" role="cell">12</span>
+                <span class="employee-kpi__cell" role="cell">12%</span>
+                <span class="employee-kpi__cell" role="cell">
+                    <span class="employee-kpi__progress">
+                        <span class="employee-kpi__badge employee-kpi__badge--yellow">50</span>
+                        <span class="employee-kpi__track">
+                            <span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+                        </span>
+                    </span>
+                </span>
+                <span class="employee-kpi__cell" role="cell">20</span>
+            </div>
+            <div class="employee-kpi__row" role="row">
+                <span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Доля товаров 4-6 ранга ,%</span>
+                <span class="employee-kpi__cell" role="cell">4.8 SKU</span>
+                <span class="employee-kpi__cell" role="cell">0%</span>
+                <span class="employee-kpi__cell" role="cell">
+                    <span class="employee-kpi__progress">
+                        <span class="employee-kpi__badge employee-kpi__badge--red">20</span>
+                        <span class="employee-kpi__track">
+                            <span class="employee-kpi__bar employee-kpi__bar--red" style="width: 20%"></span>
+                        </span>
+                    </span>
+                </span>
+                <span class="employee-kpi__cell" role="cell">20</span>
+            </div>
+            <div class="employee-kpi__row" role="row">
+                <span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Доля СТМ, %</span>
+                <span class="employee-kpi__cell" role="cell">16.0</span>
+                <span class="employee-kpi__cell" role="cell">0%</span>
+                <span class="employee-kpi__cell" role="cell">
+                    <span class="employee-kpi__progress">
+                        <span class="employee-kpi__badge employee-kpi__badge--yellow">50</span>
+                        <span class="employee-kpi__track">
+                            <span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+                        </span>
+                    </span>
+                </span>
+                <span class="employee-kpi__cell" role="cell">15</span>
+            </div>
+            <div class="employee-kpi__row" role="row">
+                <span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Пенетрация карт лояльности, %</span>
+                <span class="employee-kpi__cell" role="cell">43.0</span>
+                <span class="employee-kpi__cell" role="cell">0%</span>
+                <span class="employee-kpi__cell" role="cell">
+                    <span class="employee-kpi__progress">
+                        <span class="employee-kpi__badge employee-kpi__badge--blue">60</span>
+                        <span class="employee-kpi__track">
+                            <span class="employee-kpi__bar employee-kpi__bar--blue" style="width: 60%"></span>
+                        </span>
+                    </span>
+                </span>
+                <span class="employee-kpi__cell" role="cell">15</span>
+            </div>
+            <div class="employee-kpi__row employee-kpi__row--total" role="row">
+                <span class="employee-kpi__cell employee-kpi__cell--name" role="cell">ИТОГ</span>
+                <span class="employee-kpi__cell" role="cell"></span>
+                <span class="employee-kpi__cell" role="cell"></span>
+                <span class="employee-kpi__cell" role="cell">0.83</span>
+                <span class="employee-kpi__cell" role="cell">100</span>
+            </div>
+        </div>
+        </div>
+
+        <div class="employee-kpi__mlist">
+            <div class="employee-kpi__mhead">Показатель</div>
+
+            <div class="employee-kpi__mitem">
+                <h3 class="employee-kpi__mname">Средний чек</h3>
+                <div class="employee-kpi__mrows">
+                    <div class="employee-kpi__mrow"><span>Факт:</span><b>30.50</b></div>
+                    <div class="employee-kpi__mrow"><span>Медиана:</span><b>0%</b></div>
+                    <div class="employee-kpi__mrow"><span>Вес:</span><b>30%</b></div>
+                    <div class="employee-kpi__mrow"><span>Категория:</span><b class="employee-kpi__mcat employee-kpi__mcat--green">A</b></div>
+                    <div class="employee-kpi__mrow employee-kpi__mrow--progress">
+                        <span>Прогресс:</span><b>100%</b>
+                        <span class="employee-kpi__track employee-kpi__track--m">
+                            <span class="employee-kpi__bar employee-kpi__bar--green" style="width: 100%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="employee-kpi__mitem">
+                <h3 class="employee-kpi__mname">Наполняемость чека</h3>
+                <div class="employee-kpi__mrows">
+                    <div class="employee-kpi__mrow"><span>Факт:</span><b>12</b></div>
+                    <div class="employee-kpi__mrow"><span>Медиана:</span><b>12%</b></div>
+                    <div class="employee-kpi__mrow"><span>Вес:</span><b>20%</b></div>
+                    <div class="employee-kpi__mrow"><span>Категория:</span><b class="employee-kpi__mcat employee-kpi__mcat--yellow">C</b></div>
+                    <div class="employee-kpi__mrow employee-kpi__mrow--progress">
+                        <span>Прогресс:</span><b>50%</b>
+                        <span class="employee-kpi__track employee-kpi__track--m">
+                            <span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="employee-kpi__mitem">
+                <h3 class="employee-kpi__mname">Доля товаров 4-6 ранга ,%</h3>
+                <div class="employee-kpi__mrows">
+                    <div class="employee-kpi__mrow"><span>Факт:</span><b>4.8 SKU</b></div>
+                    <div class="employee-kpi__mrow"><span>Медиана:</span><b>0%</b></div>
+                    <div class="employee-kpi__mrow"><span>Вес:</span><b>20%</b></div>
+                    <div class="employee-kpi__mrow"><span>Категория:</span><b class="employee-kpi__mcat employee-kpi__mcat--red">D</b></div>
+                    <div class="employee-kpi__mrow employee-kpi__mrow--progress">
+                        <span>Прогресс:</span><b>20%</b>
+                        <span class="employee-kpi__track employee-kpi__track--m">
+                            <span class="employee-kpi__bar employee-kpi__bar--red" style="width: 20%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="employee-kpi__mitem">
+                <h3 class="employee-kpi__mname">Доля СТМ, %</h3>
+                <div class="employee-kpi__mrows">
+                    <div class="employee-kpi__mrow"><span>Факт:</span><b>16.0</b></div>
+                    <div class="employee-kpi__mrow"><span>Медиана:</span><b>0%</b></div>
+                    <div class="employee-kpi__mrow"><span>Вес:</span><b>15%</b></div>
+                    <div class="employee-kpi__mrow"><span>Категория:</span><b class="employee-kpi__mcat employee-kpi__mcat--yellow">C</b></div>
+                    <div class="employee-kpi__mrow employee-kpi__mrow--progress">
+                        <span>Прогресс:</span><b>50%</b>
+                        <span class="employee-kpi__track employee-kpi__track--m">
+                            <span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="employee-kpi__mitem">
+                <h3 class="employee-kpi__mname">Пенетрация карт лояльности, %</h3>
+                <div class="employee-kpi__mrows">
+                    <div class="employee-kpi__mrow"><span>Факт:</span><b>43.0</b></div>
+                    <div class="employee-kpi__mrow"><span>Медиана:</span><b>0%</b></div>
+                    <div class="employee-kpi__mrow"><span>Вес:</span><b>15%</b></div>
+                    <div class="employee-kpi__mrow"><span>Категория:</span><b class="employee-kpi__mcat">B</b></div>
+                    <div class="employee-kpi__mrow employee-kpi__mrow--progress">
+                        <span>Прогресс:</span><b>60%</b>
+                        <span class="employee-kpi__track employee-kpi__track--m">
+                            <span class="employee-kpi__bar employee-kpi__bar--blue" style="width: 60%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="employee-kpi__mtotal">
+                <h3 class="employee-kpi__mname">Итог</h3>
+                <div class="employee-kpi__mrows">
+                    <div class="employee-kpi__mrow"><span>Вклад:</span><b>0.83</b></div>
+                    <div class="employee-kpi__mrow"><span>Вес:</span><b>100%</b></div>
+                    <div class="employee-kpi__mrow employee-kpi__mrow--progress">
+                        <span>Прогресс:</span><b>83%</b>
+                        <span class="employee-kpi__track employee-kpi__track--m">
+                            <span class="employee-kpi__bar employee-kpi__bar--green" style="width: 83%"></span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

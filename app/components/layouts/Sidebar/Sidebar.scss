@@ -121,11 +121,13 @@
             width: 100%;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
+            color: $color-full-black;
             & > svg,
             & > img {
                 @include prop-vw(min-width, 20, xl);
                 @include prop-vw(width, 20, xl);
                 @include prop-vw(height, 20, xl);
+                color: $color-full-black;
             }
             & > img {
                 display: block;

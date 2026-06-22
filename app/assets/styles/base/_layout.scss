@@ -57,6 +57,48 @@
 				@include prop-vw(max-width, 1120, xl);
 			}
 		}
+		&__double {
+			display: flex;
+			@include prop-vw(gap, 10, xl);
+			width: 100%;
+
+			@include up(desktop) {
+				@include prop-vw(padding-inline, 60, xl);
+				@include prop-vw(max-width, 1560, xl);
+			}
+			@include only(desktop) {
+				@include prop-vw(margin-left, 50, lg);
+				@include prop-vw(padding-inline, 45, lg);
+				@include prop-vw(max-width, 820, lg);
+			}
+			@include only(tablet) {
+				@include prop-vw(margin-left, 50, xl);
+				@include prop-vw(padding-inline, 125, xl);
+				@include prop-vw(max-width, 1120, xl);
+			}
+		}
+		&__left {
+			@include prop-vw(max-width, 1080, xl);
+			width: 100%;
+			
+			@include only(desktop) {
+				@include prop-vw(max-width, 600, lg);
+			}
+			@include down(desktop) {
+				max-width: none;
+			}
+		}
+		&__right {
+			@include prop-vw(max-width, 350, xl);
+			width: 100%;
+			
+			@include only(desktop) {
+				@include prop-vw(max-width, 350, lg);
+			}
+			@include down(desktop) {
+				max-width: none;
+			}
+		}
 		&__banr {
 			position: relative;
 			z-index: 1;

@@ -1,0 +1,787 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .employee {
+        @include only(mobile) {
+            background: #F5F8FA;
+        }
+
+        &__card {
+            @include prop-vw(padding, 20, xl);
+            background: $color-white;
+            @include prop-vw(border-radius, 20, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.03);
+
+            @include only(desktop) {
+                @include prop-vw(padding, 20, lg);
+                @include prop-vw(border-radius, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 20, sm);
+                @include prop-vw(padding-inline, 10, sm);
+                border-radius: 0;
+                box-shadow: none;
+            }
+        }
+        &__profile {
+            display: flex;
+            align-items: flex-start;
+            @include prop-vw(gap, 20, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+            }
+        }
+        &__left {
+            @include prop-vw(max-width, 120, xl);
+            width: 100%;
+
+            @include only(desktop) {
+                @include prop-vw(max-width, 120, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(max-width, 90, sm);
+            }
+        }
+        &__avatar {
+            display: block;
+            overflow: hidden;
+            @include prop-vw(min-width, 120, xl);
+            @include prop-vw(width, 120, xl);
+            @include prop-vw(height, 120, xl);
+            background: #D3D8DE;
+            @include prop-vw(border-radius, 10, xl);
+            & > img {
+                display: block;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 120, lg);
+                @include prop-vw(width, 120, lg);
+                @include prop-vw(height, 120, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 90, sm);
+                @include prop-vw(width, 90, sm);
+                @include prop-vw(height, 90, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
+        }
+        &__info {
+            flex: 1 1 auto;
+            @include prop-vw(max-width, 710, xl);
+            width: 100%;
+        }
+        &__name {
+            display: block;
+            @include prop-vw(margin-bottom, 20, xl);
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 26, xl);
+            font-weight: bold;
+            line-height: 1.07692307692;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 20, lg);
+                @include prop-vw(font-size, 26, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 10, sm);
+                @include prop-vw(font-size, 22, sm);
+                line-height: 1.18181818182;
+            }
+        }
+        &__rows {
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 5, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 5, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 5, sm);
+            }
+        }
+        &__row {
+            display: flex;
+            align-items: flex-start;
+            @include prop-vw(gap, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+            }
+        }
+        &__label {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-dark-grey;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__value {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__divider {
+            @include prop-vw(margin-block, 15, xl);
+            @include prop-vw(height, 1, xl);
+            width: 100%;
+            background: #E1E1E1;
+
+            @include only(desktop) {
+                @include prop-vw(margin-block, 15, lg);
+                @include prop-vw(height, 1, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-block, 15, sm);
+                @include prop-vw(height, 1, sm);
+            }
+        }
+        &__links {
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 5, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 5, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 5, sm);
+            }
+        }
+        &__link {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-blue;
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue-hover;
+                }
+            }
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__rating {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 12, xl);
+            @include prop-vw(padding, 10, xl);
+            @include prop-vw(min-width, 170, xl);
+            background: #F3F6FC;
+            @include prop-vw(border-radius, 14, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 12, lg);
+                @include prop-vw(padding, 10, lg);
+                @include prop-vw(min-width, 170, lg);
+                @include prop-vw(border-radius, 14, lg);
+            }
+            @include only(mobile) {
+                display: none;
+                @include prop-vw(gap, 12, sm);
+                @include prop-vw(padding, 10, sm);
+                @include prop-vw(min-width, 170, sm);
+                @include prop-vw(border-radius, 14, sm);
+            }
+        }
+        &__rating-value {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 30, xl);
+            font-weight: 600;
+            line-height: 1.2;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 30, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 30, sm);
+            }
+        }
+        &__rating-date {
+            display: block;
+            width: fit-content;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            line-height: 1.25;
+            color: $color-dark-grey;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 12, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        &__rating-grade {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(min-width, 60, xl);
+            @include prop-vw(width, 60, xl);
+            @include prop-vw(height, 60, xl);
+            @include prop-vw(font-size, 30, xl);
+            font-weight: 600;
+            line-height: 1;
+            color: $color-blue-hover;
+            background: rgba($color-white, 0.8);
+            @include prop-vw(border-radius, 14, xl);
+            // Grade colour variants — palette mirrors .employee-history__badge
+            &--green {
+                color: $color-green;
+                background: #E8F6EE;
+            }
+            &--yellow {
+                color: #FFCC00;
+                background: #FFF0D6;
+            }
+            &--red {
+                color: $color-red;
+                background: #F9DBDB;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 60, lg);
+                @include prop-vw(width, 60, lg);
+                @include prop-vw(height, 60, lg);
+                @include prop-vw(font-size, 30, lg);
+                @include prop-vw(border-radius, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 60, sm);
+                @include prop-vw(width, 60, sm);
+                @include prop-vw(height, 60, sm);
+                @include prop-vw(font-size, 30, sm);
+                @include prop-vw(border-radius, 14, sm);
+            }
+        }
+        &__mobile-rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font-weight: normal;
+            line-height: 1;
+            background: #F3F6FC;
+            b, strong {
+                font-weight: 600;
+                color: $color-blue;
+            }
+            // Grade colour variants — palette mirrors .employee-history__badge
+            &--green {
+                background: #E8F6EE;
+                b, strong {
+                    color: $color-green;
+                }
+            }
+            &--yellow {
+                background: #FFF0D6;
+                b, strong {
+                    color: #FFCC00;
+                }
+            }
+            &--red {
+                background: #F9DBDB;
+                b, strong {
+                    color: $color-red;
+                }
+            }
+
+            @include up(tablet) {
+                display: none;
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(padding, 6, sm);
+                @include prop-vw(font-size, 12, sm);
+                @include prop-vw(border-radius, 7, sm);
+            }
+        }
+        &__kpi {
+            @include prop-vw(margin-top, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(margin-top, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-top, 10, sm);
+            }
+        }
+    }
+
+    .employee-kpi {
+        @include prop-vw(padding, 20, xl);
+        background: $color-white;
+        @include prop-vw(border-radius, 20, xl);
+        box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.03);
+
+        @include only(desktop) {
+            @include prop-vw(padding, 20, lg);
+            @include prop-vw(border-radius, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-block, 20, sm);
+            @include prop-vw(padding-inline, 10, sm);
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        &__heading {
+            display: block;
+            @include prop-vw(margin-bottom, 40, xl);
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 26, xl);
+            font-weight: bold;
+            line-height: 1.07692307692;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(margin-bottom, 40, lg);
+                @include prop-vw(font-size, 26, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 20, sm);
+                @include prop-vw(font-size, 22, sm);
+                line-height: 1.09090909091;
+            }
+        }
+        // --- Desktop: div-based grid that reads as a table (tablet & up) ---
+        &__grid-scroll {
+            @include only(mobile) {
+                display: none;
+            }
+        }
+        &__grid {
+            display: block;
+        }
+        // Mobile "table" view: show the grid with horizontal scroll, hide the list.
+        &.is-table-view {
+            @include only(mobile) {
+                .employee-kpi__grid-scroll {
+                    display: block;
+                    overflow-x: auto;
+                    overflow-y: hidden;
+                    @include prop-vw(margin-inline, -10, sm);
+                }
+                .employee-kpi__grid {
+                    @include prop-vw(min-width, 760, sm);
+                }
+                .employee-kpi__mlist {
+                    display: none;
+                }
+            }
+        }
+        &__head,
+        &__row {
+            display: grid;
+            grid-template-columns: minmax(0, 2.4fr) 1fr 1fr 1.6fr 0.9fr;
+            align-items: center;
+            @include prop-vw(gap, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
+        }
+        &__head {
+            @include prop-vw(padding-block, 22, xl);
+            @include border-side(bottom, 1, solid, $color-border, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 22, lg);
+                @include border-side(bottom, 1, solid, $color-border, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 22, sm);
+                @include border-side(bottom, 1, solid, $color-border, sm);
+            }
+        }
+        &__col {
+            @include prop-vw(padding-inline, 10, xl);
+            @include prop-vw(font-size, 12, xl);
+            font-weight: 600;
+            line-height: 1.25;
+            color: $color-dark-grey;
+            white-space: nowrap;
+
+            @include only(desktop) {
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 12, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        &__row {
+            @include prop-vw(padding-block, 8, xl);
+            @include border-side(bottom, 1, solid, $color-border, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 8, lg);
+                @include border-side(bottom, 1, solid, $color-border, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 8, sm);
+                @include border-side(bottom, 1, solid, $color-border, sm);
+            }
+        }
+        &__cell {
+            @include prop-vw(padding-inline, 10, xl);
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            line-height: 1.25;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(padding-inline, 10, xl);
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(font-size, 14, sm);
+                white-space: nowrap;
+            }
+        }
+        &__row--total {
+            @include prop-vw(padding-block, 12.5, xl);
+            background: $color-bg;
+            .employee-kpi__cell {
+                font-weight: 600;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 12.5, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 12.5, sm);
+            }
+        }
+
+        // --- Mobile controls + vertical list (mobile only) ---
+        &__controls {
+            display: none;
+
+            @include only(mobile) {
+                display: flex;
+                align-items: center;
+                @include prop-vw(gap, 10, sm);
+                @include prop-vw(margin-bottom, 20, sm);
+            }
+        }
+        &__sort {
+            position: relative;
+            flex: 1 1 auto;
+        }
+        &__sort-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            @include prop-vw(gap, 8, sm);
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 14, sm);
+            @include prop-vw(font-size, 15, sm);
+            color: $color-dark-grey;
+            background: $color-white;
+            @include border-all(1, solid, $color-border, sm);
+            @include prop-vw(border-radius, 12, sm);
+            cursor: pointer;
+            & > svg {
+                flex-shrink: 0;
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+                transition: transform $transition-default;
+            }
+        }
+        &__sort.is-open &__sort-trigger {
+            border-color: $color-form-focus;
+            & > svg {
+                transform: rotate(180deg);
+            }
+        }
+        &__sort-panel {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            @include prop-vw(padding, 6, sm);
+            background: $color-white;
+            @include border-all(1, solid, $color-border, sm);
+            @include prop-vw(border-radius, 12, sm);
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.14);
+        }
+        &__sort.is-open &__sort-panel {
+            display: flex;
+        }
+        &__sort-option {
+            @include prop-vw(padding-block, 10, sm);
+            @include prop-vw(padding-inline, 12, sm);
+            @include prop-vw(font-size, 14, sm);
+            font-weight: normal;
+            color: $color-black;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 8, sm);
+            text-align: left;
+            cursor: pointer;
+            &.is-active {
+                color: $color-blue;
+            }
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    background: $color-bg;
+                }
+            }
+        }
+        &__ctrl {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(width, 44, sm);
+            @include prop-vw(height, 44, sm);
+            color: $color-dark-grey;
+            background: $color-white;
+            @include border-all(1, solid, $color-border, sm);
+            @include prop-vw(border-radius, 12, sm);
+            cursor: pointer;
+            transition: color $transition-default, border-color $transition-default, background $transition-default;
+            & > svg {
+                @include prop-vw(width, 20, sm);
+                @include prop-vw(height, 20, sm);
+            }
+            &.is-active {
+                color: $color-blue;
+                border-color: $color-blue;
+                background: rgba($color-blue, 0.08);
+            }
+        }
+        &__mlist {
+            display: none;
+
+            @include only(mobile) {
+                display: block;
+            }
+        }
+        &__mhead {
+            @include prop-vw(padding-block, 18.5, sm);
+            @include prop-vw(padding-inline, 10, sm);
+            @include prop-vw(font-size, 14, sm);
+            font-weight: bold;
+            line-height: 1.57142857143;
+            color: $color-dark-grey;
+            @include border-side(bottom, 1, solid, $color-border, sm);
+        }
+        &__mitem,
+        &__mtotal {
+            @include prop-vw(padding-inline, 10, sm);
+            @include prop-vw(padding-bottom, 10, sm);
+            @include border-side(bottom, 1, solid, $color-border, sm);
+        }
+        &__mtotal {
+            background: $color-bg;
+            border-bottom: none;
+        }
+        &__mname {
+            display: block;
+            @include prop-vw(margin-bottom, 5, sm);
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(font-size, 14, sm);
+            font-weight: normal;
+            line-height: 1.57142857143;
+            color: $color-black;
+        }
+        &__mrows {
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 5, sm);
+        }
+        &__mrow {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 5, sm);
+            @include prop-vw(font-size, 12, sm);
+            font-weight: normal;
+            line-height: 1.25;
+            & > span:first-child {
+                color: $color-dark-grey;
+            }
+            & > b {
+                font-weight: 600;
+            }
+        }
+        &__mcat {
+            color: $color-blue;
+            // Letter colour variants — palette mirrors .employee-history__badge
+            &--green {
+                color: $color-green;
+            }
+            &--yellow {
+                color: #FFCC00;
+            }
+            &--red {
+                color: $color-red;
+            }
+        }
+        &__progress {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 5, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 5, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 5, sm);
+            }
+        }
+        &__badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(min-width, 37, xl);
+            @include prop-vw(padding-block, 5.5, xl);
+            @include prop-vw(padding-inline, 4, xl);
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            line-height: 1;
+            @include prop-vw(border-radius, 4, xl);
+            // Palette mirrors .employee-history__badge
+            &--green {
+                background: #E8F6EE;
+                color: $color-green;
+            }
+            &--yellow {
+                background: #FFF0D6;
+                color: #FFCC00;
+            }
+            &--red {
+                background: #F9DBDB;
+                color: $color-red;
+            }
+            &--blue {
+                background: #F3F6FC;
+                color: $color-blue;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 37, lg);
+                @include prop-vw(padding-block, 5.5, lg);
+                @include prop-vw(padding-inline, 4, lg);
+                @include prop-vw(font-size, 12, lg);
+                @include prop-vw(border-radius, 4, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 37, sm);
+                @include prop-vw(padding-block, 5.5, sm);
+                @include prop-vw(padding-inline, 4, sm);
+                @include prop-vw(font-size, 12, sm);
+                @include prop-vw(border-radius, 4, sm);
+            }
+        }
+        &__track {
+            position: relative;
+            z-index: 1;
+            @include prop-vw(max-width, 88, xl);
+            @include prop-vw(width, 88, xl);
+            @include prop-vw(height, 2, xl);
+            @include prop-vw(border-radius, 7, xl);
+            background: $color-border;
+
+            @include only(desktop) {
+                @include prop-vw(max-height, 88, lg);
+                @include prop-vw(width, 88, lg);
+                @include prop-vw(height, 2, lg);
+                @include prop-vw(border-radius, 7, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-left, 5, sm);
+                @include prop-vw(max-width, 100, sm);
+                @include prop-vw(width, 100, sm);
+                @include prop-vw(height, 2, sm);
+                @include prop-vw(border-radius, 7, sm);
+            }
+        }
+        &__track--m {
+            flex: 1 1 auto;
+            @include prop-vw(width, 100, sm);
+            @include prop-vw(height, 2, sm);
+        }
+        &__bar {
+            position: absolute;
+            inset-block: 0;
+            left: 0;
+            height: 100%;
+            @include prop-vw(border-radius, 4, xl);
+            &--green {
+                background: $color-green;
+            }
+            &--yellow {
+                background: #FFCC00;
+            }
+            &--red {
+                background: $color-red;
+            }
+            &--blue {
+                background: $color-blue;
+            }
+            &--m {
+                background: $color-red;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(border-radius, 4, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(border-radius, 4, sm);
+            }
+        }
+    }
+}

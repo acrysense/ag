@@ -5,6 +5,7 @@
                 <source srcset="/assets/images/logotype-desktop.svg" media="(min-width: 744px)">
                 <img src="/assets/images/logotype-mobile.svg" width="390" height="40" alt="AG">
             </picture>
+            {{> components/HeaderSearch/HeaderSearch }}
             <div class="header__inner">
                 {{> components/ProfileDropdown/ProfileDropdown props=(obj
                     class='header__profile'

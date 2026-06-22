@@ -1,0 +1,439 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    // Vertical gap between the stacked left-column panels.
+    .tasks-panel,
+    .visits-panel {
+        @include prop-vw(margin-top, 10, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 10, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 10, sm);
+        }
+    }
+
+    .visits-panel {
+        &__bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            @include prop-vw(gap, 16, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 16, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 14, sm);
+            }
+        }
+        // The tabs util uses .tabs__list (with its own margin-bottom) — the
+        // switch sits inline with the create button inside __bar, so reset it.
+        &__tabs {
+            .tabs__list {
+                margin-bottom: 0;
+            }
+            .tabs__wrapper.is--active {
+                @include prop-vw(margin-top, 20, xl);
+                @include only(desktop) {
+                    @include prop-vw(margin-top, 20, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(margin-top, 16, sm);
+                }
+            }
+        }
+        &__empty {
+            @include prop-vw(padding-block, 40, xl);
+            text-align: center;
+            @include prop-vw(font-size, 15, xl);
+            color: $color-dark-grey;
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 40, lg);
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 30, sm);
+                @include prop-vw(font-size, 15, sm);
+            }
+        }
+        &__footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            @include prop-vw(gap, 16, xl);
+            @include prop-vw(margin-top, 24, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 16, lg);
+                @include prop-vw(margin-top, 24, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 14, sm);
+                @include prop-vw(margin-top, 20, sm);
+            }
+        }
+        &__total {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 16, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 16, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 12, sm);
+            }
+        }
+        &__total-text {
+            @include prop-vw(font-size, 15, xl);
+            color: $color-dark-grey;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+    }
+
+    // --- Segmented tabs modifier (white active pill on grey track) ---
+    .tabs--switch {
+        .tabs__item.is--active .tabs__tab {
+            color: $color-black;
+            background: $color-white;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-black;
+                }
+            }
+        }
+        .tabs__tab {
+            @include prop-vw(min-width, 90, xl);
+            @include prop-vw(padding-block, 10, xl);
+            @include prop-vw(padding-inline, 16, xl);
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 90, lg);
+                @include prop-vw(padding-block, 10, lg);
+                @include prop-vw(padding-inline, 16, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 80, sm);
+                @include prop-vw(padding-block, 10, sm);
+                @include prop-vw(padding-inline, 16, sm);
+            }
+        }
+    }
+
+    // --- Visits table ---
+    .visits-table__scroll {
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+    .visits-table {
+        width: 100%;
+        border-collapse: collapse;
+
+        @include up(tablet) {
+            @include prop-vw(min-width, 760, xl);
+        }
+        @include only(mobile) {
+            @include prop-vw(min-width, 680, sm);
+        }
+
+        &__th {
+            @include prop-vw(padding-block, 12, xl);
+            @include prop-vw(padding-inline, 10, xl);
+            text-align: left;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            color: $color-dark-grey;
+            white-space: nowrap;
+            @include border-side(bottom, 1, solid, $color-border, xl);
+            &:first-child {
+                padding-left: 0;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 12, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include border-side(bottom, 1, solid, $color-border, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 12, sm);
+                @include prop-vw(padding-inline, 8, sm);
+                @include prop-vw(font-size, 13, sm);
+            }
+        }
+        &__td {
+            @include prop-vw(padding-block, 16, xl);
+            @include prop-vw(padding-inline, 10, xl);
+            @include prop-vw(font-size, 15, xl);
+            font-weight: normal;
+            color: $color-black;
+            vertical-align: middle;
+            &:first-child {
+                padding-left: 0;
+            }
+            &:last-child {
+                @include prop-vw(min-width, 240, xl);
+            }
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 16, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 15, lg);
+                &:last-child {
+                    @include prop-vw(min-width, 240, lg);
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 14, sm);
+                @include prop-vw(padding-inline, 8, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__row + &__row .visits-table__td {
+            @include border-side(top, 1, solid, $color-border, xl);
+
+            @include only(desktop) {
+                @include border-side(top, 1, solid, $color-border, lg);
+            }
+            @include only(mobile) {
+                @include border-side(top, 1, solid, $color-border, sm);
+            }
+        }
+        &__link,
+        &__score {
+            color: $color-blue;
+            white-space: nowrap;
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue-hover;
+                }
+            }
+        }
+        &__score {
+            font-weight: 600;
+            &--bad {
+                color: $color-red;
+            }
+            &--good {
+                color: $color-green;
+            }
+        }
+        &__geo {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: $color-black;
+            & > svg {
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+
+                @include only(desktop) {
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
+            }
+        }
+    }
+
+    // --- Reusable pagination ---
+    .ui-pagination {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        @include prop-vw(gap, 6, xl);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 6, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 5, sm);
+        }
+
+        &__item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(min-width, 36, xl);
+            @include prop-vw(height, 36, xl);
+            @include prop-vw(padding-inline, 10, xl);
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            color: $color-black;
+            background: $color-bg;
+            border: none;
+            @include prop-vw(border-radius, 8, xl);
+            cursor: pointer;
+            transition: color $transition-default, background $transition-default;
+            &.is-active {
+                color: $color-white;
+                background: $color-blue;
+            }
+            &--next {
+                width: auto;
+                color: $color-dark-grey;
+            }
+            &[disabled] {
+                opacity: 0.45;
+                pointer-events: none;
+            }
+            @media screen and (hover: hover) {
+                &:not(.is-active):hover {
+                    color: $color-blue;
+                    background: rgba($color-blue, 0.1);
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 36, lg);
+                @include prop-vw(height, 36, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 8, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 32, sm);
+                @include prop-vw(height, 32, sm);
+                @include prop-vw(padding-inline, 8, sm);
+                @include prop-vw(font-size, 13, sm);
+                @include prop-vw(border-radius, 8, sm);
+            }
+        }
+        &__dots {
+            @include prop-vw(padding-inline, 4, xl);
+            color: $color-dark-grey;
+        }
+    }
+
+    // --- Reusable page-size select ---
+    .page-size {
+        position: relative;
+        &__trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(min-width, 72, xl);
+            @include prop-vw(padding-block, 9, xl);
+            @include prop-vw(padding-inline, 14, xl);
+            @include prop-vw(font-size, 15, xl);
+            color: $color-black;
+            background: $color-white;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 12, xl);
+            cursor: pointer;
+            & > svg {
+                flex-shrink: 0;
+                @include prop-vw(width, 14, xl);
+                @include prop-vw(height, 14, xl);
+                color: $color-dark-grey;
+                transition: transform $transition-default;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(min-width, 72, lg);
+                @include prop-vw(padding-block, 9, lg);
+                @include prop-vw(padding-inline, 14, lg);
+                @include prop-vw(font-size, 15, lg);
+                @include border-all(1, solid, $color-border, lg);
+                @include prop-vw(border-radius, 12, lg);
+                & > svg {
+                    @include prop-vw(width, 14, lg);
+                    @include prop-vw(height, 14, lg);
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 8, sm);
+                @include prop-vw(min-width, 68, sm);
+                @include prop-vw(padding-block, 9, sm);
+                @include prop-vw(padding-inline, 12, sm);
+                @include prop-vw(font-size, 15, sm);
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 12, sm);
+                & > svg {
+                    @include prop-vw(width, 14, sm);
+                    @include prop-vw(height, 14, sm);
+                }
+            }
+        }
+        &.is-open &__trigger > svg {
+            transform: rotate(180deg);
+        }
+        &__panel {
+            position: absolute;
+            bottom: calc(100% + 6px);
+            right: 0;
+            z-index: 20;
+            display: none;
+            flex-direction: column;
+            @include prop-vw(min-width, 72, xl);
+            @include prop-vw(padding, 6, xl);
+            background: $color-white;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 12, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 72, lg);
+                @include prop-vw(padding, 6, lg);
+                @include prop-vw(border-radius, 12, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 68, sm);
+                @include prop-vw(padding, 6, sm);
+                @include prop-vw(border-radius, 12, sm);
+            }
+        }
+        &.is-open &__panel {
+            display: flex;
+        }
+        &__option {
+            @include prop-vw(padding-block, 8, xl);
+            @include prop-vw(padding-inline, 12, xl);
+            @include prop-vw(font-size, 15, xl);
+            color: $color-black;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 8, xl);
+            text-align: left;
+            cursor: pointer;
+            &.is-active {
+                color: $color-blue;
+            }
+            @media screen and (hover: hover) {
+                &:hover {
+                    background: $color-bg;
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 8, lg);
+                @include prop-vw(padding-inline, 12, lg);
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 8, sm);
+                @include prop-vw(padding-inline, 12, sm);
+                @include prop-vw(font-size, 15, sm);
+            }
+        }
+    }
+}

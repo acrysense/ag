@@ -1,0 +1,198 @@
+<section class="data-panel tasks-panel" data-module="TasksPanel" data-path="components">
+    <div class="data-panel__header">
+        <h2 class="data-panel__title">Задачи</h2>
+        <a href="/" class="data-panel__export">Экспорт в Excel</a>
+    </div>
+
+    <div class="tasks-panel__create">
+        <button type="button" class="panel-create" data-task-create>
+            <svg aria-hidden="true" focusable="false" width="28" height="28">
+                <use href="#icon-circle-plus"></use>
+            </svg>
+            <span>Создать</span>
+        </button>
+    </div>
+
+    <div class="data-panel__divider"></div>
+
+    <form class="task-form" data-task-form novalidate>
+        <div class="task-form__grid">
+            <div class="field task-form__task">
+                <label class="field__label" for="task-title">Задача</label>
+                <div class="field__control">
+                    <input class="field__input" id="task-title" type="text" name="title" autocomplete="off">
+                </div>
+                <span class="field__help">Укажите, что необходимо сделать по задаче.</span>
+            </div>
+            <div class="field task-form__date">
+                <label class="field__label" for="task-due">Срок исполнения</label>
+                <div class="field__control ui-datepicker" data-datepicker>
+                    <input class="field__input ui-datepicker__input" id="task-due" type="text" name="due" placeholder="дд.мм.гггг" autocomplete="off" inputmode="numeric" data-datepicker-input>
+                    <button type="button" class="ui-datepicker__toggle" data-datepicker-toggle aria-label="Открыть календарь">
+                        <svg aria-hidden="true" focusable="false" width="20" height="20">
+                            <use href="#icon-calendar"></use>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <label class="ui-check task-form__check">
+            <input class="ui-check__input" type="checkbox" name="hidden">
+            <span class="ui-check__box" aria-hidden="true">
+                <svg viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M1 5L4.2 8L11 1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <span class="ui-check__label">Скрыть для сотрудника</span>
+        </label>
+
+        <div class="task-form__actions">
+            <button type="submit" class="btn btn--sm">Сохранить</button>
+            <button type="reset" class="btn btn--sm btn--secondary" data-task-cancel>Отмена</button>
+        </div>
+    </form>
+
+    <ul class="tasks-list">
+        <li class="task-row">
+            <span class="task-row__status" aria-hidden="true"></span>
+            <div class="task-row__body">
+                <p class="task-row__title">Увеличить долю СТМ в чеке март</p>
+            </div>
+            <div class="task-row__meta">
+                <span class="task-row__assignee">Иванов М.С.</span>
+                <span class="task-row__date">05.05.2026</span>
+            </div>
+        </li>
+
+        <li class="task-row">
+            <span class="task-row__status" aria-hidden="true"></span>
+            <div class="task-row__body">
+                <p class="task-row__title">Пройти тренинг по товарам 6-го ранга</p>
+            </div>
+            <div class="task-row__meta">
+                <span class="task-row__assignee">Иванов М.С.</span>
+                <span class="task-row__date">05.05.2026</span>
+                <span class="task-row__hidden" title="Скрыта для сотрудника">
+                    <svg aria-hidden="true" focusable="false" width="18" height="18">
+                        <use href="#icon-eye-slash"></use>
+                    </svg>
+                </span>
+            </div>
+        </li>
+
+        <li class="task-row is-completed">
+            <span class="task-row__status task-row__status--done" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <div class="task-row__body">
+                <p class="task-row__title">Улучшить качество обслуживания</p>
+                <p class="task-row__subline"><b>Петров А.И.</b> Выполнена: 05.05.2026</p>
+            </div>
+            <div class="task-row__meta">
+                <span class="task-row__assignee">Иванов М.С.</span>
+                <span class="task-row__date">05.05.2026</span>
+            </div>
+        </li>
+
+        <li class="task-row">
+            <span class="task-row__status" aria-hidden="true"></span>
+            <div class="task-row__body">
+                <p class="task-row__title">Увеличить количество чеков</p>
+            </div>
+            <div class="task-row__meta">
+                <span class="task-row__assignee">Иванов М.С.</span>
+                <span class="task-row__date">05.05.2026</span>
+                <div class="actions-menu" data-actions>
+                    <button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
+                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/>
+                        </svg>
+                    </button>
+                    <div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+                        <button type="button" class="actions-menu__item" role="menuitem">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20">
+                                <use href="#icon-comment"></use>
+                            </svg>
+                            <span>Комментировать</span>
+                        </button>
+                        <button type="button" class="actions-menu__item" role="menuitem">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20">
+                                <use href="#icon-edit"></use>
+                            </svg>
+                            <span>Редактировать</span>
+                        </button>
+                        <button type="button" class="actions-menu__item" role="menuitem">
+                            <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M4 6h12M8 6V4.5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V6m2 0v9a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <span>Удалить</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </li>
+
+        <li class="task-row is-completed is-muted">
+            <span class="task-row__status task-row__status--soft" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <div class="task-row__body">
+                <p class="task-row__title">Ознакомиться с планом продаж на Q2 2026. Расписаться бланке у менеджера</p>
+                <p class="task-row__subline"><b>Петров А.И.</b> Выполнена: 05.05.2026</p>
+            </div>
+            <div class="task-row__meta">
+                <span class="task-row__assignee">Иванов М.С.</span>
+                <span class="task-row__date">05.05.2026</span>
+            </div>
+        </li>
+
+        <li class="task-row is-completed is-muted">
+            <span class="task-row__status task-row__status--soft" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <div class="task-row__body">
+                <p class="task-row__title">Выполнить инвентаризацию</p>
+                <p class="task-row__subline">
+                    <b>Петров А.И.</b> Выполнена: 05.05.2026
+                    <button type="button" class="task-row__confirm">Подтвердить выполнение</button>
+                </p>
+            </div>
+            <div class="task-row__meta"></div>
+        </li>
+
+        <li class="task-row is-completed is-muted">
+            <span class="task-row__status task-row__status--soft" aria-hidden="true">
+                <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <div class="task-row__body">
+                <p class="task-row__title">Продлить лицензию</p>
+                <p class="task-row__subline">
+                    <b>Петров А.И.</b> Выполнена: 05.05.2026
+                    <span class="task-row__verified">
+                        <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <b>Панковец В.В.</b> Проверена: 05.05.2026
+                    </span>
+                </p>
+            </div>
+            <div class="task-row__meta">
+                <span class="task-row__assignee">Иванов М.С.</span>
+                <span class="task-row__date">05.05.2026</span>
+            </div>
+        </li>
+    </ul>
+
+    <button type="button" class="tasks-panel__toggle" data-tasks-toggle aria-expanded="false">
+        <span data-tasks-toggle-text>Показать завершенные: 47</span>
+    </button>
+</section>

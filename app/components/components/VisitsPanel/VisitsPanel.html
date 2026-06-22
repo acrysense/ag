@@ -1,0 +1,137 @@
+<section class="data-panel visits-panel" data-module="VisitsPanel" data-path="components">
+    <div class="data-panel__header">
+        <h2 class="data-panel__title">Визиты</h2>
+        <a href="/" class="data-panel__export">Экспорт в Excel</a>
+    </div>
+
+    <div class="tabs tabs--switch visits-panel__tabs">
+        <div class="visits-panel__bar">
+            <button type="button" class="panel-create">
+                <svg aria-hidden="true" focusable="false" width="28" height="28">
+                    <use href="#icon-circle-plus"></use>
+                </svg>
+                <span>Создать</span>
+            </button>
+
+            <div class="tabs__list">
+                <div class="tabs__item is--active">
+                    <button class="tabs__tab">История</button>
+                </div>
+                <div class="tabs__item">
+                    <button class="tabs__tab">Новые</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs__wrapper is--active">
+            <div class="visits-table__scroll">
+                <table class="visits-table">
+                    <thead>
+                        <tr>
+                            <th class="visits-table__th">Дата</th>
+                            <th class="visits-table__th">Тип</th>
+                            <th class="visits-table__th">Менеджер</th>
+                            <th class="visits-table__th">Чек-лист</th>
+                            <th class="visits-table__th">Гео</th>
+                            <th class="visits-table__th">Комментарий</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="visits-table__row">
+                            <td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+                            <td class="visits-table__td">Коучинг</td>
+                            <td class="visits-table__td">Полководец Т.С.</td>
+                            <td class="visits-table__td"><a href="/" class="visits-table__score">78 / 100</a></td>
+                            <td class="visits-table__td">
+                                <span class="visits-table__geo">
+                                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </td>
+                            <td class="visits-table__td">Фокус на СТМ, хорошая динамика в Q1. Перспектива роста</td>
+                        </tr>
+                        <tr class="visits-table__row">
+                            <td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+                            <td class="visits-table__td">Коучинг</td>
+                            <td class="visits-table__td">Петров А.И.</td>
+                            <td class="visits-table__td"><a href="/" class="visits-table__score">41 / 100</a></td>
+                            <td class="visits-table__td">
+                                <span class="visits-table__geo">
+                                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </td>
+                            <td class="visits-table__td">Задачи не выполняются</td>
+                        </tr>
+                        <tr class="visits-table__row">
+                            <td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+                            <td class="visits-table__td">Диагностика</td>
+                            <td class="visits-table__td">Петров А.И.</td>
+                            <td class="visits-table__td"><span class="visits-table__score visits-table__score--bad">12 / 100</span></td>
+                            <td class="visits-table__td">
+                                <span class="visits-table__geo">
+                                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </td>
+                            <td class="visits-table__td">Мотивация повышена</td>
+                        </tr>
+                        <tr class="visits-table__row">
+                            <td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+                            <td class="visits-table__td">Контроль</td>
+                            <td class="visits-table__td">Полководец Т.С.</td>
+                            <td class="visits-table__td"><span class="visits-table__score visits-table__score--good">100 / 100</span></td>
+                            <td class="visits-table__td"></td>
+                            <td class="visits-table__td">Отличный результат</td>
+                        </tr>
+                        <tr class="visits-table__row">
+                            <td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+                            <td class="visits-table__td">Коучинг</td>
+                            <td class="visits-table__td">Петров А.И.</td>
+                            <td class="visits-table__td"><a href="/" class="visits-table__score">66 / 100</a></td>
+                            <td class="visits-table__td">
+                                <span class="visits-table__geo">
+                                    <svg viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 7.2L6 10L11.5 3.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                                </span>
+                            </td>
+                            <td class="visits-table__td">Работа над СЧ</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tabs__wrapper">
+            <div class="visits-panel__empty">Новых визитов нет</div>
+        </div>
+    </div>
+
+    <div class="visits-panel__footer">
+        <nav class="ui-pagination" aria-label="Страницы">
+            <button type="button" class="ui-pagination__item">1</button>
+            <button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+            <button type="button" class="ui-pagination__item">3</button>
+            <button type="button" class="ui-pagination__item">4</button>
+            <span class="ui-pagination__dots">…</span>
+            <button type="button" class="ui-pagination__item">22</button>
+            <button type="button" class="ui-pagination__item">23</button>
+            <button type="button" class="ui-pagination__item">24</button>
+            <button type="button" class="ui-pagination__item">25</button>
+            <button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+        </nav>
+
+        <div class="visits-panel__total">
+            <span class="visits-panel__total-text">Всего: 835</span>
+            <div class="page-size" data-page-size>
+                <button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+                    <span data-page-size-value>20</span>
+                    <svg aria-hidden="true" focusable="false" width="16" height="16">
+                        <use href="#icon-caret"></use>
+                    </svg>
+                </button>
+                <div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+                    <button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+                    <button type="button" class="page-size__option" role="option" data-value="50">50</button>
+                    <button type="button" class="page-size__option" role="option" data-value="100">100</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
