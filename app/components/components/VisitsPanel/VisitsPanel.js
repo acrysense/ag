@@ -1,4 +1,5 @@
 import { mountTabs } from '@/utils/tabs'
+import { mountDatepicker } from '@/utils/datepicker'
 
 export default (root) => {
 	if (!root || root.__visitsPanelBound) return
@@ -6,9 +7,116 @@ export default (root) => {
 
 	const disposers = []
 
+	// --- Create-visit modal with custom (non-native) validation ---
+	const modal = root.querySelector('[data-visit-modal]')
+	const createBtn = root.querySelector('[data-visit-create]')
+	const form = modal?.querySelector('[data-visit-form]')
+	if (modal && form && createBtn) {
+		const closeEls = [...modal.querySelectorAll('[data-visit-close]')]
+		const requiredCtrls = [...form.querySelectorAll('[data-required]')]
+
+		const clearErrors = () =>
+			form.querySelectorAll('.is--error').forEach((f) => f.classList.remove('is--error'))
+
+		const validateCtrl = (ctrl) => {
+			const ok = (ctrl.value || '').trim().length > 0
+			ctrl.closest('.field')?.classList.toggle('is--error', !ok)
+			return ok
+		}
+		// run validation on every control (so all errors surface), then combine
+		const validate = () => requiredCtrls.map(validateCtrl).every(Boolean)
+
+		let open = false
+		const onKey = (e) => {
+			if (e.key === 'Escape') {
+				e.preventDefault()
+				closeModal()
+			}
+		}
+		const setOpen = (state) => {
+			open = state
+			modal.hidden = !state
+			createBtn.setAttribute('aria-expanded', state ? 'true' : 'false')
+			document.documentElement.style.overflow = state ? 'hidden' : ''
+			if (state) {
+				modal.querySelector('select, input')?.focus({ preventScroll: true })
+				document.addEventListener('keydown', onKey, true)
+			} else {
+				document.removeEventListener('keydown', onKey, true)
+			}
+		}
+		const closeModal = () => {
+			form.reset()
+			form.querySelectorAll('[data-select]').forEach(resetSelect)
+			clearErrors()
+			setOpen(false)
+		}
+
+		const onCreate = (e) => {
+			e.preventDefault()
+			clearErrors()
+			setOpen(true)
+		}
+		const onSubmit = (e) => {
+			e.preventDefault()
+			if (!validate()) return
+			closeModal() // no backend — just reset & close on success
+		}
+		const onClose = (e) => {
+			e.preventDefault()
+			closeModal()
+		}
+		const onInput = (e) => {
+			const ctrl = e.target.closest('[data-required]')
+			if (ctrl) validateCtrl(ctrl) // clear the error as soon as the field is valid
+		}
+
+		setOpen(false)
+		createBtn.addEventListener('click', onCreate)
+		form.addEventListener('submit', onSubmit)
+		form.addEventListener('input', onInput)
+		form.addEventListener('change', onInput)
+		closeEls.forEach((el) => el.addEventListener('click', onClose))
+		disposers.push(() => {
+			createBtn.removeEventListener('click', onCreate)
+			form.removeEventListener('submit', onSubmit)
+			form.removeEventListener('input', onInput)
+			form.removeEventListener('change', onInput)
+			closeEls.forEach((el) => el.removeEventListener('click', onClose))
+			document.removeEventListener('keydown', onKey, true)
+			document.documentElement.style.overflow = ''
+		})
+
+		// datepicker inside the modal
+		form.querySelectorAll('[data-datepicker]').forEach((el) => {
+			const dispose = mountDatepicker(el)
+			if (dispose) disposers.push(dispose)
+		})
+
+		// custom dropdowns (Сотрудник / Время / Менеджер / Тип визита)
+		form.querySelectorAll('[data-select]').forEach((el) => {
+			const dispose = initSelect(el)
+			if (dispose) disposers.push(dispose)
+		})
+	}
+
 	// --- Segmented tabs (История / Новые) — reuse the project's tabs util ---
 	const disposeTabs = mountTabs(root)
 	if (disposeTabs) disposers.push(disposeTabs)
+
+	// The footer (pagination + page-size) belongs to the table — hide it on any
+	// tab other than "История" (index 0), e.g. the empty "Новые" state.
+	const footer = root.querySelector('.visits-panel__footer')
+	if (footer) {
+		const onTabsChange = (e) => {
+			footer.style.display = (e.detail?.index ?? 0) === 0 ? '' : 'none'
+		}
+		root.addEventListener('tabs:change', onTabsChange)
+		disposers.push(() => {
+			root.removeEventListener('tabs:change', onTabsChange)
+			footer.style.display = ''
+		})
+	}
 
 	// --- Page-size dropdown (20 / 50 / 100) ---
 	root.querySelectorAll('[data-page-size]').forEach((select) => {
@@ -81,6 +189,67 @@ export default (root) => {
 
 // Builds a demo dataset from the static template rows, then paginates it for
 // real. Page-size (20/50/100) and page navigation both reflow the visible rows.
+// Reusable custom dropdown over a hidden input (so it validates like a field).
+// Backend data can later be injected by replacing the .ui-select__option list.
+function initSelect(select) {
+	const trigger = select.querySelector('[data-select-trigger]')
+	const panel = select.querySelector('[data-select-panel]')
+	const valueEl = select.querySelector('[data-select-value]')
+	const input = select.querySelector('[data-select-input]')
+	const options = [...select.querySelectorAll('.ui-select__option')]
+	if (!trigger || !panel) return null
+
+	let open = false
+	const setOpen = (state) => {
+		open = state
+		select.classList.toggle('is-open', state)
+		trigger.setAttribute('aria-expanded', state ? 'true' : 'false')
+	}
+
+	const onTrigger = (e) => {
+		e.preventDefault()
+		e.stopPropagation()
+		setOpen(!open)
+	}
+	const onOption = (e) => {
+		const option = e.target.closest('.ui-select__option')
+		if (!option) return
+		options.forEach((o) => o.classList.toggle('is-active', o === option))
+		const value = option.dataset.value ?? option.textContent.trim()
+		if (valueEl) valueEl.textContent = option.textContent.trim()
+		select.classList.add('is-filled')
+		if (input) {
+			input.value = value
+			input.dispatchEvent(new Event('change', { bubbles: true }))
+		}
+		setOpen(false)
+	}
+	const onDocDown = (e) => {
+		if (open && !select.contains(e.target)) setOpen(false)
+	}
+
+	setOpen(false)
+	trigger.addEventListener('click', onTrigger)
+	panel.addEventListener('click', onOption)
+	document.addEventListener('pointerdown', onDocDown, true)
+
+	return () => {
+		trigger.removeEventListener('click', onTrigger)
+		panel.removeEventListener('click', onOption)
+		document.removeEventListener('pointerdown', onDocDown, true)
+		select.classList.remove('is-open')
+	}
+}
+
+function resetSelect(select) {
+	const valueEl = select.querySelector('[data-select-value]')
+	const input = select.querySelector('[data-select-input]')
+	select.classList.remove('is-filled', 'is-open')
+	select.querySelectorAll('.ui-select__option.is-active').forEach((o) => o.classList.remove('is-active'))
+	if (valueEl) valueEl.textContent = valueEl.dataset.placeholder || ''
+	if (input) input.value = ''
+}
+
 function initVisitsPagination(root) {
 	const tbody = root.querySelector('.visits-table tbody')
 	const nav = root.querySelector('.ui-pagination')

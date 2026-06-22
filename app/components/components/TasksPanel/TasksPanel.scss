@@ -257,7 +257,11 @@
                 @include prop-vw(border-radius, 16, lg);
             }
             @include only(mobile) {
-                @include prop-vw(width, 260, sm);
+                // anchor left so it can't run off the right/left edge of the screen
+                right: auto;
+                left: 0;
+                @include prop-vw(width, 300, sm);
+                max-width: calc(100vw - 40px);
                 @include prop-vw(padding, 16, sm);
                 @include prop-vw(border-radius, 16, sm);
             }
@@ -267,11 +271,22 @@
             align-items: center;
             justify-content: space-between;
             @include prop-vw(margin-bottom, 10, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 12, sm);
+            }
         }
         &__caption {
             @include prop-vw(font-size, 15, xl);
             font-weight: 600;
             color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 16, sm);
+            }
         }
         &__nav {
             display: flex;
@@ -291,6 +306,17 @@
                     background: $color-bg;
                 }
             }
+
+            @include only(desktop) {
+                @include prop-vw(width, 28, lg);
+                @include prop-vw(height, 28, lg);
+                @include prop-vw(font-size, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(width, 36, sm);
+                @include prop-vw(height, 36, sm);
+                @include prop-vw(font-size, 24, sm);
+            }
         }
         &__weekdays {
             display: grid;
@@ -301,12 +327,28 @@
                 text-align: center;
                 @include prop-vw(font-size, 12, xl);
                 color: $color-dark-grey;
+
+                @include only(desktop) {
+                    @include prop-vw(font-size, 12, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(font-size, 13, sm);
+                }
+            }
+
+            @include only(mobile) {
+                @include prop-vw(gap, 4, sm);
+                @include prop-vw(margin-bottom, 6, sm);
             }
         }
         &__grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             @include prop-vw(gap, 2, xl);
+
+            @include only(mobile) {
+                @include prop-vw(gap, 4, sm);
+            }
         }
         &__cell {
             display: flex;
@@ -330,6 +372,15 @@
                 &:not(.is-empty):not(.is-selected):hover {
                     background: $color-bg;
                 }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 8, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 16, sm);
+                @include prop-vw(border-radius, 10, sm);
             }
         }
     }

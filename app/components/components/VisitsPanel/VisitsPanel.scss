@@ -436,4 +436,360 @@
             }
         }
     }
+
+    // --- Create-visit form ---
+    // --- Create-visit modal ---
+    .visit-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        // Scroll the whole modal (not the dialog) so the browser scrollbar sits
+        // at the screen edge and the calendar popover is never clipped.
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include prop-vw(padding-block, 40, xl);
+        @include prop-vw(padding-inline, 20, xl);
+        &[hidden] {
+            display: none;
+        }
+
+        @include only(desktop) {
+            @include prop-vw(padding-block, 40, lg);
+            @include prop-vw(padding-inline, 20, lg);
+        }
+        @include only(mobile) {
+            padding: 0;
+        }
+
+        &__overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(245, 248, 250, 0.6);
+            backdrop-filter: blur(2.5px);
+        }
+        &__dialog {
+            position: relative;
+            z-index: 1;
+            @include prop-vw(max-width, 320, xl);
+            width: 100%;
+            @include prop-vw(padding, 20, xl);
+            background: $color-white;
+            @include prop-vw(border-radius, 20, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+
+            @include only(desktop) {
+                @include prop-vw(max-width, 320, lg);
+                @include prop-vw(padding, 20, lg);
+                @include prop-vw(border-radius, 20, lg);
+            }
+            @include only(mobile) {
+                max-width: none;
+                min-height: 100%;
+                margin: 0;
+                @include prop-vw(padding, 20, sm);
+                border-radius: 0;
+            }
+        }
+        &__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 16, xl);
+            @include prop-vw(margin-bottom, 20, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 16, lg);
+                @include prop-vw(margin-bottom, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 16, sm);
+                @include prop-vw(margin-bottom, 20, sm);
+            }
+        }
+        &__title {
+            display: block;
+            width: fit-content;
+            font-family: $font-secondary;
+            @include prop-vw(font-size, 26, xl);
+            font-weight: bold;
+            line-height: 1.07692307692;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 26, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 22, sm);
+                line-height: 1.09090909091;
+            }
+        }
+        &__close {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(min-width, 36, xl);
+            @include prop-vw(width, 36, xl);
+            @include prop-vw(height, 36, xl);
+            background: $color-bg;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background $transition-default;
+            & > svg {
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-dark-grey;
+            }
+            @media screen and (hover: hover) {
+                &:hover {
+                    background: $color-grey;
+                    & > svg {
+                        color: $color-black;
+                    }
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 36, lg);
+                @include prop-vw(width, 36, lg);
+                @include prop-vw(height, 36, lg);
+                & > svg {
+                    @include prop-vw(min-width, 16, lg);
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 34, sm);
+                @include prop-vw(width, 34, sm);
+                @include prop-vw(height, 34, sm);
+                & > svg {
+                    @include prop-vw(min-width, 16, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
+            }
+        }
+    }
+
+    .visit-form {
+        display: flex;
+        flex-direction: column;
+        @include prop-vw(gap, 10, xl);
+
+        @include only(desktop) {
+            @include prop-vw(gap, 10, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm);
+        }
+
+        &__row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            @include prop-vw(gap, 20, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 20, sm);
+            }
+        }
+        &__actions {
+            display: flex;
+            @include prop-vw(gap, 20, xl);
+            @include prop-vw(margin-top, 10, xl);
+            @include prop-vw(padding-top, 20, xl);
+            @include border-side(top, 1, solid, $color-border, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(padding-top, 20, lg);
+                @include prop-vw(border-top-width, 1, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 20, sm);
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(padding-top, 20, sm);
+                @include prop-vw(border-top-width, 1, sm);
+            }
+        }
+    }
+
+    // --- Custom dropdown (non-native), validates via a hidden input ---
+    .ui-select {
+        // lift the open control above later fields (.field__control has z-index:1)
+        &.is-open {
+            z-index: 40;
+        }
+        &__trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 8, xl);
+            width: 100%;
+            @include prop-vw(padding-block, 12.75, xl);
+            @include prop-vw(padding-inline, 15, xl);
+            @include prop-vw(font-size, 16, xl);
+            line-height: 1;
+            text-align: left;
+            background: $color-white;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 14, xl);
+            cursor: pointer;
+            transition: border-color $transition-default;
+            &:focus {
+                outline: none;
+                border-color: $color-form-focus;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(gap, 8, lg);
+                @include prop-vw(padding-block, 12.75, lg);
+                @include prop-vw(padding-inline, 15, lg);
+                @include prop-vw(font-size, 16, lg);
+                @include border-all(1, solid, $color-border, lg);
+                @include prop-vw(border-radius, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 12.75, sm);
+                @include prop-vw(padding-inline, 15, sm);
+                @include prop-vw(font-size, 16, sm);
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 14, sm);
+            }
+        }
+        &.is-open &__trigger {
+            border-color: $color-form-focus;
+        }
+        &__value {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: $color-dark-grey;
+        }
+        &.is-filled &__value {
+            color: $color-black;
+        }
+        &__caret {
+            flex-shrink: 0;
+            @include prop-vw(width, 16, xl);
+            @include prop-vw(height, 16, xl);
+            color: $color-dark-grey;
+            transition: transform $transition-default;
+
+            @include only(desktop) {
+                @include prop-vw(width, 16, lg);
+                @include prop-vw(height, 16, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+            }
+        }
+        &.is-open &__caret {
+            transform: rotate(180deg);
+        }
+        &__panel {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            z-index: 30;
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            @include prop-vw(padding, 6, xl);
+            background: $color-white;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 12, xl);
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.14);
+            &--scroll {
+                @include prop-vw(max-height, 210, xl);
+                overflow-y: auto;
+
+                @include only(desktop) {
+                    @include prop-vw(max-height, 210, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(max-height, 210, sm);
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(padding, 6, lg);
+                @include prop-vw(border-radius, 12, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding, 6, sm);
+                @include prop-vw(border-radius, 12, sm);
+            }
+        }
+        &.is-open &__panel {
+            display: flex;
+        }
+        &__option {
+            @include prop-vw(padding-block, 10, xl);
+            @include prop-vw(padding-inline, 12, xl);
+            @include prop-vw(font-size, 15, xl);
+            font-weight: normal;
+            color: $color-black;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 8, xl);
+            text-align: left;
+            cursor: pointer;
+            &.is-active {
+                color: $color-blue;
+            }
+            @media screen and (hover: hover) {
+                &:hover {
+                    background: $color-bg;
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 10, lg);
+                @include prop-vw(padding-inline, 12, lg);
+                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(border-radius, 8, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 10, sm);
+                @include prop-vw(padding-inline, 12, sm);
+                @include prop-vw(font-size, 15, sm);
+                @include prop-vw(border-radius, 8, sm);
+            }
+        }
+    }
+    // custom validation error state (reuses .field.is--error)
+    .field.is--error .ui-select__trigger {
+        border-color: $color-red;
+    }
+    // lift the open calendar above the fields below it (same z-index:1 issue)
+    .ui-datepicker.is-open {
+        z-index: 40;
+    }
+    // no calendar icon inside the modal — the calendar opens on input focus
+    .visit-modal {
+        .ui-datepicker__toggle {
+            display: none;
+        }
+        .ui-datepicker__input {
+            @include prop-vw(padding-right, 15, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-right, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-right, 15, sm);
+            }
+        }
+    }
 }

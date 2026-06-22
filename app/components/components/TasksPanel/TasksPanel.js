@@ -6,15 +6,39 @@ export default (root) => {
 
 	const disposers = []
 
-	// --- Create task form (no real submit) ---
+	// --- Create-task form: hidden until "Создать", closed on cancel/save ---
 	const form = root.querySelector('[data-task-form]')
+	const createBtn = root.querySelector('[data-task-create]')
+	const cancelBtn = root.querySelector('[data-task-cancel]')
 	if (form) {
+		const setOpen = (open) => {
+			form.hidden = !open
+			createBtn?.setAttribute('aria-expanded', open ? 'true' : 'false')
+			if (open) form.querySelector('input, textarea')?.focus({ preventScroll: true })
+		}
+		const onCreate = (e) => {
+			e.preventDefault()
+			setOpen(form.hidden)
+		}
+		const onCancel = (e) => {
+			e.preventDefault()
+			form.reset()
+			setOpen(false)
+		}
 		const onSubmit = (e) => {
 			e.preventDefault()
 			form.reset()
+			setOpen(false)
 		}
+		setOpen(false)
+		createBtn?.addEventListener('click', onCreate)
+		cancelBtn?.addEventListener('click', onCancel)
 		form.addEventListener('submit', onSubmit)
-		disposers.push(() => form.removeEventListener('submit', onSubmit))
+		disposers.push(() => {
+			createBtn?.removeEventListener('click', onCreate)
+			cancelBtn?.removeEventListener('click', onCancel)
+			form.removeEventListener('submit', onSubmit)
+		})
 	}
 
 	// --- Datepicker on the "Срок исполнения" field ---
