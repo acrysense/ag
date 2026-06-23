@@ -37,28 +37,31 @@
                 margin-bottom: 0;
             }
             .tabs__wrapper.is--active {
-                @include prop-vw(margin-top, 20, xl);
+                @include prop-vw(margin-top, 10, xl);
+
                 @include only(desktop) {
-                    @include prop-vw(margin-top, 20, lg);
+                    @include prop-vw(margin-top, 10, lg);
                 }
                 @include only(mobile) {
-                    @include prop-vw(margin-top, 16, sm);
+                    @include prop-vw(margin-top, 10, sm);
                 }
             }
         }
         &__empty {
             @include prop-vw(padding-block, 40, xl);
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
             text-align: center;
-            @include prop-vw(font-size, 15, xl);
             color: $color-dark-grey;
 
             @include only(desktop) {
                 @include prop-vw(padding-block, 40, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
                 @include prop-vw(padding-block, 30, sm);
-                @include prop-vw(font-size, 15, sm);
+                @include prop-vw(font-size, 14, sm);
             }
         }
         &__footer {
@@ -108,7 +111,7 @@
         .tabs__item.is--active .tabs__tab {
             color: $color-black;
             background: $color-white;
-            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.08);
+            box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
 
             @media screen and (hover: hover) {
                 &:hover {
@@ -140,8 +143,19 @@
         overflow-y: hidden;
     }
     .visits-table {
+        position: relative;
+        z-index: 1;
         width: 100%;
         border-collapse: collapse;
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            @include prop-vw(left, 35, xl);
+            right: 0;
+            @include prop-vw(height, 1, xl);
+            background: $color-border;
+        }
 
         @include up(tablet) {
             @include prop-vw(min-width, 760, xl);
@@ -151,56 +165,116 @@
         }
 
         &__th {
-            @include prop-vw(padding-block, 12, xl);
+            @include prop-vw(padding-block, 23.75, xl);
             @include prop-vw(padding-inline, 10, xl);
             text-align: left;
-            @include prop-vw(font-size, 14, xl);
-            font-weight: normal;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: 600;
+            line-height: 1;
             color: $color-dark-grey;
             white-space: nowrap;
-            @include border-side(bottom, 1, solid, $color-border, xl);
-            &:first-child {
-                padding-left: 0;
-            }
+            @include border-side(bottom, 2, solid, $color-border, xl);
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 12, lg);
+                @include prop-vw(padding-block, 23.75, lg);
                 @include prop-vw(padding-inline, 10, lg);
-                @include prop-vw(font-size, 14, lg);
-                @include border-side(bottom, 1, solid, $color-border, lg);
+                @include prop-vw(font-size, 12, lg);
+                @include border-side(bottom, 2, solid, $color-border, lg);
             }
             @include only(mobile) {
-                @include prop-vw(padding-block, 12, sm);
-                @include prop-vw(padding-inline, 8, sm);
-                @include prop-vw(font-size, 13, sm);
+                @include prop-vw(padding-block, 23.75, sm);
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(font-size, 12, sm);
+                @include border-side(bottom, 2, solid, $color-border, sm);
+            }
+
+            // sortable header: clickable + 16px double-chevron glyph
+            &[data-sort-type] {
+                position: relative;
+                cursor: pointer;
+                user-select: none;
+                transition: color $transition-default;
+                @include prop-vw(padding-right, 32, xl);
+
+                @include only(desktop) {
+                    @include prop-vw(padding-right, 32, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(padding-right, 28, sm);
+                }
+
+                // glyph pinned to the right edge of the column
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    @include prop-vw(right, 10, xl);
+                    transform: translateY(-50%);
+                    @include prop-vw(width, 16, xl);
+                    @include prop-vw(height, 16, xl);
+                    background: #ADB4C1;
+                    --vsort: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.66667C8.1768 2.66671 8.34634 2.73697 8.47133 2.86201L11.138 5.52867C11.2594 5.65441 11.3266 5.82281 11.3251 5.99761C11.3236 6.1724 11.2535 6.33961 11.1299 6.46322C11.0063 6.58682 10.8391 6.65694 10.6643 6.65845C10.4895 6.65997 10.3211 6.59278 10.1953 6.47134L8 4.27601L5.80467 6.47134C5.67893 6.59278 5.51053 6.65997 5.33573 6.65845C5.16093 6.65694 4.99373 6.58682 4.87012 6.46322C4.74652 6.33961 4.6764 6.1724 4.67488 5.99761C4.67336 5.82281 4.74056 5.65441 4.862 5.52867L7.52867 2.86201C7.65366 2.73697 7.8232 2.66671 8 2.66667ZM4.862 9.52867C4.98702 9.40369 5.15656 9.33348 5.33333 9.33348C5.51011 9.33348 5.67965 9.40369 5.80467 9.52867L8 11.724L10.1953 9.52867C10.3211 9.40723 10.4895 9.34004 10.6643 9.34156C10.8391 9.34308 11.0063 9.41319 11.1299 9.53679C11.2535 9.6604 11.3236 9.82761 11.3251 10.0024C11.3266 10.1772 11.2594 10.3456 11.138 10.4713L8.47133 13.138C8.34631 13.263 8.17678 13.3332 8 13.3332C7.82322 13.3332 7.65369 13.263 7.52867 13.138L4.862 10.4713C4.73702 10.3463 4.66681 10.1768 4.66681 10C4.66681 9.82323 4.73702 9.65369 4.862 9.52867Z" fill="black"/></svg>');
+                    -webkit-mask: var(--vsort) center / contain no-repeat;
+                    mask: var(--vsort) center / contain no-repeat;
+
+                    @include only(desktop) {
+                        @include prop-vw(right, 10, lg);
+                        @include prop-vw(width, 16, lg);
+                        @include prop-vw(height, 16, lg);
+                    }
+                    @include only(mobile) {
+                        @include prop-vw(right, 8, sm);
+                        @include prop-vw(width, 16, sm);
+                        @include prop-vw(height, 16, sm);
+                    }
+                }
+                @media screen and (hover: hover) {
+                    &:hover {
+                        color: $color-blue;
+                    }
+                }
+            }
+            &.is-asc,
+            &.is-desc {
+                color: $color-blue;
+                &::after {
+                    background: $color-blue;
+                }
+            }
+            &.is-asc::after {
+                --vsort: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.66667C8.1768 2.66671 8.34634 2.73697 8.47133 2.86201L11.138 5.52867C11.2594 5.65441 11.3266 5.82281 11.3251 5.99761C11.3236 6.1724 11.2535 6.33961 11.1299 6.46322C11.0063 6.58682 10.8391 6.65694 10.6643 6.65845C10.4895 6.65997 10.3211 6.59278 10.1953 6.47134L8 4.27601L5.80467 6.47134C5.67893 6.59278 5.51053 6.65997 5.33573 6.65845C5.16093 6.65694 4.99373 6.58682 4.87012 6.46322C4.74652 6.33961 4.6764 6.1724 4.67488 5.99761C4.67336 5.82281 4.74056 5.65441 4.862 5.52867L7.52867 2.86201C7.65366 2.73697 7.8232 2.66671 8 2.66667Z" fill="black"/></svg>');
+            }
+            &.is-desc::after {
+                --vsort: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M4.862 9.52867C4.98702 9.40369 5.15656 9.33348 5.33333 9.33348C5.51011 9.33348 5.67965 9.40369 5.80467 9.52867L8 11.724L10.1953 9.52867C10.3211 9.40723 10.4895 9.34004 10.6643 9.34156C10.8391 9.34308 11.0063 9.41319 11.1299 9.53679C11.2535 9.6604 11.3236 9.82761 11.3251 10.0024C11.3266 10.1772 11.2594 10.3456 11.138 10.4713L8.47133 13.138C8.34631 13.263 8.17678 13.3332 8 13.3332C7.82322 13.3332 7.65369 13.263 7.52867 13.138L4.862 10.4713C4.73702 10.3463 4.66681 10.1768 4.66681 10C4.66681 9.82323 4.73702 9.65369 4.862 9.52867Z" fill="black"/></svg>');
             }
         }
         &__td {
-            @include prop-vw(padding-block, 16, xl);
+            // fixed row height: <td> treats `height` as a minimum (min-height is ignored),
+            // padding-block: 0 so the icon/text rows can't grow past it — content centers.
+            @include prop-vw(height, 40, xl);
+            padding-block: 0;
             @include prop-vw(padding-inline, 10, xl);
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(font-size, 12, xl);
             font-weight: normal;
+            line-height: 1;
             color: $color-black;
             vertical-align: middle;
-            &:first-child {
-                padding-left: 0;
-            }
             &:last-child {
                 @include prop-vw(min-width, 240, xl);
             }
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 16, lg);
+                @include prop-vw(height, 40, lg);
                 @include prop-vw(padding-inline, 10, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(font-size, 12, lg);
                 &:last-child {
                     @include prop-vw(min-width, 240, lg);
                 }
             }
             @include only(mobile) {
-                @include prop-vw(padding-block, 14, sm);
+                @include prop-vw(height, 40, sm);
                 @include prop-vw(padding-inline, 8, sm);
-                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(font-size, 12, sm);
             }
         }
         &__row + &__row .visits-table__td {
@@ -224,7 +298,6 @@
             }
         }
         &__score {
-            font-weight: 600;
             &--bad {
                 color: $color-red;
             }
@@ -238,17 +311,119 @@
             justify-content: center;
             color: $color-black;
             & > svg {
-                @include prop-vw(width, 16, xl);
-                @include prop-vw(height, 16, xl);
+                @include prop-vw(width, 24, xl);
+                @include prop-vw(height, 24, xl);
 
                 @include only(desktop) {
-                    @include prop-vw(width, 16, lg);
-                    @include prop-vw(height, 16, lg);
+                    @include prop-vw(width, 24, lg);
+                    @include prop-vw(height, 24, lg);
                 }
                 @include only(mobile) {
-                    @include prop-vw(width, 16, sm);
-                    @include prop-vw(height, 16, sm);
+                    @include prop-vw(width, 24, sm);
+                    @include prop-vw(height, 24, sm);
                 }
+            }
+        }
+    }
+
+    // --- Mobile: collapse the visits table into a compact list (badge + date, type) ---
+    @include only(mobile) {
+        .visits-table {
+            position: relative;
+            display: block;
+            min-width: 0;
+            // top divider, inset on the left like the row separators
+            &::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                @include prop-vw(left, 35, sm);
+                right: 0;
+                @include prop-vw(height, 1, sm);
+                background: $color-border;
+            }
+        }
+        .visits-table thead {
+            display: none;
+        }
+        .visits-table tbody {
+            display: block;
+        }
+        .visits-table__row {
+            position: relative;
+            display: flex;
+            align-items: center;
+            @include prop-vw(padding-block, 10, sm);
+            &::after {
+                content: "";
+                position: absolute;
+                bottom: 0;
+                @include prop-vw(left, 35, sm);
+                right: 0;
+                @include prop-vw(height, 1, sm);
+                background: $color-border;
+            }
+        }
+        .visits-table__row + .visits-table__row .visits-table__td {
+            border-top: none;
+        }
+        .visits-table__td {
+            display: none;
+            width: auto;
+            height: auto;
+            padding: 0;
+        }
+        // score badge → first
+        .visits-table__td:nth-child(4) {
+            order: 1;
+            display: flex;
+            flex: 0 0 auto;
+            @include prop-vw(width, 60, sm);
+            @include prop-vw(margin-right, 10, sm);
+        }
+        // date → second (black, with comma)
+        .visits-table__td:nth-child(1) {
+            order: 2;
+            display: block;
+            @include prop-vw(font-size, 14, sm);
+            line-height: 1.57142857143;
+            color: $color-black;
+            &::after {
+                content: ",\00a0";
+            }
+        }
+        // type → third (grey)
+        .visits-table__td:nth-child(2) {
+            order: 3;
+            display: block;
+            @include prop-vw(font-size, 14, sm);
+            line-height: 1.57142857143;
+            color: $color-dark-grey;
+        }
+        .visits-table__link {
+            color: $color-black;
+        }
+        .visits-table__score {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            @include prop-vw(padding-block, 6, sm);
+            @include prop-vw(padding-inline, 5, sm);
+            @include prop-vw(border-radius, 7, sm);
+            @include prop-vw(font-size, 12, sm);
+            font-weight: normal;
+            line-height: 1;
+            white-space: nowrap;
+            color: $color-blue;
+            background: #F3F6FC;
+            &--good {
+                color: $color-green;
+                background: #E8F6EE;
+            }
+            &--bad {
+                color: $color-red;
+                background: #F9DBDB;
             }
         }
     }
@@ -286,7 +461,8 @@
                 color: $color-white;
                 background: $color-blue;
             }
-            &--next {
+            &--next,
+            &--prev {
                 width: auto;
                 color: $color-dark-grey;
             }

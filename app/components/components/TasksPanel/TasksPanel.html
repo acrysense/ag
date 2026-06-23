@@ -1,13 +1,20 @@
 <section class="data-panel tasks-panel" data-module="TasksPanel" data-path="components">
     <div class="data-panel__header">
         <h2 class="data-panel__title">Задачи</h2>
-        <a href="/" class="data-panel__export">Экспорт в Excel</a>
+        <a href="/" class="data-panel__export">
+            <svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="data-panel__export-full">Экспорт в Excel</span>
+            <span class="data-panel__export-short">Excel</span>
+        </a>
     </div>
 
     <div class="tasks-panel__create">
         <button type="button" class="panel-create" data-task-create>
             <svg aria-hidden="true" focusable="false" width="28" height="28">
-                <use href="#icon-circle-plus"></use>
+                <use href="#icon-circle-plus-thin"></use>
             </svg>
             <span>Создать</span>
         </button>

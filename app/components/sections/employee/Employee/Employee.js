@@ -13,9 +13,121 @@ export default (root) => {
 	const disposeView = initViewToggle(root)
 	if (disposeView) disposers.push(disposeView)
 
+	const disposeKpiSort = initKpiSort(root)
+	if (disposeKpiSort) disposers.push(disposeKpiSort)
+
+	const disposeRowWrap = initRowWrap(root)
+	if (disposeRowWrap) disposers.push(disposeRowWrap)
+
 	return () => {
 		disposers.forEach((d) => d())
 		delete root.__employeeBound
+	}
+}
+
+// On mobile, stack a profile row (label over value) when its label wraps to 2+
+// lines. Measured in the un-stacked state to avoid a layout feedback loop.
+function initRowWrap(root) {
+	const rows = [...root.querySelectorAll('.employee__row')]
+	if (!rows.length) return null
+	const mql = window.matchMedia('(max-width: 743.98px)')
+	const STACKED = 'employee__row--stacked'
+
+	const isWrapped = (el) => {
+		const cs = getComputedStyle(el)
+		let lh = parseFloat(cs.lineHeight)
+		if (Number.isNaN(lh)) lh = parseFloat(cs.fontSize) * 1.4
+		return el.offsetHeight > lh * 1.5
+	}
+
+	const update = () => {
+		const mobile = mql.matches
+		rows.forEach((r) => r.classList.remove(STACKED)) // measure rows un-stacked
+		if (!mobile) return
+		const wraps = rows.map((r) => {
+			const label = r.querySelector('.employee__label')
+			return label ? isWrapped(label) : false
+		})
+		rows.forEach((r, i) => r.classList.toggle(STACKED, wraps[i]))
+	}
+
+	let frame = null
+	const onResize = () => {
+		cancelAnimationFrame(frame)
+		frame = requestAnimationFrame(update)
+	}
+
+	update()
+	window.addEventListener('resize', onResize)
+
+	return () => {
+		cancelAnimationFrame(frame)
+		window.removeEventListener('resize', onResize)
+		rows.forEach((r) => r.classList.remove(STACKED))
+	}
+}
+
+// Column sorting for the desktop KPI grid. ИТОГ row stays pinned at the bottom.
+// Click cycles asc → desc → original order.
+function initKpiSort(root) {
+	const grid = root.querySelector('.employee-kpi__grid')
+	if (!grid) return null
+	const cols = [...grid.querySelectorAll('.employee-kpi__col[data-kpi-col]')]
+	const rows = [...grid.querySelectorAll('.employee-kpi__row:not(.employee-kpi__row--total)')]
+	const total = grid.querySelector('.employee-kpi__row--total')
+	if (!cols.length || !rows.length) return null
+
+	const original = rows.slice()
+	const disposers = []
+	let active = null
+	let dir = 0 // 1 asc, -1 desc, 0 none
+
+	const num = (t) => {
+		const n = parseFloat(String(t).replace(',', '.').replace(/[^\d.-]/g, ''))
+		return Number.isNaN(n) ? 0 : n
+	}
+	const cellText = (row, i) => (row.children[i]?.textContent || '').trim()
+
+	const reorder = (list) => list.forEach((r) => (total ? grid.insertBefore(r, total) : grid.appendChild(r)))
+
+	const apply = (col) => {
+		const i = cols.indexOf(col)
+		const type = col.dataset.sortType || 'text'
+		if (dir === 0) {
+			reorder(original)
+		} else {
+			const sorted = rows.slice().sort((a, b) => {
+				const av = cellText(a, i)
+				const bv = cellText(b, i)
+				const cmp = type === 'number' ? num(av) - num(bv) : av.localeCompare(bv, 'ru')
+				return cmp * dir
+			})
+			reorder(sorted)
+		}
+		cols.forEach((c) => c.classList.remove('is-asc', 'is-desc'))
+		if (dir === 1) col.classList.add('is-asc')
+		else if (dir === -1) col.classList.add('is-desc')
+	}
+
+	cols.forEach((col) => {
+		const onClick = () => {
+			if (active !== col) {
+				active = col
+				dir = 1
+			} else {
+				dir = dir === 1 ? -1 : dir === -1 ? 0 : 1
+			}
+			if (dir === 0) active = null
+			apply(col)
+		}
+		col.addEventListener('click', onClick)
+		disposers.push(() => col.removeEventListener('click', onClick))
+	})
+
+	return () => {
+		disposers.forEach((d) => d())
+		reorder(original)
+		cols.forEach((c) => c.classList.remove('is-asc', 'is-desc'))
 	}
 }
 

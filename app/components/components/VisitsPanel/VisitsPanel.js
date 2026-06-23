@@ -308,6 +308,13 @@ function initVisitsPagination(root) {
 	function renderNav() {
 		const total = pageCount()
 		nav.replaceChildren()
+		const prev = document.createElement('button')
+		prev.type = 'button'
+		prev.className = 'ui-pagination__item ui-pagination__item--prev'
+		prev.textContent = 'Назад'
+		prev.dataset.prev = '1'
+		prev.disabled = page <= 1
+		nav.appendChild(prev)
 		pageItems().forEach((it) => {
 			if (it === '…') {
 				const dots = document.createElement('span')
@@ -347,6 +354,7 @@ function initVisitsPagination(root) {
 		if (!item || item.disabled) return
 		if (item.dataset.page) goTo(parseInt(item.dataset.page, 10))
 		else if (item.dataset.next) goTo(page + 1)
+		else if (item.dataset.prev) goTo(page - 1)
 	}
 	const onPageSize = (e) => {
 		const v = parseInt(e.detail?.value, 10)
@@ -357,6 +365,62 @@ function initVisitsPagination(root) {
 		renderNav()
 	}
 
+	// --- Column sorting over the FULL dataset (keeps pagination correct) ---
+	const baseOrder = rows.slice()
+	const headers = [...root.querySelectorAll('.visits-table__th[data-sort-type]')]
+	let sortTh = null
+	let sortDir = 0 // 1 asc, -1 desc, 0 none
+	const sortDisposers = []
+	const toNum = (t) => {
+		const n = parseFloat(String(t).replace(',', '.').replace(/[^\d.-]/g, ''))
+		return Number.isNaN(n) ? 0 : n
+	}
+	const toDate = (t) => {
+		const m = /(\d{2})\.(\d{2})\.(\d{4})/.exec(String(t))
+		return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : 0
+	}
+	const colText = (row, i) => (row.children[i]?.textContent || '').trim()
+
+	const applySort = () => {
+		if (!sortTh || sortDir === 0) {
+			rows.splice(0, rows.length, ...baseOrder)
+		} else {
+			const i = [...sortTh.parentElement.children].indexOf(sortTh)
+			const type = sortTh.dataset.sortType
+			rows.sort((a, b) => {
+				const av = colText(a, i)
+				const bv = colText(b, i)
+				let cmp
+				if (type === 'date') cmp = toDate(av) - toDate(bv)
+				else if (type === 'number') cmp = toNum(av) - toNum(bv)
+				else cmp = av.localeCompare(bv, 'ru')
+				return cmp * sortDir
+			})
+		}
+		tbody.replaceChildren(...rows)
+		page = 1 // re-sort returns to the first page so the order is obvious
+		renderRows()
+		renderNav()
+	}
+
+	headers.forEach((th) => {
+		const onClick = () => {
+			if (sortTh !== th) {
+				sortTh = th
+				sortDir = 1
+			} else {
+				sortDir = sortDir === 1 ? -1 : sortDir === -1 ? 0 : 1
+			}
+			if (sortDir === 0) sortTh = null
+			headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
+			if (sortDir === 1) th.classList.add('is-asc')
+			else if (sortDir === -1) th.classList.add('is-desc')
+			applySort()
+		}
+		th.addEventListener('click', onClick)
+		sortDisposers.push(() => th.removeEventListener('click', onClick))
+	})
+
 	nav.addEventListener('click', onNavClick)
 	root.addEventListener('pagesize:change', onPageSize)
 
@@ -366,5 +430,7 @@ function initVisitsPagination(root) {
 	return () => {
 		nav.removeEventListener('click', onNavClick)
 		root.removeEventListener('pagesize:change', onPageSize)
+		sortDisposers.forEach((d) => d())
+		headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
 	}
 }

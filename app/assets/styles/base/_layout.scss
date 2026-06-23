@@ -67,14 +67,17 @@
 				@include prop-vw(max-width, 1560, xl);
 			}
 			@include only(desktop) {
-				@include prop-vw(margin-left, 50, lg);
-				@include prop-vw(padding-inline, 45, lg);
-				@include prop-vw(max-width, 820, lg);
+				@include prop-vw(gap, 10, lg);
+				@include prop-vw(padding-inline, 40, lg);
+				@include prop-vw(max-width, 1250, lg);
 			}
 			@include only(tablet) {
-				@include prop-vw(margin-left, 50, xl);
-				@include prop-vw(padding-inline, 125, xl);
-				@include prop-vw(max-width, 1120, xl);
+				@include prop-vw(gap, 10, md);
+				@include prop-vw(padding-inline, 60, xl);
+				@include prop-vw(max-width, 1560, xl);
+			}
+			@include only(mobile) {
+            	background: #F5F8FA;
 			}
 		}
 		&__left {
@@ -82,7 +85,7 @@
 			width: 100%;
 			
 			@include only(desktop) {
-				@include prop-vw(max-width, 600, lg);
+				@include prop-vw(max-width, 810, lg);
 			}
 			@include down(desktop) {
 				max-width: none;

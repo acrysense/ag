@@ -392,7 +392,7 @@
         @include prop-vw(padding-right, 12, xl);
         @include prop-vw(font-size, 14, xl);
         color: $color-black;
-        background: $color-bg;
+        background: #EBEEF2;
         border: none;
         @include prop-vw(border-radius, 20, xl);
         cursor: pointer;

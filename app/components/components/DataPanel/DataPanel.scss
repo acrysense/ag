@@ -70,7 +70,8 @@
             }
         }
         &__export {
-            display: block;
+            display: inline-flex;
+            align-items: center;
             width: fit-content;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
@@ -87,7 +88,34 @@
                 @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
+                @include prop-vw(gap, 5, sm);
                 @include prop-vw(font-size, 14, sm);
+            }
+        }
+        // desktop: «Экспорт в Excel» text only. mobile: download icon + «Экспорт».
+        &__export-icon {
+            display: none;
+
+            @include only(mobile) {
+                display: block;
+                flex-shrink: 0;
+                @include prop-vw(min-width, 16, sm);
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+                color: #ADB4C1;
+            }
+        }
+        &__export-short {
+            display: none;
+        }
+        &__export-full {
+            @include only(mobile) {
+                display: none;
+            }
+        }
+        @include only(mobile) {
+            &__export-short {
+                display: inline;
             }
         }
         &__divider {
@@ -108,39 +136,47 @@
     .panel-create {
         display: inline-flex;
         align-items: center;
-        @include prop-vw(gap, 12, xl);
+        @include prop-vw(gap, 10, xl);
         padding: 0;
-        @include prop-vw(font-size, 16, xl);
+        @include prop-vw(font-size, 14, xl);
         font-weight: normal;
+        line-height: 1.57142857143;
         color: $color-blue;
         background: transparent;
         border: none;
         cursor: pointer;
         & > svg {
             flex-shrink: 0;
-            @include prop-vw(width, 28, xl);
-            @include prop-vw(height, 28, xl);
+            @include prop-vw(min-width, 24, xl);
+            @include prop-vw(width, 24, xl);
+            @include prop-vw(height, 24, xl);
+            color: $color-blue;
         }
 
         @media screen and (hover: hover) {
             &:hover {
                 color: $color-blue-hover;
+                & > svg {
+                    color: $color-blue-hover;
+                }
             }
         }
         @include only(desktop) {
-            @include prop-vw(gap, 12, lg);
-            @include prop-vw(font-size, 16, lg);
+            @include prop-vw(gap, 10, lg);
+            @include prop-vw(font-size, 14, lg);
             & > svg {
-                @include prop-vw(width, 28, lg);
-                @include prop-vw(height, 28, lg);
+                @include prop-vw(min-width, 24, lg);
+                @include prop-vw(width, 24, lg);
+                @include prop-vw(height, 24, lg);
             }
         }
         @include only(mobile) {
             @include prop-vw(gap, 10, sm);
-            @include prop-vw(font-size, 16, sm);
+            @include prop-vw(font-size, 14, sm);
             & > svg {
-                @include prop-vw(width, 26, sm);
-                @include prop-vw(height, 26, sm);
+                @include prop-vw(min-width, 24, sm);
+                @include prop-vw(width, 24, sm);
+                @include prop-vw(height, 24, sm);
             }
         }
     }

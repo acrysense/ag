@@ -124,6 +124,11 @@
                 @include prop-vw(gap, 10, sm);
             }
         }
+        // set by JS on mobile when the label wraps to 2+ lines
+        &__row--stacked {
+            flex-direction: column;
+            @include prop-vw(gap, 2, sm);
+        }
         &__label {
             display: block;
             width: fit-content;
@@ -439,20 +444,68 @@
             }
         }
         &__col {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 6, xl);
+            padding-block: 0;
             @include prop-vw(padding-inline, 10, xl);
+            background: transparent;
+            border: none;
+            cursor: pointer;
             @include prop-vw(font-size, 12, xl);
             font-weight: 600;
             line-height: 1.25;
+            text-align: left;
             color: $color-dark-grey;
             white-space: nowrap;
+            transition: color $transition-default;
+            // sort glyph: 16px double chevron (single chevron when active)
+            &::after {
+                content: "";
+                flex-shrink: 0;
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                background: #ADB4C1;
+                --kpi-sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.66667C8.1768 2.66671 8.34634 2.73697 8.47133 2.86201L11.138 5.52867C11.2594 5.65441 11.3266 5.82281 11.3251 5.99761C11.3236 6.1724 11.2535 6.33961 11.1299 6.46322C11.0063 6.58682 10.8391 6.65694 10.6643 6.65845C10.4895 6.65997 10.3211 6.59278 10.1953 6.47134L8 4.27601L5.80467 6.47134C5.67893 6.59278 5.51053 6.65997 5.33573 6.65845C5.16093 6.65694 4.99373 6.58682 4.87012 6.46322C4.74652 6.33961 4.6764 6.1724 4.67488 5.99761C4.67336 5.82281 4.74056 5.65441 4.862 5.52867L7.52867 2.86201C7.65366 2.73697 7.8232 2.66671 8 2.66667ZM4.862 9.52867C4.98702 9.40369 5.15656 9.33348 5.33333 9.33348C5.51011 9.33348 5.67965 9.40369 5.80467 9.52867L8 11.724L10.1953 9.52867C10.3211 9.40723 10.4895 9.34004 10.6643 9.34156C10.8391 9.34308 11.0063 9.41319 11.1299 9.53679C11.2535 9.6604 11.3236 9.82761 11.3251 10.0024C11.3266 10.1772 11.2594 10.3456 11.138 10.4713L8.47133 13.138C8.34631 13.263 8.17678 13.3332 8 13.3332C7.82322 13.3332 7.65369 13.263 7.52867 13.138L4.862 10.4713C4.73702 10.3463 4.66681 10.1768 4.66681 10C4.66681 9.82323 4.73702 9.65369 4.862 9.52867Z" fill="black"/></svg>');
+                -webkit-mask: var(--kpi-sort-icon) center / contain no-repeat;
+                mask: var(--kpi-sort-icon) center / contain no-repeat;
+            }
+            &.is-asc,
+            &.is-desc {
+                color: $color-blue;
+                &::after {
+                    background: $color-blue;
+                }
+            }
+            &.is-asc::after {
+                --kpi-sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.66667C8.1768 2.66671 8.34634 2.73697 8.47133 2.86201L11.138 5.52867C11.2594 5.65441 11.3266 5.82281 11.3251 5.99761C11.3236 6.1724 11.2535 6.33961 11.1299 6.46322C11.0063 6.58682 10.8391 6.65694 10.6643 6.65845C10.4895 6.65997 10.3211 6.59278 10.1953 6.47134L8 4.27601L5.80467 6.47134C5.67893 6.59278 5.51053 6.65997 5.33573 6.65845C5.16093 6.65694 4.99373 6.58682 4.87012 6.46322C4.74652 6.33961 4.6764 6.1724 4.67488 5.99761C4.67336 5.82281 4.74056 5.65441 4.862 5.52867L7.52867 2.86201C7.65366 2.73697 7.8232 2.66671 8 2.66667Z" fill="black"/></svg>');
+            }
+            &.is-desc::after {
+                --kpi-sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M4.862 9.52867C4.98702 9.40369 5.15656 9.33348 5.33333 9.33348C5.51011 9.33348 5.67965 9.40369 5.80467 9.52867L8 11.724L10.1953 9.52867C10.3211 9.40723 10.4895 9.34004 10.6643 9.34156C10.8391 9.34308 11.0063 9.41319 11.1299 9.53679C11.2535 9.6604 11.3236 9.82761 11.3251 10.0024C11.3266 10.1772 11.2594 10.3456 11.138 10.4713L8.47133 13.138C8.34631 13.263 8.17678 13.3332 8 13.3332C7.82322 13.3332 7.65369 13.263 7.52867 13.138L4.862 10.4713C4.73702 10.3463 4.66681 10.1768 4.66681 10C4.66681 9.82323 4.73702 9.65369 4.862 9.52867Z" fill="black"/></svg>');
+            }
 
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
             @include only(desktop) {
+                @include prop-vw(gap, 6, lg);
                 @include prop-vw(padding-inline, 10, lg);
                 @include prop-vw(font-size, 12, lg);
+                &::after {
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
+                }
             }
             @include only(mobile) {
                 @include prop-vw(padding-inline, 10, sm);
                 @include prop-vw(font-size, 12, sm);
+                &::after {
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
             }
         }
         &__row {
@@ -654,6 +707,10 @@
                 color: $color-dark-grey;
             }
             & > b {
+                font-weight: normal;
+            }
+            // keep the grade (Категория) bold
+            & > b.employee-kpi__mcat {
                 font-weight: 600;
             }
         }
