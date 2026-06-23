@@ -2,15 +2,83 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
+    // --- Tasks page tabs (Мои задачи / Для сотрудников) ---
+    .tasks-page__tabs {
+        .tabs__list {
+            align-items: center;
+            width: fit-content;
+            @include prop-vw(height, 40, xl);
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(padding-inline, 2, xl);
+            padding-block: 0;
+            @include prop-vw(margin-bottom, 10, xl);
+            background: #E7EFF4;
+            @include prop-vw(border-radius, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(height, 40, lg);
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(padding-inline, 2, lg);
+                @include prop-vw(margin-bottom, 10, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(height, 40, sm);
+                @include prop-vw(gap, 10, sm);
+                @include prop-vw(padding-inline, 2, sm);
+                @include prop-vw(margin-bottom, 10, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
+        }
+        .tabs__tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(height, 36, xl);
+            padding-block: 0;
+            @include prop-vw(padding-inline, 15, xl);
+            @include prop-vw(font-size, 14, xl);
+            line-height: 1.42857142857;
+            @include prop-vw(border-radius, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(height, 36, lg);
+                @include prop-vw(padding-inline, 15, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(height, 36, sm);
+                @include prop-vw(padding-inline, 15, sm);
+                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
+        }
+    }
+    // top spacing only when filter chips are present (collapses to 30px gap);
+    // no chips → tabs sit flush at the top (bottom margin only)
+    .tasks-page__chips:not([hidden]) + .tasks-page__tabs {
+        @include prop-vw(margin-top, 30, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 30, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 30, sm);
+        }
+    }
+
     .tasks-panel {
         &__toggle {
             display: block;
-            @include prop-vw(margin-top, 20, xl);
+            @include prop-vw(margin-top, 10, xl);
+            @include prop-vw(margin-left, 39, xl);
             padding: 0;
             background: transparent;
             border: none;
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(font-size, 14, xl);
             font-weight: normal;
+            line-height: 1.57142857143;
             color: $color-blue;
             cursor: pointer;
 
@@ -20,12 +88,14 @@
                 }
             }
             @include only(desktop) {
-                @include prop-vw(margin-top, 20, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(margin-left, 39, lg);
+                @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 18, sm);
-                @include prop-vw(font-size, 15, sm);
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(margin-left, 39, sm);
+                @include prop-vw(font-size, 14, sm);
             }
         }
     }
@@ -425,6 +495,10 @@
                 color: $color-white;
                 background: $color-blue;
             }
+            // days inside a selected from–to range
+            &.is-range {
+                background: rgba($color-blue, 0.12);
+            }
             @media screen and (hover: hover) {
                 &:not(.is-empty):not(.is-selected):hover {
                     background: $color-bg;
@@ -506,6 +580,10 @@
         &.is-hidden {
             display: none;
         }
+        // hidden by the header search/filter (separate from the completed toggle)
+        &.is-filtered-out {
+            display: none;
+        }
         &.is-muted {
             .task-row__title {
                 color: $color-dark-grey;
@@ -583,7 +661,9 @@
             border-radius: 50%;
             color: $color-white;
             background: $color-white;
+            cursor: pointer;
             @include border-all(1, solid, $color-grey, xl);
+            transition: background $transition-default, border-color $transition-default;
             & > svg {
                 @include prop-vw(min-width, 16, xl);
                 @include prop-vw(width, 16, xl);
@@ -596,6 +676,16 @@
             &--soft {
                 background: rgba($color-green, 0.45);
                 border-color: transparent;
+            }
+            // affordance: empty circle hints green on hover, a completed (muted)
+            // check brightens back to full green
+            @media screen and (hover: hover) {
+                &:not(&--done):not(&--soft):hover {
+                    border-color: $color-green;
+                }
+                &--soft:hover {
+                    background: $color-green;
+                }
             }
 
             @include only(desktop) {

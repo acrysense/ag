@@ -26,11 +26,11 @@
                 display: block;
                 position: absolute;
                 @include prop-vw(top, -10, sm);
-                right: 0;
-                left: 0;
+                @include prop-vw(right, -10, sm);
+                @include prop-vw(left, -10, sm);
                 z-index: -1;
                 display: block;
-                width: 100%;
+                width: 100vw;
                 @include prop-vw(height, 10, sm);
                 background: #F5F8FA;
             }

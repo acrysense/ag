@@ -47,38 +47,76 @@ export default (root) => {
 		if (dispose) disposers.push(dispose)
 	})
 
-	// --- Show / hide completed tasks ---
+	// --- Complete / re-open tasks + the show-completed toggle ---
+	const list = root.querySelector('.tasks-list')
 	const toggle = root.querySelector('[data-tasks-toggle]')
 	const toggleText = root.querySelector('[data-tasks-toggle-text]')
-	const completed = [...root.querySelectorAll('.task-row.is-completed')]
-	// the 3 most recent completed tasks stay visible; only the rest are toggled
 	const ALWAYS_VISIBLE = 3
-	const toggleable = completed.slice(ALWAYS_VISIBLE)
-	if (toggle && toggleable.length) {
-		let shown = false
-		// real number of hidden completed tasks (not the hardcoded markup value)
-		const labelHidden = `Показать завершенные: ${toggleable.length}`
-		const labelShown = 'Скрыть завершенные'
+	let shown = false
 
-		const render = () => {
-			toggleable.forEach((row) => row.classList.toggle('is-hidden', !shown))
+	// Keep the 3 most recent completed tasks (they sit at the bottom) visible;
+	// collapse the older ones under the toggle. Re-runnable after each change.
+	const refreshCompleted = () => {
+		const completed = [...root.querySelectorAll('.task-row.is-completed')]
+		const hideable = completed.slice(0, Math.max(0, completed.length - ALWAYS_VISIBLE))
+		completed.forEach((row) => row.classList.remove('is-hidden'))
+		if (!toggle) return
+		if (hideable.length) {
+			toggle.hidden = false
+			hideable.forEach((row) => row.classList.toggle('is-hidden', !shown))
 			toggle.setAttribute('aria-expanded', shown ? 'true' : 'false')
-			if (toggleText) toggleText.textContent = shown ? labelShown : labelHidden
+			if (toggleText) {
+				toggleText.textContent = shown ? 'Скрыть завершенные' : `Показать завершенные: ${hideable.length}`
+			}
+		} else {
+			toggle.hidden = true
+			shown = false
 		}
+	}
+
+	if (toggle) {
 		const onToggle = () => {
 			shown = !shown
-			render()
+			refreshCompleted()
 		}
-		render()
 		toggle.addEventListener('click', onToggle)
 		disposers.push(() => {
 			toggle.removeEventListener('click', onToggle)
-			toggleable.forEach((row) => row.classList.remove('is-hidden'))
+			root.querySelectorAll('.task-row.is-completed.is-hidden').forEach((r) => r.classList.remove('is-hidden'))
 		})
-	} else if (toggle) {
-		// nothing left to toggle — all completed tasks are already shown
-		toggle.hidden = true
 	}
+
+	// Click the status circle: an active task → completed (muted, moved to the
+	// bottom); clicking a completed check re-opens the task back into the active
+	// group. Delegated so dynamically completed rows keep working.
+	if (list) {
+		const CHECK = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>'
+		const onStatusClick = (e) => {
+			const status = e.target.closest('.task-row__status')
+			if (!status || !list.contains(status)) return
+			const row = status.closest('.task-row')
+			if (!row) return
+			if (row.classList.contains('is-completed')) {
+				row.classList.remove('is-completed', 'is-muted')
+				status.classList.remove('task-row__status--soft', 'task-row__status--done')
+				status.innerHTML = ''
+				const firstCompleted = list.querySelector('.task-row.is-completed')
+				if (firstCompleted) list.insertBefore(row, firstCompleted)
+				else list.appendChild(row)
+			} else {
+				row.classList.add('is-completed', 'is-muted')
+				status.classList.remove('task-row__status--done')
+				status.classList.add('task-row__status--soft')
+				status.innerHTML = CHECK
+				list.appendChild(row)
+			}
+			refreshCompleted()
+		}
+		list.addEventListener('click', onStatusClick)
+		disposers.push(() => list.removeEventListener('click', onStatusClick))
+	}
+
+	refreshCompleted()
 
 	// --- Task actions dropdown ("...") ---
 	root.querySelectorAll('[data-actions]').forEach((menu) => {

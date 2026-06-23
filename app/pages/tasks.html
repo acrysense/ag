@@ -12,22 +12,9 @@
 				<div class="wrapper__main">
 					<div class="wrapper__double">
                         <div class="wrapper__left">
-                            <div class="filter-chips tasks-page__chips">
-                                <div class="filter-chips__list">
-                                    <button type="button" class="filter-chip">
-                                        <span>Иванов Марьян Сергеевич</span>
-                                        <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                                    </button>
-                                    <button type="button" class="filter-chip">
-                                        <span>Васильев Михаил Петрович</span>
-                                        <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                                    </button>
-                                    <button type="button" class="filter-chip">
-                                        <span>05.05.2026 – 19.05.2026</span>
-                                        <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-                                    </button>
-                                </div>
-                                <button type="button" class="filter-chips__reset">Сбросить все</button>
+                            <div class="filter-chips tasks-page__chips" data-filter-chips hidden>
+                                <div class="filter-chips__list" data-filter-chips-list></div>
+                                <button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
                             </div>
 
                             <div class="tabs tasks-page__tabs" data-module="Tabs" data-path="components">

@@ -1,6 +1,6 @@
 <div class="filter-search" data-module="HeaderSearch" data-path="components">
     <div class="filter-search__control">
-        <input class="filter-search__input" type="text" placeholder="" autocomplete="off" data-filter-input aria-label="Поиск">
+        <input class="filter-search__input" type="text" placeholder="Найти" autocomplete="off" data-filter-input aria-label="Поиск">
         <svg class="filter-search__icon" aria-hidden="true" focusable="false" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6"/>
             <path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
@@ -8,8 +8,44 @@
     </div>
 
     <div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
+        <div data-page-fields="employees">
         <div class="filter-panel__top">
-            <input class="filter-panel__input" type="text" placeholder="Сотрудник" autocomplete="off" data-filter-employee>
+            <div class="filter-field" data-filter-key="employee" data-multi>
+                <button type="button" class="filter-field__trigger">
+                    <span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+                    <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                </button>
+                <div class="filter-field__panel filter-field__panel--list">
+                    <input class="filter-field__search" type="text" placeholder="Найти" autocomplete="off">
+                    <div class="filter-field__options">
+                        <label class="filter-option">
+                            <input class="filter-option__input" type="checkbox" value="Василевская М.В." data-label="Василевская М.В.">
+                            <span class="filter-option__box" aria-hidden="true"></span>
+                            <span>Василевская М.В.</span>
+                        </label>
+                        <label class="filter-option">
+                            <input class="filter-option__input" type="checkbox" value="Волкова Ю.Г." data-label="Волкова Ю.Г.">
+                            <span class="filter-option__box" aria-hidden="true"></span>
+                            <span>Волкова Ю.Г.</span>
+                        </label>
+                        <label class="filter-option">
+                            <input class="filter-option__input" type="checkbox" value="Зайцева Д.М." data-label="Зайцева Д.М.">
+                            <span class="filter-option__box" aria-hidden="true"></span>
+                            <span>Зайцева Д.М.</span>
+                        </label>
+                        <label class="filter-option">
+                            <input class="filter-option__input" type="checkbox" value="Ковш Т.А." data-label="Ковш Т.А.">
+                            <span class="filter-option__box" aria-hidden="true"></span>
+                            <span>Ковш Т.А.</span>
+                        </label>
+                        <label class="filter-option">
+                            <input class="filter-option__input" type="checkbox" value="Северная Т.В." data-label="Северная Т.В.">
+                            <span class="filter-option__box" aria-hidden="true"></span>
+                            <span>Северная Т.В.</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="filter-panel__grid">
@@ -34,7 +70,7 @@
                 </button>
                 <div class="filter-field__panel">
                     <label class="filter-option">
-                        <input class="filter-option__input" type="checkbox" value="Минск" data-label="Минск" checked>
+                        <input class="filter-option__input" type="checkbox" value="Минск" data-label="Минск">
                         <span class="filter-option__box" aria-hidden="true"></span>
                         <span>Минск</span>
                     </label>
@@ -44,7 +80,7 @@
                         <span>Витебск</span>
                     </label>
                     <label class="filter-option">
-                        <input class="filter-option__input" type="checkbox" value="Брест" data-label="Брест" checked>
+                        <input class="filter-option__input" type="checkbox" value="Брест" data-label="Брест">
                         <span class="filter-option__box" aria-hidden="true"></span>
                         <span>Брест</span>
                     </label>
@@ -68,7 +104,7 @@
                 </button>
                 <div class="filter-field__panel">
                     <label class="filter-option">
-                        <input class="filter-option__input" type="checkbox" value="ADEL" data-label="ADEL" checked>
+                        <input class="filter-option__input" type="checkbox" value="ADEL" data-label="ADEL">
                         <span class="filter-option__box" aria-hidden="true"></span>
                         <span>ADEL</span>
                     </label>
@@ -92,12 +128,12 @@
                 </button>
                 <div class="filter-field__panel">
                     <label class="filter-option">
-                        <input class="filter-option__input" type="checkbox" value="A" data-label="A" checked>
+                        <input class="filter-option__input" type="checkbox" value="A" data-label="A">
                         <span class="filter-option__box" aria-hidden="true"></span>
                         <span>A</span>
                     </label>
                     <label class="filter-option">
-                        <input class="filter-option__input" type="checkbox" value="B" data-label="B" checked>
+                        <input class="filter-option__input" type="checkbox" value="B" data-label="B">
                         <span class="filter-option__box" aria-hidden="true"></span>
                         <span>B</span>
                     </label>
@@ -107,7 +143,7 @@
                         <span>C</span>
                     </label>
                     <label class="filter-option">
-                        <input class="filter-option__input" type="checkbox" value="D" data-label="D" checked>
+                        <input class="filter-option__input" type="checkbox" value="D" data-label="D">
                         <span class="filter-option__box" aria-hidden="true"></span>
                         <span>D</span>
                     </label>
@@ -170,6 +206,47 @@
                 <div class="filter-field__panel">
                     <button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">Петров А.И.</button>
                     <button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">Полководец Т.С.</button>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div data-page-fields="tasks">
+            <div class="filter-panel__top">
+                <div class="filter-field" data-filter-key="assignee" data-multi>
+                    <button type="button" class="filter-field__trigger">
+                        <span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+                        <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                    </button>
+                    <div class="filter-field__panel filter-field__panel--list">
+                        <input class="filter-field__search" type="text" placeholder="Найти" autocomplete="off">
+                        <div class="filter-field__options">
+                            <label class="filter-option">
+                                <input class="filter-option__input" type="checkbox" value="Иванов М.С." data-label="Иванов М.С.">
+                                <span class="filter-option__box" aria-hidden="true"></span>
+                                <span>Иванов М.С.</span>
+                            </label>
+                            <label class="filter-option">
+                                <input class="filter-option__input" type="checkbox" value="Петров А.И." data-label="Петров А.И.">
+                                <span class="filter-option__box" aria-hidden="true"></span>
+                                <span>Петров А.И.</span>
+                            </label>
+                            <label class="filter-option">
+                                <input class="filter-option__input" type="checkbox" value="Панковец В.В." data-label="Панковец В.В.">
+                                <span class="filter-option__box" aria-hidden="true"></span>
+                                <span>Панковец В.В.</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-panel__grid">
+                <div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
+                    <button type="button" class="filter-field__trigger">
+                        <span class="filter-field__value" data-placeholder="Дата">Дата</span>
+                        <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
+                    </button>
+                    <div class="filter-field__panel filter-field__panel--calendar"></div>
                 </div>
             </div>
         </div>

@@ -2,8 +2,8 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
-    // employees / tasks pages use the full main width (single column, no right rail)
-    .employees-page,
+    // tasks page uses the full main width (single column, no right rail)
+    // (employees now uses the dedicated .wrapper__wide container)
     .tasks-page {
         .wrapper__left {
             max-width: 100%;
@@ -12,40 +12,59 @@
     }
 
     .data-table__scroll {
-        @include prop-vw(margin-top, 20, xl);
+        @include prop-vw(margin-top, 10, xl);
         overflow-x: auto;
         overflow-y: hidden;
 
         @include only(desktop) {
-            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(margin-top, 10, lg);
         }
         @include only(mobile) {
-            @include prop-vw(margin-top, 16, sm);
+            @include prop-vw(margin-top, 10, sm);
+            @include prop-vw(margin-inline, -10, sm);
+            @include prop-vw(padding-inline, 10, sm);
         }
     }
     .data-table {
         width: 100%;
         border-collapse: collapse;
-        @include prop-vw(min-width, 1180, xl);
+        // fixed layout → explicit column widths; sorting never reflows columns
+        table-layout: fixed;
+        @include prop-vw(min-width, 1410, xl);
 
         @include only(desktop) {
-            @include prop-vw(min-width, 1180, lg);
+            @include prop-vw(min-width, 1410, lg);
         }
         @include only(mobile) {
-            @include prop-vw(min-width, 900, sm);
+            @include prop-vw(min-width, 1410, sm);
         }
+
+        // column widths — ratios of 150/60/80/110/80/100/140/130/150/120/90/130/70
+        // (exact px at the 1410 min-width, scaled proportionally above it)
+        &__th:nth-child(1)  { width: 10.638%; }
+        &__th:nth-child(2)  { width: 4.255%; }
+        &__th:nth-child(3)  { width: 5.674%; }
+        &__th:nth-child(4)  { width: 7.801%; }
+        &__th:nth-child(5)  { width: 5.674%; }
+        &__th:nth-child(6)  { width: 7.092%; }
+        &__th:nth-child(7)  { width: 9.929%; }
+        &__th:nth-child(8)  { width: 9.220%; }
+        &__th:nth-child(9)  { width: 10.638%; }
+        &__th:nth-child(10) { width: 8.511%; }
+        &__th:nth-child(11) { width: 6.383%; }
+        &__th:nth-child(12) { width: 9.220%; }
+        &__th:nth-child(13) { width: 4.965%; }
 
         &__th {
             position: relative;
             @include prop-vw(padding-block, 14, xl);
             @include prop-vw(padding-inline, 10, xl);
             text-align: left;
-            vertical-align: bottom;
-            @include prop-vw(font-size, 13, xl);
-            font-weight: normal;
-            line-height: 1.3;
+            vertical-align: middle;
+            @include prop-vw(font-size, 12, xl);
+            font-weight: 600;
+            line-height: 1.25;
             color: $color-dark-grey;
-            cursor: pointer;
             user-select: none;
             white-space: normal;
             @include border-side(bottom, 1, solid, $color-border, xl);
@@ -58,43 +77,67 @@
             &--num {
                 text-align: left;
             }
-            // sort indicator
-            &.data-table__sort::after {
-                content: "";
-                display: inline-block;
-                @include prop-vw(margin-left, 6, xl);
-                @include prop-vw(width, 10, xl);
-                @include prop-vw(height, 12, xl);
-                vertical-align: middle;
-                background: currentColor;
-                opacity: 0.35;
-                -webkit-mask: var(--sort-icon) center / contain no-repeat;
-                mask: var(--sort-icon) center / contain no-repeat;
-                --sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 10 14"><path d="M5 0L8 4H2L5 0Z" fill="black"/><path d="M5 14L2 10H8L5 14Z" fill="black"/></svg>');
+            // sort glyph (rounded double-chevron) pinned to the column's right edge
+            // — only sortable headers (JS adds .data-table__sort) are interactive
+            &.data-table__sort {
+                cursor: pointer;
+                @include prop-vw(padding-right, 24, xl);
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 50%;
+                    @include prop-vw(right, 6, xl);
+                    transform: translateY(-50%);
+                    @include prop-vw(width, 16, xl);
+                    @include prop-vw(height, 16, xl);
+                    background: #ADB4C1;
+                    --sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.66667C8.1768 2.66671 8.34634 2.73697 8.47133 2.86201L11.138 5.52867C11.2594 5.65441 11.3266 5.82281 11.3251 5.99761C11.3236 6.1724 11.2535 6.33961 11.1299 6.46322C11.0063 6.58682 10.8391 6.65694 10.6643 6.65845C10.4895 6.65997 10.3211 6.59278 10.1953 6.47134L8 4.27601L5.80467 6.47134C5.67893 6.59278 5.51053 6.65997 5.33573 6.65845C5.16093 6.65694 4.99373 6.58682 4.87012 6.46322C4.74652 6.33961 4.6764 6.1724 4.67488 5.99761C4.67336 5.82281 4.74056 5.65441 4.862 5.52867L7.52867 2.86201C7.65366 2.73697 7.8232 2.66671 8 2.66667ZM4.862 9.52867C4.98702 9.40369 5.15656 9.33348 5.33333 9.33348C5.51011 9.33348 5.67965 9.40369 5.80467 9.52867L8 11.724L10.1953 9.52867C10.3211 9.40723 10.4895 9.34004 10.6643 9.34156C10.8391 9.34308 11.0063 9.41319 11.1299 9.53679C11.2535 9.6604 11.3236 9.82761 11.3251 10.0024C11.3266 10.1772 11.2594 10.3456 11.138 10.4713L8.47133 13.138C8.34631 13.263 8.17678 13.3332 8 13.3332C7.82322 13.3332 7.65369 13.263 7.52867 13.138L4.862 10.4713C4.73702 10.3463 4.66681 10.1768 4.66681 10C4.66681 9.82323 4.73702 9.65369 4.862 9.52867Z" fill="black"/></svg>');
+                    -webkit-mask: var(--sort-icon) center / contain no-repeat;
+                    mask: var(--sort-icon) center / contain no-repeat;
+
+                    @include only(desktop) {
+                        @include prop-vw(right, 6, lg);
+                        @include prop-vw(width, 16, lg);
+                        @include prop-vw(height, 16, lg);
+                    }
+                    @include only(mobile) {
+                        @include prop-vw(right, 4, sm);
+                        @include prop-vw(width, 14, sm);
+                        @include prop-vw(height, 14, sm);
+                    }
+                }
+
+                @include only(desktop) {
+                    @include prop-vw(padding-right, 24, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(padding-right, 20, sm);
+                }
             }
+            // active sort: keep only the relevant direction chevron, in blue
             &.is-asc,
             &.is-desc {
                 color: $color-blue;
                 &::after {
-                    opacity: 1;
+                    background: $color-blue;
                 }
             }
             &.is-asc::after {
-                --sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 10 14"><path d="M5 1L8 5H2L5 1Z" fill="black"/></svg>');
+                --sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 2.66667C8.1768 2.66671 8.34634 2.73697 8.47133 2.86201L11.138 5.52867C11.2594 5.65441 11.3266 5.82281 11.3251 5.99761C11.3236 6.1724 11.2535 6.33961 11.1299 6.46322C11.0063 6.58682 10.8391 6.65694 10.6643 6.65845C10.4895 6.65997 10.3211 6.59278 10.1953 6.47134L8 4.27601L5.80467 6.47134C5.67893 6.59278 5.51053 6.65997 5.33573 6.65845C5.16093 6.65694 4.99373 6.58682 4.87012 6.46322C4.74652 6.33961 4.6764 6.1724 4.67488 5.99761C4.67336 5.82281 4.74056 5.65441 4.862 5.52867L7.52867 2.86201C7.65366 2.73697 7.8232 2.66671 8 2.66667Z" fill="black"/></svg>');
             }
             &.is-desc::after {
-                --sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 10 14"><path d="M5 13L2 9H8L5 13Z" fill="black"/></svg>');
+                --sort-icon: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M4.862 9.52867C4.98702 9.40369 5.15656 9.33348 5.33333 9.33348C5.51011 9.33348 5.67965 9.40369 5.80467 9.52867L8 11.724L10.1953 9.52867C10.3211 9.40723 10.4895 9.34004 10.6643 9.34156C10.8391 9.34308 11.0063 9.41319 11.1299 9.53679C11.2535 9.6604 11.3236 9.82761 11.3251 10.0024C11.3266 10.1772 11.2594 10.3456 11.138 10.4713L8.47133 13.138C8.34631 13.263 8.17678 13.3332 8 13.3332C7.82322 13.3332 7.65369 13.263 7.52867 13.138L4.862 10.4713C4.73702 10.3463 4.66681 10.1768 4.66681 10C4.66681 9.82323 4.73702 9.65369 4.862 9.52867Z" fill="black"/></svg>');
             }
 
             @media screen and (hover: hover) {
-                &:hover {
+                &.data-table__sort:hover {
                     color: $color-blue;
                 }
             }
             @include only(desktop) {
                 @include prop-vw(padding-block, 14, lg);
                 @include prop-vw(padding-inline, 10, lg);
-                @include prop-vw(font-size, 13, lg);
+                @include prop-vw(font-size, 12, lg);
                 @include border-side(bottom, 1, solid, $color-border, lg);
             }
             @include only(mobile) {
@@ -106,9 +149,9 @@
         &__td {
             @include prop-vw(padding-block, 16, xl);
             @include prop-vw(padding-inline, 10, xl);
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(font-size, 12, xl);
             font-weight: normal;
-            line-height: 1.35;
+            line-height: 1.25;
             color: $color-black;
             vertical-align: middle;
             &:first-child {
@@ -124,12 +167,12 @@
             @include only(desktop) {
                 @include prop-vw(padding-block, 16, lg);
                 @include prop-vw(padding-inline, 10, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(font-size, 12, lg);
             }
             @include only(mobile) {
                 @include prop-vw(padding-block, 14, sm);
                 @include prop-vw(padding-inline, 8, sm);
-                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(font-size, 12, sm);
             }
         }
         &__row.is-hidden {
@@ -224,20 +267,25 @@
                 @include prop-vw(margin-top, 24, lg);
             }
             @include only(mobile) {
-                @include prop-vw(gap, 14, sm);
+                // pagination on its own row, then "Всего" + page-size below
+                flex-direction: column;
+                align-items: stretch;
+                @include prop-vw(gap, 20, sm);
                 @include prop-vw(margin-top, 20, sm);
             }
         }
         &__total {
             display: flex;
             align-items: center;
-            @include prop-vw(gap, 16, xl);
+            @include prop-vw(gap, 40, xl);
 
             @include only(desktop) {
-                @include prop-vw(gap, 16, lg);
+                @include prop-vw(gap, 40, lg);
             }
             @include only(mobile) {
-                @include prop-vw(gap, 12, sm);
+                justify-content: space-between;
+                width: 100%;
+                @include prop-vw(gap, 40, sm);
             }
         }
         &__total-text {

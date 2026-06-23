@@ -10,8 +10,7 @@
 			<main class="wrapper__content">
 				{{> layouts/Sidebar/Sidebar }}
 				<div class="wrapper__main">
-					<div class="wrapper__double">
-                        <div class="wrapper__left">
+					<div class="wrapper__wide">
                             <div class="filter-chips" data-filter-chips hidden>
                                 <div class="filter-chips__list" data-filter-chips-list></div>
                                 <button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
@@ -35,7 +34,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
-                                                <th class="data-table__th data-table__th--center" data-sort-key="category" data-sort-type="text">Кат.</th>
+                                                <th class="data-table__th data-table__th--center">Кат.</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Индекс</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Количество чеков</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Ср. чек</th>
@@ -43,10 +42,10 @@
                                                 <th class="data-table__th data-table__th--num" data-sort-key="fill" data-sort-type="number">Наполняемость чека</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="rank" data-sort-type="number">Доля товаров 4-6 ранга</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="penetration" data-sort-type="number">Пенетрация карт лояльности</th>
-                                                <th class="data-table__th" data-sort-key="region" data-sort-type="text">Регион</th>
-                                                <th class="data-table__th" data-sort-key="brand" data-sort-type="text">Бренд</th>
+                                                <th class="data-table__th">Регион</th>
+                                                <th class="data-table__th">Бренд</th>
                                                 <th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
-                                                <th class="data-table__th data-table__th--num" data-sort-key="months" data-sort-type="number">Мес. в кат.</th>
+                                                <th class="data-table__th data-table__th--num">Мес. в кат.</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -313,7 +312,6 @@
                                 </div>
                             </section>
                         </div>
-						</div>
 					</div>
 				</main>
 				{{> layouts/Footer/Footer }}

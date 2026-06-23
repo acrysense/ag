@@ -12,22 +12,44 @@
         .filter-search {
             position: relative;
             z-index: 60;
-            flex: 1 1 auto;
+            flex: 0 0 auto;
             align-self: center;
-            @include prop-vw(max-width, 620, xl);
-            @include prop-vw(margin-inline, 40, xl);
+            @include prop-vw(width, 500, xl);
+            @include prop-vw(margin-left, 60, xl); // 60px from the logo
+            margin-right: auto; // push the profile block to the far right
 
             @include up(tablet) {
                 display: block;
             }
             @include only(desktop) {
-                @include prop-vw(max-width, 620, lg);
-                @include prop-vw(margin-inline, 30, lg);
+                @include prop-vw(width, 500, lg);
+                @include prop-vw(margin-left, 60, lg);
             }
             @include only(mobile) {
                 display: none;
             }
         }
+    }
+
+    // each page shows only its own field group
+    body:not(.tasks-page) [data-page-fields="tasks"],
+    body.tasks-page [data-page-fields="employees"] {
+        display: none;
+    }
+    // calendar panel needs more room than a plain option list
+    .filter-field__panel--calendar {
+        @include prop-vw(min-width, 290, xl);
+        @include prop-vw(padding, 14, xl);
+
+        @include only(desktop) {
+            @include prop-vw(min-width, 290, lg);
+            @include prop-vw(padding, 14, lg);
+        }
+    }
+    // block layout (not flex) so the aspect-ratio day grid sizes correctly and
+    // the panel's white background covers the whole calendar
+    .filter-field.is-open .filter-field__panel.filter-field__panel--calendar {
+        display: block;
     }
 
     .filter-search {
@@ -42,9 +64,9 @@
             @include prop-vw(padding-right, 44, xl);
             @include prop-vw(font-size, 15, xl);
             color: $color-black;
-            background: $color-white;
+            background: #F5F8FA;
             @include border-all(1, solid, $color-border, xl);
-            @include prop-vw(border-radius, 12, xl);
+            @include prop-vw(border-radius, 14, xl);
             transition: border-color $transition-default;
             &::placeholder {
                 color: $color-dark-grey;
@@ -60,7 +82,7 @@
                 @include prop-vw(padding-right, 44, lg);
                 @include prop-vw(font-size, 15, lg);
                 @include border-all(1, solid, $color-border, lg);
-                @include prop-vw(border-radius, 12, lg);
+                @include prop-vw(border-radius, 14, lg);
             }
         }
         &__icon {
@@ -265,6 +287,18 @@
             @include prop-vw(max-height, 220, xl);
             overflow-y: auto;
         }
+        // separates the selected (raised to the top) options from the rest
+        &__divider {
+            flex-shrink: 0;
+            @include prop-vw(height, 1, xl);
+            @include prop-vw(margin-block, 6, xl);
+            background: $color-border;
+
+            @include only(desktop) {
+                @include prop-vw(height, 1, lg);
+                @include prop-vw(margin-block, 6, lg);
+            }
+        }
     }
     .filter-option {
         display: flex;
@@ -302,41 +336,21 @@
             width: 0;
             height: 0;
         }
+        // squircle SVG checkbox: grey outline empty, outline + dark tick when on
         &__box {
             flex-shrink: 0;
-            position: relative;
             @include prop-vw(width, 20, xl);
             @include prop-vw(height, 20, xl);
-            background: $color-white;
-            @include border-all(1.5, solid, $color-grey, xl);
-            @include prop-vw(border-radius, 6, xl);
-            transition: background $transition-default, border-color $transition-default;
-            &::after {
-                content: "";
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                @include prop-vw(width, 11, xl);
-                @include prop-vw(height, 8, xl);
-                transform: translate(-50%, -60%) rotate(-45deg);
-                border-left: 2px solid $color-white;
-                border-bottom: 2px solid $color-white;
-                opacity: 0;
-            }
+            background: center / contain no-repeat;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5001 18.9583H7.50008C2.97508 18.9583 1.04175 17.025 1.04175 12.5V7.49999C1.04175 2.97499 2.97508 1.04166 7.50008 1.04166H12.5001C17.0251 1.04166 18.9584 2.97499 18.9584 7.49999V12.5C18.9584 17.025 17.0251 18.9583 12.5001 18.9583ZM7.50008 2.29166C3.65841 2.29166 2.29175 3.65832 2.29175 7.49999V12.5C2.29175 16.3417 3.65841 17.7083 7.50008 17.7083H12.5001C16.3417 17.7083 17.7084 16.3417 17.7084 12.5V7.49999C17.7084 3.65832 16.3417 2.29166 12.5001 2.29166H7.50008Z" fill="%23ADB4C1"/></svg>');
 
             @include only(desktop) {
                 @include prop-vw(width, 20, lg);
                 @include prop-vw(height, 20, lg);
-                @include border-all(1.5, solid, $color-grey, lg);
-                @include prop-vw(border-radius, 6, lg);
             }
         }
         &__input:checked + &__box {
-            background: $color-blue;
-            border-color: $color-blue;
-            &::after {
-                opacity: 1;
-            }
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5001 18.9583H7.50008C2.97508 18.9583 1.04175 17.025 1.04175 12.5V7.49999C1.04175 2.97499 2.97508 1.04166 7.50008 1.04166H12.5001C17.0251 1.04166 18.9584 2.97499 18.9584 7.49999V12.5C18.9584 17.025 17.0251 18.9583 12.5001 18.9583ZM7.50008 2.29166C3.65841 2.29166 2.29175 3.65832 2.29175 7.49999V12.5C2.29175 16.3417 3.65841 17.7083 7.50008 17.7083H12.5001C16.3417 17.7083 17.7084 16.3417 17.7084 12.5V7.49999C17.7084 3.65832 16.3417 2.29166 12.5001 2.29166H7.50008Z" fill="%23ADB4C1"/><path d="M14.4666 6.80001C14.1999 6.53334 13.7999 6.53334 13.5333 6.80001L8.53325 11.8L6.46659 9.73334C6.19992 9.46667 5.79992 9.46667 5.53325 9.73334C5.26659 10 5.26659 10.4 5.53325 10.6667L8.06659 13.2C8.19992 13.3333 8.33325 13.4 8.53325 13.4C8.73325 13.4 8.86659 13.3333 8.99992 13.2L14.4666 7.73334C14.7333 7.46667 14.7333 7.06667 14.4666 6.80001Z" fill="%230F1A24"/></svg>');
         }
     }
 
@@ -346,26 +360,32 @@
         align-items: center;
         flex-wrap: wrap;
         @include prop-vw(gap, 10, xl);
-        @include prop-vw(margin-bottom, 16, xl);
+        @include prop-vw(margin-bottom, 10, xl);
         &[hidden] {
             display: none;
         }
 
         @include only(desktop) {
             @include prop-vw(gap, 10, lg);
-            @include prop-vw(margin-bottom, 16, lg);
+            @include prop-vw(margin-bottom, 10, lg);
         }
         @include only(mobile) {
-            @include prop-vw(gap, 8, sm);
-            @include prop-vw(margin-bottom, 14, sm);
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(padding-block, 10, sm);
+            @include prop-vw(margin-bottom, 10, sm);
         }
 
         &__list {
             display: contents;
         }
         &__reset {
-            @include prop-vw(margin-left, 6, xl);
-            @include prop-vw(font-size, 15, xl);
+            display: block;
+            @include prop-vw(padding-block, 7, xl);
+            padding-inline: 0;
+            width: fit-content;
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1.57142857143;
             color: $color-dark-grey;
             background: transparent;
             border: none;
@@ -376,7 +396,7 @@
                 }
             }
             @include only(desktop) {
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
                 @include prop-vw(font-size, 14, sm);
@@ -386,19 +406,21 @@
     .filter-chip {
         display: inline-flex;
         align-items: center;
-        @include prop-vw(gap, 8, xl);
+        @include prop-vw(gap, 10, xl);
         @include prop-vw(padding-block, 7, xl);
-        @include prop-vw(padding-left, 14, xl);
+        @include prop-vw(padding-left, 12, xl);
         @include prop-vw(padding-right, 12, xl);
         @include prop-vw(font-size, 14, xl);
-        color: $color-black;
-        background: #EBEEF2;
+        font-weight: normal;
+        line-height: 1.57142857143;
+        color: $color-dark-grey;
+        background: #E7EFF4;
         border: none;
-        @include prop-vw(border-radius, 20, xl);
+        @include prop-vw(border-radius, 14, xl);
         cursor: pointer;
         & > svg {
-            @include prop-vw(width, 12, xl);
-            @include prop-vw(height, 12, xl);
+            @include prop-vw(width, 10, xl);
+            @include prop-vw(height, 10, xl);
             color: $color-dark-grey;
         }
         @media screen and (hover: hover) {
@@ -408,27 +430,27 @@
         }
 
         @include only(desktop) {
-            @include prop-vw(gap, 8, lg);
+            @include prop-vw(gap, 10, lg);
             @include prop-vw(padding-block, 7, lg);
-            @include prop-vw(padding-left, 14, lg);
+            @include prop-vw(padding-left, 12, lg);
             @include prop-vw(padding-right, 12, lg);
             @include prop-vw(font-size, 14, lg);
-            @include prop-vw(border-radius, 20, lg);
+            @include prop-vw(border-radius, 14, lg);
             & > svg {
-                @include prop-vw(width, 12, lg);
-                @include prop-vw(height, 12, lg);
+                @include prop-vw(width, 10, lg);
+                @include prop-vw(height, 10, lg);
             }
         }
         @include only(mobile) {
-            @include prop-vw(gap, 6, sm);
+            @include prop-vw(gap, 10, sm);
             @include prop-vw(padding-block, 7, sm);
             @include prop-vw(padding-left, 12, sm);
-            @include prop-vw(padding-right, 10, sm);
-            @include prop-vw(font-size, 13, sm);
-            @include prop-vw(border-radius, 20, sm);
+            @include prop-vw(padding-right, 12, sm);
+            @include prop-vw(font-size, 14, sm);
+            @include prop-vw(border-radius, 14, sm);
             & > svg {
-                @include prop-vw(width, 12, sm);
-                @include prop-vw(height, 12, sm);
+                @include prop-vw(width, 10, sm);
+                @include prop-vw(height, 10, sm);
             }
         }
     }

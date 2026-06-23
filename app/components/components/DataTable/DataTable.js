@@ -1,3 +1,5 @@
+import { mountStaticPagination } from '@/utils/pagination'
+
 // Reusable data-table behaviour: column sorting, row filtering, empty state and
 // a simple page-size limiter. Page-agnostic — driven entirely by data-attrs:
 //   [data-data-table]        host element (usually the card)
@@ -36,6 +38,13 @@ export default (root) => {
 	const allRows = [...tbody.querySelectorAll('tr')]
 	const baseOrder = allRows.slice()
 	const disposers = []
+
+	// windowed pagination widget (visual; compacts on mobile so it never overflows)
+	const pagNav = root.querySelector('.ui-pagination')
+	if (pagNav) {
+		const disposePag = mountStaticPagination(pagNav)
+		if (disposePag) disposers.push(disposePag)
+	}
 
 	let state = { query: '', filters: [] }
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
