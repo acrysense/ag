@@ -147,6 +147,9 @@
         z-index: 1;
         width: 100%;
         border-collapse: collapse;
+        // fixed layout → column widths come from the header, not the content,
+        // so sorting (reordering rows) never reflows the columns.
+        table-layout: fixed;
         &::before {
             content: "";
             position: absolute;
@@ -162,6 +165,26 @@
         }
         @include only(mobile) {
             @include prop-vw(min-width, 680, sm);
+        }
+
+        // fixed column widths (table mode only; mobile is a flex list).
+        // The last column (Комментарий) takes the remaining space.
+        @include up(tablet) {
+            &__th:nth-child(1) {
+                width: 12%;
+            }
+            &__th:nth-child(2) {
+                width: 13%;
+            }
+            &__th:nth-child(3) {
+                width: 16%;
+            }
+            &__th:nth-child(4) {
+                width: 13%;
+            }
+            &__th:nth-child(5) {
+                width: 8%;
+            }
         }
 
         &__th {

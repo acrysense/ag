@@ -548,17 +548,32 @@
             }
         }
         &__meta {
+            position: relative;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             @include prop-vw(gap, 16, xl);
             @include prop-vw(margin-top, 1, xl);
+            // always reserve room for the trailing action (eye / "…"), so the
+            // assignee + date stay aligned whether or not a row has one.
+            @include prop-vw(padding-right, 34, xl);
 
             @include only(desktop) {
                 @include prop-vw(gap, 16, lg);
+                @include prop-vw(padding-right, 34, lg);
             }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
+                @include prop-vw(padding-right, 30, sm);
+            }
+
+            // the icon/button lives in the reserved slot at the far right
+            .actions-menu,
+            .task-row__hidden {
+                position: absolute;
+                right: 0;
+                top: 50%;
+                transform: translateY(-50%);
             }
         }
         &__assignee,

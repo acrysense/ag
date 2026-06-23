@@ -51,14 +51,16 @@ export default (root) => {
 	const toggle = root.querySelector('[data-tasks-toggle]')
 	const toggleText = root.querySelector('[data-tasks-toggle-text]')
 	const completed = [...root.querySelectorAll('.task-row.is-completed')]
-	if (toggle) {
+	// the 3 most recent completed tasks stay visible; only the rest are toggled
+	const ALWAYS_VISIBLE = 3
+	const toggleable = completed.slice(ALWAYS_VISIBLE)
+	if (toggle && toggleable.length) {
 		let shown = false
-		const completedCount = completed.length
-		const labelHidden = toggleText?.textContent || `Показать завершенные: ${completedCount}`
+		const labelHidden = toggleText?.textContent || `Показать завершенные: ${toggleable.length}`
 		const labelShown = 'Скрыть завершенные'
 
 		const render = () => {
-			completed.forEach((row) => row.classList.toggle('is-hidden', !shown))
+			toggleable.forEach((row) => row.classList.toggle('is-hidden', !shown))
 			toggle.setAttribute('aria-expanded', shown ? 'true' : 'false')
 			if (toggleText) toggleText.textContent = shown ? labelShown : labelHidden
 		}
@@ -70,8 +72,11 @@ export default (root) => {
 		toggle.addEventListener('click', onToggle)
 		disposers.push(() => {
 			toggle.removeEventListener('click', onToggle)
-			completed.forEach((row) => row.classList.remove('is-hidden'))
+			toggleable.forEach((row) => row.classList.remove('is-hidden'))
 		})
+	} else if (toggle) {
+		// nothing left to toggle — all completed tasks are already shown
+		toggle.hidden = true
 	}
 
 	// --- Task actions dropdown ("...") ---
