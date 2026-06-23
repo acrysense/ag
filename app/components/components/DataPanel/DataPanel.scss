@@ -52,6 +52,19 @@
                 @include prop-vw(margin-bottom, 20, sm);
             }
         }
+        // right-side links group (e.g. "Архив задач" + "Экспорт в Excel")
+        &__actions {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 24, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 24, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 14, sm);
+            }
+        }
         &__title {
             display: block;
             width: fit-content;

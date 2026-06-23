@@ -32,65 +32,119 @@
 
     // --- Create-task form ---
     .task-form {
-        @include prop-vw(margin-top, 20, xl);
+        position: relative;
+        @include prop-vw(margin-top, 10, xl);
+        @include prop-vw(padding-top, 10, xl);
+        @include prop-vw(padding-bottom, 20, xl);
+        // top divider with a left inset — same stripe as .tasks-list
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            @include prop-vw(left, 38, xl);
+            right: 0;
+            @include prop-vw(height, 1, xl);
+            background: $color-border;
+        }
 
         @include only(desktop) {
-            @include prop-vw(margin-top, 20, lg);
+            @include prop-vw(margin-top, 10, lg);
+            @include prop-vw(padding-top, 10, lg);
+            @include prop-vw(padding-bottom, 20, lg);
+            &::before {
+                @include prop-vw(left, 38, lg);
+                @include prop-vw(height, 1, lg);
+            }
         }
         @include only(mobile) {
-            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(margin-top, 10, sm);
+            @include prop-vw(padding-top, 10, sm);
+            @include prop-vw(padding-bottom, 20, sm);
+            &::before {
+                @include prop-vw(left, 34, sm);
+                @include prop-vw(height, 1, sm);
+            }
         }
 
         &__grid {
             display: flex;
             align-items: flex-start;
-            @include prop-vw(gap, 20, xl);
+            @include prop-vw(gap, 10, xl);
 
             @include only(desktop) {
-                @include prop-vw(gap, 20, lg);
+                @include prop-vw(gap, 10, lg);
             }
             @include only(mobile) {
                 flex-direction: column;
-                @include prop-vw(gap, 16, sm);
+                @include prop-vw(gap, 10, sm);
             }
         }
         &__task {
-            flex: 1 1 auto;
-            min-width: 0;
-        }
-        &__date {
-            flex-shrink: 0;
-            @include prop-vw(width, 200, xl);
+            @include prop-vw(max-width, 880, xl);
+            width: 100%;
 
             @include only(desktop) {
-                @include prop-vw(width, 200, lg);
+                @include prop-vw(max-width, 880, lg);
             }
             @include only(mobile) {
-                width: 100%;
+                max-width: none;
+            }
+        }
+        &__date {
+            @include prop-vw(max-width, 150, xl);
+            width: 100%;
+
+            @include only(desktop) {
+                @include prop-vw(max-width, 150, lg);
+            }
+            @include only(mobile) {
+                max-width: none;
             }
         }
         &__check {
-            @include prop-vw(margin-top, 16, xl);
+            @include prop-vw(margin-top, 10, xl);
 
             @include only(desktop) {
-                @include prop-vw(margin-top, 16, lg);
+                @include prop-vw(margin-top, 10, lg);
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 16, sm);
+                @include prop-vw(margin-top, 10, sm);
             }
         }
         &__actions {
             display: flex;
-            @include prop-vw(gap, 12, xl);
-            @include prop-vw(margin-top, 20, xl);
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(margin-top, 10, xl);
 
             @include only(desktop) {
-                @include prop-vw(gap, 12, lg);
-                @include prop-vw(margin-top, 20, lg);
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(margin-top, 10, lg);
             }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
-                @include prop-vw(margin-top, 20, sm);
+                @include prop-vw(margin-top, 10, sm);
+            }
+        }
+        // own button variant (replaces .btn--sm): 36px tall, 14px text, r14
+        // 11*2 padding + 14 line-height (1) = 36px height
+        &__btn.btn {
+            @include prop-vw(padding-block, 11, xl);
+            @include prop-vw(padding-inline, 12, xl);
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            @include prop-vw(border-radius, 14, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 11, lg);
+                @include prop-vw(padding-inline, 12, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 11, sm);
+                @include prop-vw(padding-inline, 12, sm);
+                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(border-radius, 14, sm);
             }
         }
     }
@@ -99,12 +153,12 @@
     .ui-check {
         display: inline-flex;
         align-items: center;
-        @include prop-vw(gap, 12, xl);
+        @include prop-vw(gap, 10, xl);
         cursor: pointer;
         user-select: none;
 
         @include only(desktop) {
-            @include prop-vw(gap, 12, lg);
+            @include prop-vw(gap, 10, lg);
         }
         @include only(mobile) {
             @include prop-vw(gap, 10, sm);
@@ -116,66 +170,68 @@
             width: 0;
             height: 0;
         }
+        // box is an inline SVG with a squircle silhouette: a fill layer
+        // (white → blue on check) + a grey outline ring + the tick
         &__box {
             flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             @include prop-vw(width, 22, xl);
             @include prop-vw(height, 22, xl);
-            color: $color-white;
-            background: $color-white;
-            @include border-all(1, solid, $color-border, xl);
-            @include prop-vw(border-radius, 6, xl);
-            transition: background $transition-default, border-color $transition-default;
-            & > svg {
-                @include prop-vw(width, 12, xl);
-                @include prop-vw(height, 10, xl);
-                opacity: 0;
-                transition: opacity $transition-default;
-            }
 
             @include only(desktop) {
                 @include prop-vw(width, 22, lg);
                 @include prop-vw(height, 22, lg);
-                @include border-all(1, solid, $color-border, lg);
-                @include prop-vw(border-radius, 6, lg);
-                & > svg {
-                    @include prop-vw(width, 12, lg);
-                    @include prop-vw(height, 10, lg);
-                }
             }
             @include only(mobile) {
                 @include prop-vw(width, 22, sm);
                 @include prop-vw(height, 22, sm);
-                @include border-all(1, solid, $color-border, sm);
-                @include prop-vw(border-radius, 6, sm);
-                & > svg {
-                    @include prop-vw(width, 12, sm);
-                    @include prop-vw(height, 10, sm);
-                }
             }
         }
+        &__frame {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        &__fill {
+            fill: $color-white;
+            transition: fill $transition-default;
+        }
+        &__ring {
+            fill: #ADB4C1;
+            transition: fill $transition-default;
+        }
+        &__tick {
+            fill: none;
+            stroke: $color-white;
+            opacity: 0;
+            transition: opacity $transition-default;
+        }
         &__input:checked + &__box {
-            background: $color-blue;
-            border-color: $color-blue;
-            & > svg {
+            .ui-check__fill {
+                fill: $color-blue;
+            }
+            .ui-check__ring {
+                fill: $color-blue;
+            }
+            .ui-check__tick {
                 opacity: 1;
             }
         }
         &__input:focus-visible + &__box {
-            border-color: $color-form-focus;
+            .ui-check__ring {
+                fill: $color-form-focus;
+            }
         }
         &__label {
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(font-size, 14, xl);
             font-weight: normal;
+            line-height: 1.57142857143;
             color: $color-black;
 
             @include only(desktop) {
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
-                @include prop-vw(font-size, 15, sm);
+                @include prop-vw(font-size, 14, sm);
             }
         }
     }
@@ -185,7 +241,7 @@
         &__toggle {
             position: absolute;
             top: 50%;
-            @include prop-vw(right, 12, xl);
+            @include prop-vw(right, 15, xl);
             transform: translateY(-50%);
             display: flex;
             align-items: center;
@@ -198,8 +254,9 @@
             color: $color-dark-grey;
             cursor: pointer;
             & > svg {
-                @include prop-vw(width, 20, xl);
-                @include prop-vw(height, 20, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-black;
             }
             @media screen and (hover: hover) {
                 &:hover {
@@ -208,21 +265,21 @@
             }
 
             @include only(desktop) {
-                @include prop-vw(right, 12, lg);
+                @include prop-vw(right, 15, lg);
                 @include prop-vw(width, 24, lg);
                 @include prop-vw(height, 24, lg);
                 & > svg {
-                    @include prop-vw(width, 20, lg);
-                    @include prop-vw(height, 20, lg);
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
                 }
             }
             @include only(mobile) {
-                @include prop-vw(right, 12, sm);
+                @include prop-vw(right, 15, sm);
                 @include prop-vw(width, 24, sm);
                 @include prop-vw(height, 24, sm);
                 & > svg {
-                    @include prop-vw(width, 20, sm);
-                    @include prop-vw(height, 20, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
                 }
             }
         }
@@ -387,21 +444,61 @@
 
     // --- Task list ---
     .tasks-list {
-        @include prop-vw(margin-top, 24, xl);
+        position: relative;
+        @include prop-vw(margin-top, 10, xl);
+        // top divider with a left inset (same stripe style as the visits list)
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            @include prop-vw(left, 38, xl);
+            right: 0;
+            height: 1px;
+            background: $color-border;
+        }
+    }
+    // when the create-task form is open it already shows its own top stripe,
+    // so drop the list's stripe to avoid a double line
+    .task-form:not([hidden]) ~ .tasks-list::before {
+        content: none;
+    }
+    .tasks-list {
 
         @include only(desktop) {
-            @include prop-vw(margin-top, 24, lg);
+            @include prop-vw(margin-top, 10, lg);
+            &::before {
+                @include prop-vw(left, 38, lg);
+            }
         }
         @include only(mobile) {
-            @include prop-vw(margin-top, 20, sm);
+            @include prop-vw(margin-top, 10, sm);
+            &::before {
+                @include prop-vw(left, 34, sm);
+            }
+        }
+
+        &__empty {
+            @include prop-vw(padding-block, 40, xl);
+            text-align: center;
+            @include prop-vw(font-size, 15, xl);
+            color: $color-dark-grey;
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 40, lg);
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 30, sm);
+                @include prop-vw(font-size, 15, sm);
+            }
         }
     }
     
     .task-row {
         display: flex;
         align-items: flex-start;
-        @include prop-vw(gap, 14, xl);
-        @include prop-vw(padding-block, 14, xl);
+        @include prop-vw(gap, 15, xl);
+        @include prop-vw(padding-block, 9.5, xl);
         @include border-side(top, 1, solid, $color-border, xl);
         &:first-child {
             border-top: none;
@@ -416,14 +513,63 @@
         }
 
         @include only(desktop) {
-            @include prop-vw(gap, 14, lg);
-            @include prop-vw(padding-block, 14, lg);
+            @include prop-vw(gap, 15, lg);
+            @include prop-vw(padding-block, 9.5, lg);
             @include border-side(top, 1, solid, $color-border, lg);
         }
+        // --- Mobile reflow ------------------------------------------------
+        // status | content grid; assignee+date drop under the title and the
+        // trailing buttons (eye / "…") pin to the row's top-right corner.
         @include only(mobile) {
-            @include prop-vw(gap, 12, sm);
-            @include prop-vw(padding-block, 14, sm);
+            position: relative;
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            @include prop-vw(column-gap, 15, sm);
+            row-gap: 0;
+            align-items: start;
+            @include prop-vw(padding-block, 9.5, sm);
             @include border-side(top, 1, solid, $color-border, sm);
+
+            .task-row__status {
+                grid-column: 1;
+                grid-row: 1;
+            }
+            // break the body apart so its children can be reordered alongside meta
+            .task-row__body {
+                display: contents;
+            }
+            // title → meta → description → subline (completion line last)
+            .task-row__title {
+                grid-column: 2;
+                order: 1;
+                // always reserve room for both trailing icon slots, so titles
+                // wrap at the same width whether the row has buttons or not
+                @include prop-vw(padding-right, 66, sm);
+            }
+            .task-row__meta {
+                grid-column: 2;
+                order: 2;
+                position: static; // anchor the absolute buttons to .task-row
+                padding-right: 0;
+                @include prop-vw(margin-top, 4, sm);
+                @include prop-vw(gap, 12, sm);
+            }
+            .task-row__desc {
+                grid-column: 2;
+                order: 3;
+            }
+            .task-row__subline {
+                grid-column: 2;
+                order: 4;
+            }
+
+            // trailing buttons → top-right, aligned with the title's first line.
+            // Fixed slots ("…" rightmost, eye to its left) — same for every row.
+            .task-row__meta .actions-menu,
+            .task-row__meta .task-row__hidden {
+                transform: none;
+                @include prop-vw(top, 9.5, sm);
+            }
         }
 
         &__status {
@@ -431,16 +577,17 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            @include prop-vw(margin-top, 1, xl);
+            @include prop-vw(min-width, 24, xl);
             @include prop-vw(width, 24, xl);
             @include prop-vw(height, 24, xl);
             border-radius: 50%;
             color: $color-white;
             background: $color-white;
-            @include border-all(1.5, solid, $color-grey, xl);
+            @include border-all(1, solid, $color-grey, xl);
             & > svg {
-                @include prop-vw(width, 14, xl);
-                @include prop-vw(height, 14, xl);
+                @include prop-vw(min-width, 16, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
             }
             &--done {
                 background: $color-green;
@@ -452,21 +599,25 @@
             }
 
             @include only(desktop) {
+                @include prop-vw(min-width, 24, lg);
                 @include prop-vw(width, 24, lg);
                 @include prop-vw(height, 24, lg);
-                @include border-all(1.5, solid, $color-grey, lg);
+                @include border-all(1, solid, $color-grey, lg);
                 & > svg {
-                    @include prop-vw(width, 14, lg);
-                    @include prop-vw(height, 14, lg);
+                    @include prop-vw(min-width, 16, lg);
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
                 }
             }
             @include only(mobile) {
+                @include prop-vw(min-width, 24, sm);
                 @include prop-vw(width, 24, sm);
                 @include prop-vw(height, 24, sm);
-                @include border-all(1.5, solid, $color-grey, sm);
+                @include border-all(1, solid, $color-grey, sm);
                 & > svg {
-                    @include prop-vw(width, 14, sm);
-                    @include prop-vw(height, 14, sm);
+                    @include prop-vw(min-width, 16, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
                 }
             }
         }
@@ -475,41 +626,80 @@
             min-width: 0;
         }
         &__title {
-            @include prop-vw(font-size, 16, xl);
+            @include prop-vw(margin-top, 1, xl);
+            @include prop-vw(font-size, 14, xl);
             font-weight: normal;
-            line-height: 1.4;
+            line-height: 1.57142857143;
             color: $color-black;
 
             @include only(desktop) {
-                @include prop-vw(font-size, 16, lg);
+                @include prop-vw(margin-top, 1, lg);
+                @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
-                @include prop-vw(font-size, 15, sm);
+                @include prop-vw(margin-top, 1, sm);
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+        &__desc {
+            @include prop-vw(margin-top, 6, xl);
+            @include prop-vw(font-size, 13, xl);
+            font-weight: normal;
+            line-height: 1.46153846154;
+            color: $color-dark-grey;
+
+            @include only(desktop) {
+                @include prop-vw(margin-top, 6, lg);
+                @include prop-vw(font-size, 13, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-top, 6, sm);
+                @include prop-vw(font-size, 13, sm);
             }
         }
         &__subline {
             display: flex;
+            align-items: flex-start;
             flex-wrap: wrap;
-            align-items: center;
-            @include prop-vw(gap, 8, xl);
-            @include prop-vw(margin-top, 8, xl);
-            @include prop-vw(font-size, 14, xl);
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(margin-top, 10, xl);
+            @include prop-vw(font-size, 12, xl);
             font-weight: normal;
+            line-height: 1.25;
             color: $color-dark-grey;
             b {
-                font-weight: 600;
+                font-weight: normal;
                 color: $color-black;
             }
 
             @include only(desktop) {
-                @include prop-vw(gap, 8, lg);
-                @include prop-vw(margin-top, 8, lg);
-                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(font-size, 12, lg);
             }
             @include only(mobile) {
-                @include prop-vw(gap, 6, sm);
-                @include prop-vw(margin-top, 6, sm);
-                @include prop-vw(font-size, 13, sm);
+                @include prop-vw(gap, 5, sm);
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(font-size, 12, sm);
+            }
+        }
+        // assignee + completion date; soft chip only via --chip modifier
+        // (used when a "Подтвердить выполнение" button sits next to it)
+        &__done--chip {
+            @include prop-vw(padding-block, 5, xl);
+            @include prop-vw(padding-inline, 10, xl);
+            background: #F3F6FC;
+            @include prop-vw(border-radius, 4, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-block, 5, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(border-radius, 4, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-block, 5, sm);
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(border-radius, 4, sm);
             }
         }
         &__verified {
@@ -522,29 +712,51 @@
                 @include prop-vw(height, 14, xl);
                 color: $color-green;
             }
+
+            @include only(desktop) {
+                & > svg {
+                    @include prop-vw(width, 14, lg);
+                    @include prop-vw(height, 14, lg);
+                }
+            }
+            @include only(mobile) {
+                & > svg {
+                    @include prop-vw(width, 14, sm);
+                    @include prop-vw(height, 14, sm);
+                }
+            }
+        }
+        &__cancel {
+            color: $color-blue;
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue-hover;
+                }
+            }
         }
         &__confirm {
-            @include prop-vw(padding-block, 6, xl);
-            @include prop-vw(padding-inline, 12, xl);
-            @include prop-vw(font-size, 13, xl);
+            @include prop-vw(padding-block, 5, xl);
+            @include prop-vw(padding-inline, 10, xl);
+            @include prop-vw(font-size, 12, xl);
             font-weight: normal;
-            color: $color-blue;
-            background: rgba($color-blue, 0.1);
+            line-height: 1.25;
+            color: $color-white;
+            background: $color-blue;
             border: none;
-            @include prop-vw(border-radius, 8, xl);
+            @include prop-vw(border-radius, 4, xl);
             cursor: pointer;
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 6, lg);
-                @include prop-vw(padding-inline, 12, lg);
-                @include prop-vw(font-size, 13, lg);
-                @include prop-vw(border-radius, 8, lg);
+                @include prop-vw(padding-block, 5, lg);
+                @include prop-vw(padding-inline, 10, lg);
+                @include prop-vw(font-size, 12, lg);
+                @include prop-vw(border-radius, 4, lg);
             }
             @include only(mobile) {
-                @include prop-vw(padding-block, 6, sm);
-                @include prop-vw(padding-inline, 12, sm);
-                @include prop-vw(font-size, 13, sm);
-                @include prop-vw(border-radius, 8, sm);
+                @include prop-vw(padding-block, 5, sm);
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(font-size, 12, sm);
+                @include prop-vw(border-radius, 4, sm);
             }
         }
         &__meta {
@@ -552,34 +764,49 @@
             flex-shrink: 0;
             display: flex;
             align-items: center;
-            @include prop-vw(gap, 16, xl);
-            @include prop-vw(margin-top, 1, xl);
-            // always reserve room for the trailing action (eye / "…"), so the
-            // assignee + date stay aligned whether or not a row has one.
-            @include prop-vw(padding-right, 34, xl);
+            @include prop-vw(gap, 20, xl);
+            // always reserve room for BOTH trailing actions (eye + "…"), so the
+            // assignee + date stay aligned whether a row has them or not.
+            @include prop-vw(margin-top, 3.5, xl);
+            @include prop-vw(padding-right, 78, xl);
 
             @include only(desktop) {
-                @include prop-vw(gap, 16, lg);
-                @include prop-vw(padding-right, 34, lg);
+                @include prop-vw(gap, 20, lg);
+                @include prop-vw(margin-top, 3.5, lg);
+                @include prop-vw(padding-right, 78, lg);
             }
             @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
-                @include prop-vw(padding-right, 30, sm);
+                @include prop-vw(gap, 20, sm);
+                @include prop-vw(margin-top, 3.5, sm);
+                @include prop-vw(padding-right, 78, sm);
             }
 
-            // the icon/button lives in the reserved slot at the far right
+            // two fixed slots at the far right: "…" is rightmost, eye to its left
             .actions-menu,
             .task-row__hidden {
                 position: absolute;
-                right: 0;
                 top: 50%;
                 transform: translateY(-50%);
+            }
+            .actions-menu {
+                right: 0;
+            }
+            .task-row__hidden {
+                @include prop-vw(right, 39, xl);
+
+                @include only(desktop) {
+                    @include prop-vw(right, 39, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(right, 39, sm);
+                }
             }
         }
         &__assignee,
         &__date {
-            @include prop-vw(font-size, 14, xl);
+            @include prop-vw(font-size, 12, xl);
             font-weight: normal;
+            line-height: 1.25;
             color: $color-dark-grey;
             white-space: nowrap;
 
@@ -595,8 +822,17 @@
             align-items: center;
             color: $color-dark-grey;
             & > svg {
-                @include prop-vw(width, 18, xl);
-                @include prop-vw(height, 18, xl);
+                @include prop-vw(width, 24, xl);
+                @include prop-vw(height, 24, xl);
+
+                @include only(desktop) {
+                    @include prop-vw(width, 24, lg);
+                    @include prop-vw(height, 24, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(width, 24, sm);
+                    @include prop-vw(height, 24, sm);
+                }
             }
         }
     }
@@ -609,6 +845,7 @@
             align-items: center;
             justify-content: center;
             padding: 0;
+            @include prop-vw(min-width, 24, xl);
             @include prop-vw(width, 24, xl);
             @include prop-vw(height, 24, xl);
             color: $color-blue;
@@ -616,20 +853,27 @@
             border: none;
             cursor: pointer;
             & > svg {
+                @include prop-vw(min-width, 20, xl);
                 @include prop-vw(width, 20, xl);
                 @include prop-vw(height, 20, xl);
             }
 
             @include only(desktop) {
+                @include prop-vw(min-width, 24, lg);
                 @include prop-vw(width, 24, lg);
                 @include prop-vw(height, 24, lg);
                 & > svg {
+                    @include prop-vw(min-width, 20, lg);
                     @include prop-vw(width, 20, lg);
                     @include prop-vw(height, 20, lg);
                 }
             }
             @include only(mobile) {
+                @include prop-vw(min-width, 24, sm);
+                @include prop-vw(width, 24, sm);
+                @include prop-vw(height, 24, sm);
                 & > svg {
+                    @include prop-vw(min-width, 20, sm);
                     @include prop-vw(width, 20, sm);
                     @include prop-vw(height, 20, sm);
                 }
@@ -642,23 +886,26 @@
             z-index: 20;
             display: none;
             flex-direction: column;
-            @include prop-vw(min-width, 200, xl);
-            @include prop-vw(padding, 8, xl);
+            @include prop-vw(min-width, 179, xl);
+            @include prop-vw(padding-block, 7.5, xl);
             background: $color-white;
-            @include border-all(1, solid, $color-border, xl);
-            @include prop-vw(border-radius, 14, xl);
-            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
+            @include prop-vw(border-radius, 10, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
 
             @include only(desktop) {
-                @include prop-vw(min-width, 200, lg);
-                @include prop-vw(padding, 8, lg);
-                @include prop-vw(border-radius, 14, lg);
+                @include prop-vw(min-width, 179, lg);
+                @include prop-vw(padding-block, 7.5, lg);
+                @include prop-vw(border-radius, 10, lg);
             }
             @include only(mobile) {
-                @include prop-vw(min-width, 180, sm);
-                @include prop-vw(padding, 8, sm);
-                @include prop-vw(border-radius, 14, sm);
+                @include prop-vw(min-width, 179, sm);
+                @include prop-vw(padding-block, 7.5, sm);
+                @include prop-vw(border-radius, 10, sm);
             }
+        }
+        // lift the whole open menu above the rows below it
+        &.is-open {
+            z-index: 50;
         }
         &.is-open &__panel {
             display: flex;
@@ -667,31 +914,31 @@
             display: flex;
             align-items: center;
             @include prop-vw(gap, 10, xl);
-            @include prop-vw(padding-block, 10, xl);
-            @include prop-vw(padding-inline, 10, xl);
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(padding-block, 7.5, xl);
+            @include prop-vw(padding-inline, 15, xl);
+            @include prop-vw(font-size, 14, xl);
             font-weight: normal;
+            line-height: 1.42857142857;
             color: $color-black;
             background: transparent;
             border: none;
-            @include prop-vw(border-radius, 8, xl);
             text-align: left;
             cursor: pointer;
+            transition: color $transition-default;
             & > svg {
                 flex-shrink: 0;
+                @include prop-vw(min-width, 20, xl);
                 @include prop-vw(width, 20, xl);
                 @include prop-vw(height, 20, xl);
-                color: $color-dark-grey;
+                color: #ADB4C1;
             }
-            &:first-child {
-                color: $color-blue;
-                & > svg {
-                    color: $color-blue;
-                }
-            }
+
             @media screen and (hover: hover) {
                 &:hover {
-                    background: $color-bg;
+                    color: $color-blue-hover;
+                    & > svg {
+                        color: $color-blue-hover;
+                    }
                 }
             }
 
@@ -699,8 +946,9 @@
                 @include prop-vw(gap, 10, lg);
                 @include prop-vw(padding-block, 10, lg);
                 @include prop-vw(padding-inline, 10, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(font-size, 14, lg);
                 & > svg {
+                    @include prop-vw(min-width, 20, lg);
                     @include prop-vw(width, 20, lg);
                     @include prop-vw(height, 20, lg);
                 }
@@ -709,8 +957,9 @@
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(padding-block, 10, sm);
                 @include prop-vw(padding-inline, 10, sm);
-                @include prop-vw(font-size, 15, sm);
+                @include prop-vw(font-size, 14, sm);
                 & > svg {
+                    @include prop-vw(min-width, 20, sm);
                     @include prop-vw(width, 20, sm);
                     @include prop-vw(height, 20, sm);
                 }

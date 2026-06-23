@@ -177,6 +177,10 @@
             align-items: center;
             width: fit-content;
         }
+        // calendar.svg is currentColor — keep this badge icon grey as before
+        &__icon {
+            color: $color-dark-grey;
+        }
         &__item {
             position: relative;
             z-index: 1;

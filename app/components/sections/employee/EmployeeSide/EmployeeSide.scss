@@ -392,6 +392,12 @@
             b {
                 font-weight: normal;
                 color: $color-black;
+                // comma is rendered here so it stays glued to the value — no
+                // space can sneak in before it after HTML formatting/build.
+                &::after {
+                    content: ",";
+                    color: $color-dark-grey;
+                }
             }
 
             @include only(desktop) {

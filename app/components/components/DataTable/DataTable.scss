@@ -2,8 +2,9 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
-    // employees page uses the full main width (single column, no right rail)
-    .employees-page {
+    // employees / tasks pages use the full main width (single column, no right rail)
+    .employees-page,
+    .tasks-page {
         .wrapper__left {
             max-width: 100%;
             width: 100%;
@@ -242,6 +243,9 @@
         &__total-text {
             @include prop-vw(font-size, 15, xl);
             color: $color-dark-grey;
+            span {
+                color: $color-black;
+            }
 
             @include only(desktop) {
                 @include prop-vw(font-size, 15, lg);

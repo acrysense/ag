@@ -56,7 +56,8 @@ export default (root) => {
 	const toggleable = completed.slice(ALWAYS_VISIBLE)
 	if (toggle && toggleable.length) {
 		let shown = false
-		const labelHidden = toggleText?.textContent || `Показать завершенные: ${toggleable.length}`
+		// real number of hidden completed tasks (not the hardcoded markup value)
+		const labelHidden = `Показать завершенные: ${toggleable.length}`
 		const labelShown = 'Скрыть завершенные'
 
 		const render = () => {

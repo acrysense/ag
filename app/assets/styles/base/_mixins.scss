@@ -56,7 +56,10 @@ $alias-bp: (
 );
 
 @function _range-key($k) {
-	@return if(map.has-key($vw-ranges, $k), $k, map.get($alias-range, $k));
+	@if map.has-key($vw-ranges, $k) {
+		@return $k;
+	}
+	@return map.get($alias-range, $k);
 }
 
 @function _r($k) {
@@ -68,7 +71,10 @@ $alias-bp: (
 }
 
 @function _bp-key($k) {
-	@return if(map.has-key($breakpoints, $k), $k, map.get($alias-bp, $k));
+	@if map.has-key($breakpoints, $k) {
+		@return $k;
+	}
+	@return map.get($alias-bp, $k);
 }
 
 @function _bp($k) {
@@ -97,13 +103,16 @@ $alias-bp: (
 	}
 
 	$b: $valueAt * math.div($to, $baseWidth);
-	$lower: if($a < $b, $a, $b);
-	$upper: if($a > $b, $a, $b);
+	$lower: math.min($a, $b);
+	$upper: math.max($a, $b);
 	@return clamp(#{$lower}px, #{$k}, #{$upper}px);
 }
 
 @function vw-range($px, $range: lg) {
-	$n: if(math.is-unitless($px), $px, math.div($px, 1px));
+	$n: $px;
+	@if not math.is-unitless($px) {
+		$n: math.div($px, 1px);
+	}
 	@return vw-clamp($n, _rv($range, base), _rv($range, from), _rv($range, to));
 }
 

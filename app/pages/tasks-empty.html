@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light tasks-page" data-header-search>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__double">
+                        <div class="wrapper__left">
+                            <div class="filter-chips tasks-page__chips">
+                                <div class="filter-chips__list">
+                                    <button type="button" class="filter-chip">
+                                        <span>Иванов Марьян Сергеевич</span>
+                                        <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                                    </button>
+                                    <button type="button" class="filter-chip">
+                                        <span>Васильев Михаил Петрович</span>
+                                        <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                                    </button>
+                                    <button type="button" class="filter-chip">
+                                        <span>05.05.2026 – 19.05.2026</span>
+                                        <svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 3L9 9M9 3L3 9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+                                    </button>
+                                </div>
+                                <button type="button" class="filter-chips__reset">Сбросить все</button>
+                            </div>
+
+                            <div class="tabs tasks-page__tabs" data-module="Tabs" data-path="components">
+                                <div class="tabs__list">
+                                    <div class="tabs__item is--active">
+                                        <button class="tabs__tab">Мои задачи</button>
+                                    </div>
+                                    <div class="tabs__item">
+                                        <button class="tabs__tab">Для сотрудников</button>
+                                    </div>
+                                </div>
+
+                                <div class="tabs__wrapper is--active">
+                                    {{> components/TasksPanel/TasksPanel title="Мои задачи" idp="my-" archive=true list="components/TasksPanel/TaskListEmpty" }}
+                                </div>
+                                <div class="tabs__wrapper">
+                                    {{> components/TasksPanel/TasksPanel title="Задачи сотрудников" idp="emp-" archive=true list="components/TasksPanel/TaskListEmpty" }}
+                                </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

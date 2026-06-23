@@ -45,10 +45,19 @@ export default (root) => {
 				document.removeEventListener('keydown', onKey, true)
 			}
 		}
+		// auto-growing textareas (Комментарий): grow with content up to
+		// data-autosize-max rows, then HARD-STOP — input past the cap is
+		// rejected (no scrollbar, the field simply won't accept more rows)
+		const autosizeEls = [...form.querySelectorAll('[data-autosize]')]
+		autosizeEls.forEach((el) => (el.__lastValue = el.value))
+		const runAutosize = () => autosizeEls.forEach((el) => autosize(el))
+
 		const closeModal = () => {
 			form.reset()
 			form.querySelectorAll('[data-select]').forEach(resetSelect)
+			autosizeEls.forEach((el) => (el.__lastValue = ''))
 			clearErrors()
+			runAutosize() // shrink back to the minimum while still visible
 			setOpen(false)
 		}
 
@@ -56,6 +65,23 @@ export default (root) => {
 			e.preventDefault()
 			clearErrors()
 			setOpen(true)
+			runAutosize() // measure now that the modal is visible
+		}
+		const onAutosize = (e) => {
+			const ta = e.target
+			if (!ta.matches('[data-autosize]')) return
+			if (exceedsAutosize(ta)) {
+				// reject the change: restore the last value that fit within the cap
+				const pos = ta.selectionStart
+				ta.value = ta.__lastValue ?? ''
+				const caret = Math.max(0, Math.min(pos - 1, ta.value.length))
+				try {
+					ta.setSelectionRange(caret, caret)
+				} catch {}
+			} else {
+				ta.__lastValue = ta.value
+			}
+			autosize(ta)
 		}
 		const onSubmit = (e) => {
 			e.preventDefault()
@@ -76,12 +102,14 @@ export default (root) => {
 		form.addEventListener('submit', onSubmit)
 		form.addEventListener('input', onInput)
 		form.addEventListener('change', onInput)
+		form.addEventListener('input', onAutosize)
 		closeEls.forEach((el) => el.addEventListener('click', onClose))
 		disposers.push(() => {
 			createBtn.removeEventListener('click', onCreate)
 			form.removeEventListener('submit', onSubmit)
 			form.removeEventListener('input', onInput)
 			form.removeEventListener('change', onInput)
+			form.removeEventListener('input', onAutosize)
 			closeEls.forEach((el) => el.removeEventListener('click', onClose))
 			document.removeEventListener('keydown', onKey, true)
 			document.documentElement.style.overflow = ''
@@ -199,11 +227,31 @@ function initSelect(select) {
 	const options = [...select.querySelectorAll('.ui-select__option')]
 	if (!trigger || !panel) return null
 
+	// optional search field (selects marked with [data-select-search])
+	const searchInput = select.querySelector('[data-select-search-input]')
+	const emptyEl = select.querySelector('[data-select-empty]')
+	const applyFilter = (q) => {
+		const norm = q.trim().toLowerCase()
+		let visible = 0
+		options.forEach((o) => {
+			const match = o.textContent.toLowerCase().includes(norm)
+			o.hidden = !match
+			if (match) visible++
+		})
+		if (emptyEl) emptyEl.hidden = visible > 0
+	}
+
 	let open = false
 	const setOpen = (state) => {
 		open = state
 		select.classList.toggle('is-open', state)
 		trigger.setAttribute('aria-expanded', state ? 'true' : 'false')
+		if (state && searchInput) {
+			// reset the filter and jump straight into the search field
+			searchInput.value = ''
+			applyFilter('')
+			searchInput.focus({ preventScroll: true })
+		}
 	}
 
 	const onTrigger = (e) => {
@@ -227,16 +275,36 @@ function initSelect(select) {
 	const onDocDown = (e) => {
 		if (open && !select.contains(e.target)) setOpen(false)
 	}
+	const onSearch = (e) => applyFilter(e.target.value)
+	const onSearchKey = (e) => {
+		if (e.key === 'Escape') {
+			e.stopPropagation()
+			setOpen(false)
+			trigger.focus({ preventScroll: true })
+		} else if (e.key === 'Enter') {
+			e.preventDefault()
+			const first = options.find((o) => !o.hidden)
+			if (first) first.click()
+		}
+	}
 
 	setOpen(false)
 	trigger.addEventListener('click', onTrigger)
 	panel.addEventListener('click', onOption)
 	document.addEventListener('pointerdown', onDocDown, true)
+	if (searchInput) {
+		searchInput.addEventListener('input', onSearch)
+		searchInput.addEventListener('keydown', onSearchKey)
+	}
 
 	return () => {
 		trigger.removeEventListener('click', onTrigger)
 		panel.removeEventListener('click', onOption)
 		document.removeEventListener('pointerdown', onDocDown, true)
+		if (searchInput) {
+			searchInput.removeEventListener('input', onSearch)
+			searchInput.removeEventListener('keydown', onSearchKey)
+		}
 		select.classList.remove('is-open')
 	}
 }
@@ -248,6 +316,44 @@ function resetSelect(select) {
 	select.querySelectorAll('.ui-select__option.is-active').forEach((o) => o.classList.remove('is-active'))
 	if (valueEl) valueEl.textContent = valueEl.dataset.placeholder || ''
 	if (input) input.value = ''
+	// clear the search field and reveal every option again
+	const searchInput = select.querySelector('[data-select-search-input]')
+	if (searchInput) searchInput.value = ''
+	select.querySelectorAll('.ui-select__option[hidden]').forEach((o) => (o.hidden = false))
+	const emptyEl = select.querySelector('[data-select-empty]')
+	if (emptyEl) emptyEl.hidden = true
+}
+
+// Measure a textarea's content height plus its min/max (row-count) bounds.
+// Sets height:auto first so scrollHeight reflects the true content height.
+function measureAutosize(ta) {
+	const cs = getComputedStyle(ta)
+	const lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.4
+	const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom)
+	const borderY = parseFloat(cs.borderTopWidth) + parseFloat(cs.borderBottomWidth)
+	const minRows = parseInt(ta.dataset.autosizeMin || '2', 10)
+	const maxRows = parseInt(ta.dataset.autosizeMax || '12', 10)
+	ta.style.height = 'auto'
+	return {
+		content: ta.scrollHeight + borderY, // border-box: add the borders back
+		minH: lh * minRows + padY + borderY,
+		maxH: lh * maxRows + padY + borderY,
+	}
+}
+
+// Grow a textarea to fit its content, clamped between min and max rows.
+// Overflow stays hidden — but the hard cap below keeps content within the max,
+// so nothing is ever clipped and no scrollbar is needed.
+function autosize(ta) {
+	const { content, minH, maxH } = measureAutosize(ta)
+	ta.style.height = Math.max(minH, Math.min(content, maxH)) + 'px'
+}
+
+// True when the content needs MORE than the max rows. +1 absorbs sub-pixel
+// rounding so a full extra row is required to trip it.
+function exceedsAutosize(ta) {
+	const { content, maxH } = measureAutosize(ta)
+	return content > maxH + 1
 }
 
 function initVisitsPagination(root) {
@@ -283,7 +389,7 @@ function initVisitsPagination(root) {
 	let page = 1
 	const pageCount = () => Math.max(1, Math.ceil(rows.length / pageSize))
 
-	if (totalEl) totalEl.textContent = `Всего: ${rows.length}`
+	if (totalEl) totalEl.innerHTML = `Всего: <span>${rows.length}</span>`
 
 	function renderRows() {
 		const from = (page - 1) * pageSize
@@ -293,15 +399,60 @@ function initVisitsPagination(root) {
 		})
 	}
 
+	// On mobile the row is narrow, so we cap how many slots are shown — but
+	// keep that count constant and spend the free space near the edges
+	// (1 2 3 … N / 1 … k … N / 1 … N-2 N-1 N) instead of leaving gaps.
+	const mqMobile = window.matchMedia('(max-width: 743.98px)')
+
 	function pageItems() {
 		const total = pageCount()
+		if (total <= 1) return [1]
+
+		if (mqMobile.matches) {
+			// BUDGET = max items (page numbers + ellipses) between the nav buttons
+			const BUDGET = 5
+			const pages = new Set([1, total, page])
+			const slotCount = () => {
+				const s = [...pages].sort((a, b) => a - b)
+				let n = s.length
+				for (let i = 1; i < s.length; i++) if (s[i] - s[i - 1] > 1) n++
+				return n
+			}
+			// grow outward from the current page, alternating sides, until the
+			// next number would push us past the budget
+			let left = page - 1
+			let right = page + 1
+			let toLeft = true
+			while (left >= 1 || right <= total) {
+				const cand = toLeft ? left : right
+				if (cand >= 1 && cand <= total && !pages.has(cand)) {
+					pages.add(cand)
+					if (slotCount() > BUDGET) {
+						pages.delete(cand)
+						break
+					}
+				}
+				if (toLeft) left--
+				else right++
+				toLeft = !toLeft
+			}
+			const sorted = [...pages].sort((a, b) => a - b)
+			const items = []
+			for (let i = 0; i < sorted.length; i++) {
+				if (i > 0 && sorted[i] - sorted[i - 1] > 1) items.push('…')
+				items.push(sorted[i])
+			}
+			return items
+		}
+
+		// Desktop: first, last and the current page ±1.
 		const items = [1]
 		const left = Math.max(2, page - 1)
 		const right = Math.min(total - 1, page + 1)
 		if (left > 2) items.push('…')
 		for (let i = left; i <= right; i++) items.push(i)
 		if (right < total - 1) items.push('…')
-		if (total > 1) items.push(total)
+		items.push(total)
 		return items
 	}
 
@@ -319,7 +470,7 @@ function initVisitsPagination(root) {
 			if (it === '…') {
 				const dots = document.createElement('span')
 				dots.className = 'ui-pagination__dots'
-				dots.textContent = '…'
+				dots.innerHTML = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg>'
 				nav.appendChild(dots)
 				return
 			}
@@ -421,8 +572,12 @@ function initVisitsPagination(root) {
 		sortDisposers.push(() => th.removeEventListener('click', onClick))
 	})
 
+	// re-render the page list when crossing the mobile breakpoint
+	const onMqChange = () => renderNav()
+
 	nav.addEventListener('click', onNavClick)
 	root.addEventListener('pagesize:change', onPageSize)
+	mqMobile.addEventListener('change', onMqChange)
 
 	renderRows()
 	renderNav()
@@ -430,6 +585,7 @@ function initVisitsPagination(root) {
 	return () => {
 		nav.removeEventListener('click', onNavClick)
 		root.removeEventListener('pagesize:change', onPageSize)
+		mqMobile.removeEventListener('change', onMqChange)
 		sortDisposers.forEach((d) => d())
 		headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
 	}
