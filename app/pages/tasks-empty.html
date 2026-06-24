@@ -10,8 +10,7 @@
 			<main class="wrapper__content">
 				{{> layouts/Sidebar/Sidebar }}
 				<div class="wrapper__main">
-					<div class="wrapper__double">
-                        <div class="wrapper__left">
+					<div class="wrapper__narrow">
                             <div class="filter-chips tasks-page__chips" data-filter-chips hidden>
                                 <div class="filter-chips__list" data-filter-chips-list></div>
                                 <button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
@@ -34,7 +33,6 @@
                                     {{> components/TasksPanel/TasksPanel title="Задачи сотрудников" idp="emp-" archive=true list="components/TasksPanel/TaskListEmpty" }}
                                 </div>
                             </div>
-                        </div>
 					</div>
 				</div>
 			</main>

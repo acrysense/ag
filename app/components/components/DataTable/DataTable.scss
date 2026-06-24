@@ -2,14 +2,7 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
-    // tasks page uses the full main width (single column, no right rail)
-    // (employees now uses the dedicated .wrapper__wide container)
-    .tasks-page {
-        .wrapper__left {
-            max-width: 100%;
-            width: 100%;
-        }
-    }
+    // employees → .wrapper__wide, tasks → .wrapper__narrow (own containers)
 
     .data-table__scroll {
         @include prop-vw(margin-top, 10, xl);

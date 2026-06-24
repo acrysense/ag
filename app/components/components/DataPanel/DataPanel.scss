@@ -56,13 +56,13 @@
         &__actions {
             display: flex;
             align-items: center;
-            @include prop-vw(gap, 24, xl);
+            @include prop-vw(gap, 20, xl);
 
             @include only(desktop) {
-                @include prop-vw(gap, 24, lg);
+                @include prop-vw(gap, 20, lg);
             }
             @include only(mobile) {
-                @include prop-vw(gap, 14, sm);
+                @include prop-vw(gap, 10, sm);
             }
         }
         &__title {

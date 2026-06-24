@@ -129,12 +129,35 @@ export default (root) => {
 	const ALWAYS_VISIBLE = 3
 	let shown = false
 
-	// Keep the 3 most recent completed tasks (they sit at the bottom) visible;
-	// collapse the older ones under the toggle. Re-runnable after each change.
+	// A completed task still awaiting the manager's confirmation has the
+	// "Подтвердить выполнение" button. Those stay full-colour and lead the
+	// completed group; fully-closed tasks are muted (lightened).
+	const isPending = (row) => !!row.querySelector('.task-row__confirm')
+
+	// Group completed tasks at the bottom (pending first), and set the muted /
+	// status look from whether each task is still pending confirmation.
+	const classifyCompleted = () => {
+		if (!list) return
+		const completed = [...list.querySelectorAll('.task-row.is-completed')]
+		completed.forEach((row) => {
+			const pending = isPending(row)
+			row.classList.toggle('is-muted', !pending)
+			const status = row.querySelector('.task-row__status')
+			if (status) {
+				status.classList.toggle('task-row__status--soft', !pending)
+				status.classList.toggle('task-row__status--done', pending)
+			}
+		})
+		const ordered = [...completed.filter(isPending), ...completed.filter((r) => !isPending(r))]
+		ordered.forEach((row) => list.appendChild(row))
+	}
+
+	// Keep pending tasks + the 3 most recent closed ones visible; collapse older
+	// closed tasks under the toggle. Re-runnable after each change.
 	const refreshCompleted = () => {
-		const completed = [...root.querySelectorAll('.task-row.is-completed')]
-		const hideable = completed.slice(0, Math.max(0, completed.length - ALWAYS_VISIBLE))
-		completed.forEach((row) => row.classList.remove('is-hidden'))
+		const closed = [...root.querySelectorAll('.task-row.is-completed')].filter((r) => !isPending(r))
+		const hideable = closed.slice(0, Math.max(0, closed.length - ALWAYS_VISIBLE))
+		root.querySelectorAll('.task-row.is-completed').forEach((row) => row.classList.remove('is-hidden'))
 		if (!toggle) return
 		if (hideable.length) {
 			toggle.hidden = false
@@ -149,6 +172,11 @@ export default (root) => {
 		}
 	}
 
+	const updateCompleted = () => {
+		classifyCompleted()
+		refreshCompleted()
+	}
+
 	if (toggle) {
 		const onToggle = () => {
 			shown = !shown
@@ -161,9 +189,9 @@ export default (root) => {
 		})
 	}
 
-	// Click the status circle: an active task → completed (muted, moved to the
-	// bottom); clicking a completed check re-opens the task back into the active
-	// group. Delegated so dynamically completed rows keep working.
+	// Click the status circle: an active task → completed (classified below);
+	// clicking a completed check re-opens it into the active group. Delegated so
+	// dynamically completed rows keep working.
 	if (list) {
 		const CHECK = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>'
 		const onStatusClick = (e) => {
@@ -179,19 +207,45 @@ export default (root) => {
 				if (firstCompleted) list.insertBefore(row, firstCompleted)
 				else list.appendChild(row)
 			} else {
-				row.classList.add('is-completed', 'is-muted')
-				status.classList.remove('task-row__status--done')
-				status.classList.add('task-row__status--soft')
+				row.classList.add('is-completed')
 				status.innerHTML = CHECK
-				list.appendChild(row)
 			}
-			refreshCompleted()
+			updateCompleted()
 		}
 		list.addEventListener('click', onStatusClick)
 		disposers.push(() => list.removeEventListener('click', onStatusClick))
 	}
 
-	refreshCompleted()
+	updateCompleted()
+
+	// Give every task row the actions ("…") menu so it reveals on row hover.
+	const ACTIONS_HTML = `<div class="actions-menu" data-actions>
+		<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
+			<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-three-dots"></use></svg>
+		</button>
+		<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
+		</div>
+	</div>`
+	// Trailing tools (eye + "…") live in their own .task-row__tools wrapper so
+	// they can be aligned independently of the assignee/date meta block.
+	root.querySelectorAll('.task-row').forEach((row) => {
+		let tools = row.querySelector('.task-row__tools')
+		if (!tools) {
+			tools = document.createElement('div')
+			tools.className = 'task-row__tools'
+			row.appendChild(tools)
+		}
+		const eye = row.querySelector('.task-row__hidden')
+		if (eye && eye.parentElement !== tools) tools.appendChild(eye)
+		// move an existing menu (some rows have one in markup) into tools, or
+		// inject a fresh one — never leave a duplicate behind in __meta
+		const menu = row.querySelector('.actions-menu')
+		if (menu && menu.parentElement !== tools) tools.appendChild(menu)
+		else if (!menu) tools.insertAdjacentHTML('beforeend', ACTIONS_HTML)
+	})
 
 	// --- Task actions dropdown ("...") ---
 	root.querySelectorAll('[data-actions]').forEach((menu) => {
@@ -239,6 +293,70 @@ export default (root) => {
 			menu.classList.remove('is-open')
 		})
 	})
+
+	// --- Mobile: physically rebuild each row into a clean flex header so the
+	// status + tools centre against the title+meta block reliably (CSS grid +
+	// display:contents was too fiddly). Desktop keeps the original DOM. ---
+	if (list) {
+		const mq = window.matchMedia('(max-width: 743.98px)')
+
+		const toMobile = (row) => {
+			if (row.dataset.layout === 'mobile') return
+			const status = row.querySelector('.task-row__status')
+			const title = row.querySelector('.task-row__title')
+			if (!status || !title) return
+			const body = row.querySelector('.task-row__body')
+			const desc = row.querySelector('.task-row__desc')
+			const subline = row.querySelector('.task-row__subline')
+			const meta = row.querySelector('.task-row__meta')
+			const tools = row.querySelector('.task-row__tools')
+
+			const headtext = document.createElement('div')
+			headtext.className = 'task-row__headtext'
+			headtext.append(...[title, meta].filter(Boolean))
+
+			const lead = document.createElement('div')
+			lead.className = 'task-row__lead'
+			lead.append(...[status, headtext, tools].filter(Boolean))
+
+			row.append(...[lead, desc, subline].filter(Boolean))
+			if (body) body.remove()
+			row.dataset.layout = 'mobile'
+		}
+
+		const toDesktop = (row) => {
+			if (row.dataset.layout !== 'mobile') return
+			const lead = row.querySelector('.task-row__lead')
+			const status = row.querySelector('.task-row__status')
+			const title = row.querySelector('.task-row__title')
+			const desc = row.querySelector('.task-row__desc')
+			const subline = row.querySelector('.task-row__subline')
+			const meta = row.querySelector('.task-row__meta')
+			const tools = row.querySelector('.task-row__tools')
+
+			const body = document.createElement('div')
+			body.className = 'task-row__body'
+			body.append(...[title, desc, subline].filter(Boolean))
+
+			row.append(...[status, body, meta, tools].filter(Boolean))
+			if (lead) lead.remove()
+			delete row.dataset.layout
+		}
+
+		const sync = () => {
+			list.querySelectorAll('.task-row').forEach((row) => {
+				if (mq.matches) toMobile(row)
+				else toDesktop(row)
+			})
+		}
+		sync()
+		const onMq = () => sync()
+		mq.addEventListener('change', onMq)
+		disposers.push(() => {
+			mq.removeEventListener('change', onMq)
+			list.querySelectorAll('.task-row').forEach(toDesktop)
+		})
+	}
 
 	return () => {
 		disposers.forEach((dispose) => dispose())

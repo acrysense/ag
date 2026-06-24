@@ -173,6 +173,13 @@
             z-index: 1;
             display: block;
             overflow: hidden;
+            // placeholder banners ship empty; the ::before keeps a 150% aspect
+            // box, so an empty one still reserves ~280px. Collapse it until it
+            // actually holds an image — otherwise it inflates the whole sidebar
+            // (and stretches the layout) on pages with short content.
+            &:empty {
+                display: none;
+            }
             @include prop-vw(margin-top, 80, xl);
             @include prop-vw(max-width, 250, xl);
             width: 100%;

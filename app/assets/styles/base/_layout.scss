@@ -115,6 +115,19 @@
 				@include prop-vw(padding-inline, 60, xl);
 			}
 		}
+		// left-aligned single-column container (tasks): 1080 content + 60px side
+		// gutters → 1200 outer; the leftover space stays empty on the right.
+		&__narrow {
+			width: 100%;
+
+			@include up(tablet) {
+				@include prop-vw(max-width, 1200, xl);
+				@include prop-vw(padding-inline, 60, xl);
+			}
+			@include only(mobile) {
+				@include prop-vw(padding-inline, 10, sm);
+			}
+		}
 		&__banr {
 			position: relative;
 			z-index: 1;

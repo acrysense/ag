@@ -26,7 +26,9 @@
                 @include prop-vw(height, 40, sm);
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(padding-inline, 2, sm);
-                @include prop-vw(margin-bottom, 10, sm);
+                // a bit more breathing room so the white panel's top edge below
+                // doesn't sit flush against the tab pill
+                @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(border-radius, 10, sm);
             }
         }
@@ -54,6 +56,12 @@
                 @include prop-vw(border-radius, 10, sm);
             }
         }
+        // the generic tabs util only toggles .is--active (no display:none), so
+        // without this BOTH panels (Мои задачи + Для сотрудников) render stacked.
+        // Hide the inactive one — works pre-JS too (static markup marks panel 0).
+        .tabs__wrapper:not(.is--active) {
+            display: none;
+        }
     }
     // top spacing only when filter chips are present (collapses to 30px gap);
     // no chips → tabs sit flush at the top (bottom margin only)
@@ -65,6 +73,15 @@
         }
         @include only(mobile) {
             @include prop-vw(margin-top, 30, sm);
+        }
+    }
+    // Mobile has no container padding-block (desktop gets it from .wrapper__main),
+    // so the first block would sit flush under the header. Lift whichever is
+    // first: the chips when active, otherwise the tabs.
+    @include only(mobile) {
+        .tasks-page__chips:not([hidden]),
+        .tasks-page__chips[hidden] + .tasks-page__tabs {
+            @include prop-vw(margin-top, 10, sm);
         }
     }
 
@@ -159,19 +176,23 @@
             }
         }
         &__task {
-            flex: 1 1 auto;
+            flex-shrink: 0;
             min-width: 0;
+            @include prop-vw(width, 564, xl);
 
+            @include only(desktop) {
+                @include prop-vw(width, 564, lg);
+            }
             @include only(mobile) {
                 width: 100%;
             }
         }
         &__assignee {
             flex-shrink: 0;
-            @include prop-vw(width, 220, xl);
+            @include prop-vw(width, 250, xl);
 
             @include only(desktop) {
-                @include prop-vw(width, 220, lg);
+                @include prop-vw(width, 250, lg);
             }
             @include only(mobile) {
                 width: 100%;
@@ -218,14 +239,14 @@
             @include prop-vw(width, 46, xl);
             @include prop-vw(height, 46, xl);
             color: $color-dark-grey;
-            background: $color-bg;
+            background: $color-white;
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 14, xl);
             cursor: pointer;
             transition: color $transition-default, background $transition-default;
             & > svg {
-                @include prop-vw(width, 22, xl);
-                @include prop-vw(height, 22, xl);
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
             }
             &.is-active {
                 color: $color-blue;
@@ -243,8 +264,8 @@
                 @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 14, lg);
                 & > svg {
-                    @include prop-vw(width, 22, lg);
-                    @include prop-vw(height, 22, lg);
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
                 }
             }
             @include only(mobile) {
@@ -254,8 +275,8 @@
                 @include border-all(1, solid, $color-border, sm);
                 @include prop-vw(border-radius, 14, sm);
                 & > svg {
-                    @include prop-vw(width, 22, sm);
-                    @include prop-vw(height, 22, sm);
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
                 }
             }
         }
@@ -669,6 +690,18 @@
             .task-row__title {
                 color: $color-dark-grey;
             }
+            // on hover the lightening is dropped — the row looks like default
+            @media screen and (hover: hover) {
+                &:hover {
+                    .task-row__title {
+                        color: $color-black;
+                    }
+                    .task-row__status--soft {
+                        background: $color-green;
+                        border-color: $color-green;
+                    }
+                }
+            }
         }
 
         @include only(desktop) {
@@ -676,58 +709,39 @@
             @include prop-vw(padding-block, 9.5, lg);
             @include border-side(top, 1, solid, $color-border, lg);
         }
-        // --- Mobile reflow ------------------------------------------------
-        // status | content grid; assignee+date drop under the title and the
-        // trailing buttons (eye / "…") pin to the row's top-right corner.
+        // --- Mobile layout (JS rebuilds the DOM into .task-row__lead) --------
+        // lead = [status | headtext(title + meta) | tools], flex-centred so the
+        // status and tools sit dead-centre against the title+meta block;
+        // description/subline drop below, indented under the headtext.
         @include only(mobile) {
-            position: relative;
-            display: grid;
-            grid-template-columns: auto minmax(0, 1fr);
-            @include prop-vw(column-gap, 15, sm);
-            row-gap: 0;
-            align-items: start;
+            display: block;
             @include prop-vw(padding-block, 9.5, sm);
             @include border-side(top, 1, solid, $color-border, sm);
 
-            .task-row__status {
-                grid-column: 1;
-                grid-row: 1;
+            .task-row__lead {
+                display: flex;
+                align-items: center;
+                @include prop-vw(gap, 15, sm);
             }
-            // break the body apart so its children can be reordered alongside meta
-            .task-row__body {
-                display: contents;
-            }
-            // title → meta → description → subline (completion line last)
-            .task-row__title {
-                grid-column: 2;
-                order: 1;
-                // always reserve room for both trailing icon slots, so titles
-                // wrap at the same width whether the row has buttons or not
-                @include prop-vw(padding-right, 66, sm);
+            .task-row__headtext {
+                flex: 1 1 auto;
+                min-width: 0;
             }
             .task-row__meta {
-                grid-column: 2;
-                order: 2;
-                position: static; // anchor the absolute buttons to .task-row
-                padding-right: 0;
-                @include prop-vw(margin-top, 4, sm);
+                @include prop-vw(margin-top, 5, sm);
+                @include prop-vw(gap, 20, sm);
+            }
+            // fixed-width gutter (like desktop) so the title's right edge is
+            // identical whether or not the row has the eye — content right-aligns
+            .task-row__tools {
+                flex-shrink: 0;
                 @include prop-vw(gap, 12, sm);
+                @include prop-vw(width, 60, sm);
             }
-            .task-row__desc {
-                grid-column: 2;
-                order: 3;
-            }
+            // description + subline align under the headtext (past the status)
+            .task-row__desc,
             .task-row__subline {
-                grid-column: 2;
-                order: 4;
-            }
-
-            // trailing buttons → top-right, aligned with the title's first line.
-            // Fixed slots ("…" rightmost, eye to its left) — same for every row.
-            .task-row__meta .actions-menu,
-            .task-row__meta .task-row__hidden {
-                transform: none;
-                @include prop-vw(top, 9.5, sm);
+                @include prop-vw(margin-left, 39, sm);
             }
         }
 
@@ -750,25 +764,6 @@
                 @include prop-vw(width, 16, xl);
                 @include prop-vw(height, 16, xl);
             }
-            &--done {
-                background: $color-green;
-                border-color: $color-green;
-            }
-            &--soft {
-                background: rgba($color-green, 0.45);
-                border-color: transparent;
-            }
-            // affordance: empty circle hints green on hover, a completed (muted)
-            // check brightens back to full green
-            @media screen and (hover: hover) {
-                &:not(&--done):not(&--soft):hover {
-                    border-color: $color-green;
-                }
-                &--soft:hover {
-                    background: $color-green;
-                }
-            }
-
             @include only(desktop) {
                 @include prop-vw(min-width, 24, lg);
                 @include prop-vw(width, 24, lg);
@@ -791,6 +786,26 @@
                     @include prop-vw(height, 16, sm);
                 }
             }
+            // colour states + hover come LAST so the per-breakpoint border-all
+            // (grey) above can't override their border-color back to grey
+            &--done {
+                background: $color-green;
+                border-color: $color-green;
+            }
+            &--soft {
+                background: rgba($color-green, 0.45);
+                border-color: transparent;
+            }
+            // affordance: empty circle hints green on hover, a completed (muted)
+            // check brightens back to full green
+            @media screen and (hover: hover) {
+                &:not(&--done):not(&--soft):hover {
+                    border-color: $color-green;
+                }
+                &--soft:hover {
+                    background: $color-green;
+                }
+            }
         }
         &__body {
             flex: 1 1 auto;
@@ -808,7 +823,7 @@
                 @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 1, sm);
+                margin-top: 0;
                 @include prop-vw(font-size, 14, sm);
             }
         }
@@ -824,8 +839,9 @@
                 @include prop-vw(font-size, 13, lg);
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 6, sm);
-                @include prop-vw(font-size, 13, sm);
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(font-size, 12, sm);
+                line-height: 1.25;
             }
         }
         &__subline {
@@ -852,6 +868,19 @@
                 @include prop-vw(gap, 5, sm);
                 @include prop-vw(margin-top, 10, sm);
                 @include prop-vw(font-size, 12, sm);
+            }
+        }
+        // verified variant (Выполнена + Проверена): wider 40px split between the
+        // two segments — only here; plain sublines keep their default gap.
+        // column-gap only, so wrapped row-gap stays at the base value
+        &__subline:has(.task-row__verified) {
+            @include prop-vw(column-gap, 40, xl);
+
+            @include only(desktop) {
+                @include prop-vw(column-gap, 40, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(column-gap, 40, sm);
             }
         }
         // assignee + completion date; soft chip only via --chip modifier
@@ -931,46 +960,34 @@
             }
         }
         &__meta {
-            position: relative;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             @include prop-vw(gap, 20, xl);
-            // always reserve room for BOTH trailing actions (eye + "…"), so the
-            // assignee + date stay aligned whether a row has them or not.
             @include prop-vw(margin-top, 3.5, xl);
-            @include prop-vw(padding-right, 78, xl);
 
             @include only(desktop) {
                 @include prop-vw(gap, 20, lg);
                 @include prop-vw(margin-top, 3.5, lg);
-                @include prop-vw(padding-right, 78, lg);
             }
             @include only(mobile) {
                 @include prop-vw(gap, 20, sm);
-                @include prop-vw(margin-top, 3.5, sm);
-                @include prop-vw(padding-right, 78, sm);
+                @include prop-vw(margin-top, 5, sm);
             }
+        }
+        // trailing tools (eye + "…") in their own column, so they can be aligned
+        // independently of the assignee/date meta block
+        &__tools {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            @include prop-vw(gap, 15, xl);
+            @include prop-vw(width, 64, xl);
 
-            // two fixed slots at the far right: "…" is rightmost, eye to its left
-            .actions-menu,
-            .task-row__hidden {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-            .actions-menu {
-                right: 0;
-            }
-            .task-row__hidden {
-                @include prop-vw(right, 39, xl);
-
-                @include only(desktop) {
-                    @include prop-vw(right, 39, lg);
-                }
-                @include only(mobile) {
-                    @include prop-vw(right, 39, sm);
-                }
+            @include only(desktop) {
+                @include prop-vw(gap, 15, lg);
+                @include prop-vw(width, 64, lg);
             }
         }
         &__assignee,
@@ -1004,6 +1021,21 @@
                     @include prop-vw(width, 24, sm);
                     @include prop-vw(height, 24, sm);
                 }
+            }
+        }
+    }
+
+    // three-dots trigger appears only on row hover (pointer devices); on touch
+    // it stays visible, and an open menu keeps it shown even off-hover
+    @media screen and (hover: hover) {
+        .task-row {
+            .actions-menu__trigger {
+                opacity: 0;
+                transition: opacity $transition-default;
+            }
+            &:hover .actions-menu__trigger,
+            .actions-menu.is-open .actions-menu__trigger {
+                opacity: 1;
             }
         }
     }
