@@ -226,7 +226,7 @@ export default (root) => {
 		<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
 			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
 			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
-			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem" data-task-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
 		</div>
 	</div>`
 	// Trailing tools (eye + "…") live in their own .task-row__tools wrapper so
@@ -256,6 +256,9 @@ export default (root) => {
 		let open = false
 		const setOpen = (state) => {
 			open = state
+			// drop focus from a menu item before hiding the panel — otherwise
+			// aria-hidden lands on a focused descendant (assistive-tech warning)
+			if (!state && panel.contains(document.activeElement)) document.activeElement.blur()
 			menu.classList.toggle('is-open', open)
 			trigger.setAttribute('aria-expanded', open ? 'true' : 'false')
 			panel.setAttribute('aria-hidden', open ? 'false' : 'true')
@@ -293,6 +296,44 @@ export default (root) => {
 			menu.classList.remove('is-open')
 		})
 	})
+
+	// --- Delete-task confirm modal (UI only — open/close, no delete wired) ---
+	const delModal = root.querySelector('[data-task-delete-modal]')
+	if (delModal) {
+		const onDelKey = (e) => {
+			if (e.key === 'Escape') {
+				e.preventDefault()
+				setDelOpen(false)
+			}
+		}
+		const setDelOpen = (state) => {
+			delModal.hidden = !state
+			document.documentElement.style.overflow = state ? 'hidden' : ''
+			if (state) {
+				delModal.querySelector('.task-modal__dialog')?.focus({ preventScroll: true })
+				document.addEventListener('keydown', onDelKey, true)
+			} else {
+				document.removeEventListener('keydown', onDelKey, true)
+			}
+		}
+		// open from any "Удалить" item in the per-row action menus (delegated,
+		// since the menus are injected dynamically)
+		const onDelOpen = (e) => {
+			if (e.target.closest('[data-task-delete]')) setDelOpen(true)
+		}
+		// close on overlay, "Отмена", and (no backend yet) the "Удалить" button
+		const onDelClose = (e) => {
+			if (e.target.closest('[data-task-delete-close], [data-task-delete-confirm]')) setDelOpen(false)
+		}
+		root.addEventListener('click', onDelOpen)
+		delModal.addEventListener('click', onDelClose)
+		disposers.push(() => {
+			root.removeEventListener('click', onDelOpen)
+			delModal.removeEventListener('click', onDelClose)
+			document.removeEventListener('keydown', onDelKey, true)
+			document.documentElement.style.overflow = ''
+		})
+	}
 
 	// --- Mobile: physically rebuild each row into a clean flex header so the
 	// status + tools centre against the title+meta block reliably (CSS grid +

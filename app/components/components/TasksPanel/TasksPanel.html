@@ -77,4 +77,16 @@
     <button type="button" class="tasks-panel__toggle" data-tasks-toggle aria-expanded="false">
         <span data-tasks-toggle-text>Показать завершенные: 47</span>
     </button>
+
+    <div class="task-modal" data-task-delete-modal hidden>
+        <div class="task-modal__overlay" data-task-delete-close></div>
+        <div class="task-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="task-delete-title" tabindex="-1">
+            <h3 class="task-modal__title" id="task-delete-title">Подтвердите удаление задачи</h3>
+            <div class="task-modal__divider"></div>
+            <div class="task-modal__actions">
+                <button type="button" class="btn btn--sm btn--danger" data-task-delete-confirm>Удалить</button>
+                <button type="button" class="btn btn--sm btn--secondary" data-task-delete-close>Отмена</button>
+            </div>
+        </div>
+    </div>
 </section>

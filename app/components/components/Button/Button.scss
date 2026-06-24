@@ -27,6 +27,10 @@
             color: $color-black;
             background: $color-bg;
         }
+        &--danger {
+            color: $color-white;
+            background: $color-red;
+        }
         &[disabled] {
             background: $color-dark-grey;
         }
@@ -38,6 +42,10 @@
             &:hover:not([disabled]) {
                 color: $color-white;
                 background: $color-blue-hover;
+            }
+            // keep danger red on hover (the base rule above would turn it blue)
+            &--danger:hover:not([disabled]) {
+                background: #a83a3a;
             }
         }
         @include only(desktop) {

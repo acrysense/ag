@@ -1169,4 +1169,94 @@
             }
         }
     }
+
+    // --- Delete-task confirm modal (same overlay/dialog shell as the visit
+    // modal, simplified to title + divider + actions; primary button is red) ---
+    .task-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        display: flex;
+        align-items: flex-start;
+        overflow-y: auto;
+        overflow-x: hidden;
+        @include prop-vw(padding, 20, xl);
+        &[hidden] {
+            display: none;
+        }
+
+        @include only(desktop) {
+            @include prop-vw(padding, 20, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding, 20, sm);
+        }
+
+        &__overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(245, 248, 250, 0.6);
+            backdrop-filter: blur(2.5px);
+        }
+        &__dialog {
+            position: relative;
+            z-index: 1;
+            margin: auto;
+            @include prop-vw(max-width, 360, xl);
+            width: 100%;
+            @include prop-vw(padding, 20, xl);
+            background: $color-white;
+            @include prop-vw(border-radius, 20, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+
+            @include only(desktop) {
+                @include prop-vw(max-width, 360, lg);
+                @include prop-vw(padding, 20, lg);
+                @include prop-vw(border-radius, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(max-width, 360, sm);
+                @include prop-vw(padding, 20, sm);
+                @include prop-vw(border-radius, 20, sm);
+            }
+        }
+        &__title {
+            @include prop-vw(font-size, 16, xl);
+            font-weight: normal;
+            line-height: 1.5;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 16, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 16, sm);
+            }
+        }
+        &__divider {
+            @include prop-vw(margin-block, 16, xl);
+            @include prop-vw(height, 1, xl);
+            background: $color-border;
+
+            @include only(desktop) {
+                @include prop-vw(margin-block, 16, lg);
+                @include prop-vw(height, 1, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(margin-block, 16, sm);
+                @include prop-vw(height, 1, sm);
+            }
+        }
+        &__actions {
+            display: flex;
+            @include prop-vw(gap, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+            }
+        }
+    }
 }

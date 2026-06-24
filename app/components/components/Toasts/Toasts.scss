@@ -2,72 +2,113 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
-	.toasts {
-		position: fixed;
-        @include prop-vw(right, 40, xl);
-        @include prop-vw(bottom, 120, xl);
-		display: flex;
-		flex-direction: column;
+    // fixed stack in the page's bottom-right corner
+    .toasts {
+        position: fixed;
+        z-index: 4000;
+        display: flex;
+        flex-direction: column;
         @include prop-vw(gap, 20, xl);
-		z-index: 4000;
-		pointer-events: none;
+        @include prop-vw(right, 30, xl);
+        @include prop-vw(bottom, 92, xl);
+        pointer-events: none;
 
         @include only(desktop) {
-            @include prop-vw(right, 40, lg);
-            @include prop-vw(bottom, 120, lg);
             @include prop-vw(gap, 20, lg);
+            @include prop-vw(right, 30, lg);
+            @include prop-vw(bottom, 92, lg);
         }
         @include only(mobile) {
+            @include prop-vw(gap, 20, sm);
             @include prop-vw(right, 20, sm);
-            @include prop-vw(bottom, 80, sm);
-            @include prop-vw(gap, 20, sm);
+            @include prop-vw(left, 20, sm);
+            @include prop-vw(bottom, 92, sm);
         }
-	}
+    }
 
-	.toast {
-		pointer-events: auto;
-		display: grid;
-		grid-template-columns: 1fr auto;
+    .toast {
+        pointer-events: auto;
+        position: relative;
+        display: flex;
         align-items: flex-start;
-        @include prop-vw(gap, 20, xl);
-        @include prop-vw(max-width, 400, xl);
-        @include prop-vw(min-width, 400, xl);
-        width: 100%;
-        @include prop-vw(padding-block, 12, xl);
-        @include prop-vw(padding-inline, 15, xl);
-        color: $color-white;
-		transform: translateY(10px);
-		opacity: 0;
-		transition: transform .2s ease, opacity .2s ease;
+        @include prop-vw(width, 348, xl);
+        @include prop-vw(padding, 20, xl);
+        @include prop-vw(padding-right, 47, xl);
+        background: $color-white;
+        @include prop-vw(border-radius, 10, xl);
+        box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.08);
+        transform: translateY(10px);
+        opacity: 0;
+        transition: transform 0.2s ease, opacity 0.2s ease;
 
-		&.is-in { transform: translateY(0); opacity: 1; }
-		&.is-out { transform: translateY(10px); opacity: 0; }
+        &.is-in {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        &.is-out {
+            transform: translateY(10px);
+            opacity: 0;
+        }
 
-		&--success { background: var(--toast-success, $color-green); }
-		&--error { background: var(--toast-error, $color-red); }
+        // icon + close share the type colour
+        &--success .toast__icon,
+        &--success .toast__close {
+            color: $color-green;
+        }
+        &--error .toast__icon,
+        &--error .toast__close {
+            color: $color-red;
+        }
 
         @include only(desktop) {
-            @include prop-vw(gap, 20, lg);
-            @include prop-vw(max-width, 400, lg);
-            @include prop-vw(min-width, 400, lg);
-            @include prop-vw(padding-block, 12, lg);
-            @include prop-vw(padding-inline, 15, lg);
+            @include prop-vw(width, 348, lg);
+            @include prop-vw(padding, 20, lg);
+            @include prop-vw(padding-right, 47, lg);
+            @include prop-vw(border-radius, 10, lg);
         }
         @include only(mobile) {
-            @include prop-vw(gap, 20, sm);
-            @include prop-vw(max-width, 320, sm);
-            @include prop-vw(min-width, 320, sm);
-            @include prop-vw(padding-block, 12, sm);
-            @include prop-vw(padding-inline, 15, sm);
+            width: 100%;
+            @include prop-vw(padding, 20, sm);
+            @include prop-vw(padding-right, 47, sm);
+            @include prop-vw(border-radius, 10, sm);
         }
-	}
+    }
 
-	.toast__text {
-        display: block;
-        width: fit-content;
+    .toast__icon {
+        flex-shrink: 0;
+        display: flex;
+        @include prop-vw(margin-right, 15, xl);
+        & > svg {
+            @include prop-vw(width, 20, xl);
+            @include prop-vw(height, 20, xl);
+        }
+
+        @include only(desktop) {
+            @include prop-vw(margin-right, 15, lg);
+            & > svg {
+                @include prop-vw(width, 20, lg);
+                @include prop-vw(height, 20, lg);
+            }
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-right, 15, sm);
+            & > svg {
+                @include prop-vw(width, 20, sm);
+                @include prop-vw(height, 20, sm);
+            }
+        }
+    }
+
+    .toast__body {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+
+    .toast__title {
         @include prop-vw(font-size, 14, xl);
-        font-weight: normal;
+        font-weight: bold;
         line-height: 1.57142857143;
+        color: $color-black;
 
         @include only(desktop) {
             @include prop-vw(font-size, 14, lg);
@@ -77,56 +118,71 @@
         }
     }
 
-	.toast__close {
+    .toast__text {
+        @include prop-vw(font-size, 14, xl);
+        font-weight: normal;
+        line-height: 1.28571428571;
+        color: $color-black;
+
+        @include only(desktop) {
+            @include prop-vw(font-size, 14, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(font-size, 14, sm);
+        }
+    }
+    // description gap below a title; a standalone text toast keeps no top gap
+    .toast__title + .toast__text {
+        @include prop-vw(margin-top, 10, xl);
+
+        @include only(desktop) {
+            @include prop-vw(margin-top, 10, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(margin-top, 10, sm);
+        }
+    }
+
+    .toast__close {
+        position: absolute;
+        @include prop-vw(top, 20, xl);
+        @include prop-vw(right, 20, xl);
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
-        @include prop-vw(min-width, 24, xl);
-        @include prop-vw(width, 24, xl);
-        @include prop-vw(height, 24, xl);
-        font-size: 0;
         background: transparent;
-		border: 0;
-        border-radius: 0;
-		cursor: pointer;
-		transition: background .15s ease;
+        border: 0;
+        cursor: pointer;
+        transition: opacity 0.15s ease;
         &:focus {
             outline: none;
         }
         & > svg {
-            @include prop-vw(min-width, 16, xl);
-            @include prop-vw(width, 16, xl);
-            @include prop-vw(height, 16, xl);
-            color: $color-white;
+            @include prop-vw(width, 12, xl);
+            @include prop-vw(height, 12, xl);
         }
 
-		@media screen and (hover: hover) {
+        @media screen and (hover: hover) {
             &:hover {
-                & > svg {
-                    color: $color-grey;
-                }
+                opacity: 0.65;
             }
         }
         @include only(desktop) {
-            @include prop-vw(min-width, 24, lg);
-            @include prop-vw(width, 24, lg);
-            @include prop-vw(height, 24, lg);
+            @include prop-vw(top, 20, lg);
+            @include prop-vw(right, 20, lg);
             & > svg {
-                @include prop-vw(min-width, 16, lg);
-                @include prop-vw(width, 16, lg);
-                @include prop-vw(height, 16, lg);
+                @include prop-vw(width, 12, lg);
+                @include prop-vw(height, 12, lg);
             }
         }
         @include only(mobile) {
-            @include prop-vw(min-width, 24, sm);
-            @include prop-vw(width, 24, sm);
-            @include prop-vw(height, 24, sm);
+            @include prop-vw(top, 20, sm);
+            @include prop-vw(right, 20, sm);
             & > svg {
-                @include prop-vw(min-width, 16, sm);
-                @include prop-vw(width, 16, sm);
-                @include prop-vw(height, 16, sm);
+                @include prop-vw(width, 12, sm);
+                @include prop-vw(height, 12, sm);
             }
         }
-	}
+    }
 }
