@@ -186,6 +186,87 @@ export default (root) => {
 		})
 	})
 
+	// --- Mobile card view: label each cell with its column header ---
+	const headerLabels = [...table.querySelectorAll('thead th')].map((th) => th.textContent.trim())
+	allRows.forEach((row) => {
+		;[...row.children].forEach((td, i) => {
+			if (headerLabels[i]) td.setAttribute('data-label', headerLabels[i])
+		})
+	})
+
+	// programmatic sort used by the mobile "Сортировать по" dropdown
+	const sortByKey = (key, dir) => {
+		if (!key || !dir) {
+			sort = { key: null, dir: 0, type: 'text', th: null }
+		} else {
+			const th = headers.find((h) => h.dataset.sortKey === key)
+			colIndex = th ? [...th.parentElement.children].indexOf(th) : 0
+			sort = { key, dir: dir === 'desc' ? -1 : 1, type: th?.dataset.sortType || 'text', th }
+		}
+		headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
+		if (sort.th && sort.dir === 1) sort.th.classList.add('is-asc')
+		else if (sort.th && sort.dir === -1) sort.th.classList.add('is-desc')
+		recompute()
+	}
+
+	// --- "Сортировать по" dropdown (mobile) ---
+	root.querySelectorAll('[data-dt-sort]').forEach((el) => {
+		const trigger = el.querySelector('[data-dt-sort-trigger]')
+		const panel = el.querySelector('[data-dt-sort-panel]')
+		const valueEl = el.querySelector('[data-dt-sort-value]')
+		const options = [...el.querySelectorAll('.data-table__sort-option')]
+		if (!trigger || !panel) return
+
+		let open = false
+		const setOpen = (s) => {
+			open = s
+			el.classList.toggle('is-open', s)
+			trigger.setAttribute('aria-expanded', s ? 'true' : 'false')
+			panel.setAttribute('aria-hidden', s ? 'false' : 'true')
+		}
+		const onTrigger = (e) => {
+			e.preventDefault()
+			e.stopPropagation()
+			setOpen(!open)
+		}
+		const onOption = (e) => {
+			const opt = e.target.closest('.data-table__sort-option')
+			if (!opt) return
+			options.forEach((o) => o.classList.toggle('is-active', o === opt))
+			if (valueEl) valueEl.textContent = opt.textContent.trim()
+			sortByKey(opt.dataset.sort === 'default' ? null : opt.dataset.sort, opt.dataset.dir)
+			setOpen(false)
+		}
+		const onDocDown = (e) => {
+			if (open && !el.contains(e.target)) setOpen(false)
+		}
+		setOpen(false)
+		trigger.addEventListener('click', onTrigger)
+		panel.addEventListener('click', onOption)
+		document.addEventListener('pointerdown', onDocDown, true)
+		disposers.push(() => {
+			trigger.removeEventListener('click', onTrigger)
+			panel.removeEventListener('click', onOption)
+			document.removeEventListener('pointerdown', onDocDown, true)
+		})
+	})
+
+	// --- View toggle (cards / table) on mobile ---
+	const viewBtns = [...root.querySelectorAll('[data-dt-view]')]
+	viewBtns.forEach((btn) => {
+		const onClick = () => {
+			const cards = btn.dataset.dtView === 'cards'
+			table.classList.toggle('is-cards-view', cards)
+			viewBtns.forEach((b) => {
+				const on = b === btn
+				b.classList.toggle('is-active', on)
+				b.setAttribute('aria-pressed', on ? 'true' : 'false')
+			})
+		}
+		btn.addEventListener('click', onClick)
+		disposers.push(() => btn.removeEventListener('click', onClick))
+	})
+
 	// --- Public API for filter UIs ---
 	root.__dataTable = {
 		applyFilters(next = {}) {

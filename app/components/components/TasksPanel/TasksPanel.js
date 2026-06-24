@@ -47,6 +47,81 @@ export default (root) => {
 		if (dispose) disposers.push(dispose)
 	})
 
+	// --- "Ответственный" custom select ---
+	root.querySelectorAll('[data-task-assignee]').forEach((select) => {
+		const trigger = select.querySelector('[data-select-trigger]')
+		const panel = select.querySelector('[data-select-panel]')
+		const valueEl = select.querySelector('[data-select-value]')
+		const inputEl = select.querySelector('[data-select-input]')
+		if (!trigger || !panel) return
+
+		let open = false
+		const setOpen = (s) => {
+			open = s
+			select.classList.toggle('is-open', s)
+			trigger.setAttribute('aria-expanded', s ? 'true' : 'false')
+		}
+		const reset = () => {
+			setOpen(false)
+			select.classList.remove('is-filled')
+			select.querySelectorAll('.ui-select__option.is-active').forEach((o) => o.classList.remove('is-active'))
+			if (valueEl) valueEl.textContent = valueEl.dataset.placeholder || ''
+			if (inputEl) inputEl.value = ''
+		}
+		const onTrigger = (e) => {
+			e.preventDefault()
+			e.stopPropagation()
+			setOpen(!open)
+		}
+		const onOption = (e) => {
+			const opt = e.target.closest('.ui-select__option')
+			if (!opt) return
+			select.querySelectorAll('.ui-select__option').forEach((o) => o.classList.toggle('is-active', o === opt))
+			if (valueEl) valueEl.textContent = opt.textContent.trim()
+			select.classList.add('is-filled')
+			if (inputEl) inputEl.value = opt.dataset.value || opt.textContent.trim()
+			setOpen(false)
+		}
+		const onDocDown = (e) => {
+			if (open && !select.contains(e.target)) setOpen(false)
+		}
+
+		trigger.addEventListener('click', onTrigger)
+		panel.addEventListener('click', onOption)
+		document.addEventListener('pointerdown', onDocDown, true)
+		form?.addEventListener('reset', reset)
+		disposers.push(() => {
+			trigger.removeEventListener('click', onTrigger)
+			panel.removeEventListener('click', onOption)
+			document.removeEventListener('pointerdown', onDocDown, true)
+			form?.removeEventListener('reset', reset)
+		})
+	})
+
+	// --- "Скрыть от сотрудника" eye toggle (open eye → crossed eye, blue when on) ---
+	const hideBtn = root.querySelector('[data-task-hide]')
+	if (hideBtn) {
+		const hideInput = root.querySelector('[data-task-hide-input]')
+		const hideUse = hideBtn.querySelector('use')
+		const setHidden = (on) => {
+			hideBtn.classList.toggle('is-active', on)
+			hideBtn.setAttribute('aria-pressed', on ? 'true' : 'false')
+			hideUse?.setAttribute('href', on ? '#icon-eye-slash' : '#icon-eye')
+			if (hideInput) hideInput.value = on ? '1' : '0'
+		}
+		const onHide = (e) => {
+			e.preventDefault()
+			setHidden(hideBtn.getAttribute('aria-pressed') !== 'true')
+		}
+		const onReset = () => setHidden(false)
+		hideBtn.addEventListener('click', onHide)
+		form?.addEventListener('reset', onReset)
+		disposers.push(() => {
+			hideBtn.removeEventListener('click', onHide)
+			form?.removeEventListener('reset', onReset)
+		})
+	}
+
 	// --- Complete / re-open tasks + the show-completed toggle ---
 	const list = root.querySelector('.tasks-list')
 	const toggle = root.querySelector('[data-tasks-toggle]')

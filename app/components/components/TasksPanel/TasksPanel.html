@@ -32,30 +32,39 @@
                 </div>
                 <span class="field__help">Укажите, что необходимо сделать по задаче.</span>
             </div>
-            <div class="field task-form__date">
-                <label class="field__label" for="{{idp}}task-due">Срок исполнения</label>
-                <div class="field__control ui-datepicker" data-datepicker>
-                    <input class="field__input ui-datepicker__input" id="{{idp}}task-due" type="text" name="due" placeholder="дд.мм.гггг" autocomplete="off" inputmode="numeric" data-datepicker-input>
-                    <button type="button" class="ui-datepicker__toggle" data-datepicker-toggle aria-label="Открыть календарь">
-                        <svg aria-hidden="true" focusable="false" width="20" height="20">
-                            <use href="#icon-calendar"></use>
-                        </svg>
+            <div class="field task-form__assignee">
+                <span class="field__label">Ответственный</span>
+                <div class="field__control ui-select" data-task-assignee>
+                    <button type="button" class="ui-select__trigger" data-select-trigger aria-haspopup="listbox" aria-expanded="false">
+                        <span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
+                        <svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
                     </button>
+                    <div class="ui-select__panel" data-select-panel role="listbox">
+                        <button type="button" class="ui-select__option" role="option" data-value="Иванов М.С.">Иванов М.С.</button>
+                        <button type="button" class="ui-select__option" role="option" data-value="Петров А.И.">Петров А.И.</button>
+                        <button type="button" class="ui-select__option" role="option" data-value="Панковец В.В.">Панковец В.В.</button>
+                    </div>
+                    <input type="hidden" name="assignee" value="" data-select-input>
                 </div>
             </div>
+            <div class="task-form__daterow">
+                <div class="field task-form__date">
+                    <label class="field__label" for="{{idp}}task-due">Срок исполнения</label>
+                    <div class="field__control ui-datepicker" data-datepicker>
+                        <input class="field__input ui-datepicker__input" id="{{idp}}task-due" type="text" name="due" placeholder="дд.мм.гггг" autocomplete="off" inputmode="numeric" data-datepicker-input>
+                        <button type="button" class="ui-datepicker__toggle" data-datepicker-toggle aria-label="Открыть календарь">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20">
+                                <use href="#icon-calendar"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="task-form__hide" data-task-hide aria-pressed="false" aria-label="Скрыть от сотрудника" title="Скрыть от сотрудника">
+                    <svg aria-hidden="true" focusable="false" width="22" height="22"><use href="#icon-eye"></use></svg>
+                </button>
+                <input type="hidden" name="hidden" value="0" data-task-hide-input>
+            </div>
         </div>
-
-        <label class="ui-check task-form__check">
-            <input class="ui-check__input" type="checkbox" name="hidden">
-            <span class="ui-check__box" aria-hidden="true">
-                <svg class="ui-check__frame" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path class="ui-check__fill" d="M13.75 20.8542H8.24998C3.27248 20.8542 1.14581 18.7275 1.14581 13.75V8.25004C1.14581 3.27254 3.27248 1.14587 8.24998 1.14587H13.75C18.7275 1.14587 20.8541 3.27254 20.8541 8.25004V13.75C20.8541 18.7275 18.7275 20.8542 13.75 20.8542Z"/>
-                    <path class="ui-check__ring" d="M13.75 20.8542H8.24998C3.27248 20.8542 1.14581 18.7275 1.14581 13.75V8.25004C1.14581 3.27254 3.27248 1.14587 8.24998 1.14587H13.75C18.7275 1.14587 20.8541 3.27254 20.8541 8.25004V13.75C20.8541 18.7275 18.7275 20.8542 13.75 20.8542ZM8.24998 2.52087C4.02415 2.52087 2.52081 4.02421 2.52081 8.25004V13.75C2.52081 17.9759 4.02415 19.4792 8.24998 19.4792H13.75C17.9758 19.4792 19.4791 17.9759 19.4791 13.75V8.25004C19.4791 4.02421 17.9758 2.52087 13.75 2.52087H8.24998Z"/>
-                    <path class="ui-check__tick" d="M1 5L4.2 8L11 1" transform="translate(5 6.5)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </span>
-            <span class="ui-check__label">Скрыть для сотрудника</span>
-        </label>
 
         <div class="task-form__actions">
             <button type="submit" class="btn task-form__btn">Сохранить</button>

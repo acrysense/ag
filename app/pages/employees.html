@@ -29,8 +29,28 @@
                                     </a>
                                 </div>
 
+                                <div class="data-table__controls">
+                                    <div class="data-table__sort" data-dt-sort>
+                                        <button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false">
+                                            <span data-dt-sort-value>По умолчанию</span>
+                                            <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                                        </button>
+                                        <div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
+                                            <button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+                                            <button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="asc">Сотрудник (А–Я)</button>
+                                            <button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="desc">Сотрудник (Я–А)</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg>
+                                    </button>
+                                    <button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg>
+                                    </button>
+                                </div>
+
                                 <div class="data-table__scroll">
-                                    <table class="data-table">
+                                    <table class="data-table is-cards-view">
                                         <thead>
                                             <tr>
                                                 <th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>

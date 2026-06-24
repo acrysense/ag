@@ -372,6 +372,7 @@
         @include only(mobile) {
             @include prop-vw(gap, 10, sm);
             @include prop-vw(padding-block, 10, sm);
+            @include prop-vw(padding-inline, 10, sm);
             @include prop-vw(margin-bottom, 10, sm);
         }
 

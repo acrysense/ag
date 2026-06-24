@@ -42,23 +42,51 @@ export default (root) => {
 		const m = /(\d{2})\.(\d{2})\.(\d{4})/.exec(String(s))
 		return m ? new Date(+m[3], +m[2] - 1, +m[1]).setHours(0, 0, 0, 0) : null
 	}
-	// Tasks page has no data-table — filter the visible task rows in place.
+	// Tasks page has no data-table — filter the visible task rows in place,
+	// per list, and show an empty-state row when a filter hides everything.
 	function applyTaskFilter(query, list) {
-		const rows = document.querySelectorAll('.task-row')
-		if (!rows.length) return
+		const lists = document.querySelectorAll('.tasks-list')
+		if (!lists.length) return
 		const q = query.trim().toLowerCase()
 		const assignees = list.filter((f) => f.key === 'assignee').map((f) => f.value.toLowerCase())
 		const date = list.find((f) => f.key === 'date' && f.range)
 		const from = date ? parseDmy(date.range.from) : null
 		const to = date ? parseDmy(date.range.to) : null
-		rows.forEach((row) => {
-			const who = (row.querySelector('.task-row__assignee')?.textContent || '').toLowerCase()
-			const when = parseDmy(row.querySelector('.task-row__date')?.textContent || '')
-			let ok = true
-			if (q && !row.textContent.toLowerCase().includes(q)) ok = false
-			if (ok && assignees.length && !assignees.some((a) => who.includes(a))) ok = false
-			if (ok && from != null && to != null && (when == null || when < from || when > to)) ok = false
-			row.classList.toggle('is-filtered-out', !ok)
+		const active = !!q || assignees.length > 0 || (from != null && to != null)
+
+		lists.forEach((ul) => {
+			const rows = [...ul.querySelectorAll('.task-row')]
+			rows.forEach((row) => {
+				const who = (row.querySelector('.task-row__assignee')?.textContent || '').toLowerCase()
+				const when = parseDmy(row.querySelector('.task-row__date')?.textContent || '')
+				let ok = true
+				if (q && !row.textContent.toLowerCase().includes(q)) ok = false
+				if (ok && assignees.length && !assignees.some((a) => who.includes(a))) ok = false
+				if (ok && from != null && to != null && (when == null || when < from || when > to)) ok = false
+				row.classList.toggle('is-filtered-out', !ok)
+			})
+
+			const anyVisible = rows.some(
+				(r) => !r.classList.contains('is-filtered-out') && !r.classList.contains('is-hidden')
+			)
+			const emptyByFilter = active && !anyVisible
+			let empty = ul.querySelector('.tasks-list__empty--filter')
+			if (emptyByFilter) {
+				if (!empty) {
+					empty = document.createElement('li')
+					empty.className = 'tasks-list__empty tasks-list__empty--filter'
+					empty.textContent = 'Задачи по фильтру не найдены'
+					ul.appendChild(empty)
+				}
+				empty.hidden = false
+			} else if (empty) {
+				empty.hidden = true
+			}
+
+			// hide the "show completed" toggle while the filter empties this list
+			// (TasksPanel owns its [hidden] attribute; we use a separate class)
+			const toggleBtn = ul.closest('.tasks-panel')?.querySelector('[data-tasks-toggle]')
+			toggleBtn?.classList.toggle('is-filter-hidden', emptyByFilter)
 		})
 	}
 

@@ -76,6 +76,15 @@
             padding: 0;
             background: transparent;
             border: none;
+            // base display:block would otherwise beat the UA [hidden] rule, so
+            // TasksPanel's toggle.hidden never took effect — restore it here…
+            &[hidden] {
+                display: none;
+            }
+            // …and a separate class for the header filter emptying the list
+            &.is-filter-hidden {
+                display: none;
+            }
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
             line-height: 1.57142857143;
@@ -150,35 +159,104 @@
             }
         }
         &__task {
-            @include prop-vw(max-width, 880, xl);
-            width: 100%;
+            flex: 1 1 auto;
+            min-width: 0;
+
+            @include only(mobile) {
+                width: 100%;
+            }
+        }
+        &__assignee {
+            flex-shrink: 0;
+            @include prop-vw(width, 220, xl);
 
             @include only(desktop) {
-                @include prop-vw(max-width, 880, lg);
+                @include prop-vw(width, 220, lg);
             }
             @include only(mobile) {
-                max-width: none;
+                width: 100%;
+            }
+        }
+        // date field + eye toggle share a row (so the eye sits right of the date,
+        // including on mobile where the grid stacks the other fields)
+        &__daterow {
+            flex-shrink: 0;
+            display: flex;
+            align-items: flex-start;
+            @include prop-vw(gap, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
+            @include only(mobile) {
+                width: 100%;
+                @include prop-vw(gap, 10, sm);
             }
         }
         &__date {
-            @include prop-vw(max-width, 150, xl);
-            width: 100%;
+            flex-shrink: 0;
+            @include prop-vw(width, 150, xl);
 
             @include only(desktop) {
-                @include prop-vw(max-width, 150, lg);
+                @include prop-vw(width, 150, lg);
             }
             @include only(mobile) {
-                max-width: none;
+                flex: 1 1 auto;
+                width: auto;
+                min-width: 0;
             }
         }
-        &__check {
-            @include prop-vw(margin-top, 10, xl);
+        // eye toggle (replaces the "hide from employee" checkbox): aligned with
+        // the input row (cleared past the label), turns blue when active (hidden)
+        &__hide {
+            flex-shrink: 0;
+            align-self: flex-start;
+            @include prop-vw(margin-top, 24, xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(width, 46, xl);
+            @include prop-vw(height, 46, xl);
+            color: $color-dark-grey;
+            background: $color-bg;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 14, xl);
+            cursor: pointer;
+            transition: color $transition-default, background $transition-default;
+            & > svg {
+                @include prop-vw(width, 22, xl);
+                @include prop-vw(height, 22, xl);
+            }
+            &.is-active {
+                color: $color-blue;
+            }
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
 
             @include only(desktop) {
-                @include prop-vw(margin-top, 10, lg);
+                @include prop-vw(margin-top, 24, lg);
+                @include prop-vw(width, 46, lg);
+                @include prop-vw(height, 46, lg);
+                @include border-all(1, solid, $color-border, lg);
+                @include prop-vw(border-radius, 14, lg);
+                & > svg {
+                    @include prop-vw(width, 22, lg);
+                    @include prop-vw(height, 22, lg);
+                }
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(margin-top, 24, sm);
+                @include prop-vw(width, 46, sm);
+                @include prop-vw(height, 46, sm);
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 14, sm);
+                & > svg {
+                    @include prop-vw(width, 22, sm);
+                    @include prop-vw(height, 22, sm);
+                }
             }
         }
         &__actions {
@@ -556,6 +634,9 @@
             text-align: center;
             @include prop-vw(font-size, 15, xl);
             color: $color-dark-grey;
+            &[hidden] {
+                display: none;
+            }
 
             @include only(desktop) {
                 @include prop-vw(padding-block, 40, lg);

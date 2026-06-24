@@ -303,4 +303,172 @@
             }
         }
     }
+
+    // --- Mobile controls: "Сортировать по" dropdown + card/table view toggle ---
+    .data-table__controls {
+        display: none;
+
+        @include only(mobile) {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(margin-top, 16, sm);
+            @include prop-vw(margin-bottom, 4, sm);
+        }
+    }
+    .data-table__sort {
+        position: relative;
+        flex: 1 1 auto;
+
+        &-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            @include prop-vw(gap, 8, sm);
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 14, sm);
+            @include prop-vw(font-size, 15, sm);
+            color: $color-dark-grey;
+            background: $color-white;
+            @include border-all(1, solid, $color-border, sm);
+            @include prop-vw(border-radius, 12, sm);
+            cursor: pointer;
+            & > svg {
+                flex-shrink: 0;
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+                color: $color-dark-grey;
+                transition: transform $transition-default;
+            }
+        }
+        &.is-open &-trigger {
+            border-color: $color-form-focus;
+            & > svg {
+                transform: rotate(180deg);
+            }
+        }
+        &-panel {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            @include prop-vw(padding, 6, sm);
+            background: $color-white;
+            @include border-all(1, solid, $color-border, sm);
+            @include prop-vw(border-radius, 12, sm);
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.14);
+        }
+        &.is-open &-panel {
+            display: flex;
+        }
+        &-option {
+            @include prop-vw(padding-block, 10, sm);
+            @include prop-vw(padding-inline, 12, sm);
+            @include prop-vw(font-size, 14, sm);
+            font-weight: normal;
+            color: $color-black;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 8, sm);
+            text-align: left;
+            cursor: pointer;
+            &.is-active {
+                color: $color-blue;
+            }
+            @media screen and (hover: hover) {
+                &:hover {
+                    background: $color-bg;
+                }
+            }
+        }
+    }
+    .data-table__ctrl {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include prop-vw(width, 44, sm);
+        @include prop-vw(height, 44, sm);
+        color: $color-dark-grey;
+        background: $color-white;
+        @include border-all(1, solid, $color-border, sm);
+        @include prop-vw(border-radius, 12, sm);
+        cursor: pointer;
+        transition: color $transition-default, border-color $transition-default, background $transition-default;
+        & > svg {
+            @include prop-vw(width, 20, sm);
+            @include prop-vw(height, 20, sm);
+        }
+        &.is-active {
+            color: $color-blue;
+            border-color: $color-blue;
+            background: rgba($color-blue, 0.08);
+        }
+    }
+
+    // --- Mobile card view: the table rows render as labelled cards ---
+    @include only(mobile) {
+        .data-table.is-cards-view {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            table-layout: auto;
+
+            thead {
+                display: none;
+            }
+            tbody {
+                display: block;
+            }
+            .data-table__row {
+                display: block;
+                @include prop-vw(padding, 14, sm);
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 14, sm);
+                & + .data-table__row {
+                    @include prop-vw(margin-top, 10, sm);
+                    // neutralise the table-mode top border between rows
+                    .data-table__td {
+                        border-top: none;
+                    }
+                }
+            }
+            .data-table__td {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                @include prop-vw(gap, 12, sm);
+                width: auto;
+                @include prop-vw(padding-block, 5, sm);
+                padding-inline: 0;
+                @include prop-vw(font-size, 14, sm);
+                text-align: right;
+                white-space: normal;
+                &::before {
+                    content: attr(data-label);
+                    flex-shrink: 0;
+                    @include prop-vw(font-size, 13, sm);
+                    font-weight: 600;
+                    color: $color-dark-grey;
+                    text-align: left;
+                }
+                // first cell = the employee name → card title (full width, no label)
+                &:first-child {
+                    display: block;
+                    @include prop-vw(margin-bottom, 8, sm);
+                    @include prop-vw(padding-bottom, 8, sm);
+                    @include border-side(bottom, 1, solid, $color-border, sm);
+                    @include prop-vw(font-size, 15, sm);
+                    text-align: left;
+                    &::before {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
 }
