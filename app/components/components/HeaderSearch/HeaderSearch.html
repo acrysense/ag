@@ -208,6 +208,38 @@
                     <button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">Полководец Т.С.</button>
                 </div>
             </div>
+
+            <!-- free-text input (list of values), inline — no dropdown -->
+            <div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
+                <input type="text" class="filter-field__input" data-filter-text placeholder="Кол-во чеков" autocomplete="off">
+            </div>
+
+            <!-- numeric range (From – To), inline — no dropdown -->
+            <div class="filter-field filter-field--inline" data-filter-key="index" data-range>
+                <div class="filter-range">
+                    <input type="text" class="filter-field__input" data-range-from placeholder="Индекс от" autocomplete="off" inputmode="decimal">
+                    <span class="filter-range__dash">–</span>
+                    <input type="text" class="filter-field__input" data-range-to placeholder="до" autocomplete="off" inputmode="decimal">
+                </div>
+            </div>
+
+            <!-- date range (From – To) -->
+            <div class="filter-field" data-filter-key="period" data-daterange>
+                <button type="button" class="filter-field__trigger">
+                    <span class="filter-field__value" data-placeholder="Период">Период</span>
+                    <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                </button>
+                <div class="filter-field__panel filter-field__panel--calendar"></div>
+            </div>
+
+            <!-- single date -->
+            <div class="filter-field" data-filter-key="date" data-date>
+                <button type="button" class="filter-field__trigger">
+                    <span class="filter-field__value" data-placeholder="Дата">Дата</span>
+                    <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                </button>
+                <div class="filter-field__panel filter-field__panel--calendar"></div>
+            </div>
         </div>
         </div>
 

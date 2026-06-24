@@ -50,22 +50,62 @@ export default (root) => {
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
 	let pageSize = Infinity
 
-	const cellText = (row, key) => {
-		const cell = row.querySelector(`[data-filter-key="${key}"]`)
-		return cell ? norm(cell.textContent) : norm(row.textContent)
+	// resolve a filter key to the cell holding its value: a td tagged with
+	// data-filter-key, else the column under the matching sortable header
+	const colIndexForKey = (key) => {
+		const th = table.querySelector(`th[data-sort-key="${key}"]`)
+		return th ? [...th.parentElement.children].indexOf(th) : -1
+	}
+	const cellForKey = (row, key) => {
+		const tagged = row.querySelector(`[data-filter-key="${key}"]`)
+		if (tagged) return tagged
+		const ci = colIndexForKey(key)
+		return ci >= 0 ? row.children[ci] : null
+	}
+	// "1,31" / "1 234" → 1.31 / 1234 ; "10.05.2026" → timestamp
+	const toNum = (s) => {
+		const v = parseFloat(String(s).replace(/\s/g, '').replace(',', '.'))
+		return Number.isNaN(v) ? null : v
+	}
+	const toDate = (s) => {
+		const m = /(\d{2})\.(\d{2})\.(\d{4})/.exec(String(s))
+		return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : null
 	}
 
 	const matches = (row) => {
 		if (state.query && !norm(row.textContent).includes(state.query)) return false
-		// group active filter values by key → OR within a key, AND across keys
+		// group active filters by key → OR within a key, AND across keys
 		const byKey = new Map()
 		for (const f of state.filters) {
 			if (!byKey.has(f.key)) byKey.set(f.key, [])
-			byKey.get(f.key).push(norm(f.value))
+			byKey.get(f.key).push(f)
 		}
-		for (const [key, values] of byKey) {
-			const text = cellText(row, key)
-			if (!values.some((v) => text.includes(v))) return false
+		for (const [key, fs] of byKey) {
+			const cell = cellForKey(row, key)
+			const ranges = fs.filter((f) => f.range)
+			// numeric / date From–To range → compare the cell value to [from, to]
+			if (ranges.length) {
+				if (!cell) continue // no matching column (e.g. a demo date field) → skip
+				const raw = cell.textContent
+				const ok = ranges.some(({ range }) => {
+					const isDate = /\d{2}\.\d{2}\.\d{4}/.test(`${range.from}${range.to}`)
+					const v = isDate ? toDate(raw) : toNum(raw)
+					if (v == null) return false
+					const lo = isDate ? toDate(range.from) : toNum(range.from)
+					const hi = isDate ? toDate(range.to) : toNum(range.to)
+					return (lo == null || v >= lo) && (hi == null || v <= hi)
+				})
+				if (!ok) return false
+				continue
+			}
+			// text / select filters (OR within a key); free-text lists split on commas
+			const text = cell ? norm(cell.textContent) : norm(row.textContent)
+			const ok = fs.some((f) =>
+				f.list
+					? String(f.value).split(/[,\s]+/).map(norm).filter(Boolean).some((t) => text.includes(t))
+					: text.includes(norm(f.value))
+			)
+			if (!ok) return false
 		}
 		return true
 	}

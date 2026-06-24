@@ -36,6 +36,15 @@
     body.tasks-page [data-page-fields="employees"] {
         display: none;
     }
+    // Mobile: .data-panel's grey top strip (::before) reads as the separator
+    // between the active filter chips and the content. With no active filters
+    // there are no chips, so that strip is a stray divider under the header —
+    // hide it until at least one chip is shown.
+    @include only(mobile) {
+        body.employees-page:not(:has([data-filter-chips]:not([hidden]))) .data-panel::before {
+            display: none;
+        }
+    }
     // calendar panel needs more room than a plain option list
     .filter-field__panel--calendar {
         @include prop-vw(min-width, 290, xl);
@@ -47,9 +56,84 @@
         }
     }
     // block layout (not flex) so the aspect-ratio day grid sizes correctly and
-    // the panel's white background covers the whole calendar
+    // the panel's white background covers the whole calendar. The min-width is
+    // re-stated here (higher specificity) because the base .filter-field__panel
+    // min-width is declared later and would otherwise win and shrink it.
     .filter-field.is-open .filter-field__panel.filter-field__panel--calendar {
         display: block;
+        @include prop-vw(min-width, 290, xl);
+
+        @include only(desktop) {
+            @include prop-vw(min-width, 290, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(min-width, 290, sm);
+        }
+    }
+    // free-text / numeric-range fields are inline inputs (no dropdown) — match
+    // the select-trigger box so they sit consistently in the filter grid
+    .filter-field__input {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        @include prop-vw(padding-block, 12, xl);
+        @include prop-vw(padding-inline, 16, xl);
+        @include prop-vw(font-size, 15, xl);
+        line-height: 1.4;
+        color: $color-black;
+        background: $color-white;
+        @include border-all(1, solid, $color-border, xl);
+        @include prop-vw(border-radius, 12, xl);
+        transition: border-color $transition-default;
+        &::placeholder {
+            color: $color-dark-grey;
+        }
+        &:focus {
+            outline: none;
+            border-color: $color-form-focus;
+        }
+
+        @include only(desktop) {
+            @include prop-vw(padding-block, 12, lg);
+            @include prop-vw(padding-inline, 16, lg);
+            @include prop-vw(font-size, 15, lg);
+            @include border-all(1, solid, $color-border, lg);
+            @include prop-vw(border-radius, 12, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 16, sm);
+            @include prop-vw(font-size, 15, sm);
+            @include prop-vw(border-radius, 12, sm);
+        }
+    }
+    // two compact inputs sharing the field's grid cell (От – До)
+    .filter-range {
+        display: flex;
+        align-items: center;
+        @include prop-vw(gap, 6, xl);
+        .filter-field__input {
+            flex: 1 1 0;
+            @include prop-vw(padding-inline, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-inline, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-inline, 12, sm);
+            }
+        }
+        &__dash {
+            flex-shrink: 0;
+            color: $color-dark-grey;
+        }
+
+        @include only(desktop) {
+            @include prop-vw(gap, 6, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(gap, 6, sm);
+        }
     }
 
     .filter-search {

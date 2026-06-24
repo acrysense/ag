@@ -3,6 +3,9 @@
 
 @layer layout {
     .sidebar {
+        // position (no z-index yet → no stacking context) so it can be lifted
+        // above a modal overlay on demand; mobile overrides this to fixed
+        position: relative;
         @include prop-vw(padding-top, 20, xl);
         @include prop-vw(padding-bottom, 40, xl);
         @include prop-vw(padding-inline, 30, xl);
@@ -10,6 +13,16 @@
         @include prop-vw(max-width, 350, xl);
         width: 100%;
         @include border-side(right, 1, solid, $color-border, xl);
+
+        // Keep the sidebar sharp above a modal's blurred overlay (delete task /
+        // create visit). Desktop/tablet only — on mobile the sidebar is a hidden
+        // drawer and the modal is full-screen, so nothing to preserve.
+        @include up(tablet) {
+            body:has(.task-modal:not([hidden])) &,
+            body:has(.visit-modal:not([hidden])) & {
+                z-index: 250;
+            }
+        }
 
         @include only(desktop) {
             @include prop-vw(padding-top, 20, lg);

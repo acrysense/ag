@@ -34,15 +34,19 @@
             </div>
             <div class="field task-form__assignee">
                 <span class="field__label">Ответственный</span>
-                <div class="field__control ui-select" data-task-assignee>
+                <div class="field__control ui-select" data-task-assignee data-select-search>
                     <button type="button" class="ui-select__trigger" data-select-trigger aria-haspopup="listbox" aria-expanded="false">
                         <span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
                         <svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
                     </button>
-                    <div class="ui-select__panel" data-select-panel role="listbox">
+                    <div class="ui-select__panel ui-select__panel--scroll" data-select-panel role="listbox">
+                        <div class="ui-select__search">
+                            <input type="text" class="ui-select__search-input" data-select-search-input placeholder="Поиск" autocomplete="off" aria-label="Поиск ответственного">
+                        </div>
                         <button type="button" class="ui-select__option" role="option" data-value="Иванов М.С.">Иванов М.С.</button>
                         <button type="button" class="ui-select__option" role="option" data-value="Петров А.И.">Петров А.И.</button>
                         <button type="button" class="ui-select__option" role="option" data-value="Панковец В.В.">Панковец В.В.</button>
+                        <p class="ui-select__empty" data-select-empty hidden>Ничего не найдено</p>
                     </div>
                     <input type="hidden" name="assignee" value="" data-select-input>
                 </div>

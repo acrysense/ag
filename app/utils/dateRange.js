@@ -12,7 +12,7 @@ const pad = (n) => String(n).padStart(2, '0')
 const fmt = (d) => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`
 const ymd = (y, m, day) => new Date(y, m, day).setHours(0, 0, 0, 0)
 
-export function mountDateRange(field, onChange) {
+export function mountDateRange(field, onChange, { single = false } = {}) {
 	if (!field || field.__dateRangeBound) return () => {}
 	field.__dateRangeBound = true
 
@@ -74,7 +74,11 @@ export function mountDateRange(field, onChange) {
 
 	const pickDay = (day) => {
 		const t = ymd(view.getFullYear(), view.getMonth(), day)
-		if (start == null || (start != null && end != null)) {
+		if (single) {
+			// single-date mode: one click selects the day and completes
+			start = t
+			end = t
+		} else if (start == null || (start != null && end != null)) {
 			start = t
 			end = null
 		} else if (t >= start) {

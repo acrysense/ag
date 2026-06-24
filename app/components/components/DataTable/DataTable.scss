@@ -147,6 +147,7 @@
             line-height: 1.25;
             color: $color-black;
             vertical-align: middle;
+            transition: background $transition-default;
             &:first-child {
                 padding-left: 0;
             }
@@ -179,6 +180,15 @@
             }
             @include only(mobile) {
                 @include border-side(top, 1, solid, $color-border, sm);
+            }
+        }
+        // light, no-click row highlight for readability — table view only
+        // (the mobile card view stacks cells, so a row tint there makes no sense)
+        @include up(tablet) {
+            @media screen and (hover: hover) {
+                &__row:hover .data-table__td {
+                    background: #f5f8fa;
+                }
             }
         }
         &__link {

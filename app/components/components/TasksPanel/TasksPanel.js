@@ -55,11 +55,32 @@ export default (root) => {
 		const inputEl = select.querySelector('[data-select-input]')
 		if (!trigger || !panel) return
 
+		// optional in-dropdown search (same UX as the header filters)
+		const searchInput = select.querySelector('[data-select-search-input]')
+		const emptyEl = select.querySelector('[data-select-empty]')
+		const options = [...select.querySelectorAll('.ui-select__option')]
+		const applyFilter = (q) => {
+			const norm = q.trim().toLowerCase()
+			let visible = 0
+			options.forEach((o) => {
+				const match = o.textContent.toLowerCase().includes(norm)
+				o.hidden = !match
+				if (match) visible++
+			})
+			if (emptyEl) emptyEl.hidden = visible > 0
+		}
+
 		let open = false
 		const setOpen = (s) => {
 			open = s
 			select.classList.toggle('is-open', s)
 			trigger.setAttribute('aria-expanded', s ? 'true' : 'false')
+			if (s && searchInput) {
+				// reset the filter and drop straight into the search field
+				searchInput.value = ''
+				applyFilter('')
+				searchInput.focus({ preventScroll: true })
+			}
 		}
 		const reset = () => {
 			setOpen(false)
@@ -67,6 +88,9 @@ export default (root) => {
 			select.querySelectorAll('.ui-select__option.is-active').forEach((o) => o.classList.remove('is-active'))
 			if (valueEl) valueEl.textContent = valueEl.dataset.placeholder || ''
 			if (inputEl) inputEl.value = ''
+			if (searchInput) searchInput.value = ''
+			options.forEach((o) => (o.hidden = false))
+			if (emptyEl) emptyEl.hidden = true
 		}
 		const onTrigger = (e) => {
 			e.preventDefault()
@@ -85,16 +109,36 @@ export default (root) => {
 		const onDocDown = (e) => {
 			if (open && !select.contains(e.target)) setOpen(false)
 		}
+		const onSearch = (e) => applyFilter(e.target.value)
+		const onSearchKey = (e) => {
+			if (e.key === 'Escape') {
+				e.stopPropagation()
+				setOpen(false)
+				trigger.focus({ preventScroll: true })
+			} else if (e.key === 'Enter') {
+				e.preventDefault()
+				const first = options.find((o) => !o.hidden)
+				if (first) first.click()
+			}
+		}
 
 		trigger.addEventListener('click', onTrigger)
 		panel.addEventListener('click', onOption)
 		document.addEventListener('pointerdown', onDocDown, true)
 		form?.addEventListener('reset', reset)
+		if (searchInput) {
+			searchInput.addEventListener('input', onSearch)
+			searchInput.addEventListener('keydown', onSearchKey)
+		}
 		disposers.push(() => {
 			trigger.removeEventListener('click', onTrigger)
 			panel.removeEventListener('click', onOption)
 			document.removeEventListener('pointerdown', onDocDown, true)
 			form?.removeEventListener('reset', reset)
+			if (searchInput) {
+				searchInput.removeEventListener('input', onSearch)
+				searchInput.removeEventListener('keydown', onSearchKey)
+			}
 		})
 	})
 
@@ -224,7 +268,7 @@ export default (root) => {
 			<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-three-dots"></use></svg>
 		</button>
 		<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
-			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem" data-task-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
 			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
 			<button type="button" class="actions-menu__item" role="menuitem" data-task-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
 		</div>
@@ -334,6 +378,88 @@ export default (root) => {
 			document.documentElement.style.overflow = ''
 		})
 	}
+
+	// --- Inline comment (the "Комментировать" action): edit an input that, on
+	// save, becomes the row's __desc (grey description). ---
+	const COMMENT_HTML = `<div class="task-comment" data-task-comment-editor>
+		<input type="text" class="task-comment__input" data-task-comment-input placeholder="Комментарий" autocomplete="off">
+		<div class="task-comment__actions">
+			<button type="button" class="task-comment__btn task-comment__btn--save" data-task-comment-save aria-label="Сохранить">
+				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg>
+			</button>
+			<button type="button" class="task-comment__btn task-comment__btn--cancel" data-task-comment-cancel aria-label="Отмена">
+				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg>
+			</button>
+		</div>
+	</div>`
+
+	const openComment = (row) => {
+		const existingEditor = row.querySelector('[data-task-comment-editor]')
+		if (existingEditor) {
+			existingEditor.querySelector('[data-task-comment-input]')?.focus()
+			return
+		}
+		const desc = row.querySelector('.task-row__desc')
+		const lead = row.querySelector('.task-row__lead') // present only on mobile
+		const tmp = document.createElement('div')
+		tmp.innerHTML = COMMENT_HTML.trim()
+		const editor = tmp.firstElementChild
+		const input = editor.querySelector('[data-task-comment-input]')
+		input.value = desc ? desc.textContent.trim() : ''
+
+		// place the editor where the __desc sits (or would sit)
+		if (desc) {
+			desc.hidden = true
+			desc.after(editor)
+		} else if (lead) {
+			row.insertBefore(editor, row.querySelector('.task-row__subline') || null)
+		} else {
+			row.querySelector('.task-row__title')?.after(editor)
+		}
+		input.focus()
+
+		const close = (save) => {
+			if (save) {
+				const val = input.value.trim()
+				let d = row.querySelector('.task-row__desc')
+				if (val) {
+					if (!d) {
+						d = document.createElement('p')
+						d.className = 'task-row__desc'
+						editor.before(d)
+					}
+					d.textContent = val
+					d.hidden = false
+				} else if (d) {
+					d.hidden = false // empty input → leave the existing desc untouched
+				}
+			} else {
+				const d = row.querySelector('.task-row__desc')
+				if (d) d.hidden = false
+			}
+			editor.remove()
+		}
+		editor.querySelector('[data-task-comment-save]').addEventListener('click', () => close(true))
+		editor.querySelector('[data-task-comment-cancel]').addEventListener('click', () => close(false))
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault()
+				close(true)
+			} else if (e.key === 'Escape') {
+				e.preventDefault()
+				close(false)
+			}
+		})
+	}
+
+	const onComment = (e) => {
+		const item = e.target.closest('[data-task-comment]')
+		if (!item || !root.contains(item)) return
+		const row = item.closest('.task-row')
+		if (row) openComment(row)
+	}
+	root.addEventListener('click', onComment)
+	disposers.push(() => root.removeEventListener('click', onComment))
 
 	// --- Mobile: physically rebuild each row into a clean flex header so the
 	// status + tools centre against the title+meta block reliably (CSS grid +

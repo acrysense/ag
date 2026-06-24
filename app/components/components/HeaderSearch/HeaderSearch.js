@@ -131,11 +131,25 @@ export default (root) => {
 	// ---- field (custom select) helpers ----
 	function readField(field) {
 		const key = field.dataset.filterKey
-		if (field.hasAttribute('data-daterange')) {
+		// calendar fields: date range and single date both read from __dateRange
+		if (field.hasAttribute('data-daterange') || field.hasAttribute('data-date')) {
 			const r = field.__dateRange?.getRange()
 			if (!r) return []
 			const label = r.from === r.to ? r.from : `${r.from} – ${r.to}`
 			return [{ key, value: `${r.from}|${r.to}`, label, range: r }]
+		}
+		// free-text input (e.g. a list of values)
+		if (field.hasAttribute('data-input')) {
+			const v = field.querySelector('[data-filter-text]')?.value.trim() || ''
+			return v ? [{ key, value: v, label: v, list: true }] : []
+		}
+		// numeric From–To range
+		if (field.hasAttribute('data-range')) {
+			const from = field.querySelector('[data-range-from]')?.value.trim() || ''
+			const to = field.querySelector('[data-range-to]')?.value.trim() || ''
+			if (!from && !to) return []
+			const label = from && to ? `От ${from} до ${to}` : from ? `От ${from}` : `До ${to}`
+			return [{ key, value: `${from}|${to}`, label, range: { from, to } }]
 		}
 		const multi = field.hasAttribute('data-multi')
 		if (multi) {
@@ -152,6 +166,7 @@ export default (root) => {
 	function clearField(field) {
 		field.querySelectorAll('.filter-option__input').forEach((cb) => (cb.checked = false))
 		field.querySelectorAll('.filter-option.is-active').forEach((o) => o.classList.remove('is-active'))
+		field.querySelectorAll('[data-filter-text], [data-range-from], [data-range-to]').forEach((i) => (i.value = ''))
 		const label = field.querySelector('.filter-field__value')
 		if (label) label.textContent = label.dataset.placeholder || ''
 		field.classList.remove('is-open')
@@ -162,8 +177,16 @@ export default (root) => {
 		// keep multiselect checkboxes in step when a chip is removed
 		fields.forEach((field) => {
 			const key = field.dataset.filterKey
-			if (field.hasAttribute('data-daterange')) {
+			if (field.hasAttribute('data-daterange') || field.hasAttribute('data-date')) {
 				if (!filters.some((f) => f.key === key)) field.__dateRange?.clear()
+				return
+			}
+			if (field.hasAttribute('data-input') || field.hasAttribute('data-range')) {
+				if (!filters.some((f) => f.key === key)) {
+					field.querySelectorAll('[data-filter-text], [data-range-from], [data-range-to]').forEach((i) => (i.value = ''))
+					const lbl = field.querySelector('.filter-field__value')
+					if (lbl) lbl.textContent = lbl.dataset.placeholder || ''
+				}
 				return
 			}
 			const active = new Set(filters.filter((f) => f.key === key).map((f) => f.value))
@@ -191,9 +214,10 @@ export default (root) => {
 		const panel = field.querySelector('.filter-field__panel')
 		const multi = field.hasAttribute('data-multi')
 
-		// date-range field: a calendar handles selection; just wire open/close
-		if (field.hasAttribute('data-daterange')) {
-			disposers.push(mountDateRange(field))
+		// calendar fields (date range / single date): a calendar handles
+		// selection; just wire open/close. single date closes after one pick.
+		if (field.hasAttribute('data-daterange') || field.hasAttribute('data-date')) {
+			disposers.push(mountDateRange(field, null, { single: field.hasAttribute('data-date') }))
 			const onTrigger = (e) => {
 				e.preventDefault()
 				e.stopPropagation()
@@ -274,6 +298,16 @@ export default (root) => {
 		}
 		trigger?.addEventListener('click', onTrigger)
 		disposers.push(() => trigger?.removeEventListener('click', onTrigger))
+
+		// free-text / numeric-range fields: reflect the typed value in the trigger
+		if (field.hasAttribute('data-input') || field.hasAttribute('data-range')) {
+			const onFieldInput = () => {
+				const f = readField(field)
+				if (labelEl) labelEl.textContent = f.length ? f[0].label : labelEl.dataset.placeholder || ''
+			}
+			field.addEventListener('input', onFieldInput)
+			disposers.push(() => field.removeEventListener('input', onFieldInput))
+		}
 
 		// single-select: <button> options (no native toggle, handle on click)
 		const onOption = (e) => {
