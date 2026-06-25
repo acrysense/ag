@@ -163,6 +163,36 @@ export default (root) => {
 		if (!active || !active.dataset.value) return []
 		return [{ key, value: active.dataset.value, label: active.dataset.label || active.dataset.value }]
 	}
+	// reflect whether a select holds a chosen value (vs its placeholder), so the
+	// trigger label can be greyed (placeholder) or black (value) via .is-filled
+	function reflectFilled(field) {
+		const lbl = field.querySelector('.filter-field__value')
+		if (!lbl) return
+		const txt = lbl.textContent.trim()
+		field.classList.toggle('is-filled', txt !== '' && txt !== (lbl.dataset.placeholder || '').trim())
+	}
+	// inline chips under a multiselect trigger — a duplicate of the page chips so
+	// the chosen values can be removed without leaving the filter
+	function renderFieldChips(field) {
+		if (!field.hasAttribute('data-multi')) return
+		let host = field.querySelector('.filter-field__chips')
+		if (!host) {
+			host = document.createElement('div')
+			host.className = 'filter-field__chips'
+			field.appendChild(host)
+		}
+		const checked = [...field.querySelectorAll('.filter-option__input:checked')]
+		host.innerHTML = ''
+		host.hidden = checked.length === 0
+		checked.forEach((cb) => {
+			const chip = document.createElement('button')
+			chip.type = 'button'
+			chip.className = 'filter-chip filter-chip--inline'
+			chip.dataset.value = cb.value
+			chip.innerHTML = `<span>${cb.dataset.label || cb.value}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
+			host.appendChild(chip)
+		})
+	}
 	function clearField(field) {
 		field.querySelectorAll('.filter-option__input').forEach((cb) => (cb.checked = false))
 		field.querySelectorAll('.filter-option.is-active').forEach((o) => o.classList.remove('is-active'))
@@ -170,6 +200,8 @@ export default (root) => {
 		const label = field.querySelector('.filter-field__value')
 		if (label) label.textContent = label.dataset.placeholder || ''
 		field.classList.remove('is-open')
+		reflectFilled(field)
+		renderFieldChips(field)
 		field.__reorder?.()
 		field.__dateRange?.clear()
 	}
@@ -198,6 +230,10 @@ export default (root) => {
 			})
 			field.__reorder?.()
 		})
+		fields.forEach((f) => {
+			reflectFilled(f)
+			renderFieldChips(f)
+		})
 	}
 
 	// collect every filter field (incl. "Сотрудник") into the filter list
@@ -217,7 +253,7 @@ export default (root) => {
 		// calendar fields (date range / single date): a calendar handles
 		// selection; just wire open/close. single date closes after one pick.
 		if (field.hasAttribute('data-daterange') || field.hasAttribute('data-date')) {
-			disposers.push(mountDateRange(field, null, { single: field.hasAttribute('data-date') }))
+			disposers.push(mountDateRange(field, () => reflectFilled(field), { single: field.hasAttribute('data-date') }))
 			const onTrigger = (e) => {
 				e.preventDefault()
 				e.stopPropagation()
@@ -258,6 +294,7 @@ export default (root) => {
 			if (!labelEl || !multi) return
 			const n = field.querySelectorAll('.filter-option__input:checked').length
 			labelEl.textContent = n ? `${labelEl.dataset.placeholder || ''}: ${n}` : labelEl.dataset.placeholder || ''
+			reflectFilled(field)
 		}
 
 		const isOn = (o) => !!o.querySelector('.filter-option__input')?.checked
@@ -317,6 +354,7 @@ export default (root) => {
 			field.querySelectorAll('.filter-option').forEach((o) => o.classList.remove('is-active'))
 			option.classList.add('is-active')
 			if (labelEl) labelEl.textContent = option.dataset.label || option.dataset.value
+			reflectFilled(field)
 			field.classList.remove('is-open')
 		}
 		field.addEventListener('click', onOption)
@@ -328,6 +366,7 @@ export default (root) => {
 				if (!e.target.matches('.filter-option__input')) return
 				setLabel()
 				reorder()
+				renderFieldChips(field)
 			}
 			field.addEventListener('change', onChange)
 			disposers.push(() => field.removeEventListener('change', onChange))
@@ -347,6 +386,7 @@ export default (root) => {
 
 		setLabel()
 		reorder()
+		renderFieldChips(field)
 	})
 
 	// ---- header dropdown open/close ----
@@ -413,6 +453,18 @@ export default (root) => {
 	// close a field sheet via its buttons, or by tapping the dimmed backdrop
 	// (the open field's ::before — a click there lands on the field element)
 	const onFieldSheet = (e) => {
+		// remove a chosen value via its inline chip under the multiselect trigger
+		const fieldChip = e.target.closest('.filter-field__chips .filter-chip')
+		if (fieldChip) {
+			e.preventDefault()
+			const f = fieldChip.closest('.filter-field')
+			const cb = [...f.querySelectorAll('.filter-option__input')].find((c) => c.value === fieldChip.dataset.value)
+			if (cb) {
+				cb.checked = false
+				cb.dispatchEvent(new Event('change', { bubbles: true }))
+			}
+			return
+		}
 		if (e.target.closest('[data-field-apply], [data-field-close]')) {
 			e.preventDefault()
 			e.target.closest('.filter-field')?.classList.remove('is-open')

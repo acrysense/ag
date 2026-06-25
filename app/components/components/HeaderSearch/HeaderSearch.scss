@@ -146,10 +146,12 @@
             @include prop-vw(border-radius, 12, lg);
         }
         @include only(mobile) {
-            @include prop-vw(padding-block, 12, sm);
-            @include prop-vw(padding-inline, 16, sm);
-            @include prop-vw(font-size, 15, sm);
-            @include prop-vw(border-radius, 12, sm);
+            @include prop-vw(height, 46, sm);
+            padding-block: 0;
+            @include prop-vw(padding-inline, 15, sm);
+            @include prop-vw(font-size, 14, sm);
+            line-height: 1.57142857143;
+            @include prop-vw(border-radius, 14, sm);
         }
     }
     // two compact inputs sharing the field's grid cell (От – До)
@@ -165,7 +167,7 @@
                 @include prop-vw(padding-inline, 10, lg);
             }
             @include only(mobile) {
-                @include prop-vw(padding-inline, 12, sm);
+                @include prop-vw(padding-inline, 15, sm);
             }
         }
         &__dash {
@@ -371,6 +373,20 @@
                 @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 12, lg);
             }
+            @include only(mobile) {
+                @include prop-vw(gap, 8, sm);
+                @include prop-vw(height, 46, sm);
+                padding-block: 0;
+                @include prop-vw(padding-inline, 15, sm);
+                @include prop-vw(font-size, 14, sm);
+                line-height: 1.57142857143;
+                @include border-all(1, solid, $color-border, sm);
+                @include prop-vw(border-radius, 14, sm);
+                & > svg {
+                    @include prop-vw(width, 14, sm);
+                    @include prop-vw(height, 14, sm);
+                }
+            }
         }
         &.is-open &__trigger {
             border-color: $color-form-focus;
@@ -382,6 +398,10 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
+            color: $color-dark-grey; // placeholder state
+        }
+        &.is-filled &__value {
+            color: $color-black; // a value is selected
         }
         &__panel {
             position: absolute;
@@ -426,6 +446,13 @@
                 @include prop-vw(padding-inline, 12, lg);
                 @include prop-vw(font-size, 14, lg);
             }
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 8, sm);
+                @include prop-vw(padding-block, 9, sm);
+                @include prop-vw(padding-inline, 12, sm);
+                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
         }
         &__options {
             display: flex;
@@ -443,6 +470,28 @@
             @include only(desktop) {
                 @include prop-vw(height, 1, lg);
                 @include prop-vw(margin-block, 6, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(height, 1, sm);
+                @include prop-vw(margin-block, 6, sm);
+            }
+        }
+        // inline chips of the chosen values, shown under the multiselect trigger
+        &__chips {
+            display: flex;
+            flex-wrap: wrap;
+            @include prop-vw(gap, 8, xl);
+            @include prop-vw(margin-top, 10, xl);
+            &[hidden] {
+                display: none;
+            }
+            @include only(desktop) {
+                @include prop-vw(gap, 8, lg);
+                @include prop-vw(margin-top, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 8, sm);
+                @include prop-vw(margin-top, 10, sm);
             }
         }
     }
@@ -475,6 +524,13 @@
             @include prop-vw(font-size, 15, lg);
             @include prop-vw(border-radius, 8, lg);
         }
+        @include only(mobile) {
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(padding-block, 9, sm);
+            @include prop-vw(padding-inline, 10, sm);
+            @include prop-vw(font-size, 15, sm);
+            @include prop-vw(border-radius, 8, sm);
+        }
 
         &__input {
             position: absolute;
@@ -493,6 +549,10 @@
             @include only(desktop) {
                 @include prop-vw(width, 20, lg);
                 @include prop-vw(height, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(width, 20, sm);
+                @include prop-vw(height, 20, sm);
             }
         }
         &__input:checked + &__box {
@@ -639,36 +699,39 @@
             align-items: center;
             justify-content: space-between;
             flex-shrink: 0;
-            @include prop-vw(padding-block, 16, sm);
-            @include prop-vw(padding-inline, 16, sm);
-            @include border-side(bottom, 1, solid, $color-border, sm);
+            @include prop-vw(padding-block, 14, sm);
+            @include prop-vw(padding-inline, 10, sm);
         }
         .filter-panel__title {
+            font-family: $font-secondary;
             @include prop-vw(font-size, 18, sm);
             font-weight: bold;
+            line-height: 1.33333333333;
             color: $color-black;
         }
         .filter-panel__close {
             display: flex;
             align-items: center;
             justify-content: center;
-            @include prop-vw(width, 32, sm);
-            @include prop-vw(height, 32, sm);
+            padding: 0;
+            @include prop-vw(min-width, 24, sm);
+            @include prop-vw(width, 24, sm);
+            @include prop-vw(height, 24, sm);
             color: $color-black;
             background: transparent;
             border: none;
             cursor: pointer;
             & > svg {
-                @include prop-vw(width, 16, sm);
-                @include prop-vw(height, 16, sm);
+                @include prop-vw(min-width, 20, sm);
+                @include prop-vw(width, 20, sm);
+                @include prop-vw(height, 20, sm);
             }
         }
         // field groups scroll between the head and the actions
         .filter-search__dropdown > [data-page-fields] {
             flex: 1 1 auto;
             overflow-y: auto;
-            @include prop-vw(padding-block, 16, sm);
-            @include prop-vw(padding-inline, 16, sm);
+            @include prop-vw(padding-inline, 10, sm);
         }
         // every field stacks full-width
         .filter-panel__top,
@@ -681,10 +744,9 @@
         .filter-panel__actions {
             flex-shrink: 0;
             display: flex;
-            @include prop-vw(gap, 12, sm);
-            @include prop-vw(padding-block, 16, sm);
-            @include prop-vw(padding-inline, 16, sm);
-            @include border-side(top, 1, solid, $color-border, sm);
+            @include prop-vw(gap, 20, sm);
+            @include prop-vw(padding-block, 10, sm);
+            @include prop-vw(padding-inline, 10, sm);
             .btn {
                 flex: 1 1 0;
             }
