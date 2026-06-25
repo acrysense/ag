@@ -25,8 +25,53 @@
                 @include prop-vw(width, 500, lg);
                 @include prop-vw(margin-left, 60, lg);
             }
+            // Mobile: drop the search onto its own full-width row below the header
+            // Own full-width row below the logo. The input fills the container
+            // content box (→ 10px gutters, same as the page), while a full-bleed
+            // ::before draws the divider edge-to-edge between the two rows —
+            // i.e. the header's bottom border, moved up above the search.
             @include only(mobile) {
-                display: none;
+                display: block;
+                order: 10;
+                flex: 0 0 100%;
+                width: 100%;
+                position: relative;
+                margin-inline: 0;
+                @include prop-vw(margin-top, 10, sm);
+                @include prop-vw(padding-top, 10, sm);
+                // no padding-bottom — header__wrapper's own bottom padding (9.5)
+                // already spaces the search from the content (avoids a double gap)
+                padding-bottom: 0;
+                padding-inline: 0;
+                background: $color-white;
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    @include prop-vw(left, -10, sm);
+                    @include prop-vw(right, -10, sm);
+                    @include border-side(top, 1, solid, $color-border, sm);
+                }
+            }
+        }
+        // let the search wrap to a second row on mobile, and move the header's
+        // bottom border above the search (the search's own border-top draws it)
+        .header__wrapper {
+            @include only(mobile) {
+                flex-wrap: wrap;
+                // with the search row present, the gap below it should read as a
+                // round 10 (the search itself adds none — see padding-bottom: 0)
+                @include prop-vw(padding-bottom, 10, sm);
+            }
+        }
+        @include only(mobile) {
+            .header {
+                border-bottom: none;
+            }
+            // the search row already spaces the content below the header, so the
+            // back link needs only a small 10px top gap (vs 20px elsewhere)
+            .wrapper__back {
+                @include prop-vw(margin-top, 10, sm);
             }
         }
     }
@@ -41,7 +86,7 @@
     // there are no chips, so that strip is a stray divider under the header —
     // hide it until at least one chip is shown.
     @include only(mobile) {
-        body.employees-page:not(:has([data-filter-chips]:not([hidden]))) .data-panel::before {
+        body[data-header-search]:not(:has([data-filter-chips]:not([hidden]))) .data-panel::before {
             display: none;
         }
     }
@@ -168,6 +213,18 @@
                 @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 14, lg);
             }
+            // mobile: 40px-tall grey pill, 12px text, icon room on the right
+            @include only(mobile) {
+                @include prop-vw(height, 40, sm);
+                padding-block: 0;
+                @include prop-vw(padding-left, 14, sm);
+                @include prop-vw(padding-right, 38, sm);
+                @include prop-vw(font-size, 12, sm);
+                line-height: 1.25;
+                background: #f5f8fa;
+                border: none;
+                @include prop-vw(border-radius, 7, sm);
+            }
         }
         &__icon {
             position: absolute;
@@ -183,6 +240,11 @@
                 @include prop-vw(right, 16, lg);
                 @include prop-vw(width, 20, lg);
                 @include prop-vw(height, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(right, 14, sm);
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
             }
         }
         &__dropdown {
@@ -536,6 +598,156 @@
             & > svg {
                 @include prop-vw(width, 10, sm);
                 @include prop-vw(height, 10, sm);
+            }
+        }
+    }
+
+    // ====================================================================
+    // Mobile: the filter is a full-screen sheet, and each field opens as a
+    // bottom sheet (not an inline dropdown).
+    // ====================================================================
+    .filter-panel__head {
+        display: none; // mobile-only header
+    }
+    @include only(mobile) {
+        // --- full-screen filter ---
+        // raise the whole search above the header profile (z 1000) so its
+        // full-screen dropdown isn't trapped under .filter-search's own z-index
+        body[data-header-search] .filter-search.is-open {
+            z-index: 1100;
+        }
+        body[data-header-search] .filter-search.is-open .filter-search__dropdown {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            min-width: 0;
+            max-width: none;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            transform: none;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .filter-panel__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            @include prop-vw(padding-block, 16, sm);
+            @include prop-vw(padding-inline, 16, sm);
+            @include border-side(bottom, 1, solid, $color-border, sm);
+        }
+        .filter-panel__title {
+            @include prop-vw(font-size, 18, sm);
+            font-weight: bold;
+            color: $color-black;
+        }
+        .filter-panel__close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(width, 32, sm);
+            @include prop-vw(height, 32, sm);
+            color: $color-black;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            & > svg {
+                @include prop-vw(width, 16, sm);
+                @include prop-vw(height, 16, sm);
+            }
+        }
+        // field groups scroll between the head and the actions
+        .filter-search__dropdown > [data-page-fields] {
+            flex: 1 1 auto;
+            overflow-y: auto;
+            @include prop-vw(padding-block, 16, sm);
+            @include prop-vw(padding-inline, 16, sm);
+        }
+        // every field stacks full-width
+        .filter-panel__top,
+        .filter-panel__grid {
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 12, sm);
+        }
+        // actions pinned at the bottom
+        .filter-panel__actions {
+            flex-shrink: 0;
+            display: flex;
+            @include prop-vw(gap, 12, sm);
+            @include prop-vw(padding-block, 16, sm);
+            @include prop-vw(padding-inline, 16, sm);
+            @include border-side(top, 1, solid, $color-border, sm);
+            .btn {
+                flex: 1 1 0;
+            }
+        }
+
+        // --- each field as a bottom sheet ---
+        .filter-field.is-open::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            z-index: 1110;
+            background: rgba(#212121, 0.35);
+        }
+        .filter-field.is-open .filter-field__panel,
+        .filter-field.is-open .filter-field__panel.filter-field__panel--calendar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: auto;
+            z-index: 1111;
+            width: 100%;
+            min-width: 0;
+            max-width: none;
+            max-height: 80vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            @include prop-vw(border-radius, 16, sm);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 16, sm);
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+        }
+        // drag handle (JS-injected) sticks to the top of the sheet
+        .filter-field__sheet-head {
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+            @include prop-vw(width, 40, sm);
+            @include prop-vw(height, 4, sm);
+            @include prop-vw(margin-bottom, 12, sm);
+            margin-inline: auto;
+            background: $color-grey;
+            border-radius: 4px;
+        }
+        .filter-field__options {
+            max-height: none;
+        }
+        // apply/close (JS-injected) stick to the bottom of the sheet
+        .filter-field__sheet-actions {
+            position: sticky;
+            bottom: 0;
+            flex-shrink: 0;
+            display: flex;
+            @include prop-vw(gap, 12, sm);
+            @include prop-vw(margin-top, 12, sm);
+            @include prop-vw(padding-top, 12, sm);
+            background: $color-white;
+            .btn {
+                flex: 1 1 0;
             }
         }
     }

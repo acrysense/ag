@@ -18,9 +18,11 @@
         @include only(mobile) {
             position: relative;
             z-index: 1;
-            @include prop-vw(padding-block, 20, sm);
+            padding-top: 0;
+            @include prop-vw(padding-bottom, 20, sm);
             @include prop-vw(padding-inline, 10, sm);
             border-radius: 0;
+            box-shadow: none;
             &::before {
                 content: '';
                 display: block;

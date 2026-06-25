@@ -350,11 +350,15 @@ export default (root) => {
 	})
 
 	// ---- header dropdown open/close ----
+	const mqMobile = window.matchMedia('(max-width: 743.98px)')
 	let open = false
 	const setOpen = (s) => {
 		open = s
 		root.classList.toggle('is-open', s)
 		if (dropdown) dropdown.setAttribute('aria-hidden', s ? 'false' : 'true')
+		// lock the page scroll behind the full-screen filter (mobile)
+		if (mqMobile.matches) document.documentElement.style.overflow = s ? 'hidden' : ''
+		if (!s) fields.forEach((f) => f.classList.remove('is-open'))
 	}
 	const onInputFocus = () => setOpen(true)
 	const onDocDown = (e) => {
@@ -382,6 +386,45 @@ export default (root) => {
 		document.removeEventListener('pointerdown', onDocDown, true)
 		document.removeEventListener('keydown', onKey, true)
 	})
+
+	// --- Mobile chrome: "Фильтр" close button + per-field bottom-sheet bits ---
+	const filterClose = root.querySelector('[data-filter-close]')
+	const onFilterClose = () => setOpen(false)
+	filterClose?.addEventListener('click', onFilterClose)
+	disposers.push(() => filterClose?.removeEventListener('click', onFilterClose))
+
+	// give each field-with-a-panel a drag handle + Применить/Закрыть so it reads
+	// as a bottom sheet on mobile (hidden on desktop via CSS). Calendar panels
+	// are skipped — mountDateRange owns their innerHTML.
+	fields.forEach((field) => {
+		const panel = field.querySelector('.filter-field__panel')
+		if (!panel || panel.classList.contains('filter-field__panel--calendar')) return
+		if (panel.querySelector('.filter-field__sheet-actions')) return
+		const handle = document.createElement('div')
+		handle.className = 'filter-field__sheet-head'
+		panel.insertBefore(handle, panel.firstChild)
+		const acts = document.createElement('div')
+		acts.className = 'filter-field__sheet-actions'
+		acts.innerHTML =
+			'<button type="button" class="btn btn--sm" data-field-apply>Применить</button>' +
+			'<button type="button" class="btn btn--sm btn--secondary" data-field-close>Закрыть</button>'
+		panel.appendChild(acts)
+	})
+	// close a field sheet via its buttons, or by tapping the dimmed backdrop
+	// (the open field's ::before — a click there lands on the field element)
+	const onFieldSheet = (e) => {
+		if (e.target.closest('[data-field-apply], [data-field-close]')) {
+			e.preventDefault()
+			e.target.closest('.filter-field')?.classList.remove('is-open')
+			return
+		}
+		const field = e.target.closest('.filter-field')
+		if (field && field.classList.contains('is-open') && e.target === field) {
+			field.classList.remove('is-open')
+		}
+	}
+	root.addEventListener('click', onFieldSheet)
+	disposers.push(() => root.removeEventListener('click', onFieldSheet))
 
 	const onApply = (e) => {
 		e.preventDefault()

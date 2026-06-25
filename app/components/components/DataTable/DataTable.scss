@@ -209,6 +209,7 @@
             @include prop-vw(font-size, 13, xl);
             font-weight: 600;
             line-height: 1;
+            text-transform: uppercase;
             &--a {
                 background: #E8F5E9;
                 color: $color-green;
@@ -314,7 +315,7 @@
         @include only(mobile) {
             display: flex;
             align-items: center;
-            @include prop-vw(gap, 10, sm);
+            @include prop-vw(gap, 5, sm);
             @include prop-vw(margin-top, 16, sm);
             @include prop-vw(margin-bottom, 4, sm);
         }
@@ -328,14 +329,16 @@
             align-items: center;
             justify-content: space-between;
             width: 100%;
+            @include prop-vw(height, 36, sm);
             @include prop-vw(gap, 8, sm);
-            @include prop-vw(padding-block, 12, sm);
-            @include prop-vw(padding-inline, 14, sm);
-            @include prop-vw(font-size, 15, sm);
+            padding-block: 0;
+            @include prop-vw(padding-inline, 15, sm);
+            @include prop-vw(font-size, 14, sm);
+            line-height: 1.57142857143;
             color: $color-dark-grey;
             background: $color-white;
             @include border-all(1, solid, $color-border, sm);
-            @include prop-vw(border-radius, 12, sm);
+            @include prop-vw(border-radius, 7, sm);
             cursor: pointer;
             & > svg {
                 flex-shrink: 0;
@@ -394,22 +397,22 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        @include prop-vw(width, 44, sm);
-        @include prop-vw(height, 44, sm);
-        color: $color-dark-grey;
+        @include prop-vw(width, 36, sm);
+        @include prop-vw(height, 36, sm);
+        color: $color-black;
         background: $color-white;
         @include border-all(1, solid, $color-border, sm);
-        @include prop-vw(border-radius, 12, sm);
+        @include prop-vw(border-radius, 7, sm);
         cursor: pointer;
         transition: color $transition-default, border-color $transition-default, background $transition-default;
         & > svg {
-            @include prop-vw(width, 20, sm);
-            @include prop-vw(height, 20, sm);
+            @include prop-vw(width, 16, sm);
+            @include prop-vw(height, 16, sm);
         }
+        // active: tinted fill + muted icon, border unchanged
         &.is-active {
-            color: $color-blue;
-            border-color: $color-blue;
-            background: rgba($color-blue, 0.08);
+            color: $color-dark-grey;
+            background: $color-bg;
         }
     }
 
@@ -421,57 +424,127 @@
             min-width: 0;
             table-layout: auto;
 
-            thead {
+            // keep the first column's heading (e.g. «Сотрудник» / «Аптека») as a
+            // bold list caption with a 2px underline; hide the rest of the thead
+            thead,
+            thead tr {
+                display: block;
+            }
+            .data-table__th {
                 display: none;
+            }
+            .data-table__th:first-child {
+                display: block;
+                width: auto;
+                @include prop-vw(padding-top, 14, sm);
+                @include prop-vw(padding-bottom, 12, sm);
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(font-size, 14, sm);
+                font-weight: bold;
+                line-height: 1.25;
+                color: $color-dark-grey;
+                @include border-side(bottom, 2, solid, $color-border, sm);
+                &::after {
+                    content: none; // no sort glyph on the caption
+                }
             }
             tbody {
                 display: block;
             }
             .data-table__row {
-                display: block;
-                @include prop-vw(padding, 14, sm);
-                @include border-all(1, solid, $color-border, sm);
-                @include prop-vw(border-radius, 14, sm);
-                & + .data-table__row {
-                    @include prop-vw(margin-top, 10, sm);
-                    // neutralise the table-mode top border between rows
-                    .data-table__td {
-                        border-top: none;
-                    }
-                }
+                // a plain list row: no outer border/radius, just a bottom divider
+                display: flex;
+                flex-direction: column;
+                @include prop-vw(gap, 5, sm); // vertical gap between cells
+                padding-top: 0;
+                @include prop-vw(padding-inline, 10, sm);
+                @include prop-vw(padding-bottom, 10, sm);
+                @include border-side(bottom, 1, solid, $color-border, sm);
             }
             .data-table__td {
                 display: flex;
                 align-items: center;
-                justify-content: space-between;
-                @include prop-vw(gap, 12, sm);
+                justify-content: flex-start;
+                @include prop-vw(gap, 5, sm); // horizontal gap label ↔ value
                 width: auto;
-                @include prop-vw(padding-block, 5, sm);
+                padding-block: 0;
                 padding-inline: 0;
-                @include prop-vw(font-size, 14, sm);
-                text-align: right;
+                border: none; // drop the table-mode row separators
+                @include prop-vw(font-size, 12, sm);
+                line-height: 1.25;
+                text-align: left;
                 white-space: normal;
                 &::before {
-                    content: attr(data-label);
+                    content: attr(data-label) ':';
                     flex-shrink: 0;
-                    @include prop-vw(font-size, 13, sm);
-                    font-weight: 600;
+                    @include prop-vw(font-size, 12, sm);
+                    line-height: 1.25;
+                    font-weight: normal;
                     color: $color-dark-grey;
                     text-align: left;
                 }
-                // first cell = the employee name → card title (full width, no label)
+                // first cell = the name → card title (.data-table__link): 46px tall
+                // via padding, 14px / 1.5714 line, and no divider beneath it
                 &:first-child {
                     display: block;
-                    @include prop-vw(margin-bottom, 8, sm);
-                    @include prop-vw(padding-bottom, 8, sm);
-                    @include border-side(bottom, 1, solid, $color-border, sm);
-                    @include prop-vw(font-size, 15, sm);
+                    padding: 0;
                     text-align: left;
                     &::before {
                         display: none;
                     }
+                    .data-table__link {
+                        display: block;
+                        @include prop-vw(font-size, 14, sm);
+                        line-height: 1.57142857143;
+                        // 46 = 2×12 padding + 22 line
+                        @include prop-vw(padding-block, 12, sm);
+                    }
+                }
+                // category → just the bold, colour-coded letter (no chip)
+                .data-table__cat {
+                    width: auto;
+                    height: auto;
+                    padding: 0;
+                    border-radius: 0;
+                    background: none;
+                    @include prop-vw(font-size, 12, sm);
+                    font-weight: bold;
                 }
             }
         }
+    }
+
+    // managers table has 12 columns (employees has 13) — its own column widths,
+    // higher specificity than the global .data-table__th:nth-child(N) above
+    .managers-table {
+        .data-table__th:nth-child(1)  { width: 12%; }
+        .data-table__th:nth-child(2)  { width: 11%; }
+        .data-table__th:nth-child(3)  { width: 6%; }
+        .data-table__th:nth-child(4)  { width: 7%; }
+        .data-table__th:nth-child(5)  { width: 8%; }
+        .data-table__th:nth-child(6)  { width: 9%; }
+        .data-table__th:nth-child(7)  { width: 7%; }
+        .data-table__th:nth-child(8)  { width: 9%; }
+        .data-table__th:nth-child(9)  { width: 10%; }
+        .data-table__th:nth-child(10) { width: 7%; }
+        .data-table__th:nth-child(11) { width: 6%; }
+        .data-table__th:nth-child(12) { width: 8%; }
+    }
+    // pharmacies table has 14 columns
+    .pharmacies-table {
+        .data-table__th:nth-child(1)  { width: 10%; }
+        .data-table__th:nth-child(2)  { width: 7%; }
+        .data-table__th:nth-child(3)  { width: 9%; }
+        .data-table__th:nth-child(4)  { width: 9%; }
+        .data-table__th:nth-child(5)  { width: 5%; }
+        .data-table__th:nth-child(6)  { width: 10%; }
+        .data-table__th:nth-child(7)  { width: 7%; }
+        .data-table__th:nth-child(8)  { width: 5%; }
+        .data-table__th:nth-child(9)  { width: 7%; }
+        .data-table__th:nth-child(10) { width: 8%; }
+        .data-table__th:nth-child(11) { width: 6%; }
+        .data-table__th:nth-child(12) { width: 5%; }
+        .data-table__th:nth-child(13) { width: 7%; }
+        .data-table__th:nth-child(14) { width: 5%; }
     }
 }

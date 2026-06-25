@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light managers-page" data-header-search>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__wide">
+                            <a href="/" class="wrapper__back wrapper__back--mobile">
+                                <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+                                <span>Назад</span>
+                            </a>
+                            <div class="filter-chips" data-filter-chips hidden>
+                                <div class="filter-chips__list" data-filter-chips-list></div>
+                                <button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
+                            </div>
+
+                            <section class="data-panel managers-table" data-data-table data-module="DataTable" data-path="components">
+                                <div class="data-panel__header">
+                                    <h1 class="data-panel__title">Менеджеры</h1>
+                                    <a href="/" class="data-panel__export">
+                                        <svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                        <span class="data-panel__export-full">Экспорт в Excel</span>
+                                        <span class="data-panel__export-short">Excel</span>
+                                    </a>
+                                </div>
+
+                                <div class="data-table__controls">
+                                    <div class="data-table__sort" data-dt-sort>
+                                        <button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false">
+                                            <span data-dt-sort-value>По умолчанию</span>
+                                            <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                                        </button>
+                                        <div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
+                                            <button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+                                            <button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="asc">Сотрудник (А–Я)</button>
+                                            <button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="desc">Сотрудник (Я–А)</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg>
+                                    </button>
+                                    <button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg>
+                                    </button>
+                                </div>
+
+                                <div class="data-table__scroll">
+                                    <table class="data-table is-cards-view">
+                                        <thead>
+                                            <tr>
+                                                <th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+                                                <th class="data-table__th">Регион</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="pharmacies" data-sort-type="number">Аптек</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="kpi" data-sort-type="number">КПИ РМ%</th>
+                                                <th class="data-table__th data-table__th--center">Кат. команды</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="turnover" data-sort-type="number">Товарооборот</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Ср. чек</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="rank" data-sort-type="number">Доля товаров 4–6 ранга</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="penetration" data-sort-type="number">Пенетрация карт лояльности</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Кол-во чеков</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="stm" data-sort-type="number">СТМ %</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="ab" data-sort-type="number">Доля сотрудников A/B %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each (arr
+                                                (obj name="Василевская М.В." region="Минск" num="134" cat="b" pct="98")
+                                                (obj name="Ковш Т.А." region="Витебская обл." num="249" cat="b" pct="97")
+                                                (obj name="Зайцева Д.М." region="Витебская обл." num="98034" cat="a" pct="38")
+                                                (obj name="Волкова Ю.Г." region="Брестская обл." num="1" cat="d" pct="31")
+                                                (obj name="Северная Т.В." region="Витебская обл." num="89" cat="b" pct="89")
+                                                (obj name="Василевская М.В." region="Минск" num="134" cat="b" pct="87")
+                                                (obj name="Ковш Т.А." region="Минск" num="249" cat="b" pct="93")
+                                                (obj name="Зайцева Д.М." region="Гродненская обл." num="98034" cat="a" pct="91")
+                                                (obj name="Волкова Ю.Г." region="Минск" num="1" cat="d" pct="95")
+                                                (obj name="Северная Т.В." region="Минск" num="89" cat="b" pct="90")
+                                                (obj name="Василевская М.В." region="Минск" num="134" cat="b" pct="18")
+                                                (obj name="Ковш Т.А." region="Могилевска обл." num="249" cat="b" pct="56")
+                                                (obj name="Зайцева Д.М." region="Брестская обл." num="98034" cat="a" pct="98")
+                                                (obj name="Волкова Ю.Г." region="Минск" num="1" cat="d" pct="86")
+                                                (obj name="Северная Т.В." region="Брестская обл." num="89" cat="b" pct="74")
+                                            )}}
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="employee"><a href="/manager" class="data-table__link">{{this.name}}</a></td>
+                                                <td class="data-table__td" data-filter-key="region">{{this.region}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.pct}}%</td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.pct}}%</td>
+                                                <td class="data-table__td data-table__td--num">{{this.pct}}%</td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                    <div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+                                </div>
+
+                                <div class="data-table__footer">
+                                    <nav class="ui-pagination" aria-label="Страницы">
+                                        <button type="button" class="ui-pagination__item">1</button>
+                                        <button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+                                        <button type="button" class="ui-pagination__item">3</button>
+                                        <button type="button" class="ui-pagination__item">4</button>
+                                        <span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+                                        <button type="button" class="ui-pagination__item">22</button>
+                                        <button type="button" class="ui-pagination__item">23</button>
+                                        <button type="button" class="ui-pagination__item">24</button>
+                                        <button type="button" class="ui-pagination__item">25</button>
+                                        <button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+                                    </nav>
+
+                                    <div class="data-table__total">
+                                        <span class="data-table__total-text">Всего: <span>835</span></span>
+                                        <div class="page-size" data-page-size>
+                                            <button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+                                                <span data-page-size-value>20</span>
+                                                <svg aria-hidden="true" focusable="false" width="16" height="16">
+                                                    <use href="#icon-caret"></use>
+                                                </svg>
+                                            </button>
+                                            <div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+                                                <button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+                                                <button type="button" class="page-size__option" role="option" data-value="50">50</button>
+                                                <button type="button" class="page-size__option" role="option" data-value="100">100</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+					</div>
+				</main>
+				{{> layouts/Footer/Footer }}
+			</div>
+		</body>
+</html>

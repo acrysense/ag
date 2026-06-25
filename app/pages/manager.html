@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light manager-page">
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__mid">
+						<a href="/managers" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+
+						<div class="manager">
+							<!-- top: profile card + visits panel -->
+							<div class="manager__top">
+								<section class="data-panel manager__card">
+									<div class="employee__profile">
+										<div class="employee__avatar">
+											<img src="/assets/images/ava.jpg" alt="Петров Алексей Иванович">
+										</div>
+										<div class="employee__info">
+											<h1 class="employee__name">Петров Алексей Иванович</h1>
+											<div class="employee__rows">
+												<div class="employee__row">
+													<span class="employee__label">Регион:</span>
+													<span class="employee__value">Минская область</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Аптек:</span>
+													<a href="/" class="employee__link">67</a>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Ставка:</span>
+													<span class="employee__value">1.25</span>
+												</div>
+											</div>
+										</div>
+										<div class="manager__rating">
+											<div class="employee__rating">
+												<div class="employee__rating-body">
+													<span class="employee__rating-value">0.83</span>
+													<span class="employee__rating-date">12.04.2026</span>
+												</div>
+												<span class="employee__rating-grade">B</span>
+											</div>
+											<button type="button" class="btn btn--sm btn--secondary manager__settings">Настройки</button>
+										</div>
+									</div>
+								</section>
+
+								<section class="data-panel manager__visits">
+									<div class="manager__visits-head">
+										<h2 class="data-panel__title">Визиты</h2>
+										<div class="manager__visits-tabs">
+											<button type="button" class="manager__visits-tab is-active">Новые</button>
+											<button type="button" class="manager__visits-tab">История</button>
+										</div>
+									</div>
+									<ul class="manager__visits-list">
+										{{#each (arr
+											(obj cat="b" name="Дрозд В.В." date="10.03.2026")
+											(obj cat="a" name="Орлова Т.Д." date="10.02.2026")
+											(obj cat="a" name="Синица С.С." date="10.03.2026")
+											(obj cat="b" name="Воробей М.В." date="10.01.2026")
+											(obj cat="b" name="Сорока С.В." date="10.03.2026")
+											(obj cat="c" name="Сорока С.В." date="10.03.2026")
+											(obj cat="b" name="Дрозд В.В." date="10.03.2026")
+											(obj cat="b" name="Воробей М.В." date="10.03.2026")
+											(obj cat="c" name="Сорока С.В." date="10.03.2026")
+											(obj cat="c" name="Воробей М.В." date="10.03.2026")
+											(obj cat="d" name="Сорока С.В." date="10.03.2026")
+										)}}
+										<li class="manager__visit">
+											<span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span>
+											<span class="manager__visit-text">{{this.name}}, {{this.date}}</span>
+										</li>
+										{{/each}}
+									</ul>
+								</section>
+							</div>
+
+							<!-- KPI -->
+							<section class="data-panel manager__kpi">
+								<h2 class="data-panel__title">KPI</h2>
+								<div class="data-table__scroll">
+									<table class="data-table manager-table">
+										<thead>
+											<tr>
+												<th class="data-table__th">Показатель</th>
+												<th class="data-table__th data-table__th--num">План РМ</th>
+												<th class="data-table__th data-table__th--num">Факт РМ</th>
+												<th class="data-table__th data-table__th--num">Прогресс, %</th>
+												<th class="data-table__th data-table__th--num">Размер KPI, %</th>
+												<th class="data-table__th data-table__th--num">KPI факт, %</th>
+												<th class="data-table__th data-table__th--num">Факт региона</th>
+												<th class="data-table__th data-table__th--num">Факт сети</th>
+											</tr>
+										</thead>
+										<tbody>
+											{{#each (arr
+												(obj name="Средний чек" plan="+0%" fact="0%" prog="100" size="30.50" kpi="30.50" reg="0%" net="0.030")
+												(obj name="Доля товаров 4-6 ранга, %" plan="+12%" fact="-12%" prog="100" size="12" kpi="12" reg="-12%" net="0.020")
+												(obj name="Доля сотрудников кат-ии А, В, %" plan="0%" fact="0%" prog="100" size="4.8" kpi="4.8" reg="0%" net="0.020")
+												(obj name="Товарооборот" plan="0%" fact="0%" prog="100" size="16.0" kpi="16.0" reg="0%" net="0.015")
+												(obj name="Доля СТМ, %" plan="0%" fact="0%" prog="100" size="43.0" kpi="43.0" reg="0%" net="0.015")
+												(obj name="Пенетрация карт лояльности, %" plan="0%" fact="0%" prog="100" size="43.0" kpi="43.0" reg="0%" net="0.015")
+											)}}
+											<tr class="data-table__row">
+												<td class="data-table__td">{{this.name}}</td>
+												<td class="data-table__td data-table__td--num">{{this.plan}}</td>
+												<td class="data-table__td data-table__td--num">{{this.fact}}</td>
+												<td class="data-table__td data-table__td--num"><span class="manager__progress">{{this.prog}}<span class="manager__progress-track"></span></span></td>
+												<td class="data-table__td data-table__td--num">{{this.size}}</td>
+												<td class="data-table__td data-table__td--num">{{this.kpi}}</td>
+												<td class="data-table__td data-table__td--num">{{this.reg}}</td>
+												<td class="data-table__td data-table__td--num">{{this.net}}</td>
+											</tr>
+											{{/each}}
+										</tbody>
+									</table>
+								</div>
+							</section>
+
+							<!-- pharmacies under management -->
+							<section class="data-panel manager__pharmacies" data-data-table data-module="DataTable" data-path="components">
+								<div class="data-panel__header">
+									<h2 class="data-panel__title">Аптеки в курации</h2>
+									<a href="/" class="data-panel__export">
+										<svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+											<path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+											<path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+										</svg>
+										<span class="data-panel__export-full">Экспорт в Excel</span>
+										<span class="data-panel__export-short">Excel</span>
+									</a>
+								</div>
+								<div class="data-table__scroll">
+									<table class="data-table manager-table">
+										<thead>
+											<tr>
+												<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
+												<th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Индекс</th>
+												<th class="data-table__th data-table__th--center">Категория аптеки</th>
+												<th class="data-table__th data-table__th--center">Торговая категория</th>
+												<th class="data-table__th data-table__th--num" data-sort-key="staff" data-sort-type="number">Кол-во сотрудников</th>
+												<th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Средний чек</th>
+												<th class="data-table__th data-table__th--num">Доля товаров 4-6 ранга %</th>
+												<th class="data-table__th data-table__th--num">Доля A/B %</th>
+												<th class="data-table__th data-table__th--num">Товарооборот РОЗН, руб.</th>
+												<th class="data-table__th data-table__th--num">Доля СТМ %</th>
+												<th class="data-table__th data-table__th--num">Пенетрация карт лояльности</th>
+											</tr>
+										</thead>
+										<tbody>
+											{{#each (arr
+												(obj name="ADEL №14" idx="10" cat="b" num="5")
+												(obj name="Эконом №8" idx="1" cat="b" num="12")
+												(obj name="Эконом №9" idx="10" cat="a" num="9")
+												(obj name="Аптека ADEL №14, Кобирин" idx="100" cat="d" num="24")
+												(obj name="ADEL №123" idx="20" cat="b" num="15")
+												(obj name="ADEL №14" idx="1" cat="b" num="1")
+												(obj name="Эконом №13" idx="5" cat="b" num="1")
+												(obj name="Эконом №9" idx="10" cat="a" num="4")
+											)}}
+											<tr class="data-table__row">
+												<td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">{{this.name}}</a></td>
+												<td class="data-table__td data-table__td--num">{{this.idx}}</td>
+												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+											</tr>
+											{{/each}}
+											<tr class="data-table__row manager__total-row">
+												<td class="data-table__td"><b>Итого</b></td>
+												<td class="data-table__td data-table__td--num">1.03</td>
+												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--a">a</span></td>
+												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--a">a</span></td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+												<td class="data-table__td data-table__td--num">15 100</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+								</div>
+								<div class="data-table__footer">
+									<nav class="ui-pagination" aria-label="Страницы">
+										<button type="button" class="ui-pagination__item">1</button>
+										<button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+										<button type="button" class="ui-pagination__item">3</button>
+										<button type="button" class="ui-pagination__item">4</button>
+										<span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+										<button type="button" class="ui-pagination__item">25</button>
+										<button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+									</nav>
+									<div class="data-table__total">
+										<span class="data-table__total-text">Всего: <span>835</span></span>
+										<div class="page-size" data-page-size>
+											<button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+												<span data-page-size-value>20</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+												<button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+												<button type="button" class="page-size__option" role="option" data-value="50">50</button>
+												<button type="button" class="page-size__option" role="option" data-value="100">100</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<!-- employee info for a selected pharmacy -->
+							<section class="data-panel manager__staff" data-data-table data-module="DataTable" data-path="components">
+								<div class="manager__staff-head">
+									<h2 class="data-panel__title">Информация по сотрудникам: <span class="manager__staff-pharmacy">Эконом №8</span></h2>
+									<div class="manager__staff-nav">
+										<button type="button" class="manager__staff-arrow" aria-label="Предыдущая аптека"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg></button>
+										<button type="button" class="manager__staff-arrow manager__staff-arrow--next" aria-label="Следующая аптека"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg></button>
+									</div>
+								</div>
+								<div class="data-table__controls">
+									<div class="field manager__staff-search">
+										<div class="field__control">
+											<input class="field__input" type="text" placeholder="Найти" autocomplete="off">
+										</div>
+									</div>
+									<div class="manager__staff-cats">
+										<button type="button" class="manager__staff-cat is-active">A</button>
+										<button type="button" class="manager__staff-cat">B</button>
+										<button type="button" class="manager__staff-cat">C</button>
+										<button type="button" class="manager__staff-cat">D</button>
+									</div>
+								</div>
+								<div class="data-table__scroll">
+									<table class="data-table manager-table">
+										<thead>
+											<tr>
+												<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+												<th class="data-table__th data-table__th--center">Категория</th>
+												<th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Индекс</th>
+												<th class="data-table__th data-table__th--center">Тренд</th>
+												<th class="data-table__th data-table__th--num">Товарооборот РОЗН, руб.</th>
+												<th class="data-table__th data-table__th--num">Количество чеков</th>
+												<th class="data-table__th data-table__th--num">Средний чек</th>
+												<th class="data-table__th data-table__th--num">Наполняемость чека</th>
+												<th class="data-table__th data-table__th--num">Доля СТМ</th>
+												<th class="data-table__th data-table__th--num">Доля товаров 4-6 ранга %</th>
+												<th class="data-table__th data-table__th--num">Пенетрация карт лояльности</th>
+											</tr>
+										</thead>
+										<tbody>
+											{{#each (arr
+												(obj name="Василевская М.В." cat="b" idx="1,31" trend="up" val="12")
+												(obj name="Ковш Т.А." cat="b" idx="2,01" trend="down" val="56.22")
+												(obj name="Зайцева Д.М." cat="a" idx="2,01" trend="up" val="192.13")
+												(obj name="Волкова Ю.Г." cat="d" idx="2,01" trend="up" val="40.00")
+												(obj name="Северная Т.В." cat="b" idx="2,01" trend="down" val="12.3")
+											)}}
+											<tr class="data-table__row">
+												<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
+												<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+												<td class="data-table__td data-table__td--num"><span class="manager__index manager__index--{{this.trend}}">{{this.idx}}</span></td>
+												<td class="data-table__td data-table__td--center"><span class="manager__trend manager__trend--{{this.trend}}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span></td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												<td class="data-table__td data-table__td--num">{{this.val}}</td>
+											</tr>
+											{{/each}}
+										</tbody>
+									</table>
+									<div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+								</div>
+								<div class="data-table__footer">
+									<nav class="ui-pagination" aria-label="Страницы">
+										<button type="button" class="ui-pagination__item">1</button>
+										<button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+										<button type="button" class="ui-pagination__item">3</button>
+										<button type="button" class="ui-pagination__item">4</button>
+										<span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+										<button type="button" class="ui-pagination__item">25</button>
+										<button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+									</nav>
+									<div class="data-table__total">
+										<span class="data-table__total-text">Всего: <span>835</span></span>
+										<div class="page-size" data-page-size>
+											<button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+												<span data-page-size-value>20</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+												<button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+												<button type="button" class="page-size__option" role="option" data-value="50">50</button>
+												<button type="button" class="page-size__option" role="option" data-value="100">100</button>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<!-- category breakdown -->
+							<div class="manager__cats">
+								{{#each (arr (obj c="a") (obj c="b") (obj c="c") (obj c="d"))}}
+								<section class="data-panel manager__cat-card">
+									<h3 class="manager__cat-title"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span> Категория</h3>
+									<ul class="manager__cat-list">
+										<li class="manager__cat-item"><span class="manager__cat-score manager__cat-score--{{this.c}}">1,31</span> Дрозд В.В.</li>
+										<li class="manager__cat-item"><span class="manager__cat-score manager__cat-score--{{this.c}}">1,31</span> Орлова Т.Д.</li>
+										<li class="manager__cat-item"><span class="manager__cat-score manager__cat-score--{{this.c}}">1,31</span> Синица С.С.</li>
+										<li class="manager__cat-item"><span class="manager__cat-score manager__cat-score--{{this.c}}">1,31</span> Дрозд В.В.</li>
+										<li class="manager__cat-item"><span class="manager__cat-score manager__cat-score--{{this.c}}">1,31</span> Воробей М.В.</li>
+									</ul>
+								</section>
+								{{/each}}
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

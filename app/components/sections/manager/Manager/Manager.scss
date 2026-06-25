@@ -1,0 +1,287 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+    .manager {
+        @include prop-vw(margin-top, 10, xl);
+        // vertical rhythm between the major blocks
+        > * + * {
+            @include prop-vw(margin-top, 20, xl);
+        }
+        @include only(mobile) {
+            > * + * {
+                @include prop-vw(margin-top, 10, sm);
+            }
+        }
+
+        // --- top row: profile card + visits panel ---
+        &__top {
+            display: flex;
+            align-items: flex-start;
+            @include prop-vw(gap, 20, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+            }
+            @include only(mobile) {
+                flex-direction: column;
+                @include prop-vw(gap, 10, sm);
+            }
+        }
+        &__card {
+            flex: 1 1 auto;
+            min-width: 0;
+            .employee__profile {
+                display: flex;
+                align-items: flex-start;
+                @include prop-vw(gap, 20, xl);
+            }
+            @include only(mobile) {
+                width: 100%;
+            }
+        }
+        &__rating {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 10, xl);
+        }
+        &__settings {
+            width: 100%;
+        }
+        &__visits {
+            flex-shrink: 0;
+            @include prop-vw(width, 360, xl);
+            align-self: stretch;
+
+            @include only(desktop) {
+                @include prop-vw(width, 320, lg);
+            }
+            @include only(mobile) {
+                width: 100%;
+            }
+        }
+        &__visits-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 12, xl);
+            @include prop-vw(margin-bottom, 16, xl);
+        }
+        &__visits-tabs {
+            display: flex;
+            @include prop-vw(gap, 2, xl);
+            background: #E7EFF4;
+            @include prop-vw(border-radius, 8, xl);
+            @include prop-vw(padding, 2, xl);
+        }
+        &__visits-tab {
+            @include prop-vw(padding-block, 5, xl);
+            @include prop-vw(padding-inline, 12, xl);
+            @include prop-vw(font-size, 13, xl);
+            color: $color-dark-grey;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 6, xl);
+            cursor: pointer;
+            &.is-active {
+                color: $color-black;
+                background: $color-white;
+            }
+        }
+        &__visits-list {
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 14, xl);
+        }
+        &__visit {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 12, xl);
+        }
+        &__visit-text {
+            @include prop-vw(font-size, 14, xl);
+            color: $color-black;
+        }
+
+        // --- KPI progress cell ---
+        &__progress {
+            display: inline-flex;
+            align-items: center;
+            @include prop-vw(gap, 8, xl);
+            color: $color-blue;
+        }
+        &__progress-track {
+            display: block;
+            @include prop-vw(width, 40, xl);
+            @include prop-vw(height, 2, xl);
+            background: $color-blue;
+            border-radius: 2px;
+        }
+
+        // --- "Информация по сотрудникам" header + controls ---
+        &__staff-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(gap, 12, xl);
+            @include prop-vw(margin-bottom, 20, xl);
+            .data-panel__title {
+                color: $color-dark-grey;
+            }
+        }
+        &__staff-pharmacy {
+            color: $color-blue;
+        }
+        &__staff-nav {
+            display: flex;
+            @include prop-vw(gap, 8, xl);
+        }
+        &__staff-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(width, 32, xl);
+            @include prop-vw(height, 32, xl);
+            color: $color-dark-grey;
+            background: $color-bg;
+            border: none;
+            @include prop-vw(border-radius, 8, xl);
+            cursor: pointer;
+            & > svg {
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+            }
+            &--next > svg {
+                transform: scaleX(-1);
+            }
+        }
+        &__staff-search {
+            @include prop-vw(width, 280, xl);
+            margin-right: auto;
+        }
+        &__staff-cats {
+            display: flex;
+            @include prop-vw(gap, 2, xl);
+            background: $color-bg;
+            @include prop-vw(border-radius, 8, xl);
+            @include prop-vw(padding, 2, xl);
+        }
+        &__staff-cat {
+            @include prop-vw(min-width, 32, xl);
+            @include prop-vw(height, 28, xl);
+            @include prop-vw(font-size, 13, xl);
+            font-weight: 600;
+            color: $color-dark-grey;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 6, xl);
+            cursor: pointer;
+            &.is-active {
+                color: $color-black;
+                background: $color-white;
+            }
+        }
+
+        // index value coloured by trend; the trend chevron points up/down
+        &__index--up {
+            color: $color-green;
+        }
+        &__index--down {
+            color: $color-red;
+        }
+        &__trend {
+            display: inline-flex;
+            & > svg {
+                @include prop-vw(width, 12, xl);
+                @include prop-vw(height, 12, xl);
+            }
+            &--up {
+                color: $color-green;
+            }
+            &--down {
+                color: $color-red;
+                & > svg {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+        &__total-row .data-table__td {
+            background: $color-bg;
+            font-weight: 600;
+        }
+
+        // --- category breakdown: 4 panels ---
+        &__cats {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            @include prop-vw(gap, 20, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+            }
+            @include only(mobile) {
+                grid-template-columns: 1fr;
+                @include prop-vw(gap, 10, sm);
+            }
+        }
+        &__cat-title {
+            display: flex;
+            align-items: center;
+            @include prop-vw(gap, 8, xl);
+            @include prop-vw(margin-bottom, 16, xl);
+            @include prop-vw(font-size, 15, xl);
+            font-weight: 600;
+            color: $color-black;
+        }
+        &__cat-list {
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 12, xl);
+        }
+        &__cat-item {
+            display: flex;
+            @include prop-vw(gap, 10, xl);
+            @include prop-vw(font-size, 14, xl);
+            @include border-side(bottom, 1, solid, $color-border, xl);
+            @include prop-vw(padding-bottom, 12, xl);
+            &:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+            }
+        }
+        &__cat-score {
+            font-weight: 600;
+            &--a {
+                color: $color-green;
+            }
+            &--b {
+                color: $color-blue;
+            }
+            &--c {
+                color: #a07a00;
+            }
+            &--d {
+                color: $color-red;
+            }
+        }
+    }
+
+    // manager tables size columns to content (different column sets than the
+    // employees/managers lists, which use the global fixed widths)
+    .data-table.manager-table {
+        table-layout: auto;
+        @include prop-vw(min-width, 1230, xl);
+
+        @include only(desktop) {
+            @include prop-vw(min-width, 1100, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(min-width, 900, sm);
+        }
+        th,
+        td {
+            width: auto;
+        }
+    }
+}

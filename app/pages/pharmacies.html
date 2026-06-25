@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light pharmacies-page" data-header-search>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__wide">
+                            <a href="/" class="wrapper__back wrapper__back--mobile">
+                                <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+                                <span>Назад</span>
+                            </a>
+                            <div class="filter-chips" data-filter-chips hidden>
+                                <div class="filter-chips__list" data-filter-chips-list></div>
+                                <button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
+                            </div>
+
+                            <section class="data-panel pharmacies-table" data-data-table data-module="DataTable" data-path="components">
+                                <div class="data-panel__header">
+                                    <h1 class="data-panel__title">Аптеки</h1>
+                                    <a href="/" class="data-panel__export">
+                                        <svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                            <path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                        </svg>
+                                        <span class="data-panel__export-full">Экспорт в Excel</span>
+                                        <span class="data-panel__export-short">Excel</span>
+                                    </a>
+                                </div>
+
+                                <div class="data-table__controls">
+                                    <div class="data-table__sort" data-dt-sort>
+                                        <button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false">
+                                            <span data-dt-sort-value>По умолчанию</span>
+                                            <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                                        </button>
+                                        <div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
+                                            <button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+                                            <button type="button" class="data-table__sort-option" role="option" data-sort="pharmacy" data-dir="asc">Аптека (А–Я)</button>
+                                            <button type="button" class="data-table__sort-option" role="option" data-sort="pharmacy" data-dir="desc">Аптека (Я–А)</button>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg>
+                                    </button>
+                                    <button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false">
+                                        <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg>
+                                    </button>
+                                </div>
+
+                                <div class="data-table__scroll">
+                                    <table class="data-table is-cards-view">
+                                        <thead>
+                                            <tr>
+                                                <th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
+                                                <th class="data-table__th">Бренд</th>
+                                                <th class="data-table__th">Регион</th>
+                                                <th class="data-table__th">Тип территории</th>
+                                                <th class="data-table__th data-table__th--center">Кластер</th>
+                                                <th class="data-table__th">Розничная компания</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="teamindex" data-sort-type="number">Индекс команды</th>
+                                                <th class="data-table__th data-table__th--center">Кат. команды</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="regionindex" data-sort-type="number">Индекс региона</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="turnover" data-sort-type="number">Товарооборот РОЗН</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Кол-во чеков</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Ср. чек</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="fill" data-sort-type="number">Наполняемость чека</th>
+                                                <th class="data-table__th data-table__th--num">Доля СТМ, %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{#each (arr
+                                                (obj name="ADEL №11" brand="ADEL" region="Минск" terr="Город" c="b" idx="1,31" num="134")
+                                                (obj name="ADEL №22" brand="Добрыя лекі" region="Витебская обл." terr="Областной центр" c="b" idx="2,01" num="249")
+                                                (obj name="Эконом №1" brand="Эконом" region="Витебская обл." terr="Районный центр" c="a" idx="2,01" num="98034")
+                                                (obj name="ADEL №4" brand="ADEL" region="Брестская обл." terr="Областной центр" c="d" idx="2,01" num="1")
+                                                (obj name="ADEL №6" brand="ADEL" region="Витебская обл." terr="Областной центр" c="b" idx="2,01" num="89")
+                                                (obj name="ADEL №87" brand="ADEL" region="Минск" terr="Минск" c="b" idx="1,31" num="134")
+                                                (obj name="ADEL №43" brand="Добрыя лекі" region="Минск" terr="Минск" c="b" idx="2,01" num="249")
+                                                (obj name="Эконом №24" brand="Эконом" region="Гродненская обл." terr="Деревня" c="a" idx="2,01" num="98034")
+                                                (obj name="ADEL №4" brand="ADEL" region="Минск" terr="Областной центр" c="d" idx="2,01" num="1")
+                                                (obj name="Эконом №6" brand="ADEL" region="Минск" terr="Областной центр" c="b" idx="2,01" num="89")
+                                                (obj name="Эконом №9" brand="ADEL" region="Минск" terr="Деревня" c="b" idx="1,31" num="134")
+                                                (obj name="Эконом №42" brand="Добрыя лекі" region="Могилевска обл." terr="Деревня" c="b" idx="2,01" num="249")
+                                                (obj name="Эконом №1" brand="Эконом" region="Брестская обл." terr="Деревня" c="a" idx="2,01" num="98034")
+                                                (obj name="Эконом №52" brand="ADEL" region="Минск" terr="Агрогородок" c="d" idx="2,01" num="1")
+                                                (obj name="Эконом №66" brand="ADEL" region="Брестская обл." terr="Агрогородок" c="b" idx="2,01" num="89")
+                                            )}}
+                                            <tr class="data-table__row">
+                                                <td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">{{this.name}}</a></td>
+                                                <td class="data-table__td" data-filter-key="brand">{{this.brand}}</td>
+                                                <td class="data-table__td" data-filter-key="region">{{this.region}}</td>
+                                                <td class="data-table__td">{{this.terr}}</td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="cluster"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
+                                                <td class="data-table__td">ООО Амадей</td>
+                                                <td class="data-table__td data-table__td--num">{{this.idx}}</td>
+                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
+                                                <td class="data-table__td data-table__td--num">{{this.idx}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                                <td class="data-table__td data-table__td--num">{{this.num}}</td>
+                                            </tr>
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                    <div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+                                </div>
+
+                                <div class="data-table__footer">
+                                    <nav class="ui-pagination" aria-label="Страницы">
+                                        <button type="button" class="ui-pagination__item">1</button>
+                                        <button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+                                        <button type="button" class="ui-pagination__item">3</button>
+                                        <button type="button" class="ui-pagination__item">4</button>
+                                        <span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+                                        <button type="button" class="ui-pagination__item">22</button>
+                                        <button type="button" class="ui-pagination__item">23</button>
+                                        <button type="button" class="ui-pagination__item">24</button>
+                                        <button type="button" class="ui-pagination__item">25</button>
+                                        <button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+                                    </nav>
+
+                                    <div class="data-table__total">
+                                        <span class="data-table__total-text">Всего: <span>835</span></span>
+                                        <div class="page-size" data-page-size>
+                                            <button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+                                                <span data-page-size-value>20</span>
+                                                <svg aria-hidden="true" focusable="false" width="16" height="16">
+                                                    <use href="#icon-caret"></use>
+                                                </svg>
+                                            </button>
+                                            <div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+                                                <button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+                                                <button type="button" class="page-size__option" role="option" data-value="50">50</button>
+                                                <button type="button" class="page-size__option" role="option" data-value="100">100</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+					</div>
+				</main>
+				{{> layouts/Footer/Footer }}
+			</div>
+		</body>
+</html>
