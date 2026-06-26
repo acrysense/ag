@@ -1,0 +1,24 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+	.chart {
+		position: relative;
+		width: 100%;
+
+		// ApexCharts injects its own sizing; keep the SVG from overflowing
+		.apexcharts-canvas {
+			margin-inline: auto;
+		}
+		// match the project font weight/colour for axis + tooltip text
+		.apexcharts-text,
+		.apexcharts-tooltip-text {
+			fill: $color-dark-grey;
+		}
+		.apexcharts-tooltip {
+			@include prop-vw(border-radius, 10, xl);
+			border: 1px solid $color-border;
+			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+		}
+	}
+}

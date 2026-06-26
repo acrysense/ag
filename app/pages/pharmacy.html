@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light pharmacy-page">
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="pharmacy">
+						<a href="/pharmacies" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+
+						<div class="pharmacy__grid">
+							<div class="pharmacy__main">
+								<!-- pharmacy card -->
+								<section class="data-panel pharmacy__card">
+									<div class="pharmacy__card-info">
+										<h1 class="pharmacy__title">ADEL, Аптека №12</h1>
+										<div class="pharmacy__rows">
+											<div class="pharmacy__row"><span class="pharmacy__label">Компания:</span><span class="pharmacy__value">ООО “Амадей”</span></div>
+											<div class="pharmacy__row"><span class="pharmacy__label">Адрес:</span><span class="pharmacy__value">Минская обл., Областной центр., Улица, д1</span></div>
+											<div class="pharmacy__row"><span class="pharmacy__label">Координаты:</span><a href="/" class="pharmacy__link">5534444.442442 , 455543.222345</a></div>
+											<div class="pharmacy__row"><span class="pharmacy__label">Сотрудников:</span><span class="pharmacy__value">22</span></div>
+											<div class="pharmacy__row"><span class="pharmacy__label">Кластер по трафику:</span><span class="pharmacy__value">A</span></div>
+											<div class="pharmacy__row"><span class="pharmacy__label">Трафик:</span><span class="pharmacy__value">323333 ч / сутки</span></div>
+											<div class="pharmacy__row"><span class="pharmacy__label">Менеджер:</span><a href="/manager" class="pharmacy__link">Петров Алексей Иванович</a></div>
+										</div>
+									</div>
+									<div class="pharmacy__badges">
+										<div class="pharmacy__badge">
+											<div class="pharmacy__badge-body">
+												<span class="pharmacy__badge-value">1.47</span>
+												<span class="pharmacy__badge-label">Категория аптеки</span>
+											</div>
+											<span class="pharmacy__badge-grade pharmacy__badge-grade--a">A</span>
+										</div>
+										<div class="pharmacy__badge">
+											<div class="pharmacy__badge-body">
+												<span class="pharmacy__badge-value">0.92</span>
+												<span class="pharmacy__badge-label">Торговая категория</span>
+											</div>
+											<span class="pharmacy__badge-grade pharmacy__badge-grade--b">B</span>
+										</div>
+									</div>
+								</section>
+
+								<!-- KPI -->
+								<section class="data-panel pharmacy__kpi">
+									<div class="data-table__scroll">
+										<table class="data-table pharmacy-kpi-table">
+											<thead>
+												<tr>
+													<th class="data-table__th">Показатель</th>
+													<th class="data-table__th data-table__th--num">План</th>
+													<th class="data-table__th data-table__th--num">Факт</th>
+													<th class="data-table__th">Прогресс, %</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each (arr
+													(obj name="Товарооборот РОЗН" plan="989 000" fact="872 000" prog="100" tone="green")
+													(obj name="Количество чеков" plan="120 000" fact="98 000" prog="100" tone="green")
+													(obj name="Средний чек" plan="+0%" fact="98 000" prog="100" tone="green")
+													(obj name="Наполняемость чека, %" plan="+12%" fact="-12%" prog="20" tone="red")
+													(obj name="Доля СТМ, %" plan="0%" fact="0%" prog="50" tone="yellow")
+													(obj name="Доля товаров 4-6 ранга ,%" plan="0%" fact="0%" prog="100" tone="green")
+													(obj name="Пенетрация карт лояльности, %" plan="0%" fact="0%" prog="100" tone="green")
+													(obj name="Индекс региона" plan="0%" fact="0%" prog="50" tone="yellow")
+													(obj name="Индекс бренда" plan="0%" fact="0%" prog="100" tone="green")
+												)}}
+												<tr class="data-table__row">
+													<td class="data-table__td">{{this.name}}</td>
+													<td class="data-table__td data-table__td--num">{{this.plan}}</td>
+													<td class="data-table__td data-table__td--num">{{this.fact}}</td>
+													<td class="data-table__td">
+														<span class="pharmacy__prog pharmacy__prog--{{this.tone}}">
+															<span class="pharmacy__prog-val">{{this.prog}}</span>
+															<span class="pharmacy__prog-bar"><span class="pharmacy__prog-fill" style="width: {{this.prog}}%"></span></span>
+														</span>
+													</td>
+												</tr>
+												{{/each}}
+											</tbody>
+										</table>
+									</div>
+								</section>
+
+								<!-- employees -->
+								<section class="data-panel pharmacy__staff" data-data-table data-module="DataTable" data-path="components">
+									<div class="data-panel__header">
+										<h2 class="data-panel__title">Сотрудники</h2>
+										<a href="/" class="data-panel__export">
+											<svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+												<path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+												<path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+											</svg>
+											<span class="data-panel__export-full">Экспорт в Excel</span>
+											<span class="data-panel__export-short">Excel</span>
+										</a>
+									</div>
+									<div class="data-table__controls">
+										<div class="field manager__staff-search">
+											<div class="field__control">
+												<input class="field__input" type="text" placeholder="Найти" autocomplete="off">
+											</div>
+										</div>
+										<div class="manager__staff-cats">
+											<button type="button" class="manager__staff-cat is-active">A</button>
+											<button type="button" class="manager__staff-cat">B</button>
+											<button type="button" class="manager__staff-cat">C</button>
+											<button type="button" class="manager__staff-cat">D</button>
+										</div>
+									</div>
+									<div class="data-table__scroll">
+										<table class="data-table manager-table">
+											<thead>
+												<tr>
+													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+													<th class="data-table__th data-table__th--center">Кат.</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Инд.</th>
+													<th class="data-table__th data-table__th--center">Тренд</th>
+													<th class="data-table__th data-table__th--num">Товарооборот РОЗН</th>
+													<th class="data-table__th data-table__th--num">Количество чеков</th>
+													<th class="data-table__th data-table__th--num">Ср. чек</th>
+													<th class="data-table__th data-table__th--num">Наполняемость чека</th>
+													<th class="data-table__th data-table__th--num">Доля СТМ</th>
+													<th class="data-table__th data-table__th--num">Доля 4-6 ранга, %</th>
+													<th class="data-table__th data-table__th--num">Пенетрация карт лояльности</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each (arr
+													(obj name="Василевская М.В." cat="b" idx="1,31" trend="up" val="134")
+													(obj name="Ковш Т.А." cat="b" idx="2,01" trend="down" val="249")
+													(obj name="Зайцева Д.М." cat="a" idx="2,01" trend="up" val="98034")
+													(obj name="Волкова Ю.Г." cat="d" idx="2,01" trend="up" val="1")
+													(obj name="Северная Т.В." cat="b" idx="2,01" trend="down" val="89")
+													(obj name="Василевская М.В." cat="b" idx="1,31" trend="up" val="134")
+													(obj name="Ковш Т.А." cat="b" idx="2,01" trend="down" val="249")
+												)}}
+												<tr class="data-table__row">
+													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
+													<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+													<td class="data-table__td data-table__td--num"><span class="manager__index manager__index--{{this.trend}}">{{this.idx}}</span></td>
+													<td class="data-table__td data-table__td--center"><span class="manager__trend manager__trend--{{this.trend}}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span></td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+													<td class="data-table__td data-table__td--num">{{this.val}}</td>
+												</tr>
+												{{/each}}
+											</tbody>
+										</table>
+										<div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+									</div>
+									<div class="data-table__footer">
+										<nav class="ui-pagination" aria-label="Страницы">
+											<button type="button" class="ui-pagination__item">1</button>
+											<button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+											<button type="button" class="ui-pagination__item">3</button>
+											<button type="button" class="ui-pagination__item">4</button>
+											<span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+											<button type="button" class="ui-pagination__item">25</button>
+											<button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+										</nav>
+										<div class="data-table__total">
+											<span class="data-table__total-text">Всего: <span>835</span></span>
+											<div class="page-size" data-page-size>
+												<button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+													<span data-page-size-value>20</span>
+													<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+												</button>
+												<div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+													<button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+													<button type="button" class="page-size__option" role="option" data-value="50">50</button>
+													<button type="button" class="page-size__option" role="option" data-value="100">100</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</section>
+
+								<!-- line chart -->
+								<section class="data-panel pharmacy__chart-panel">
+									<h2 class="data-panel__title">Динамика доли A+B сотрудников</h2>
+									<div class="chart pharmacy__line" data-module="Chart" data-path="components" data-chart="line">
+										<div data-chart-canvas></div>
+										<script type="application/json" data-chart-config>{"data":[71,69,70,73,78,72],"categories":["Янв.","Фев.","Мар.","Апр.","Май","Июн."],"min":50,"max":80,"tickAmount":3,"height":260}</script>
+									</div>
+								</section>
+							</div>
+
+							<aside class="pharmacy__aside">
+								<!-- category history -->
+								<section class="data-panel pharmacy__history">
+									<h2 class="data-panel__title">История категорий аптеки</h2>
+									<ul class="pharmacy__history-list">
+										{{#each (arr
+											(obj c="b" v="0.83" d="10.03.2026")
+											(obj c="a" v="1.22" d="10.02.2026")
+											(obj c="a" v="1.67" d="10.03.2026")
+											(obj c="b" v="0.91" d="10.01.2026")
+											(obj c="a" v="1.01" d="10.12.2025")
+											(obj c="c" v="0.14" d="10.11.2025")
+											(obj c="d" v="0.27" d="10.10.2025")
+											(obj c="a" v="1.99" d="10.09.2025")
+											(obj c="a" v="1.34" d="10.08.2025")
+											(obj c="b" v="0.78" d="10.07.2025")
+										)}}
+										<li class="pharmacy__history-item">
+											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
+											<span class="pharmacy__history-text"><b>{{this.v}}</b>, {{this.d}}</span>
+										</li>
+										{{/each}}
+									</ul>
+								</section>
+
+								<!-- employees by category (donut) -->
+								<section class="data-panel pharmacy__donut-panel">
+									<h2 class="data-panel__title">Сотрудники по категориям</h2>
+									<div class="pharmacy__donut">
+										<div class="chart pharmacy__donut-chart" data-module="Chart" data-path="components" data-chart="donut">
+											<div data-chart-canvas></div>
+											<script type="application/json" data-chart-config>{"series":[58,28,8,18],"labels":["A","B","C","D"],"height":230}</script>
+											<div class="pharmacy__donut-center">
+												<span>Сотрудники</span>
+												<b>22</b>
+											</div>
+										</div>
+									</div>
+									<ul class="pharmacy__legend">
+										{{#each (arr
+											(obj c="a" p="58%" n="12 чел")
+											(obj c="b" p="28%" n="6 чел")
+											(obj c="c" p="8%" n="3 чел")
+											(obj c="d" p="18%" n="1 чел")
+										)}}
+										<li class="pharmacy__legend-item">
+											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
+											<span class="pharmacy__legend-text">{{this.p}}, {{this.n}}</span>
+										</li>
+										{{/each}}
+									</ul>
+								</section>
+
+								<!-- visits -->
+								<section class="data-panel pharmacy__visits">
+									<div class="pharmacy__visits-head">
+										<h2 class="data-panel__title">Визиты</h2>
+										<div class="manager__visits-tabs">
+											<button type="button" class="manager__visits-tab is-active">Новые</button>
+											<button type="button" class="manager__visits-tab">История</button>
+										</div>
+									</div>
+									<ul class="pharmacy__visits-list">
+										{{#each (arr
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Коучинг")
+											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+											(obj tone="red" score="2/100" d="10.02.2026" type="Диагностика")
+											(obj tone="red" score="29/100" d="10.02.2026" type="Контроль")
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Контроль")
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Диагностика")
+											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Коучинг")
+											(obj tone="red" score="29/100" d="10.02.2026" type="Контроль")
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Контроль")
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Диагностика")
+											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+											(obj tone="blue" score="78/100" d="10.02.2026" type="Коучинг")
+											(obj tone="red" score="29/100" d="10.02.2026" type="Контроль")
+											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+										)}}
+										<li class="pharmacy__visit">
+											<span class="pharmacy__visit-score pharmacy__visit-score--{{this.tone}}">{{this.score}}</span>
+											<span class="pharmacy__visit-text">{{this.d}}, {{this.type}}</span>
+										</li>
+										{{/each}}
+									</ul>
+								</section>
+							</aside>
+						</div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

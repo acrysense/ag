@@ -12,6 +12,7 @@
 @forward '@/components/sections/employee/Employee/Employee';
 @forward '@/components/sections/employee/EmployeeSide/EmployeeSide';
 @forward '@/components/sections/manager/Manager/Manager';
+@forward '@/components/sections/pharmacy/Pharmacy/Pharmacy';
 
 @forward '@/components/sections/motivation/Motivation/Motivation';
 
@@ -37,4 +38,5 @@
 @forward '@/components/components/TasksPanel/TasksPanel';
 @forward '@/components/components/VisitsPanel/VisitsPanel';
 @forward '@/components/components/DataTable/DataTable';
+@forward '@/components/components/Chart/Chart';
 @forward '@/components/components/HeaderSearch/HeaderSearch';
