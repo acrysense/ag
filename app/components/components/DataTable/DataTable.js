@@ -1,4 +1,4 @@
-import { mountStaticPagination } from '@/utils/pagination'
+import { mountStaticPagination, mountDataPagination } from '@/utils/pagination'
 
 // Reusable data-table behaviour: column sorting, row filtering, empty state and
 // a simple page-size limiter. Page-agnostic — driven entirely by data-attrs:
@@ -22,9 +22,113 @@ function parseDate(text) {
 	return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : 0
 }
 
-export default (root) => {
+// ---- JSON-driven build -----------------------------------------------------
+const esc = (s) =>
+	String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+const alignCls = (align, base) =>
+	align === 'center' ? ` ${base}--center` : align === 'num' ? ` ${base}--num` : ''
+
+// render a single cell by the column's declared type
+function cellHTML(col, row) {
+	const v = row[col.key]
+	switch (col.type) {
+		case 'link':
+			return `<a class="data-table__link" href="${esc(row[col.hrefKey] || '#')}">${esc(v)}</a>`
+		case 'cat':
+			return `<span class="data-table__cat data-table__cat--${esc(v)}">${esc(v)}</span>`
+		case 'trend':
+			return `<span class="manager__trend manager__trend--${esc(v)}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>`
+		case 'index':
+			return `<span class="manager__index manager__index--${esc(row[col.trendKey] || '')}">${esc(v)}</span>`
+		default:
+			return esc(v)
+	}
+}
+
+// one <td> (mobile card label baked in) + a full <tbody> — reused by the client
+// build and by the server render that swaps rows on each fetch
+function tdHTML(col, row) {
+	const fAttr = col.filterKey ? ` data-filter-key="${esc(col.filterKey)}"` : ''
+	const label = col.label ? ` data-label="${esc(col.label)}"` : ''
+	return `<td class="data-table__td${alignCls(col.align, 'data-table__td')}"${fAttr}${label}>${cellHTML(col, row)}</td>`
+}
+function tbodyHTML(cols, rows) {
+	return rows.map((row) => `<tr class="data-table__row">${cols.map((c) => tdHTML(c, row)).join('')}</tr>`).join('')
+}
+
+// build the full inner table (controls + table + footer) from a config blob.
+// `empty` → empty <tbody> (server mode fills it per page via fetch)
+function buildTable(root, config, empty) {
+	const cols = Array.isArray(config.columns) ? config.columns : []
+	const rows = empty ? [] : Array.isArray(config.rows) ? config.rows : []
+	const sizes = config.pageSizes || (config.pageSize ? [config.pageSize] : [20, 50, 100])
+	const pageSize = config.pageSize || sizes[0] || 20
+
+	const thead = cols
+		.map((c) => {
+			const sortAttr = c.sort ? ` data-sort-key="${esc(c.key)}" data-sort-type="${esc(c.sort)}"` : ''
+			return `<th class="data-table__th${alignCls(c.align, 'data-table__th')}"${sortAttr}>${esc(c.label || '')}</th>`
+		})
+		.join('')
+
+	const tbody = tbodyHTML(cols, rows)
+
+	const sortOpts = ['<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>']
+	cols
+		.filter((c) => c.sort)
+		.forEach((c) => {
+			sortOpts.push(`<button type="button" class="data-table__sort-option" role="option" data-sort="${esc(c.key)}" data-dir="asc">${esc(c.label)} ↑</button>`)
+			sortOpts.push(`<button type="button" class="data-table__sort-option" role="option" data-sort="${esc(c.key)}" data-dir="desc">${esc(c.label)} ↓</button>`)
+		})
+	const controls = `<div class="data-table__controls"><div class="data-table__sort" data-dt-sort><button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button><div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">${sortOpts.join('')}</div></div><button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></button><button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></button></div>`
+
+	const pageSizeOpts = sizes
+		.map((s) => `<button type="button" class="page-size__option${s === pageSize ? ' is-active' : ''}" role="option" data-value="${s}">${s}</button>`)
+		.join('')
+	const footer = `<div class="data-table__footer"><nav class="ui-pagination" aria-label="Страницы"></nav><div class="data-table__total"><span class="data-table__total-text">Всего: <span data-total>${esc(config.total ?? rows.length)}</span></span><div class="page-size" data-page-size><button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false"><span data-page-size-value>${pageSize}</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button><div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">${pageSizeOpts}</div></div></div></div>`
+
+	const tableCls = `data-table is-cards-view${config.table ? ' ' + esc(config.table) : ''}`
+	const wrap = document.createElement('div')
+	wrap.innerHTML = `${controls}<div class="data-table__scroll"><table class="${tableCls}"><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table><div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div></div>${footer}`
+	while (wrap.firstChild) root.appendChild(wrap.firstChild)
+}
+
+// config comes from an inline <script data-table-data> OR a data-table-src URL
+async function resolveConfig(root) {
+	const src = root.dataset.tableSrc
+	if (src) {
+		try {
+			const r = await fetch(src, { headers: { Accept: 'application/json' } })
+			return await r.json()
+		} catch (err) {
+			console.warn('[DataTable] failed to load config from', src, err)
+			return null
+		}
+	}
+	const el = root.querySelector('[data-table-data]')
+	if (el) {
+		try {
+			return JSON.parse(el.textContent)
+		} catch (err) {
+			console.warn('[DataTable] invalid data-table-data JSON', err)
+			return null
+		}
+	}
+	return null
+}
+
+export default async (root) => {
 	if (!root || root.__dataTableBound) return
 	root.__dataTableBound = true
+
+	// JSON-driven mode: build the table from a config blob. mode:"server" → rows
+	// are fetched per page from config.endpoint; otherwise everything is in `rows`.
+	const config = await resolveConfig(root)
+	const serverMode = config?.mode === 'server'
+	if (config) buildTable(root, config, serverMode)
+	const dataMode = !!config
+	const cols = config?.columns || []
+	let reqId = 0
 
 	const table = root.querySelector('table')
 	const tbody = table?.querySelector('tbody')
@@ -38,17 +142,28 @@ export default (root) => {
 	const allRows = [...tbody.querySelectorAll('tr')]
 	const baseOrder = allRows.slice()
 	const disposers = []
-
-	// windowed pagination widget (visual; compacts on mobile so it never overflows)
-	const pagNav = root.querySelector('.ui-pagination')
-	if (pagNav) {
-		const disposePag = mountStaticPagination(pagNav)
-		if (disposePag) disposers.push(disposePag)
-	}
+	const totalEl = root.querySelector('[data-total]')
 
 	let state = { query: '', filters: [] }
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
-	let pageSize = Infinity
+	let pageSize = dataMode ? config.pageSize || Infinity : Infinity
+	let currentPage = 1
+
+	// pagination: real (data mode → navigates the dataset) or visual (static demo)
+	const pagNav = root.querySelector('.ui-pagination')
+	let dataPag = null
+	if (pagNav) {
+		if (dataMode) {
+			dataPag = mountDataPagination(pagNav, (p) => {
+				currentPage = p
+				recompute()
+			})
+			disposers.push(() => dataPag.dispose())
+		} else {
+			const disposePag = mountStaticPagination(pagNav)
+			if (disposePag) disposers.push(disposePag)
+		}
+	}
 
 	// resolve a filter key to the cell holding its value: a td tagged with
 	// data-filter-key, else the column under the matching sortable header
@@ -110,7 +225,54 @@ export default (root) => {
 		return true
 	}
 
+	// server mode: fetch the current page slice (sort/filter/page → query params)
+	async function loadServer() {
+		const id = ++reqId
+		root.classList.add('is-loading')
+		const params = new URLSearchParams()
+		params.set('page', String(currentPage))
+		params.set('pageSize', pageSize === Infinity ? '0' : String(pageSize))
+		if (sort.key && sort.dir) {
+			params.set('sort', sort.key)
+			params.set('dir', sort.dir > 0 ? 'asc' : 'desc')
+		}
+		if (state.query) params.set('q', state.query)
+		if (state.filters.length) params.set('filters', JSON.stringify(state.filters))
+		try {
+			const sep = config.endpoint.includes('?') ? '&' : '?'
+			const res = await fetch(config.endpoint + sep + params.toString(), { headers: { Accept: 'application/json' } })
+			const data = await res.json()
+			if (id !== reqId) return // a newer request superseded this one
+			const rows = Array.isArray(data.rows) ? data.rows : []
+			const total = Number(data.total) || rows.length
+			tbody.innerHTML = tbodyHTML(cols, rows)
+			if (emptyEl) {
+				emptyEl.textContent = 'Ничего не найдено'
+				emptyEl.hidden = rows.length > 0
+			}
+			const size = pageSize === Infinity ? total || 1 : pageSize
+			const totalPages = Math.max(1, Math.ceil(total / size))
+			if (currentPage > totalPages) currentPage = totalPages
+			dataPag?.render(totalPages, currentPage)
+			if (totalEl) totalEl.textContent = String(total)
+		} catch (err) {
+			if (id !== reqId) return
+			console.warn('[DataTable] server load failed', err)
+			tbody.innerHTML = ''
+			if (emptyEl) {
+				emptyEl.textContent = 'Ошибка загрузки'
+				emptyEl.hidden = false
+			}
+		} finally {
+			if (id === reqId) root.classList.remove('is-loading')
+		}
+	}
+
 	function recompute() {
+		if (serverMode) {
+			loadServer()
+			return
+		}
 		let matched = baseOrder.filter(matches)
 
 		if (sort.key && sort.dir !== 0) {
@@ -129,18 +291,34 @@ export default (root) => {
 			})
 		}
 
-		// reflect order in the DOM and toggle visibility + page-size limit
+		// reflect order in the DOM and toggle visibility
 		const matchedSet = new Set(matched)
 		baseOrder.forEach((row) => {
 			if (!matchedSet.has(row)) row.classList.add('is-hidden')
 		})
-		let shown = 0
-		matched.forEach((row) => {
-			tbody.appendChild(row)
-			const visible = shown < pageSize
-			row.classList.toggle('is-hidden', !visible)
-			if (visible) shown++
-		})
+
+		if (dataMode) {
+			// real pagination: show only the current page's slice of the matches
+			const size = pageSize === Infinity ? matched.length || 1 : pageSize
+			const totalPages = Math.max(1, Math.ceil(matched.length / size))
+			if (currentPage > totalPages) currentPage = totalPages
+			const start = (currentPage - 1) * size
+			matched.forEach((row, i) => {
+				tbody.appendChild(row)
+				row.classList.toggle('is-hidden', i < start || i >= start + size)
+			})
+			dataPag?.render(totalPages, currentPage)
+			if (totalEl) totalEl.textContent = String(matched.length)
+		} else {
+			// static mode: cap to the page-size limit (no real page navigation)
+			let shown = 0
+			matched.forEach((row) => {
+				tbody.appendChild(row)
+				const visible = shown < pageSize
+				row.classList.toggle('is-hidden', !visible)
+				if (visible) shown++
+			})
+		}
 
 		if (emptyEl) emptyEl.hidden = matched.length > 0
 	}
@@ -166,6 +344,7 @@ export default (root) => {
 			headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
 			if (sort.dir === 1) th.classList.add('is-asc')
 			else if (sort.dir === -1) th.classList.add('is-desc')
+			currentPage = 1
 			recompute()
 		}
 		th.addEventListener('click', onClick)
@@ -201,6 +380,7 @@ export default (root) => {
 			options.forEach((o) => o.classList.toggle('is-active', o === option))
 			if (valueEl) valueEl.textContent = option.dataset.value
 			pageSize = parseInt(option.dataset.value, 10) || Infinity
+			currentPage = 1
 			setOpen(false)
 			recompute()
 		}
@@ -246,6 +426,7 @@ export default (root) => {
 		headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
 		if (sort.th && sort.dir === 1) sort.th.classList.add('is-asc')
 		else if (sort.th && sort.dir === -1) sort.th.classList.add('is-desc')
+		currentPage = 1
 		recompute()
 	}
 
@@ -307,6 +488,16 @@ export default (root) => {
 		disposers.push(() => btn.removeEventListener('click', onClick))
 	})
 
+	// in server mode, debounce live filter/search input so we don't hit the
+	// endpoint on every keystroke (page/sort clicks stay immediate)
+	let filterTimer = null
+	const recomputeFiltered = () => {
+		if (!serverMode) return recompute()
+		clearTimeout(filterTimer)
+		filterTimer = setTimeout(recompute, 300)
+	}
+	disposers.push(() => clearTimeout(filterTimer))
+
 	// --- Public API for filter UIs ---
 	root.__dataTable = {
 		applyFilters(next = {}) {
@@ -314,10 +505,12 @@ export default (root) => {
 				query: norm(next.query),
 				filters: Array.isArray(next.filters) ? next.filters : [],
 			}
-			recompute()
+			currentPage = 1
+			recomputeFiltered()
 		},
 		reset() {
 			state = { query: '', filters: [] }
+			currentPage = 1
 			recompute()
 		},
 	}

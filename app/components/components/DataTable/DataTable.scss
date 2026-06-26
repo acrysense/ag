@@ -4,6 +4,12 @@
 @layer components {
     // employees → .wrapper__wide, tasks → .wrapper__narrow (own containers)
 
+    // server mode: dim + lock the table while a page slice is being fetched
+    [data-data-table].is-loading .data-table__scroll {
+        opacity: 0.55;
+        pointer-events: none;
+        transition: opacity 0.15s ease;
+    }
     .data-table__scroll {
         @include prop-vw(margin-top, 10, xl);
         overflow-x: auto;
@@ -61,9 +67,6 @@
             user-select: none;
             white-space: normal;
             @include border-side(bottom, 1, solid, $color-border, xl);
-            &:first-child {
-                padding-left: 0;
-            }
             &--center {
                 text-align: center;
             }
@@ -148,9 +151,6 @@
             color: $color-black;
             vertical-align: middle;
             transition: background $transition-default;
-            &:first-child {
-                padding-left: 0;
-            }
             &--center {
                 text-align: center;
             }
