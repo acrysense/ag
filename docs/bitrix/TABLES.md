@@ -25,8 +25,36 @@
 Всё. Заголовки, тело таблицы, контролы (сортировка/вид), пагинацию фронт построит сам
 из JSON. **Своими руками `<thead>`/`<tbody>` писать не нужно.**
 
-> Заголовок панели (`<h1>`) и кнопку «Экспорт» при желании можно оставить внутри секции
-> руками — фронт дописывает таблицу после них.
+> Заголовок панели (`<h1>`) и кнопку «Экспорт» кладём внутрь секции руками —
+> фронт дописывает таблицу после них (см. «Заголовок + Экспорт» ниже).
+
+### Заголовок + кнопка «Экспорт в Excel»
+
+Таблица строится из JSON, но заголовок и кнопку экспорта фронт **не генерит** —
+их кладём прямо **внутрь секции**. `buildTable` дописывает таблицу в конец секции,
+поэтому порядок получается: заголовок → контролы → таблица → футер.
+
+```html
+<section class="data-panel employees-table"
+         data-data-table data-module="DataTable" data-path="components"
+         data-table-src="/local/ajax/employees.php">
+
+    <div class="data-panel__header">
+        <h1 class="data-panel__title">Сотрудники аптек</h1>
+        <a href="/local/ajax/employees-export.php" class="data-panel__export">
+            <svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-download"></use></svg>
+            <span class="data-panel__export-full">Экспорт в Excel</span>
+            <span class="data-panel__export-short">Excel</span>
+        </a>
+    </div>
+
+</section>
+```
+
+- `href` у кнопки — ваш URL, который отдаёт готовый `.xlsx` (или генерит его).
+- `data-panel__export-full` / `--short` — полный и короткий текст (короткий показывается
+  на узких экранах), оставьте оба.
+- Заголовок и кнопка — статичная «обвязка» страницы, в JSON их класть не нужно.
 
 ---
 
