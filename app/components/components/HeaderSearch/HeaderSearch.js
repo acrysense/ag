@@ -1,4 +1,5 @@
 import { mountDateRange } from '@/utils/dateRange'
+import { tableUrlEnabled, readTableUrl } from '@/utils/tableUrl'
 
 // Reusable header search + filter dropdown. Drives a [data-data-table] via its
 // public __dataTable API (employees), or filters task rows directly (tasks).
@@ -241,7 +242,14 @@ export default (root) => {
 	function collectFilters() {
 		const next = []
 		fields.forEach((field) => next.push(...readField(field)))
-		filters = next
+		// drop duplicate key+value (a page may hold two fields for the same key)
+		const seen = new Set()
+		filters = next.filter((f) => {
+			const id = `${f.key} ${f.value}`
+			if (seen.has(id)) return false
+			seen.add(id)
+			return true
+		})
 	}
 
 	// ---- per-field dropdown open/close + selection ----
@@ -508,8 +516,57 @@ export default (root) => {
 	document.addEventListener('datatable:ready', onTableReady)
 	disposers.push(() => document.removeEventListener('datatable:ready', onTableReady))
 
-	// ---- initial state: seed chips from any pre-checked / pre-active options ----
-	collectFilters()
+	// reflect filters from a shared URL back into the field widgets, then let
+	// collectFilters() rebuild the list (with proper labels) from them
+	function restoreFromUrl() {
+		const u = readTableUrl()
+		if (input) input.value = u.query
+		fields.forEach((field) => {
+			const key = field.dataset.filterKey
+			const mine = u.filters.filter((f) => f.key === key)
+			if (field.hasAttribute('data-input')) {
+				const inp = field.querySelector('[data-filter-text]')
+				if (inp) inp.value = mine[0]?.value || ''
+			} else if (field.hasAttribute('data-range')) {
+				const r = mine[0]?.range || {}
+				const from = field.querySelector('[data-range-from]')
+				const to = field.querySelector('[data-range-to]')
+				if (from) from.value = r.from || ''
+				if (to) to.value = r.to || ''
+			} else if (!field.hasAttribute('data-daterange') && !field.hasAttribute('data-date')) {
+				const vals = new Set(mine.map((f) => f.value))
+				field.querySelectorAll('.filter-option__input').forEach((cb) => {
+					cb.checked = vals.has(cb.value || cb.dataset.value)
+				})
+				field.querySelectorAll('.filter-option[data-value]').forEach((o) => {
+					o.classList.toggle('is-active', vals.has(o.dataset.value))
+				})
+				const labelEl = field.querySelector('.filter-field__value')
+				if (labelEl) {
+					if (field.hasAttribute('data-multi')) {
+						const n = field.querySelectorAll('.filter-option__input:checked').length
+						labelEl.textContent = n ? `${labelEl.dataset.placeholder || ''}: ${n}` : labelEl.dataset.placeholder || ''
+					} else {
+						const active = field.querySelector('.filter-option.is-active')
+						labelEl.textContent = active ? active.dataset.label || active.dataset.value : labelEl.dataset.placeholder || ''
+					}
+				}
+			}
+			if (field.hasAttribute('data-input') || field.hasAttribute('data-range')) {
+				const f = readField(field)
+				const labelEl = field.querySelector('.filter-field__value')
+				if (labelEl) labelEl.textContent = f.length ? f[0].label : labelEl.dataset.placeholder || ''
+			}
+			field.__reorder?.()
+			reflectFilled(field)
+			renderFieldChips(field)
+		})
+		collectFilters() // rebuild the filter list from the restored fields
+	}
+
+	// ---- initial state: restore from a shared URL, else seed from markup ----
+	if (tableUrlEnabled() && location.search) restoreFromUrl()
+	else collectFilters()
 	apply()
 
 	return () => {

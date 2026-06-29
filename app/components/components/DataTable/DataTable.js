@@ -1,4 +1,5 @@
 import { mountStaticPagination, mountDataPagination } from '@/utils/pagination'
+import { tableUrlEnabled, readTableUrl, writeTableUrl } from '@/utils/tableUrl'
 
 // Reusable data-table behaviour: column sorting, row filtering, empty state and
 // a simple page-size limiter. Page-agnostic — driven entirely by data-attrs:
@@ -150,6 +151,21 @@ export default async (root) => {
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
 	let pageSize = dataMode ? config.pageSize || Infinity : Infinity
 	let currentPage = 1
+
+	// Shareable URL state (sole client table only). One writer — syncUrl — runs at
+	// the end of every recompute, so every change (filter/sort/page/size) is captured.
+	const urlEnabled = tableUrlEnabled() && !serverMode
+	const serializeFilters = (arr) => arr.map((x) => `${x.key}=${x.value}`).sort().join('&')
+	const syncUrl = () => {
+		if (!urlEnabled) return
+		writeTableUrl({
+			query: state.query,
+			filters: state.filters,
+			sort,
+			page: dataMode ? currentPage : 1,
+			size: dataMode ? pageSize : null,
+		})
+	}
 
 	// pagination: real (data mode → navigates the dataset) or visual (static demo)
 	const pagNav = root.querySelector('.ui-pagination')
@@ -322,6 +338,7 @@ export default async (root) => {
 		}
 
 		if (emptyEl) emptyEl.hidden = matched.length > 0
+		syncUrl()
 	}
 
 	// colIndex is resolved per sortable header when clicked
@@ -420,7 +437,7 @@ export default async (root) => {
 	}
 
 	// programmatic sort used by the mobile "Сортировать по" dropdown
-	const sortByKey = (key, dir) => {
+	const sortByKey = (key, dir, silent) => {
 		if (!key || !dir) {
 			sort = { key: null, dir: 0, type: 'text', th: null }
 		} else {
@@ -431,6 +448,7 @@ export default async (root) => {
 		headers.forEach((h) => h.classList.remove('is-asc', 'is-desc'))
 		if (sort.th && sort.dir === 1) sort.th.classList.add('is-asc')
 		else if (sort.th && sort.dir === -1) sort.th.classList.add('is-desc')
+		if (silent) return // restoring from URL — caller does the single recompute
 		currentPage = 1
 		recompute()
 	}
@@ -506,11 +524,13 @@ export default async (root) => {
 	// --- Public API for filter UIs ---
 	root.__dataTable = {
 		applyFilters(next = {}) {
-			state = {
-				query: norm(next.query),
-				filters: Array.isArray(next.filters) ? next.filters : [],
-			}
-			currentPage = 1
+			const q = norm(next.query)
+			const f = Array.isArray(next.filters) ? next.filters : []
+			// only jump back to page 1 when the filter set actually changed — keeps a
+			// page restored from the URL from being reset by the header's re-apply
+			const changed = q !== state.query || serializeFilters(f) !== serializeFilters(state.filters)
+			state = { query: q, filters: f }
+			if (changed) currentPage = 1
 			recomputeFiltered()
 		},
 		reset() {
@@ -518,6 +538,26 @@ export default async (root) => {
 			currentPage = 1
 			recompute()
 		},
+	}
+
+	// --- Restore state from a shared URL (sole client table only) ---
+	if (urlEnabled && location.search) {
+		const u = readTableUrl()
+		state = { query: norm(u.query), filters: u.filters }
+		if (u.sort) sortByKey(u.sort.key, u.sort.dir < 0 ? 'desc' : 'asc', true)
+		if (dataMode) {
+			if (u.size) {
+				pageSize = u.size
+				root.querySelectorAll('[data-page-size]').forEach((sel) => {
+					const valueEl = sel.querySelector('[data-page-size-value]')
+					if (valueEl) valueEl.textContent = String(u.size)
+					sel.querySelectorAll('.page-size__option').forEach((o) =>
+						o.classList.toggle('is-active', parseInt(o.dataset.value, 10) === u.size)
+					)
+				})
+			}
+			if (u.page > 1) currentPage = u.page // set last — sort/size resets would clobber it
+		}
 	}
 
 	recompute()
