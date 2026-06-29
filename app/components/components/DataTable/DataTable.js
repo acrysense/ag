@@ -34,8 +34,10 @@ function cellHTML(col, row) {
 	switch (col.type) {
 		case 'link':
 			return `<a class="data-table__link" href="${esc(row[col.hrefKey] || '#')}">${esc(v)}</a>`
-		case 'cat':
-			return `<span class="data-table__cat data-table__cat--${esc(v)}">${esc(v)}</span>`
+		case 'cat': {
+			const k = String(v ?? '').toLowerCase() // class is lowercase (--a/--b/--c/--d), letter shown uppercase
+			return `<span class="data-table__cat data-table__cat--${esc(k)}">${esc(k.toUpperCase())}</span>`
+		}
 		case 'trend':
 			return `<span class="manager__trend manager__trend--${esc(v)}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>`
 		case 'index':
@@ -291,26 +293,25 @@ export default async (root) => {
 			})
 		}
 
-		// reflect order in the DOM and toggle visibility
-		const matchedSet = new Set(matched)
-		baseOrder.forEach((row) => {
-			if (!matchedSet.has(row)) row.classList.add('is-hidden')
-		})
-
 		if (dataMode) {
-			// real pagination: show only the current page's slice of the matches
+			// Windowed render: keep ONLY the current page's rows in the DOM.
+			// The rest stay detached in `baseOrder` (memory only — never laid out),
+			// so thousands of rows load, sort and filter without a render freeze.
 			const size = pageSize === Infinity ? matched.length || 1 : pageSize
-			const totalPages = Math.max(1, Math.ceil(matched.length / size))
+			const totalPages = Math.max(1, Math.ceil((matched.length || 1) / size))
 			if (currentPage > totalPages) currentPage = totalPages
 			const start = (currentPage - 1) * size
-			matched.forEach((row, i) => {
-				tbody.appendChild(row)
-				row.classList.toggle('is-hidden', i < start || i >= start + size)
-			})
+			const pageRows = matched.slice(start, start + size)
+			pageRows.forEach((row) => row.classList.remove('is-hidden'))
+			tbody.replaceChildren(...pageRows)
 			dataPag?.render(totalPages, currentPage)
 			if (totalEl) totalEl.textContent = String(matched.length)
 		} else {
-			// static mode: cap to the page-size limit (no real page navigation)
+			// static mode: reorder in place, cap to page-size (no real navigation)
+			const matchedSet = new Set(matched)
+			baseOrder.forEach((row) => {
+				if (!matchedSet.has(row)) row.classList.add('is-hidden')
+			})
 			let shown = 0
 			matched.forEach((row) => {
 				tbody.appendChild(row)
@@ -407,12 +408,16 @@ export default async (root) => {
 	})
 
 	// --- Mobile card view: label each cell with its column header ---
+	// In data mode the labels are baked into each cell at build time, so we skip
+	// this O(rows×cols) pass (it would touch every detached row, thousands of them).
 	const headerLabels = [...table.querySelectorAll('thead th')].map((th) => th.textContent.trim())
-	allRows.forEach((row) => {
-		;[...row.children].forEach((td, i) => {
-			if (headerLabels[i]) td.setAttribute('data-label', headerLabels[i])
+	if (!dataMode) {
+		allRows.forEach((row) => {
+			;[...row.children].forEach((td, i) => {
+				if (headerLabels[i]) td.setAttribute('data-label', headerLabels[i])
+			})
 		})
-	})
+	}
 
 	// programmatic sort used by the mobile "Сортировать по" dropdown
 	const sortByKey = (key, dir) => {
