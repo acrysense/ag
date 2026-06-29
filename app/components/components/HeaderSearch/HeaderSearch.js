@@ -33,7 +33,8 @@ export default (root) => {
 	const chipsHost = document.querySelector('[data-filter-chips]')
 	const chipsList = chipsHost?.querySelector('[data-filter-chips-list]')
 	const resetAllBtn = chipsHost?.querySelector('[data-filter-reset-all]')
-	const table = document.querySelector('[data-data-table]')
+	// a page may hold several data tables (e.g. tabs) — drive them all
+	const tables = [...document.querySelectorAll('[data-data-table]')]
 
 	const disposers = []
 	let filters = [] // [{ key, value, label }]
@@ -90,10 +91,10 @@ export default (root) => {
 		})
 	}
 
-	const tableApi = () => table && table.__dataTable
+	const tableApis = () => tables.map((t) => t.__dataTable).filter(Boolean)
 	const apply = () => {
-		const api = tableApi()
-		if (api) api.applyFilters({ query: input?.value || '', filters })
+		const apis = tableApis()
+		if (apis.length) apis.forEach((api) => api.applyFilters({ query: input?.value || '', filters }))
 		else applyTaskFilter(input?.value || '', filters)
 		renderChips()
 	}

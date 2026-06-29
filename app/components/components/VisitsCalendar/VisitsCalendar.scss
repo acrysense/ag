@@ -1,0 +1,504 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+	.vcal {
+		display: block;
+		width: 100%;
+
+		// --- header: title + prev/next ---
+		&__head {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			@include prop-vw(gap, 12, xl);
+		}
+		&__title {
+			@include prop-vw(font-size, 22, xl);
+			font-weight: bold;
+			color: $color-black;
+			span {
+				color: $color-dark-grey;
+				font-weight: bold;
+			}
+			@include only(mobile) {
+				@include prop-vw(font-size, 18, sm);
+			}
+		}
+		&__nav {
+			display: flex;
+			@include prop-vw(gap, 8, xl);
+		}
+		&__navbtn {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(width, 32, xl);
+			@include prop-vw(height, 32, xl);
+			color: $color-dark-grey;
+			background: $color-bg;
+			border: none;
+			@include prop-vw(border-radius, 8, xl);
+			cursor: pointer;
+			& > svg {
+				@include prop-vw(width, 18, xl);
+				@include prop-vw(height, 18, xl);
+			}
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-black;
+				}
+			}
+		}
+
+		// --- controls: create + view toggle ---
+		&__controls {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			@include prop-vw(gap, 12, xl);
+			@include prop-vw(margin-top, 16, xl);
+			@include prop-vw(margin-bottom, 20, xl);
+		}
+		&__views {
+			display: flex;
+			@include prop-vw(gap, 2, xl);
+			background: $color-bg;
+			@include prop-vw(border-radius, 8, xl);
+			@include prop-vw(padding, 2, xl);
+		}
+		&__view {
+			@include prop-vw(padding-block, 7, xl);
+			@include prop-vw(padding-inline, 18, xl);
+			@include prop-vw(font-size, 14, xl);
+			color: $color-dark-grey;
+			background: transparent;
+			border: none;
+			@include prop-vw(border-radius, 6, xl);
+			cursor: pointer;
+			&.is-active {
+				color: $color-black;
+				background: $color-white;
+			}
+			@include only(mobile) {
+				@include prop-vw(padding-inline, 12, sm);
+				@include prop-vw(font-size, 13, sm);
+			}
+		}
+
+		// --- month / week grid ---
+		&__weekdays,
+		&__row {
+			display: grid;
+			grid-template-columns: repeat(5, minmax(0, 1fr));
+		}
+		&__weekdays {
+			@include prop-vw(gap, 1, xl);
+			@include prop-vw(margin-bottom, 8, xl);
+			span {
+				@include prop-vw(font-size, 14, xl);
+				color: $color-black;
+			}
+		}
+		&__grid {
+			@include border-side(top, 1, solid, $color-border, xl);
+			@include border-side(left, 1, solid, $color-border, xl);
+		}
+		&__row {
+			& + & {
+			}
+		}
+		&__cell {
+			min-height: 0;
+			@include prop-vw(min-height, 130, xl);
+			@include prop-vw(padding, 10, xl);
+			@include border-side(right, 1, solid, $color-border, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
+			&.is-out {
+				background: #fbfcfe;
+			}
+		}
+		&__daynum {
+			display: block;
+			@include prop-vw(font-size, 13, xl);
+			color: $color-dark-grey;
+			@include prop-vw(margin-bottom, 8, xl);
+			.vcal__cell.is-out & {
+				color: $color-grey;
+			}
+		}
+		&__events {
+			display: flex;
+			flex-direction: column;
+			@include prop-vw(gap, 6, xl);
+		}
+		&__event {
+			display: flex;
+			align-items: center;
+			@include prop-vw(gap, 8, xl);
+			padding: 0;
+			background: transparent;
+			border: none;
+			text-align: left;
+			cursor: pointer;
+			@include prop-vw(font-size, 14, xl);
+			color: $color-black;
+			&.is-cancelled {
+				color: $color-dark-grey;
+				text-decoration: line-through;
+				.vcal__dot {
+					opacity: 0.5;
+				}
+			}
+			@media screen and (hover: hover) {
+				&:hover .vcal__event-name {
+					color: $color-blue;
+				}
+			}
+		}
+		&__dot {
+			flex-shrink: 0;
+			@include prop-vw(width, 3, xl);
+			@include prop-vw(height, 14, xl);
+			border-radius: 2px;
+			background: $color-grey;
+		}
+		&__event--a .vcal__dot,
+		&__event--a.vcal__slot-event .vcal__dot {
+			background: $color-green;
+		}
+		&__event--b .vcal__dot {
+			background: $color-blue;
+		}
+		&__event--c .vcal__dot {
+			background: #ffc107;
+		}
+		&__event--d .vcal__dot {
+			background: $color-red;
+		}
+		&__add {
+			@include prop-vw(margin-top, 4, xl);
+			padding: 0;
+			width: fit-content;
+			@include prop-vw(font-size, 14, xl);
+			color: $color-blue;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			opacity: 0;
+			transition: opacity $transition-default;
+			.vcal__cell:hover &,
+			.vcal__tcell:hover & {
+				opacity: 1;
+			}
+		}
+
+		// --- time grid (day = 1 column, week = 5 columns) ---
+		// --- time grid (day = 1 column, week = 5 columns) ---
+		&__tgrid {
+			@include only(mobile) {
+				overflow-x: auto;
+			}
+		}
+		&__tgrid-inner {
+			display: grid;
+			grid-template-columns: #{vw-range(56, xl)} repeat(var(--days, 5), minmax(0, 1fr));
+			@include border-side(top, 1, solid, $color-border, xl);
+			@include border-side(left, 1, solid, $color-border, xl);
+
+			@include only(desktop) {
+				grid-template-columns: #{vw-range(56, lg)} repeat(var(--days, 5), minmax(0, 1fr));
+			}
+			@include only(mobile) {
+				grid-template-columns: #{vw-range(48, sm)} repeat(var(--days, 5), minmax(0, 1fr));
+				@include prop-vw(min-width, 640, sm);
+			}
+		}
+		&__tcorner {
+			@include border-side(right, 1, solid, $color-border, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
+		}
+		&__tcol-head {
+			@include prop-vw(padding, 10, xl);
+			@include border-side(right, 1, solid, $color-border, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
+			span {
+				@include prop-vw(font-size, 14, xl);
+				color: $color-black;
+			}
+			b {
+				display: block;
+				@include prop-vw(margin-top, 2, xl);
+				@include prop-vw(font-size, 13, xl);
+				font-weight: normal;
+				color: $color-dark-grey;
+			}
+		}
+		&__hour {
+			@include prop-vw(padding-block, 10, xl);
+			@include prop-vw(padding-inline, 8, xl);
+			@include prop-vw(font-size, 14, xl);
+			color: $color-dark-grey;
+			@include border-side(right, 1, solid, $color-border, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
+		}
+		&__tcell {
+			display: flex;
+			flex-direction: column;
+			@include prop-vw(gap, 6, xl);
+			@include prop-vw(min-height, 56, xl);
+			@include prop-vw(padding, 8, xl);
+			@include border-side(right, 1, solid, $color-border, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
+		}
+		&__tevent {
+			display: flex;
+			align-items: center;
+			@include prop-vw(gap, 8, xl);
+			width: 100%;
+			padding: 0;
+			background: transparent;
+			border: none;
+			text-align: left;
+			cursor: pointer;
+			&.is-cancelled {
+				.data-table__cat {
+					opacity: 0.6;
+				}
+				.vcal__tevent-name {
+					color: $color-dark-grey;
+					text-decoration: line-through;
+				}
+				.vcal__tevent-sub {
+					text-decoration: line-through;
+				}
+			}
+			@media screen and (hover: hover) {
+				&:hover .vcal__tevent-name {
+					color: $color-blue;
+				}
+			}
+		}
+		&__tevent-body {
+			min-width: 0;
+		}
+		&__tevent-name {
+			display: block;
+			@include prop-vw(font-size, 14, xl);
+			color: $color-black;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		&__tevent-sub {
+			display: block;
+			@include prop-vw(font-size, 13, xl);
+			color: $color-dark-grey;
+		}
+		&__tcell .vcal__add {
+			margin-top: 0;
+		}
+
+		// month grid needs a min width so the 5-col grid never squishes on mobile
+		&__body--month {
+			@include only(mobile) {
+				overflow-x: auto;
+				.vcal__weekdays,
+				.vcal__grid {
+					@include prop-vw(min-width, 700, sm);
+				}
+			}
+		}
+	}
+
+	// --- floating event popup (appended to <body>): grey shell + white cards ---
+	.vcal-pop {
+		position: absolute;
+		z-index: 200;
+		@include prop-vw(width, 360, xl);
+		max-width: calc(100vw - 24px);
+		@include prop-vw(padding, 12, xl);
+		display: flex;
+		flex-direction: column;
+		@include prop-vw(gap, 12, xl);
+		background: #f5f8fa;
+		@include prop-vw(border-radius, 16, xl);
+		box-shadow: 0 16px 50px rgba(0, 0, 0, 0.18);
+
+		&__card {
+			display: flex;
+			flex-direction: column;
+			@include prop-vw(gap, 8, xl);
+			@include prop-vw(padding, 16, xl);
+			background: $color-white;
+			@include prop-vw(border-radius, 12, xl);
+			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+		}
+		&__who {
+			display: flex;
+			align-items: center;
+			@include prop-vw(gap, 10, xl);
+			b {
+				@include prop-vw(font-size, 15, xl);
+				color: $color-black;
+			}
+		}
+		&__when {
+			@include prop-vw(font-size, 15, xl);
+			color: $color-black;
+		}
+		&__muted {
+			@include prop-vw(font-size, 14, xl);
+			color: $color-dark-grey;
+		}
+		&__edit {
+			@include prop-vw(margin-top, 6, xl);
+			width: fit-content;
+			@include prop-vw(padding-block, 7, xl);
+			@include prop-vw(padding-inline, 14, xl);
+			@include prop-vw(font-size, 14, xl);
+			color: $color-black;
+			background: $color-bg;
+			border: none;
+			@include prop-vw(border-radius, 8, xl);
+			cursor: pointer;
+		}
+		&__row {
+			display: flex;
+			align-items: center;
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(font-size, 15, xl);
+			color: $color-black;
+			& > svg {
+				flex-shrink: 0;
+				@include prop-vw(width, 18, xl);
+				@include prop-vw(height, 18, xl);
+				color: $color-dark-grey;
+			}
+			b {
+				color: $color-black;
+			}
+		}
+		&__check {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(width, 22, xl);
+			@include prop-vw(height, 22, xl);
+			color: $color-white;
+			background: $color-green;
+			border-radius: 50%;
+			& > svg {
+				@include prop-vw(width, 14, xl);
+				@include prop-vw(height, 14, xl);
+				color: $color-white;
+			}
+		}
+		&__comment {
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.45;
+			color: $color-black;
+			&--muted {
+				color: $color-dark-grey;
+			}
+		}
+		&__coords {
+			@include prop-vw(font-size, 13, xl);
+			color: $color-grey;
+		}
+		&__field {
+			@include prop-vw(margin-top, 6, xl);
+			@include prop-vw(font-size, 15, xl);
+			color: $color-black;
+		}
+		&__label {
+			display: block;
+			@include prop-vw(margin-bottom, 4, xl);
+			@include prop-vw(font-size, 13, xl);
+			color: $color-dark-grey;
+		}
+		&__link {
+			color: $color-blue;
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-blue-hover;
+				}
+			}
+		}
+		&__footer {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			@include prop-vw(gap, 12, xl);
+			@include prop-vw(padding-top, 4, xl);
+		}
+		&__del {
+			@include prop-vw(font-size, 14, xl);
+			color: $color-dark-grey;
+			background: transparent;
+			border: none;
+			cursor: pointer;
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-red;
+				}
+			}
+		}
+	}
+
+	// --- План визитов tab layout: calendar + target sidebar ---
+	.visits-plan {
+		display: flex;
+		align-items: flex-start;
+		@include prop-vw(gap, 20, xl);
+		@include only(desktop) {
+			@include prop-vw(gap, 16, lg);
+		}
+		@include only(mobile) {
+			flex-direction: column;
+			@include prop-vw(gap, 10, sm);
+		}
+		&__cal {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+		&__target {
+			flex-shrink: 0;
+			@include prop-vw(width, 340, xl);
+			@include only(desktop) {
+				@include prop-vw(width, 300, lg);
+			}
+			@include only(mobile) {
+				width: 100%;
+			}
+		}
+		&__stats {
+			display: flex;
+			flex-direction: column;
+			@include prop-vw(gap, 12, xl);
+			@include prop-vw(margin-top, 16, xl);
+			@include prop-vw(margin-bottom, 24, xl);
+		}
+		&__stat {
+			@include prop-vw(font-size, 14, xl);
+			color: $color-dark-grey;
+			b {
+				color: $color-black;
+				font-weight: 600;
+			}
+		}
+		// one shared grid so badge column + numbers line up across every row
+		&__legend {
+			display: grid;
+			grid-template-columns: auto repeat(3, minmax(0, 1fr));
+			align-items: center;
+			@include prop-vw(column-gap, 10, xl);
+			@include prop-vw(row-gap, 14, xl);
+			@include prop-vw(font-size, 14, xl);
+			color: $color-black;
+		}
+		&__legend-head {
+			color: $color-dark-grey;
+		}
+	}
+}

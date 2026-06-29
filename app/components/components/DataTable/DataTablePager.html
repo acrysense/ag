@@ -1,0 +1,28 @@
+<div class="data-table__footer">
+	<nav class="ui-pagination" aria-label="Страницы">
+		<button type="button" class="ui-pagination__item">1</button>
+		<button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+		<button type="button" class="ui-pagination__item">3</button>
+		<button type="button" class="ui-pagination__item">4</button>
+		<span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+		<button type="button" class="ui-pagination__item">22</button>
+		<button type="button" class="ui-pagination__item">23</button>
+		<button type="button" class="ui-pagination__item">24</button>
+		<button type="button" class="ui-pagination__item">25</button>
+		<button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+	</nav>
+	<div class="data-table__total">
+		<span class="data-table__total-text">Всего: <span>{{default total "835"}}</span></span>
+		<div class="page-size" data-page-size>
+			<button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
+				<span data-page-size-value>20</span>
+				<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+			</button>
+			<div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+				<button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+				<button type="button" class="page-size__option" role="option" data-value="50">50</button>
+				<button type="button" class="page-size__option" role="option" data-value="100">100</button>
+			</div>
+		</div>
+	</div>
+</div>

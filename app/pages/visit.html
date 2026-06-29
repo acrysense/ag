@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light visit-page">
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__double" data-module="Visit" data-path="sections/visit">
+						<div class="wrapper__left">
+							<a href="/visits" class="wrapper__back">
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+								<span>Назад</span>
+							</a>
+
+							<!-- checklist -->
+							<section class="data-panel visit">
+								<div class="visit__head">
+									<h1 class="visit__title">Чек-лист визита</h1>
+									<span class="visit__date">09.05.2026, 11:26</span>
+								</div>
+
+								<!-- qualitative -->
+								<div class="visit-sec" data-collapsible>
+									<div class="visit-sec__head">
+										<h2 class="visit-sec__title">Качественные показатели</h2>
+										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть"><svg viewBox="0 0 20 20" fill="none"><path d="M5 12L10 7L15 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+									</div>
+									<div class="visit-sec__body">
+										<ul class="visit-q">
+											{{#each (arr
+												(obj title="Увеличить долю СТМ в чеке март" yn="yes" desc="Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ. Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ.")
+												(obj title="Пройти тренинг по товарам 6-го ранга")
+												(obj title="Улучшить качество обслуживания" yn="no" desc="Обсудить недостаточно высокие показатели продаж СТМ.")
+												(obj title="Увеличить количество чеков")
+												(obj title="Ознакомиться с планом продаж на Q2 2026. Расписаться бланке у менеджера")
+												(obj title="Выполнить инвентаризацию" yn="no")
+												(obj title="Продлить лицензию" yn="yes")
+												(obj title="Увеличить долю СТМ в чеке март" yn="yes")
+											)}}
+											<li class="visit-q__item">
+												<div class="visit-q__toggle">
+													<button type="button" class="visit-q__yn visit-q__yn--yes{{#if (eq this.yn "yes")}} is-active{{/if}}" data-yn="yes">Да</button>
+													<button type="button" class="visit-q__yn visit-q__yn--no{{#if (eq this.yn "no")}} is-active{{/if}}" data-yn="no">Нет</button>
+												</div>
+												<div class="visit-q__body">
+													<div class="visit-q__name">{{this.title}}</div>
+													{{#if this.desc}}<div class="visit-q__desc">{{this.desc}}</div>{{/if}}
+												</div>
+												<div class="visit-menu" data-menu>
+													<button type="button" class="visit-menu__trigger" data-menu-trigger aria-label="Действия"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></button>
+													<div class="visit-menu__panel" data-menu-panel hidden>
+														<button type="button" class="visit-menu__item"><svg viewBox="0 0 18 18" fill="none"><path d="M3 4.5A1.5 1.5 0 0 1 4.5 3h9A1.5 1.5 0 0 1 15 4.5v6A1.5 1.5 0 0 1 13.5 12H7l-3 3V4.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Комментировать</button>
+														<button type="button" class="visit-menu__item"><svg viewBox="0 0 18 18" fill="none"><path d="M12.5 3.5l2 2L6 14l-2.5.5L4 12l8.5-8.5Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>Редактировать</button>
+														<button type="button" class="visit-menu__item visit-menu__item--danger"><svg viewBox="0 0 18 18" fill="none"><path d="M4 5h10M7 5V3.5h4V5M5.5 5l.5 9h6l.5-9" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>Удалить</button>
+													</div>
+												</div>
+											</li>
+											{{/each}}
+										</ul>
+									</div>
+								</div>
+
+								<!-- quantitative -->
+								<div class="visit-sec" data-collapsible>
+									<div class="visit-sec__head">
+										<h2 class="visit-sec__title">Количественные показатели</h2>
+										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть"><svg viewBox="0 0 20 20" fill="none"><path d="M5 12L10 7L15 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+									</div>
+									<div class="visit-sec__body">
+										<div class="visit-quant__scroll">
+											<table class="visit-quant">
+												<thead>
+													<tr>
+														<th class="visit-quant__th visit-quant__th--idx" rowspan="2"></th>
+														<th class="visit-quant__th" rowspan="2">Критерий</th>
+														<th class="visit-quant__th" rowspan="2">Качество<span>Балы, 1-5</span></th>
+														<th class="visit-quant__th visit-quant__th--group" colspan="2">Оценка количества</th>
+														<th class="visit-quant__th visit-quant__th--pct" rowspan="2">%</th>
+													</tr>
+													<tr>
+														<th class="visit-quant__th visit-quant__th--sub">Покупателей</th>
+														<th class="visit-quant__th visit-quant__th--sub">Рекомендации</th>
+													</tr>
+												</thead>
+												<tbody>
+													{{#each (arr
+														(obj n="1" crit="Предложил акционный товар" q="12" buyers="4" recs="5" pct="78%")
+														(obj n="2" crit="Распродал все запасы парацетамола" q="12" buyers="4" recs="5" pct="23%" menu=true)
+														(obj n="3" crit="Выполнил все задачи из поставленных менеджером в ходе планового совещания" q="12")
+														(obj n="4" crit="Выполняет план по СТМ" q="12" buyers="4" recs="5" pct="67%")
+														(obj n="5" crit="Скорость обслуживания" q="12" buyers="4" recs="5" pct="90%")
+													)}}
+													<tr class="visit-quant__row">
+														<td class="visit-quant__td visit-quant__td--idx">{{this.n}}.</td>
+														<td class="visit-quant__td visit-quant__td--crit">{{this.crit}}</td>
+														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.q}}" inputmode="numeric"></td>
+														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.buyers}}" inputmode="numeric"></td>
+														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.recs}}" inputmode="numeric"></td>
+														<td class="visit-quant__td visit-quant__td--pct">
+															<span>{{this.pct}}</span>
+															{{#if this.menu}}<span class="visit-quant__dots"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></span>{{/if}}
+														</td>
+													</tr>
+													{{/each}}
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<!-- score + comment + geo -->
+							<section class="data-panel visit-result">
+								<div class="visit-result__grid">
+									<div class="visit-score">
+										<span class="visit-score__label">Баллов по чек-листу</span>
+										<div class="visit-score__box visit-score__box--bad">
+											<span class="visit-score__value">42</span>
+											<span class="visit-score__date">12.04.2026</span>
+										</div>
+										<div class="visit-score__scale">
+											<div class="visit-score__range"><b>Плохо</b><span>0 – 40</span></div>
+											<div class="visit-score__range"><b>Норма</b><span>41 – 60</span></div>
+											<div class="visit-score__range"><b>Хорошо</b><span>61 – 80</span></div>
+											<div class="visit-score__range"><b>Отлично</b><span>81 – 100</span></div>
+										</div>
+									</div>
+									<div class="visit-comment">
+										<span class="visit-comment__label">Комментарий</span>
+										<textarea class="visit-comment__field" rows="5">Сотрудник демонстрирует хороший уровень обслуживания. Рекомендуется усилить работу с СТМ и допродажами.</textarea>
+									</div>
+								</div>
+
+								<div class="visit-geo">
+									<h3 class="visit-geo__title">Геолокация менеджера</h3>
+									<div class="visit-geo__rows">
+										<div class="visit-geo__row"><span class="visit-geo__label">Аптека №50:</span><a href="/" class="visit-geo__link">Минск, ул Широкая, 1к2</a></div>
+										<div class="visit-geo__row"><span class="visit-geo__label">Время передачи данных:</span><span>09.03.2026 12:24</span></div>
+										<div class="visit-geo__row"><span class="visit-geo__label">Локация:</span><a href="/" class="visit-geo__link">5534444.442442 , 455543.222345</a></div>
+									</div>
+									<button type="button" class="btn visit-geo__btn" data-geo-btn>Передать геолокацию</button>
+									<p class="visit-geo__error" data-geo-error>Не удалось установить геолокацию, доступ заблокирован</p>
+								</div>
+							</section>
+
+							<!-- footer actions -->
+							<div class="visit__footer">
+								<div class="visit__footer-main">
+									<button type="button" class="btn">Сохранить</button>
+									<button type="button" class="btn btn--secondary">Сохранить черновик</button>
+									<button type="button" class="btn btn--ghost">Отмена</button>
+								</div>
+								<button type="button" class="visit__delete">Удалить визит</button>
+							</div>
+						</div>
+
+						<aside class="wrapper__right">
+							<!-- employee card -->
+							<section class="data-panel visit-emp">
+								<div class="visit-emp__top">
+									<div class="visit-emp__avatar"><img src="/assets/images/ava.jpg" alt="Водолеев Марьян Сергеевич"></div>
+									<div class="visit-emp__info">
+										<h2 class="visit-emp__name">Водолеев Марьян Сергеевич</h2>
+										<div class="visit-emp__rating"><span class="data-table__cat data-table__cat--b">b</span><span class="visit-emp__rating-val">0.83</span>, 10.03.2026</div>
+									</div>
+								</div>
+								<div class="visit-emp__rows">
+									<div class="visit-emp__row"><span class="visit-emp__label">Должность:</span><span>Фармацевт</span></div>
+									<div class="visit-emp__row"><span class="visit-emp__label">Аптека:</span><a href="/pharmacy" class="visit-emp__link">Аптека ADEL №50, Минск</a></div>
+									<div class="visit-emp__row"><span class="visit-emp__label">Менеджер:</span><a href="/manager" class="visit-emp__link">Петров А.И</a></div>
+								</div>
+							</section>
+
+							<!-- visit meta -->
+							<section class="data-panel visit-meta">
+								<div class="visit-meta__block">
+									<span class="visit-meta__label">Тип визита</span>
+									<span class="visit-meta__value">Кучинг</span>
+								</div>
+								<div class="visit-meta__block">
+									<span class="visit-meta__label">Комментарий</span>
+									<p class="visit-meta__text">Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ.<br>Средний чек.</p>
+								</div>
+							</section>
+
+							<!-- visits history -->
+							<section class="data-panel visit-hist">
+								<h2 class="data-panel__title">История визитов</h2>
+								<ul class="visit-hist__list">
+									{{#each (arr
+										(obj tone="blue" score="78/100" d="10.02.2026" type="Коучинг")
+										(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+										(obj tone="red" score="2/100" d="10.02.2026" type="Диагностика")
+										(obj tone="red" score="29/100" d="10.02.2026" type="Контроль")
+										(obj tone="blue" score="78/100" d="10.02.2026" type="Контроль")
+										(obj tone="blue" score="78/100" d="10.02.2026" type="Диагностика")
+										(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+										(obj tone="blue" score="78/100" d="10.02.2026" type="Коучинг")
+										(obj tone="red" score="29/100" d="10.02.2026" type="Контроль")
+										(obj tone="blue" score="78/100" d="10.02.2026" type="Контроль")
+										(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+									)}}
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
+										<span class="visit-hist__text">{{this.d}}, {{this.type}}</span>
+									</li>
+									{{/each}}
+								</ul>
+							</section>
+						</aside>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

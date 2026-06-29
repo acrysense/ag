@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light visits-page" data-header-search>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__wide">
+						<a href="/" class="wrapper__back wrapper__back--mobile">
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+						<div class="filter-chips" data-filter-chips hidden>
+							<div class="filter-chips__list" data-filter-chips-list></div>
+							<button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
+						</div>
+
+						<div class="tabs visits-page__tabs" data-module="Tabs" data-path="components">
+							<div class="tabs__list">
+								<div class="tabs__item is--active"><button class="tabs__tab">План визитов</button></div>
+								<div class="tabs__item"><button class="tabs__tab">План-факт</button></div>
+								<div class="tabs__item"><button class="tabs__tab">История визитов</button></div>
+							</div>
+
+							<!-- TAB 1: План визитов (календарь + таргет) -->
+							<div class="tabs__wrapper is--active">
+								<div class="visits-plan">
+									<section class="data-panel visits-plan__cal">
+										<div class="vcal" data-module="VisitsCalendar" data-path="components" data-anchor="2026-05-01"></div>
+									</section>
+									<aside class="visits-plan__target">
+										<section class="data-panel">
+											<h2 class="data-panel__title">Таргет посещений</h2>
+											<div class="visits-plan__stats">
+												<div class="visits-plan__stat">Таргет визитов: <b>603</b></div>
+												<div class="visits-plan__stat">Запланировано визитов: <b>462</b></div>
+												<div class="visits-plan__stat">Выполнено визитов: <b>22</b></div>
+												<div class="visits-plan__stat">Процент выполнения: <b>8%</b></div>
+											</div>
+											<div class="visits-plan__legend">
+												<span></span>
+												<span class="visits-plan__legend-head">Факт</span>
+												<span class="visits-plan__legend-head">План</span>
+												<span class="visits-plan__legend-head">Таргет</span>
+												{{#each (arr
+													(obj c="a" fact="12" plan="134" target="134")
+													(obj c="b" fact="9" plan="143" target="249")
+													(obj c="c" fact="1" plan="120" target="120")
+													(obj c="d" fact="0" plan="65" target="100")
+												)}}
+												<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
+												<span class="visits-plan__legend-cell">{{this.fact}}</span>
+												<span class="visits-plan__legend-cell">{{this.plan}}</span>
+												<span class="visits-plan__legend-cell">{{this.target}}</span>
+												{{/each}}
+											</div>
+										</section>
+									</aside>
+								</div>
+							</div>
+
+							<!-- TAB 2: План-факт -->
+							<div class="tabs__wrapper">
+								<section class="data-panel visits-pf" data-data-table data-module="DataTable" data-path="components">
+									<div class="data-panel__header">
+										<h2 class="data-panel__title">План и факт визитов</h2>
+										<a href="/" class="data-panel__export">
+											<svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+												<path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+												<path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+											</svg>
+											<span class="data-panel__export-full">Экспорт в Excel</span>
+											<span class="data-panel__export-short">Excel</span>
+										</a>
+									</div>
+									<div class="data-table__controls">
+										<div class="data-table__sort" data-dt-sort>
+											<button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button>
+											<div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
+												<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+												<button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="asc">Сотрудник (А–Я)</button>
+												<button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="desc">Сотрудник (Я–А)</button>
+											</div>
+										</div>
+										<button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></button>
+										<button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></button>
+									</div>
+									<div class="data-table__scroll">
+										<table class="data-table is-cards-view visits-table">
+											<thead>
+												<tr>
+													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
+													<th class="data-table__th data-table__th--center">Кат.</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="plan" data-sort-type="number">План</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="fact" data-sort-type="number">Факт</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="pct" data-sort-type="number">% вып.</th>
+													<th class="data-table__th" data-sort-key="next" data-sort-type="date">След. визит</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each (arr
+													(obj name="Василевская М.В." pharmacy="ADEL №14" cat="b" plan="10" fact="5" pct="50" next="12.05.2026")
+													(obj name="Ковш Т.А." pharmacy="Эконом №8" cat="b" plan="1" fact="1" pct="100" next="09.08.2026")
+													(obj name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" plan="10" fact="9" pct="90" next="22.06.2026")
+													(obj name="Волкова Ю.Г." pharmacy="Аптека ADEL №14, Кобирин" cat="d" plan="100" fact="24" pct="24" next="19.05.2026")
+													(obj name="Северная Т.В." pharmacy="ADEL №123" cat="b" plan="20" fact="15" pct="75" next="02.05.2026")
+													(obj name="Василевская М.В." pharmacy="ADEL №14" cat="b" plan="1" fact="1" pct="100" next="22.05.2026")
+													(obj name="Ковш Т.А." pharmacy="Эконом №13" cat="b" plan="5" fact="1" pct="20" next="29.05.2026")
+													(obj name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" plan="10" fact="4" pct="40" next="17.05.2026")
+													(obj name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" plan="1" fact="1" pct="100" next="02.05.2026")
+													(obj name="Северная Т.В." pharmacy="ADEL №210" cat="b" plan="7" fact="7" pct="100" next="12.05.2026")
+													(obj name="Василевская М.В." pharmacy="ADEL №14" cat="b" plan="100" fact="0" pct="0" next="12.05.2026")
+													(obj name="Ковш Т.А." pharmacy="Эконом №22" cat="b" plan="92" fact="2" pct="2" next="12.05.2026")
+													(obj name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" plan="6" fact="6" pct="100" next="12.05.2026")
+													(obj name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" plan="10" fact="12" pct="120" next="12.05.2026")
+													(obj name="Северная Т.В." pharmacy="ADEL №83" cat="b" plan="7" fact="7" pct="100" next="12.05.2026")
+												)}}
+												<tr class="data-table__row">
+													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
+													<td class="data-table__td" data-filter-key="pharmacy">{{this.pharmacy}}</td>
+													<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+													<td class="data-table__td data-table__td--num">{{this.plan}}</td>
+													<td class="data-table__td data-table__td--num">{{this.fact}}</td>
+													<td class="data-table__td data-table__td--num">{{this.pct}}</td>
+													<td class="data-table__td">{{this.next}}</td>
+												</tr>
+												{{/each}}
+											</tbody>
+										</table>
+										<div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+									</div>
+									{{> components/DataTable/DataTablePager }}
+								</section>
+							</div>
+
+							<!-- TAB 3: История визитов -->
+							<div class="tabs__wrapper">
+								<section class="data-panel visits-history" data-data-table data-module="DataTable" data-path="components">
+									<div class="data-panel__header">
+										<h2 class="data-panel__title">История визитов</h2>
+										<a href="/" class="data-panel__export">
+											<svg class="data-panel__export-icon" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+												<path d="M10 3.5V12.5M10 12.5L6.5 9M10 12.5L13.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+												<path d="M4.5 13.5V15A1.5 1.5 0 0 0 6 16.5H14A1.5 1.5 0 0 0 15.5 15V13.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+											</svg>
+											<span class="data-panel__export-full">Экспорт в Excel</span>
+											<span class="data-panel__export-short">Excel</span>
+										</a>
+									</div>
+									<div class="data-table__controls">
+										<div class="data-table__sort" data-dt-sort>
+											<button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button>
+											<div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
+												<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+												<button type="button" class="data-table__sort-option" role="option" data-sort="date" data-dir="desc">Сначала новые</button>
+												<button type="button" class="data-table__sort-option" role="option" data-sort="date" data-dir="asc">Сначала старые</button>
+											</div>
+										</div>
+										<button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></button>
+										<button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></button>
+									</div>
+									<div class="data-table__scroll">
+										<table class="data-table is-cards-view visits-table">
+											<thead>
+												<tr>
+													<th class="data-table__th" data-sort-key="date" data-sort-type="date">Дата визита</th>
+													<th class="data-table__th">Тип</th>
+													<th class="data-table__th data-table__th--num">Лист</th>
+													<th class="data-table__th data-table__th--center">Гео</th>
+													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
+													<th class="data-table__th data-table__th--center">Кат.</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="visits" data-sort-type="number">Визиты</th>
+													<th class="data-table__th">Комментарий</th>
+												</tr>
+											</thead>
+											<tbody>
+												{{#each (arr
+													(obj date="12.05.2026" type="Коучинг" score="78 / 100" tone="blue" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="50" comment="Перспектива роста")
+													(obj date="09.08.2026" type="Коучинг" score="78 / 100" tone="blue" geo=true name="Ковш Т.А." pharmacy="Эконом №8" cat="b" visits="100" comment="Задачи не выполняются")
+													(obj date="22.06.2026" type="Диагностика" score="100 / 100" tone="green" name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="90" comment="Мотивация повышена")
+													(obj date="19.05.2026" type="Контроль" score="100 / 100" tone="green" name="Волкова Ю.Г." pharmacy="Аптека ADEL №14, Кобирин" cat="d" visits="24" comment="Фокус на СТМ, хорошая динамика в Q1.")
+													(obj date="02.05.2026" type="Коучинг" score="88 / 100" tone="blue" name="Северная Т.В." pharmacy="ADEL №123" cat="b" visits="75" comment="Мотивация повышена")
+													(obj date="22.05.2026" type="Контроль" score="12 / 100" tone="red" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="100" comment="Мотивация повышена")
+													(obj date="29.05.2026" type="Диагностика" score="78 / 100" tone="blue" geo=true name="Ковш Т.А." pharmacy="Эконом №13" cat="b" visits="20" comment="Фокус на СТМ, хорошая динамика в Q1.")
+													(obj date="17.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="40" comment="Отличный результат")
+													(obj date="02.05.2026" type="Коучинг" score="12 / 100" tone="red" geo=true name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" visits="100" comment="Мотивация повышена")
+													(obj date="12.05.2026" type="Контроль" score="12 / 100" tone="red" geo=true name="Северная Т.В." pharmacy="ADEL №210" cat="b" visits="100" comment="Работа над СЧ")
+													(obj date="12.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="0" comment="Задачи не выполняются")
+													(obj date="12.05.2026" type="Диагностика" score="100 / 100" tone="green" geo=true name="Ковш Т.А." pharmacy="Эконом №22" cat="b" visits="2" comment="Отличный результат")
+													(obj date="12.05.2026" type="Коучинг" score="78 / 100" tone="blue" geo=true name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="100" comment="Мотивация повышена")
+													(obj date="12.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" visits="120" comment="Задачи не выполняются")
+													(obj date="12.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Северная Т.В." pharmacy="ADEL №83" cat="b" visits="100" comment="Отличный результат")
+												)}}
+												<tr class="data-table__row">
+													<td class="data-table__td"><a href="/visit" class="data-table__link">{{this.date}}</a></td>
+													<td class="data-table__td">{{this.type}}</td>
+													<td class="data-table__td data-table__td--num"><span class="visits-score visits-score--{{this.tone}}">{{this.score}}</span></td>
+													<td class="data-table__td data-table__td--center">
+														{{#if this.geo}}<span class="visits-geo" title="Геолокация передана"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5L6.5 11.5L12.5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{{/if}}
+													</td>
+													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
+													<td class="data-table__td" data-filter-key="pharmacy">{{this.pharmacy}}</td>
+													<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+													<td class="data-table__td data-table__td--num">{{this.visits}}</td>
+													<td class="data-table__td">{{this.comment}}</td>
+												</tr>
+												{{/each}}
+											</tbody>
+										</table>
+										<div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
+									</div>
+									{{> components/DataTable/DataTablePager }}
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			{{> components/VisitModal/VisitModal }}
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

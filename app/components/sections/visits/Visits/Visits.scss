@@ -1,0 +1,77 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+@layer components {
+	.visits-page__tabs {
+		@include prop-vw(margin-top, 10, xl);
+
+		@include only(desktop) {
+			@include prop-vw(margin-top, 10, lg);
+		}
+		@include only(mobile) {
+			@include prop-vw(margin-top, 10, sm);
+		}
+	}
+
+	// the visits tables size columns to content (different column sets than the
+	// fixed-width list tables)
+	.data-table.visits-table {
+		table-layout: auto;
+		@include prop-vw(min-width, 1150, xl);
+
+		@include only(desktop) {
+			@include prop-vw(min-width, 1000, lg);
+		}
+		@include only(mobile) {
+			min-width: 0;
+		}
+		th,
+		td {
+			width: auto;
+		}
+	}
+
+	// "Лист" score — coloured by result tone
+	.visits-score {
+		font-weight: 600;
+		white-space: nowrap;
+		&--green {
+			color: $color-green;
+		}
+		&--blue {
+			color: $color-blue;
+		}
+		&--red {
+			color: $color-red;
+		}
+	}
+
+	// geolocation tick in the "Гео" column
+	.visits-geo {
+		display: inline-flex;
+		color: $color-dark-grey;
+		& > svg {
+			@include prop-vw(width, 16, xl);
+			@include prop-vw(height, 16, xl);
+
+			@include only(desktop) {
+				@include prop-vw(width, 16, lg);
+				@include prop-vw(height, 16, lg);
+			}
+			@include only(mobile) {
+				@include prop-vw(width, 16, sm);
+				@include prop-vw(height, 16, sm);
+			}
+		}
+	}
+
+	// placeholder while the План-визитов calendar is built (next phase)
+	.visits-plan-stub {
+		&__text {
+			@include prop-vw(margin-top, 12, xl);
+			@include prop-vw(font-size, 15, xl);
+			line-height: 1.5;
+			color: $color-dark-grey;
+		}
+	}
+}
