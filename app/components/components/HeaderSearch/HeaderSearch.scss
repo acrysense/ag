@@ -676,6 +676,13 @@
     .filter-field__sheet-actions {
         display: none;
     }
+    // inline chips under a multiselect are for the mobile bottom-sheet only — on
+    // desktop the page-level chips (under the search) already show the selection
+    @include up(tablet) {
+        .filter-field__chips {
+            display: none;
+        }
+    }
     @include only(mobile) {
         // --- full-screen filter ---
         // raise the whole search above the header profile (z 1000) so its
