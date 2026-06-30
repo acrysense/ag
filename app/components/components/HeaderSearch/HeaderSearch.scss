@@ -669,6 +669,13 @@
     .filter-panel__head {
         display: none; // mobile-only header
     }
+    // bottom-sheet chrome (JS-injected into every field panel) is mobile-only —
+    // hide it on desktop, otherwise it shows as duplicate Применить/Закрыть inside
+    // the dropdown and breaks the layout
+    .filter-field__sheet-head,
+    .filter-field__sheet-actions {
+        display: none;
+    }
     @include only(mobile) {
         // --- full-screen filter ---
         // raise the whole search above the header profile (z 1000) so its
@@ -785,6 +792,7 @@
         }
         // drag handle (JS-injected) sticks to the top of the sheet
         .filter-field__sheet-head {
+            display: block;
             position: sticky;
             top: 0;
             flex-shrink: 0;
