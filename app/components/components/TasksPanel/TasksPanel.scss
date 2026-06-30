@@ -689,6 +689,7 @@
         }
 
         &__empty {
+            list-style: none;
             @include prop-vw(padding-block, 40, xl);
             text-align: center;
             @include prop-vw(font-size, 15, xl);

@@ -158,6 +158,16 @@ export default async (root) => {
 	}
 
 	const emptyEl = root.querySelector('[data-table-empty]')
+	// empty state: hide the table (no lone headers) and show a tidy centered notice
+	const showEmpty = (visible, msg) => {
+		if (emptyEl) {
+			if (msg) emptyEl.textContent = msg
+			emptyEl.hidden = !visible
+		}
+		table.classList.toggle('is-empty', visible)
+	}
+	// "Нет данных" when the dataset is empty, "Ничего не найдено" when a filter cleared it
+	const emptyMsg = () => (state.query || state.filters.length ? 'Ничего не найдено' : 'Нет данных')
 	const headers = [...table.querySelectorAll('th[data-sort-key]')]
 	const allRows = [...tbody.querySelectorAll('tr')]
 	const baseOrder = allRows.slice()
@@ -281,10 +291,7 @@ export default async (root) => {
 			const rows = Array.isArray(data.rows) ? data.rows : []
 			const total = Number(data.total) || rows.length
 			tbody.innerHTML = tbodyHTML(cols, rows)
-			if (emptyEl) {
-				emptyEl.textContent = 'Ничего не найдено'
-				emptyEl.hidden = rows.length > 0
-			}
+			showEmpty(rows.length === 0, emptyMsg())
 			const size = pageSize === Infinity ? total || 1 : pageSize
 			const totalPages = Math.max(1, Math.ceil(total / size))
 			if (currentPage > totalPages) currentPage = totalPages
@@ -294,10 +301,7 @@ export default async (root) => {
 			if (id !== reqId) return
 			console.warn('[DataTable] server load failed', err)
 			tbody.innerHTML = ''
-			if (emptyEl) {
-				emptyEl.textContent = 'Ошибка загрузки'
-				emptyEl.hidden = false
-			}
+			showEmpty(true, 'Ошибка загрузки')
 		} finally {
 			if (id === reqId) root.classList.remove('is-loading')
 		}
@@ -354,7 +358,7 @@ export default async (root) => {
 			})
 		}
 
-		if (emptyEl) emptyEl.hidden = matched.length > 0
+		showEmpty(matched.length === 0, emptyMsg())
 		syncUrl()
 	}
 

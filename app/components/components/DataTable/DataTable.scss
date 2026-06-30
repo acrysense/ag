@@ -32,6 +32,31 @@
     .data-table__loader--error {
         color: $color-red;
     }
+    // empty state: no rows (or a filter matched nothing) — a tidy centered notice
+    .data-table__empty {
+        @include prop-vw(padding-block, 48, xl);
+        @include prop-vw(padding-inline, 20, xl);
+        text-align: center;
+        @include prop-vw(font-size, 15, xl);
+        line-height: 1.4;
+        color: $color-dark-grey;
+
+        @include only(desktop) {
+            @include prop-vw(padding-block, 48, lg);
+            @include prop-vw(font-size, 15, lg);
+        }
+        @include only(mobile) {
+            @include prop-vw(padding-block, 36, sm);
+            @include prop-vw(font-size, 15, sm);
+        }
+        &[hidden] {
+            display: none;
+        }
+    }
+    // hide the table itself when empty so the notice stands alone (no lone headers)
+    .data-table.is-empty {
+        display: none;
+    }
     .data-table__spinner {
         width: 28px;
         height: 28px;

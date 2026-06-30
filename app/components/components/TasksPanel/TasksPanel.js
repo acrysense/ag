@@ -31,7 +31,7 @@ function taskRowHTML(t) {
 }
 
 function buildTaskListHTML(tasks) {
-	if (!tasks.length) return '<ul class="tasks-list"><li class="tasks-list__empty">Задач пока нет</li></ul>'
+	if (!tasks.length) return '<ul class="tasks-list"><li class="tasks-list__empty">Нет доступных задач</li></ul>'
 	return `<ul class="tasks-list">${tasks.map(taskRowHTML).join('')}</ul>`
 }
 
