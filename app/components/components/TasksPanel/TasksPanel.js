@@ -1,8 +1,83 @@
 import { mountDatepicker } from '@/utils/datepicker'
 
-export default (root) => {
+// ---- JSON-driven task list -------------------------------------------------
+const escTask = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+
+// One <li class="task-row"> from a task object — matches the static markup so all
+// the panel wiring (status toggle, completed grouping, actions menu, edit) works.
+function taskRowHTML(t) {
+	const done = !!t.done
+	const awaiting = done && !!t.awaitingConfirm // completed, not yet confirmed → keeps full colour + button
+	const check = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>'
+	const statusCls = done ? (awaiting ? ' task-row__status--done' : ' task-row__status--soft') : ''
+	const status = `<span class="task-row__status${statusCls}" aria-hidden="true">${done ? check : ''}</span>`
+
+	let body = `<p class="task-row__title">${escTask(t.title)}</p>`
+	if (t.desc) body += `<p class="task-row__desc">${escTask(t.desc)}</p>`
+	if (done) {
+		const doneCls = awaiting ? 'task-row__done task-row__done--chip' : 'task-row__done'
+		let sub = `<span class="${doneCls}"><b>${escTask(t.completedBy)}</b> Выполнена: ${escTask(t.completedDate)}</span>`
+		if (awaiting) sub += '<button type="button" class="task-row__confirm">Подтвердить выполнение</button>'
+		if (t.verifiedBy)
+			sub += `<span class="task-row__verified"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg><b>${escTask(t.verifiedBy)}</b> Проверена: ${escTask(t.verifiedDate)}</span>`
+		body += `<p class="task-row__subline">${sub}</p>`
+	}
+
+	let meta = `<span class="task-row__assignee">${escTask(t.assignee)}</span><span class="task-row__date">${escTask(t.due)}</span>`
+	if (t.hidden)
+		meta += '<span class="task-row__hidden" title="Скрыта для сотрудника"><svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg></span>'
+
+	return `<li class="task-row${done ? ' is-completed' : ''}">${status}<div class="task-row__body">${body}</div><div class="task-row__meta">${meta}</div></li>`
+}
+
+function buildTaskListHTML(tasks) {
+	if (!tasks.length) return '<ul class="tasks-list"><li class="tasks-list__empty">Задач пока нет</li></ul>'
+	return `<ul class="tasks-list">${tasks.map(taskRowHTML).join('')}</ul>`
+}
+
+// If the section declares data-tasks-src / inline data-tasks-data, fetch the JSON
+// and build the list in place (with a loader) before the panel wiring runs.
+async function resolveTasks(root) {
+	const src = root.dataset.tasksSrc
+	const inlineEl = root.querySelector('[data-tasks-data]')
+	if (!src && !inlineEl) return // static-markup mode — nothing to build
+
+	const anchor = root.querySelector('[data-tasks-toggle]')
+	const place = (node) => (anchor ? anchor.before(node) : root.appendChild(node))
+	root.querySelector('.tasks-list')?.remove() // drop any placeholder list
+
+	const loader = document.createElement('div')
+	loader.className = 'tasks-panel__loader'
+	loader.innerHTML = '<span class="tasks-panel__spinner" aria-hidden="true"></span><span>Загрузка задач…</span>'
+	place(loader)
+
+	let data = null
+	try {
+		data = src ? await (await fetch(src, { headers: { Accept: 'application/json' } })).json() : JSON.parse(inlineEl.textContent)
+	} catch (err) {
+		console.warn('[TasksPanel] failed to load tasks', err)
+	}
+	loader.remove()
+
+	const tasks = Array.isArray(data) ? data : data && Array.isArray(data.tasks) ? data.tasks : null
+	if (!tasks) {
+		const err = document.createElement('div')
+		err.className = 'tasks-panel__loader tasks-panel__loader--error'
+		err.textContent = 'Не удалось загрузить задачи'
+		place(err)
+		return
+	}
+	const wrap = document.createElement('div')
+	wrap.innerHTML = buildTaskListHTML(tasks)
+	place(wrap.firstElementChild)
+}
+
+export default async (root) => {
 	if (!root || root.__tasksPanelBound) return
 	root.__tasksPanelBound = true
+
+	// JSON-driven mode: build the list before any wiring touches .task-row nodes
+	await resolveTasks(root)
 
 	const disposers = []
 

@@ -642,6 +642,37 @@
     .tasks-list__edit {
         list-style: none;
     }
+    // loader shown while the JSON task list (data-tasks-src) is fetched
+    .tasks-panel__loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include prop-vw(gap, 10, xl);
+        @include prop-vw(min-height, 160, xl);
+        @include prop-vw(font-size, 14, xl);
+        color: $color-dark-grey;
+    }
+    .tasks-panel__loader--error {
+        color: $color-red;
+    }
+    .tasks-panel__spinner {
+        width: 26px;
+        height: 26px;
+        border: 3px solid $color-grey;
+        border-top-color: $color-blue;
+        border-radius: 50%;
+        animation: tasks-panel-spin 0.7s linear infinite;
+    }
+    @keyframes tasks-panel-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .tasks-panel__spinner {
+            animation-duration: 1.8s;
+        }
+    }
     .tasks-list {
 
         @include only(desktop) {

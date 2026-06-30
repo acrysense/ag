@@ -1,4 +1,4 @@
-<section class="data-panel tasks-panel" data-module="TasksPanel" data-path="components">
+<section class="data-panel tasks-panel" data-module="TasksPanel" data-path="components"{{#if tasksSrc}} data-tasks-src="{{tasksSrc}}"{{/if}}>
     <div class="data-panel__header">
         <h2 class="data-panel__title">{{#if title}}{{title}}{{else}}Задачи{{/if}}</h2>
         <div class="data-panel__actions">
@@ -73,7 +73,7 @@
         </div>
     </form>
 
-    {{#if list}}{{> (lookup . "list") }}{{else}}{{> components/TasksPanel/TaskListMine }}{{/if}}
+    {{#unless tasksSrc}}{{#if list}}{{> (lookup . "list") }}{{else}}{{> components/TasksPanel/TaskListMine }}{{/if}}{{/unless}}
 
     <button type="button" class="tasks-panel__toggle" data-tasks-toggle aria-expanded="false">
         <span data-tasks-toggle-text>Показать завершенные: 47</span>
