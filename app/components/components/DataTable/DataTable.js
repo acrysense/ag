@@ -126,7 +126,24 @@ export default async (root) => {
 
 	// JSON-driven mode: build the table from a config blob. mode:"server" → rows
 	// are fetched per page from config.endpoint; otherwise everything is in `rows`.
+	// While the config is fetched (data-table-src), show a loader so the panel
+	// keeps its height instead of collapsing to nothing.
+	let loaderEl = null
+	if (root.dataset.tableSrc) {
+		loaderEl = document.createElement('div')
+		loaderEl.className = 'data-table__loader'
+		loaderEl.innerHTML =
+			'<span class="data-table__spinner" aria-hidden="true"></span><span class="data-table__loader-text">Загрузка данных…</span>'
+		root.appendChild(loaderEl)
+	}
 	const config = await resolveConfig(root)
+	loaderEl?.remove()
+	if (root.dataset.tableSrc && !config) {
+		const err = document.createElement('div')
+		err.className = 'data-table__loader data-table__loader--error'
+		err.textContent = 'Не удалось загрузить данные'
+		root.appendChild(err)
+	}
 	const serverMode = config?.mode === 'server'
 	if (config) buildTable(root, config, serverMode)
 	const dataMode = !!config

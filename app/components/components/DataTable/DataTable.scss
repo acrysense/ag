@@ -10,6 +10,46 @@
         pointer-events: none;
         transition: opacity 0.15s ease;
     }
+
+    // initial load: a spinner that holds the panel height while the JSON
+    // (data-table-src) is fetched, so the table doesn't render collapsed
+    .data-table__loader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include prop-vw(gap, 10, xl);
+        @include prop-vw(min-height, 240, xl);
+        @include prop-vw(font-size, 14, xl);
+        line-height: 1.4;
+        color: $color-dark-grey;
+
+        @include only(mobile) {
+            @include prop-vw(min-height, 200, sm);
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(font-size, 14, sm);
+        }
+    }
+    .data-table__loader--error {
+        color: $color-red;
+    }
+    .data-table__spinner {
+        width: 28px;
+        height: 28px;
+        border: 3px solid $color-grey;
+        border-top-color: $color-blue;
+        border-radius: 50%;
+        animation: data-table-spin 0.7s linear infinite;
+    }
+    @keyframes data-table-spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        .data-table__spinner {
+            animation-duration: 1.8s;
+        }
+    }
     .data-table__scroll {
         @include prop-vw(margin-top, 10, xl);
         overflow-x: auto;
