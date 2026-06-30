@@ -638,6 +638,10 @@
     .task-form:not([hidden]) ~ .tasks-list::before {
         content: none;
     }
+    // host <li> for the in-place edit form (JS-injected in place of a task row)
+    .tasks-list__edit {
+        list-style: none;
+    }
     .tasks-list {
 
         @include only(desktop) {

@@ -6,38 +6,132 @@ export default (root) => {
 
 	const disposers = []
 
-	// --- Create-task form: hidden until "Создать", closed on cancel/save ---
+	// --- Create / edit task form ---
+	// One form serves both: "Создать" opens it at the top; "Редактировать" prefills
+	// it and relocates it (in a temporary <li>) in place of the task being edited.
 	const form = root.querySelector('[data-task-form]')
 	const createBtn = root.querySelector('[data-task-create]')
 	const cancelBtn = root.querySelector('[data-task-cancel]')
 	if (form) {
+		const titleInput = form.querySelector('[name="title"]')
+		const dueInput = form.querySelector('[name="due"]')
+		const assigneeSelect = form.querySelector('[data-task-assignee]')
+		// marker for the form's home position, so edit can move it back
+		const formHome = document.createComment('task-form-home')
+		form.before(formHome)
+		let editRow = null // task <li> being edited (null → create mode)
+		let editLi = null // temp <li> hosting the form in place of the task
+
 		const setOpen = (open) => {
 			form.hidden = !open
 			createBtn?.setAttribute('aria-expanded', open ? 'true' : 'false')
 			if (open) form.querySelector('input, textarea')?.focus({ preventScroll: true })
 		}
+		// prefill the custom widgets directly (their own reset listeners cleared them)
+		const setSelect = (select, value) => {
+			if (!select) return
+			const input = select.querySelector('[data-select-input]')
+			const valueEl = select.querySelector('[data-select-value]')
+			const opts = [...select.querySelectorAll('.ui-select__option')]
+			const match = opts.find((o) => (o.dataset.value || o.textContent.trim()) === value)
+			opts.forEach((o) => o.classList.toggle('is-active', o === match))
+			select.classList.toggle('is-filled', !!value)
+			if (valueEl) valueEl.textContent = value || valueEl.dataset.placeholder || ''
+			if (input) input.value = value || ''
+		}
+		const setHide = (on) => {
+			const btn = form.querySelector('[data-task-hide]')
+			const inp = form.querySelector('[data-task-hide-input]')
+			btn?.classList.toggle('is-active', on)
+			btn?.setAttribute('aria-pressed', on ? 'true' : 'false')
+			btn?.querySelector('use')?.setAttribute('href', on ? '#icon-eye-slash' : '#icon-eye')
+			if (inp) inp.value = on ? '1' : '0'
+		}
+		const restoreHome = () => {
+			formHome.after(form)
+			if (editLi) { editLi.remove(); editLi = null }
+			if (editRow) { editRow.hidden = false; editRow = null }
+		}
+		const closeForm = () => {
+			form.reset()
+			restoreHome()
+			setOpen(false)
+		}
+		const openCreate = () => {
+			closeForm()
+			setOpen(true)
+		}
+		const openEdit = (row) => {
+			closeForm() // leave any previous create/edit cleanly
+			if (titleInput) titleInput.value = row.querySelector('.task-row__title')?.textContent.trim() || ''
+			if (dueInput) dueInput.value = row.querySelector('.task-row__date')?.textContent.trim() || ''
+			setSelect(assigneeSelect, row.querySelector('.task-row__assignee')?.textContent.trim() || '')
+			setHide(!!row.querySelector('.task-row__hidden'))
+			editLi = document.createElement('li')
+			editLi.className = 'tasks-list__edit'
+			row.parentElement.insertBefore(editLi, row)
+			editLi.appendChild(form)
+			row.hidden = true
+			editRow = row
+			setOpen(true)
+		}
+		const saveEdit = (row) => {
+			const title = titleInput?.value.trim()
+			const assignee = assigneeSelect?.querySelector('[data-select-input]')?.value.trim()
+			const due = dueInput?.value.trim()
+			const t = row.querySelector('.task-row__title')
+			const a = row.querySelector('.task-row__assignee')
+			const d = row.querySelector('.task-row__date')
+			if (t && title) t.textContent = title
+			if (a && assignee) a.textContent = assignee
+			if (d && due) d.textContent = due
+			// hidden flag → add/remove the eye marker in the row tools
+			const on = form.querySelector('[data-task-hide-input]')?.value === '1'
+			let mark = row.querySelector('.task-row__hidden')
+			if (on && !mark) {
+				const tools = row.querySelector('.task-row__tools') || row
+				mark = document.createElement('span')
+				mark.className = 'task-row__hidden'
+				mark.title = 'Скрыта для сотрудника'
+				mark.innerHTML = '<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg>'
+				tools.prepend(mark)
+			} else if (!on && mark) mark.remove()
+		}
+
 		const onCreate = (e) => {
 			e.preventDefault()
-			setOpen(form.hidden)
+			// note: form has an <input name="hidden">, so read the attribute, not form.hidden
+			const isOpen = !form.hasAttribute('hidden')
+			if (!editRow && isOpen) closeForm() // toggle the create form shut
+			else openCreate()
 		}
 		const onCancel = (e) => {
 			e.preventDefault()
-			form.reset()
-			setOpen(false)
+			closeForm()
 		}
 		const onSubmit = (e) => {
 			e.preventDefault()
-			form.reset()
-			setOpen(false)
+			if (editRow) saveEdit(editRow)
+			closeForm() // demo: no backend
 		}
+		const onEditOpen = (e) => {
+			const item = e.target.closest('[data-task-edit]')
+			if (!item || !root.contains(item)) return
+			const row = item.closest('.task-row')
+			if (row) openEdit(row)
+		}
+
 		setOpen(false)
 		createBtn?.addEventListener('click', onCreate)
 		cancelBtn?.addEventListener('click', onCancel)
 		form.addEventListener('submit', onSubmit)
+		root.addEventListener('click', onEditOpen)
 		disposers.push(() => {
 			createBtn?.removeEventListener('click', onCreate)
 			cancelBtn?.removeEventListener('click', onCancel)
 			form.removeEventListener('submit', onSubmit)
+			root.removeEventListener('click', onEditOpen)
+			restoreHome()
 		})
 	}
 
@@ -269,7 +363,7 @@ export default (root) => {
 		</button>
 		<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
 			<button type="button" class="actions-menu__item" role="menuitem" data-task-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
-			<button type="button" class="actions-menu__item" role="menuitem"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem" data-task-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
 			<button type="button" class="actions-menu__item" role="menuitem" data-task-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
 		</div>
 	</div>`
