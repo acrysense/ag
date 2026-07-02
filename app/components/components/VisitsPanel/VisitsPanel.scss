@@ -363,7 +363,9 @@
 
     // --- Mobile: collapse the visits table into a compact list (badge + date, type) ---
     @include only(mobile) {
-        .visits-table {
+        // :not(.data-table) — this compact list is only for the panel's own table,
+        // not the DataTable-driven visits-page tables (they have their own card view)
+        .visits-table:not(.data-table) {
             position: relative;
             display: block;
             min-width: 0;
@@ -378,10 +380,10 @@
                 background: $color-border;
             }
         }
-        .visits-table thead {
+        .visits-table:not(.data-table) thead {
             display: none;
         }
-        .visits-table tbody {
+        .visits-table:not(.data-table) tbody {
             display: block;
         }
         .visits-table__row {
