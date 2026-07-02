@@ -27,6 +27,10 @@
   таблицы «План-факт» и «История» — обычный `DataTable` (см. TABLES.md).
 - **[visits-config.php](visits-config.php)** — PHP-пример отдачи JSON визитов для календаря.
 
+## 5. Разное
+- **[TOASTS.md](TOASTS.md)** — всплывающие уведомления (тосты): вывести `<div data-toast>`
+  на странице или вызвать `window.toast.success/error(...)`.
+
 ## Общие правила (везде одинаково)
 - Сборка только под **node 22**, с **`BASE=/bitrix/templates/auth/`**.
 - PHP-эндпоинты отдают `Content-Type: application/json; charset=utf-8`, доступны **без HTTP-авторизации**.
