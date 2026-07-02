@@ -2,6 +2,41 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
+	// loader shown while the JSON visits (data-visits-src) are fetched
+	.vcal__loader {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		@include prop-vw(gap, 10, xl);
+		@include prop-vw(min-height, 320, xl);
+		@include prop-vw(font-size, 14, xl);
+		color: $color-dark-grey;
+
+		@include only(mobile) {
+			@include prop-vw(min-height, 240, sm);
+			@include prop-vw(gap, 10, sm);
+			@include prop-vw(font-size, 14, sm);
+		}
+	}
+	.vcal__spinner {
+		width: 28px;
+		height: 28px;
+		border: 3px solid $color-grey;
+		border-top-color: $color-blue;
+		border-radius: 50%;
+		animation: vcal-spin 0.7s linear infinite;
+	}
+	@keyframes vcal-spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.vcal__spinner {
+			animation-duration: 1.8s;
+		}
+	}
+
 	.vcal {
 		display: block;
 		width: 100%;

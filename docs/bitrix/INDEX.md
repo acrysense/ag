@@ -22,6 +22,11 @@
   активна / скрыта / выполнена / ждёт подтверждения / проверена), подключение через `data-tasks-src`.
 - **[tasks-config.php](tasks-config.php)** — PHP-пример отдачи JSON со списком задач.
 
+## 4. Визиты (План визитов / План-факт / История)
+- **[VISITS.md](VISITS.md)** — календарь визитов из JSON (`data-visits-src`, контракт визита);
+  таблицы «План-факт» и «История» — обычный `DataTable` (см. TABLES.md).
+- **[visits-config.php](visits-config.php)** — PHP-пример отдачи JSON визитов для календаря.
+
 ## Общие правила (везде одинаково)
 - Сборка только под **node 22**, с **`BASE=/bitrix/templates/auth/`**.
 - PHP-эндпоинты отдают `Content-Type: application/json; charset=utf-8`, доступны **без HTTP-авторизации**.

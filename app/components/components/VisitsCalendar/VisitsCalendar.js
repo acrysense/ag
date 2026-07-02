@@ -60,7 +60,7 @@ function mondayOf(date) {
 	return d
 }
 
-export default function VisitsCalendar(root) {
+export default async function VisitsCalendar(root) {
 	if (root.__visitsCalBound) return
 	root.__visitsCalBound = true
 
@@ -84,6 +84,14 @@ export default function VisitsCalendar(root) {
 	cursor.setHours(0, 0, 0, 0)
 
 	const disposers = []
+
+	// JSON-driven events (data-visits-src / inline data-visits-data). Falls back to
+	// the built-in demo generator when neither is set, so the static page still works.
+	let eventIndex = null // Map<'dd.mm.yyyy', event[]>
+	const dayEvents = (date) => {
+		if (!eventIndex) return eventsForDay(date) // demo fallback
+		return (eventIndex.get(dmy(date)) || []).slice().sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))
+	}
 
 	// ---- view bodies ------------------------------------------------------
 	function monthGrid() {
@@ -110,7 +118,7 @@ export default function VisitsCalendar(root) {
 					week
 						.map((cell) => {
 							const out = cell.getMonth() !== cursor.getMonth()
-							const evs = eventsForDay(cell)
+							const evs = dayEvents(cell)
 							return `<div class="vcal__cell${out ? ' is-out' : ''}">
 								<span class="vcal__daynum">${cell.getDate()}</span>
 								<div class="vcal__events">${evs.map(eventHTML).join('')}${out ? '' : '<button type="button" class="vcal__add" data-visit-create>+ Создать визит</button>'}</div>
@@ -144,7 +152,7 @@ export default function VisitsCalendar(root) {
 			rows += `<span class="vcal__hour">${hh}</span>`
 			rows += days
 				.map((date) => {
-					const evs = eventsForDay(date).filter((e) => e.time === hh)
+					const evs = dayEvents(date).filter((e) => e.time === hh)
 					const inner = evs
 						.map(
 							(ev) =>
@@ -300,6 +308,26 @@ export default function VisitsCalendar(root) {
 	disposers.push(() => root.removeEventListener('click', onRootClick))
 	disposers.push(() => document.removeEventListener('click', onDocClick))
 	disposers.push(closePopup)
+
+	// JSON mode: fetch the visits before the first render (loader meanwhile)
+	const src = root.dataset.visitsSrc
+	const inlineEl = root.querySelector('[data-visits-data]')
+	if (src || inlineEl) {
+		root.innerHTML = '<div class="vcal__loader"><span class="vcal__spinner" aria-hidden="true"></span><span>Загрузка визитов…</span></div>'
+		let data = null
+		try {
+			data = src ? await (await fetch(src, { headers: { Accept: 'application/json' } })).json() : JSON.parse(inlineEl.textContent)
+		} catch (err) {
+			console.warn('[VisitsCalendar] failed to load visits', err)
+		}
+		const list = Array.isArray(data) ? data : data && Array.isArray(data.visits) ? data.visits : []
+		eventIndex = new Map()
+		list.forEach((ev) => {
+			if (!ev || !ev.date) return
+			if (!eventIndex.has(ev.date)) eventIndex.set(ev.date, [])
+			eventIndex.get(ev.date).push(ev)
+		})
+	}
 
 	render()
 
