@@ -27,7 +27,24 @@ function taskRowHTML(t) {
 	if (t.hidden)
 		meta += '<span class="task-row__hidden" title="Скрыта для сотрудника"><svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg></span>'
 
-	return `<li class="task-row${done ? ' is-completed' : ''}">${status}<div class="task-row__body">${body}</div><div class="task-row__meta">${meta}</div></li>`
+	const idAttr = t.id != null && t.id !== '' ? ` data-task-id="${escTask(t.id)}"` : ''
+	return `<li class="task-row${done ? ' is-completed' : ''}"${idAttr}>${status}<div class="task-row__body">${body}</div><div class="task-row__meta">${meta}</div></li>`
+}
+
+// POST a task mutation to the backend and resolve on success / throw on failure.
+// Endpoint: root[data-tasks-action-url] or window.AG_TASKS_ACTION_URL.
+// No endpoint → demo mode: resolve success so the panel works standalone.
+async function persistTask(root, action, payload) {
+	const url = root.dataset.tasksActionUrl || (typeof window !== 'undefined' && window.AG_TASKS_ACTION_URL)
+	if (!url) return { ok: true } // demo stub — every action "succeeds"
+	const res = await fetch(url, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+		body: JSON.stringify({ action, ...payload }),
+	})
+	const data = await res.json().catch(() => null)
+	if (!res.ok || (data && data.ok === false)) throw new Error((data && data.error) || `HTTP ${res.status}`)
+	return data || { ok: true }
 }
 
 function buildTaskListHTML(tasks) {
@@ -81,6 +98,33 @@ export default async (root) => {
 
 	const disposers = []
 
+	// --- Backend save gate --------------------------------------------------
+	// Every mutating action (status, comment, edit, create, delete) goes through
+	// runAction: it POSTs to the endpoint and only applies the UI change on a
+	// successful response; on error it shows a toast and runs revert(). One action
+	// at a time (saving flag) to avoid overlapping writes.
+	const taskId = (row) => row?.dataset.taskId
+	let saving = false
+	const runAction = async (action, payload, apply, opts = {}) => {
+		if (saving) return false
+		saving = true
+		opts.el?.classList.add('is-saving')
+		try {
+			const data = await persistTask(root, action, payload)
+			apply(data)
+			if (opts.successMsg) window.toast?.success(opts.successMsg)
+			return true
+		} catch (err) {
+			console.warn('[TasksPanel] save failed:', action, err)
+			window.toast?.error(opts.errorMsg || 'Не удалось сохранить. Попробуйте ещё раз.')
+			opts.revert?.()
+			return false
+		} finally {
+			saving = false
+			opts.el?.classList.remove('is-saving')
+		}
+	}
+
 	// --- Create / edit task form ---
 	// One form serves both: "Создать" opens it at the top; "Редактировать" prefills
 	// it and relocates it (in a temporary <li>) in place of the task being edited.
@@ -91,6 +135,13 @@ export default async (root) => {
 		const titleInput = form.querySelector('[name="title"]')
 		const dueInput = form.querySelector('[name="due"]')
 		const assigneeSelect = form.querySelector('[data-task-assignee]')
+		const submitBtn = form.querySelector('[type="submit"]')
+		const formValues = () => ({
+			title: titleInput?.value.trim() || '',
+			assignee: assigneeSelect?.querySelector('[data-select-input]')?.value.trim() || '',
+			due: dueInput?.value.trim() || '',
+			hidden: form.querySelector('[data-task-hide-input]')?.value === '1',
+		})
 		// marker for the form's home position, so edit can move it back
 		const formHome = document.createComment('task-form-home')
 		form.before(formHome)
@@ -184,10 +235,32 @@ export default async (root) => {
 			e.preventDefault()
 			closeForm()
 		}
+		// build + insert a new task row on the list (used after a successful create)
+		const addRow = (vals, data) => {
+			const tmp = document.createElement('div')
+			tmp.innerHTML = taskRowHTML({ ...vals, id: data?.id })
+			const row = tmp.firstElementChild
+			enhanceRow(row)
+			const first = list?.querySelector('.task-row')
+			if (first) list.insertBefore(row, first)
+			else list?.appendChild(row)
+			updateCompleted()
+		}
 		const onSubmit = (e) => {
 			e.preventDefault()
-			if (editRow) saveEdit(editRow)
-			closeForm() // demo: no backend
+			const vals = formValues()
+			if (editRow) {
+				const row = editRow
+				runAction('update', { id: taskId(row), ...vals }, () => {
+					saveEdit(row)
+					closeForm()
+				}, { el: submitBtn, errorMsg: 'Не удалось сохранить задачу' })
+			} else {
+				runAction('create', { ...vals }, (data) => {
+					addRow(vals, data)
+					closeForm()
+				}, { el: submitBtn, errorMsg: 'Не удалось создать задачу' })
+			}
 		}
 		const onEditOpen = (e) => {
 			const item = e.target.closest('[data-task-edit]')
@@ -411,19 +484,28 @@ export default async (root) => {
 			const status = e.target.closest('.task-row__status')
 			if (!status || !list.contains(status)) return
 			const row = status.closest('.task-row')
-			if (!row) return
-			if (row.classList.contains('is-completed')) {
-				row.classList.remove('is-completed', 'is-muted')
-				status.classList.remove('task-row__status--soft', 'task-row__status--done')
-				status.innerHTML = ''
-				const firstCompleted = list.querySelector('.task-row.is-completed')
-				if (firstCompleted) list.insertBefore(row, firstCompleted)
-				else list.appendChild(row)
-			} else {
-				row.classList.add('is-completed')
-				status.innerHTML = CHECK
-			}
-			updateCompleted()
+			if (!row || row.classList.contains('is-saving')) return
+			const willComplete = !row.classList.contains('is-completed')
+			// apply only after the backend confirms the status change
+			runAction(
+				'status',
+				{ id: taskId(row), done: willComplete },
+				() => {
+					if (willComplete) {
+						row.classList.add('is-completed')
+						status.innerHTML = CHECK
+					} else {
+						row.classList.remove('is-completed', 'is-muted')
+						status.classList.remove('task-row__status--soft', 'task-row__status--done')
+						status.innerHTML = ''
+						const firstCompleted = list.querySelector('.task-row.is-completed')
+						if (firstCompleted) list.insertBefore(row, firstCompleted)
+						else list.appendChild(row)
+					}
+					updateCompleted()
+				},
+				{ el: row }
+			)
 		}
 		list.addEventListener('click', onStatusClick)
 		disposers.push(() => list.removeEventListener('click', onStatusClick))
@@ -442,9 +524,9 @@ export default async (root) => {
 			<button type="button" class="actions-menu__item" role="menuitem" data-task-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
 		</div>
 	</div>`
-	// Trailing tools (eye + "…") live in their own .task-row__tools wrapper so
-	// they can be aligned independently of the assignee/date meta block.
-	root.querySelectorAll('.task-row').forEach((row) => {
+	// Trailing tools (eye + "…") live in their own .task-row__tools wrapper.
+	// Extracted so newly created rows get the same treatment.
+	const enhanceRow = (row) => {
 		let tools = row.querySelector('.task-row__tools')
 		if (!tools) {
 			tools = document.createElement('div')
@@ -453,61 +535,49 @@ export default async (root) => {
 		}
 		const eye = row.querySelector('.task-row__hidden')
 		if (eye && eye.parentElement !== tools) tools.appendChild(eye)
-		// move an existing menu (some rows have one in markup) into tools, or
-		// inject a fresh one — never leave a duplicate behind in __meta
 		const menu = row.querySelector('.actions-menu')
 		if (menu && menu.parentElement !== tools) tools.appendChild(menu)
 		else if (!menu) tools.insertAdjacentHTML('beforeend', ACTIONS_HTML)
-	})
+	}
+	root.querySelectorAll('.task-row').forEach(enhanceRow)
 
-	// --- Task actions dropdown ("...") ---
-	root.querySelectorAll('[data-actions]').forEach((menu) => {
+	// --- Task actions dropdown ("…") — delegated so injected/new rows work too ---
+	const setMenuOpen = (menu, state) => {
 		const trigger = menu.querySelector('[data-actions-trigger]')
 		const panel = menu.querySelector('[data-actions-panel]')
-		if (!trigger || !panel) return
-
-		let open = false
-		const setOpen = (state) => {
-			open = state
-			// drop focus from a menu item before hiding the panel — otherwise
-			// aria-hidden lands on a focused descendant (assistive-tech warning)
-			if (!state && panel.contains(document.activeElement)) document.activeElement.blur()
-			menu.classList.toggle('is-open', open)
-			trigger.setAttribute('aria-expanded', open ? 'true' : 'false')
-			panel.setAttribute('aria-hidden', open ? 'false' : 'true')
-		}
-
-		const onTrigger = (e) => {
+		if (!state && panel?.contains(document.activeElement)) document.activeElement.blur()
+		menu.classList.toggle('is-open', state)
+		trigger?.setAttribute('aria-expanded', state ? 'true' : 'false')
+		panel?.setAttribute('aria-hidden', state ? 'false' : 'true')
+	}
+	const closeAllMenus = () => root.querySelectorAll('[data-actions].is-open').forEach((m) => setMenuOpen(m, false))
+	const onMenuClick = (e) => {
+		const trigger = e.target.closest('[data-actions-trigger]')
+		if (trigger && root.contains(trigger)) {
 			e.preventDefault()
 			e.stopPropagation()
-			setOpen(!open)
+			const menu = trigger.closest('[data-actions]')
+			const wasOpen = menu.classList.contains('is-open')
+			closeAllMenus()
+			if (!wasOpen) setMenuOpen(menu, true)
+			return
 		}
-		const onDocDown = (e) => {
-			if (open && !menu.contains(e.target)) setOpen(false)
-		}
-		const onKey = (e) => {
-			if (open && e.key === 'Escape') {
-				e.preventDefault()
-				setOpen(false)
-				trigger.focus({ preventScroll: true })
-			}
-		}
-		const onItemClick = (e) => {
-			if (e.target.closest('.actions-menu__item')) setOpen(false)
-		}
-
-		setOpen(false)
-		trigger.addEventListener('click', onTrigger)
-		panel.addEventListener('click', onItemClick)
-		document.addEventListener('pointerdown', onDocDown, true)
-		document.addEventListener('keydown', onKey, true)
-		disposers.push(() => {
-			trigger.removeEventListener('click', onTrigger)
-			panel.removeEventListener('click', onItemClick)
-			document.removeEventListener('pointerdown', onDocDown, true)
-			document.removeEventListener('keydown', onKey, true)
-			menu.classList.remove('is-open')
-		})
+		if (e.target.closest('.actions-menu__item')) closeAllMenus() // any item click closes the menu
+	}
+	const onMenuDocDown = (e) => {
+		const t = e.target
+		if (t && t.nodeType === 1 && !t.closest('[data-actions]')) closeAllMenus()
+	}
+	const onMenuKey = (e) => {
+		if (e.key === 'Escape') closeAllMenus()
+	}
+	root.addEventListener('click', onMenuClick)
+	document.addEventListener('pointerdown', onMenuDocDown, true)
+	document.addEventListener('keydown', onMenuKey, true)
+	disposers.push(() => {
+		root.removeEventListener('click', onMenuClick)
+		document.removeEventListener('pointerdown', onMenuDocDown, true)
+		document.removeEventListener('keydown', onMenuKey, true)
 	})
 
 	// --- Delete-task confirm modal (UI only — open/close, no delete wired) ---
@@ -529,20 +599,38 @@ export default async (root) => {
 				document.removeEventListener('keydown', onDelKey, true)
 			}
 		}
-		// open from any "Удалить" item in the per-row action menus (delegated,
-		// since the menus are injected dynamically)
+		// open from any "Удалить" item — remember which row triggered it
+		let pendingDeleteRow = null
 		const onDelOpen = (e) => {
-			if (e.target.closest('[data-task-delete]')) setDelOpen(true)
+			const item = e.target.closest('[data-task-delete]')
+			if (!item || !root.contains(item)) return
+			pendingDeleteRow = item.closest('.task-row')
+			setDelOpen(true)
 		}
-		// close on overlay, "Отмена", and (no backend yet) the "Удалить" button
-		const onDelClose = (e) => {
-			if (e.target.closest('[data-task-delete-close], [data-task-delete-confirm]')) setDelOpen(false)
+		// confirm → save first, remove the row only on success; overlay/Отмена close
+		const onDelModalClick = (e) => {
+			if (e.target.closest('[data-task-delete-confirm]')) {
+				const row = pendingDeleteRow
+				if (!row) return setDelOpen(false)
+				runAction(
+					'delete',
+					{ id: taskId(row) },
+					() => {
+						row.remove()
+						updateCompleted()
+						setDelOpen(false)
+					},
+					{ el: e.target.closest('[data-task-delete-confirm]'), errorMsg: 'Не удалось удалить задачу' }
+				)
+				return
+			}
+			if (e.target.closest('[data-task-delete-close]')) setDelOpen(false)
 		}
 		root.addEventListener('click', onDelOpen)
-		delModal.addEventListener('click', onDelClose)
+		delModal.addEventListener('click', onDelModalClick)
 		disposers.push(() => {
 			root.removeEventListener('click', onDelOpen)
-			delModal.removeEventListener('click', onDelClose)
+			delModal.removeEventListener('click', onDelModalClick)
 			document.removeEventListener('keydown', onDelKey, true)
 			document.documentElement.style.overflow = ''
 		})
@@ -588,25 +676,34 @@ export default async (root) => {
 		input.focus()
 
 		const close = (save) => {
-			if (save) {
-				const val = input.value.trim()
-				let d = row.querySelector('.task-row__desc')
-				if (val) {
-					if (!d) {
-						d = document.createElement('p')
-						d.className = 'task-row__desc'
-						editor.before(d)
-					}
-					d.textContent = val
-					d.hidden = false
-				} else if (d) {
-					d.hidden = false // empty input → leave the existing desc untouched
-				}
-			} else {
+			if (!save) {
 				const d = row.querySelector('.task-row__desc')
 				if (d) d.hidden = false
+				editor.remove()
+				return
 			}
-			editor.remove()
+			const val = input.value.trim()
+			// save first — apply the comment to the row only on a successful response
+			runAction(
+				'comment',
+				{ id: taskId(row), comment: val },
+				() => {
+					let d = row.querySelector('.task-row__desc')
+					if (val) {
+						if (!d) {
+							d = document.createElement('p')
+							d.className = 'task-row__desc'
+							editor.before(d)
+						}
+						d.textContent = val
+						d.hidden = false
+					} else if (d) {
+						d.hidden = false // empty input → leave the existing desc untouched
+					}
+					editor.remove()
+				},
+				{ el: editor, errorMsg: 'Не удалось сохранить комментарий' }
+			)
 		}
 		editor.querySelector('[data-task-comment-save]').addEventListener('click', () => close(true))
 		editor.querySelector('[data-task-comment-cancel]').addEventListener('click', () => close(false))

@@ -87,6 +87,11 @@
     }
 
     .tasks-panel {
+        // element being saved to the backend — dim + block interaction until done
+        .is-saving {
+            opacity: 0.6;
+            pointer-events: none;
+        }
         &__toggle {
             display: block;
             @include prop-vw(margin-top, 10, xl);
