@@ -6,6 +6,7 @@
 const WEEKDAYS = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']
 const WEEKDAYS_SHORT = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
 const MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
+const MONTHS_SHORT = ['янв', 'фев', 'мар', 'апр', 'май', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
 
 const EMPLOYEES = [
 	{ name: 'Медицинская Т.В.', cat: 'b' },
@@ -176,7 +177,9 @@ export default async function VisitsCalendar(root) {
 			const mon = mondayOf(cursor)
 			const fri = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() + 4)
 			const pad = (d) => String(d.getDate()).padStart(2, '0')
-			return `<span>${pad(mon)} – ${pad(fri)} ${MONTHS[fri.getMonth()]}</span>`
+			// same month → "05 – 09 май"; spans two months → "30 апр – 04 май"
+			if (mon.getMonth() === fri.getMonth()) return `<span>${pad(mon)} – ${pad(fri)} ${MONTHS[fri.getMonth()]}</span>`
+			return `<span>${pad(mon)} ${MONTHS_SHORT[mon.getMonth()]} – ${pad(fri)} ${MONTHS_SHORT[fri.getMonth()]}</span>`
 		}
 		return `<span>${MONTHS[cursor.getMonth()]}</span>`
 	}
@@ -189,12 +192,12 @@ export default async function VisitsCalendar(root) {
 			<div class="vcal__head">
 				<h2 class="vcal__title">План визитов, ${titleText()}</h2>
 				<div class="vcal__nav">
-					<button type="button" class="vcal__navbtn" data-prev aria-label="Назад"><svg viewBox="0 0 20 20" fill="none"><path d="M12 5L7 10L12 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-					<button type="button" class="vcal__navbtn" data-next aria-label="Вперёд"><svg viewBox="0 0 20 20" fill="none"><path d="M8 5L13 10L8 15" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+					<button type="button" class="vcal__navbtn" data-prev aria-label="Назад"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-left"></use></svg></button>
+					<button type="button" class="vcal__navbtn" data-next aria-label="Вперёд"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-right"></use></svg></button>
 				</div>
 			</div>
 			<div class="vcal__controls">
-				<button type="button" class="btn btn--sm vcal__create" data-visit-create>+ Создать визит</button>
+				<button type="button" class="vcal__create" data-visit-create><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-plus"></use></svg>Создать визит</button>
 				<div class="vcal__views">
 					<button type="button" class="vcal__view${view === 'day' ? ' is-active' : ''}" data-view="day">День</button>
 					<button type="button" class="vcal__view${view === 'week' ? ' is-active' : ''}" data-view="week">Неделя</button>

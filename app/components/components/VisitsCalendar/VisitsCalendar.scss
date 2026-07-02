@@ -49,35 +49,37 @@
 			@include prop-vw(gap, 12, xl);
 		}
 		&__title {
-			@include prop-vw(font-size, 22, xl);
+			@include prop-vw(font-size, 30, xl);
+			font-family: $font-secondary;
 			font-weight: bold;
+			line-height: 1.06666666667;
 			color: $color-black;
 			span {
 				color: $color-dark-grey;
 				font-weight: bold;
 			}
 			@include only(mobile) {
-				@include prop-vw(font-size, 18, sm);
+				@include prop-vw(font-size, 24, sm);
 			}
 		}
 		&__nav {
 			display: flex;
-			@include prop-vw(gap, 8, xl);
+			@include prop-vw(gap, 5, xl);
 		}
 		&__navbtn {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			@include prop-vw(width, 32, xl);
-			@include prop-vw(height, 32, xl);
-			color: $color-dark-grey;
-			background: $color-bg;
+			@include prop-vw(width, 36, xl);
+			@include prop-vw(height, 36, xl);
+			color: $color-dark-grey; // #737F8C
+			background: $color-bg; // #F3F6FC
 			border: none;
-			@include prop-vw(border-radius, 8, xl);
+			@include prop-vw(border-radius, 10, xl);
 			cursor: pointer;
 			& > svg {
-				@include prop-vw(width, 18, xl);
-				@include prop-vw(height, 18, xl);
+				@include prop-vw(width, 12, xl);
+				@include prop-vw(height, 12, xl);
 			}
 			@media screen and (hover: hover) {
 				&:hover {
@@ -92,32 +94,65 @@
 			align-items: center;
 			justify-content: space-between;
 			@include prop-vw(gap, 12, xl);
-			@include prop-vw(margin-top, 16, xl);
-			@include prop-vw(margin-bottom, 20, xl);
+			@include prop-vw(margin-top, 20, xl);
+			@include prop-vw(margin-bottom, 40, xl);
+		}
+		&__create {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(gap, 5, xl);
+			@include prop-vw(height, 36, xl);
+			@include prop-vw(padding-inline, 16, xl);
+			@include prop-vw(font-size, 14, xl);
+			font-weight: normal;
+			line-height: 1;
+			color: $color-white;
+			background: $color-blue;
+			border: none;
+			@include prop-vw(border-radius, 14, xl);
+			cursor: pointer;
+			& > svg {
+				flex-shrink: 0;
+				@include prop-vw(width, 16, xl);
+				@include prop-vw(height, 16, xl);
+			}
+			@media screen and (hover: hover) {
+				&:hover {
+					background: $color-blue-hover;
+				}
+			}
 		}
 		&__views {
 			display: flex;
-			@include prop-vw(gap, 2, xl);
-			background: $color-bg;
-			@include prop-vw(border-radius, 8, xl);
-			@include prop-vw(padding, 2, xl);
+			align-items: center;
+			@include prop-vw(height, 32, xl);
+			background: #e7eff4;
+			@include prop-vw(border-radius, 10, xl);
+			@include prop-vw(padding, 1, xl);
 		}
 		&__view {
-			@include prop-vw(padding-block, 7, xl);
-			@include prop-vw(padding-inline, 18, xl);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(height, 30, xl);
+			padding-block: 0;
+			@include prop-vw(padding-inline, 15, xl);
 			@include prop-vw(font-size, 14, xl);
+			font-weight: normal;
+			line-height: 1;
 			color: $color-dark-grey;
 			background: transparent;
 			border: none;
-			@include prop-vw(border-radius, 6, xl);
+			@include prop-vw(border-radius, 10, xl);
 			cursor: pointer;
 			&.is-active {
-				color: $color-black;
-				background: $color-white;
+				color: $color-white;
+				background: $color-blue;
+				box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
 			}
 			@include only(mobile) {
 				@include prop-vw(padding-inline, 12, sm);
-				@include prop-vw(font-size, 13, sm);
 			}
 		}
 

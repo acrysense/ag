@@ -6,15 +6,6 @@
 	// grey #E7EFF4 track, blue active pill with a soft shadow. Scoped here so
 	// other pages' tabs are untouched.
 	.visits-page__tabs {
-		@include prop-vw(margin-top, 10, xl);
-
-		@include only(desktop) {
-			@include prop-vw(margin-top, 10, lg);
-		}
-		@include only(mobile) {
-			@include prop-vw(margin-top, 10, sm);
-		}
-
 		.tabs__list {
 			align-items: center;
 			width: fit-content;
