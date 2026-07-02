@@ -80,6 +80,11 @@
 		@include only(desktop) {
 			@include prop-vw(min-width, 1400, lg);
 		}
+		// mobile "Таблица" view: keep the full width (sm range, not the floored xl)
+		// so columns aren't squished; the card view resets min-width to 0 below
+		@include only(mobile) {
+			@include prop-vw(min-width, 1400, sm);
+		}
 		// no top divider line for these tables (the global .visits-table adds one)
 		&::before {
 			content: none;
@@ -118,6 +123,7 @@
 		.data-table__th:nth-child(8) { width: 5.036%; }
 		.data-table__th:nth-child(9) { width: 20.863%; }
 		@include only(mobile) {
+			@include prop-vw(min-width, 1390, sm);
 			&.is-cards-view {
 				min-width: 0;
 				.data-table__th { width: auto; }
