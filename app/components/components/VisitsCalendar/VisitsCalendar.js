@@ -231,7 +231,7 @@ export default async function VisitsCalendar(root) {
 			<div class="vcal-pop__when">${esc(ev.date)} в ${esc(ev.time)}</div>
 			<div class="vcal-pop__muted">${esc(ev.phone)}</div>
 			<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
-			${planned ? '<button type="button" class="vcal-pop__edit" data-visit-create>Изменить</button>' : ''}
+			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ employee: ev.name, date: ev.date, time: ev.time, manager: ev.manager, type: ev.type, comment: ev.comment }))}">Изменить</button>` : ''}
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
@@ -304,8 +304,11 @@ export default async function VisitsCalendar(root) {
 	}
 
 	const onDocClick = (e) => {
+		if (!popup) return
+		// a create/edit trigger opens the visit modal → close the floating popup first
+		if (e.target.closest('[data-visit-create]')) return closePopup()
 		// close when clicking outside the popup (and not on another event)
-		if (popup && !popup.contains(e.target) && !e.target.closest('[data-event-id]')) closePopup()
+		if (!popup.contains(e.target) && !e.target.closest('[data-event-id]')) closePopup()
 	}
 
 	root.addEventListener('click', onRootClick)

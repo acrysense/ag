@@ -42,15 +42,37 @@ export function mountVisitModal(modal) {
 	autosizeEls.forEach((el) => (el.__lastValue = el.value))
 	const runAutosize = () => autosizeEls.forEach((el) => autosize(el))
 
-	const closeModal = () => {
+	const resetForm = () => {
 		form.reset()
 		form.querySelectorAll('[data-select]').forEach(resetSelect)
 		autosizeEls.forEach((el) => (el.__lastValue = ''))
 		clearErrors()
 		runAutosize()
+	}
+	const closeModal = () => {
+		resetForm()
 		setOpen(false)
 	}
-	const openModal = () => {
+	// Prefill the form when opened from an "Изменить" trigger that carries a
+	// data-visit-prefill JSON payload (employee/date/time/manager/type/comment).
+	const applyPrefill = (data) => {
+		if (!data) return
+		const dateEl = form.querySelector('[name="date"]')
+		if (dateEl && data.date != null) dateEl.value = data.date
+		const commentEl = form.querySelector('[name="comment"]')
+		if (commentEl && data.comment != null) {
+			commentEl.value = data.comment
+			commentEl.__lastValue = data.comment
+		}
+		form.querySelectorAll('[data-select]').forEach((select) => {
+			const input = select.querySelector('[data-select-input]')
+			const val = input && data[input.name]
+			if (val != null && val !== '') setSelectValue(select, val)
+		})
+	}
+	const openModal = (prefill) => {
+		resetForm()
+		applyPrefill(prefill)
 		clearErrors()
 		setOpen(true)
 		runAutosize()
@@ -84,12 +106,18 @@ export function mountVisitModal(modal) {
 		const ctrl = e.target.closest('[data-required]')
 		if (ctrl) validateCtrl(ctrl)
 	}
-	// open from any "Создать визит" trigger anywhere on the page
+	// open from any "Создать визит" / "Изменить" trigger anywhere on the page
 	const onDocCreate = (e) => {
-		if (e.target.closest('[data-visit-create]')) {
-			e.preventDefault()
-			openModal()
+		const trigger = e.target.closest('[data-visit-create]')
+		if (!trigger) return
+		e.preventDefault()
+		let prefill = null
+		if (trigger.dataset.visitPrefill) {
+			try {
+				prefill = JSON.parse(trigger.dataset.visitPrefill)
+			} catch {}
 		}
+		openModal(prefill)
 	}
 
 	setOpen(false)
@@ -212,6 +240,20 @@ function initSelect(select) {
 		}
 		select.classList.remove('is-open')
 	}
+}
+
+// Programmatically select a value (used by prefill). Falls back to showing the
+// raw value when it isn't among the options, so an employee/manager that isn't
+// in the demo list still displays instead of staying empty.
+function setSelectValue(select, value) {
+	const valueEl = select.querySelector('[data-select-value]')
+	const input = select.querySelector('[data-select-input]')
+	const options = [...select.querySelectorAll('.ui-select__option')]
+	const match = options.find((o) => (o.dataset.value ?? o.textContent.trim()) === String(value))
+	options.forEach((o) => o.classList.toggle('is-active', o === match))
+	if (valueEl) valueEl.textContent = match ? match.textContent.trim() : String(value)
+	select.classList.add('is-filled')
+	if (input) input.value = match ? match.dataset.value ?? match.textContent.trim() : String(value)
 }
 
 function resetSelect(select) {
