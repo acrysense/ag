@@ -268,7 +268,7 @@
 
     // --- Floating filter panel ---
     .filter-panel {
-        @include prop-vw(width, 620, xl);
+        @include prop-vw(width, 680, xl);
         max-width: 92vw;
         @include prop-vw(padding, 20, xl);
         background: $color-white;
@@ -276,7 +276,7 @@
         box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.14);
 
         @include only(desktop) {
-            @include prop-vw(width, 620, lg);
+            @include prop-vw(width, 680, lg);
             @include prop-vw(padding, 20, lg);
             @include prop-vw(border-radius, 20, lg);
         }
@@ -314,14 +314,13 @@
         }
         &__grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            // 2 columns on desktop/tablet — wider fields so long values (e.g.
+            // «Розничная компания», аптеки) don't get squished / ellipsised
+            grid-template-columns: repeat(2, 1fr);
             @include prop-vw(gap, 12, xl);
 
             @include only(desktop) {
                 @include prop-vw(gap, 12, lg);
-            }
-            @include only(tablet) {
-                grid-template-columns: repeat(2, 1fr);
             }
             @include only(mobile) {
                 grid-template-columns: 1fr;
