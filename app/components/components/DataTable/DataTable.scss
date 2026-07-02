@@ -121,7 +121,8 @@
 
         &__th {
             position: relative;
-            @include prop-vw(padding-block, 14, xl);
+            @include prop-vw(height, 60, xl);
+            padding-block: 0;
             @include prop-vw(padding-inline, 10, xl);
             text-align: left;
             vertical-align: middle;
@@ -131,7 +132,7 @@
             color: $color-dark-grey;
             user-select: none;
             white-space: normal;
-            @include border-side(bottom, 1, solid, $color-border, xl);
+            @include border-side(bottom, 2, solid, $color-border, xl);
             &--center {
                 text-align: center;
             }
@@ -196,19 +197,22 @@
                 }
             }
             @include only(desktop) {
-                @include prop-vw(padding-block, 14, lg);
+                @include prop-vw(height, 60, lg);
+                padding-block: 0;
                 @include prop-vw(padding-inline, 10, lg);
                 @include prop-vw(font-size, 12, lg);
-                @include border-side(bottom, 1, solid, $color-border, lg);
+                @include border-side(bottom, 2, solid, $color-border, lg);
             }
             @include only(mobile) {
+                height: auto; // card view sizes its own caption
                 @include prop-vw(padding-block, 12, sm);
                 @include prop-vw(padding-inline, 8, sm);
                 @include prop-vw(font-size, 12, sm);
             }
         }
         &__td {
-            @include prop-vw(padding-block, 16, xl);
+            @include prop-vw(height, 46, xl);
+            padding-block: 0;
             @include prop-vw(padding-inline, 10, xl);
             @include prop-vw(font-size, 12, xl);
             font-weight: normal;
@@ -224,11 +228,13 @@
             }
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 16, lg);
+                @include prop-vw(height, 46, lg);
+                padding-block: 0;
                 @include prop-vw(padding-inline, 10, lg);
                 @include prop-vw(font-size, 12, lg);
             }
             @include only(mobile) {
+                height: auto; // card view stacks cells, no fixed row height
                 @include prop-vw(padding-block, 14, sm);
                 @include prop-vw(padding-inline, 8, sm);
                 @include prop-vw(font-size, 12, sm);
