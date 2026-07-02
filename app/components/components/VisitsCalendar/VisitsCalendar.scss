@@ -380,6 +380,138 @@
 				}
 			}
 		}
+
+		// -----------------------------------------------------------------
+		// Mobile adaptation. The whole calendar was authored at xl scale,
+		// which floors to ~0.53× below 1024 → 7px text and 19px buttons.
+		// Re-scale the header, controls and body to sm (full, readable
+		// sizes), stack the controls, and let the Day view fill the width.
+		// -----------------------------------------------------------------
+		@include only(mobile) {
+			// header: title + prev/next
+			&__head {
+				align-items: flex-start;
+				@include prop-vw(gap, 10, sm);
+			}
+			&__nav {
+				flex-shrink: 0;
+				@include prop-vw(gap, 6, sm);
+			}
+			&__navbtn {
+				@include prop-vw(width, 36, sm);
+				@include prop-vw(height, 36, sm);
+				@include prop-vw(border-radius, 10, sm);
+				& > svg {
+					@include prop-vw(width, 12, sm);
+					@include prop-vw(height, 12, sm);
+				}
+			}
+
+			// controls: full-width segmented views on top, full-width CTA below
+			&__controls {
+				flex-direction: column;
+				align-items: stretch;
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(margin-top, 16, sm);
+				@include prop-vw(margin-bottom, 20, sm);
+			}
+			&__views {
+				order: 0;
+				width: 100%;
+				@include prop-vw(height, 40, sm);
+				@include prop-vw(border-radius, 12, sm);
+				@include prop-vw(padding, 2, sm);
+			}
+			&__view {
+				flex: 1 1 0;
+				@include prop-vw(height, 36, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
+			&__create {
+				order: 1;
+				width: 100%;
+				@include prop-vw(height, 44, sm);
+				@include prop-vw(gap, 6, sm);
+				@include prop-vw(font-size, 15, sm);
+				@include prop-vw(border-radius, 12, sm);
+				& > svg {
+					@include prop-vw(width, 16, sm);
+					@include prop-vw(height, 16, sm);
+				}
+			}
+
+			// month grid — readable, compact cells
+			&__weekdays {
+				@include prop-vw(margin-bottom, 8, sm);
+				span {
+					@include prop-vw(font-size, 13, sm);
+				}
+			}
+			&__cell {
+				@include prop-vw(min-height, 108, sm);
+				@include prop-vw(padding, 8, sm);
+			}
+			&__daynum {
+				@include prop-vw(font-size, 13, sm);
+				@include prop-vw(margin-bottom, 6, sm);
+			}
+			&__events {
+				@include prop-vw(gap, 6, sm);
+			}
+			&__event {
+				@include prop-vw(gap, 8, sm);
+				@include prop-vw(font-size, 13, sm);
+			}
+			&__dot {
+				@include prop-vw(width, 3, sm);
+				@include prop-vw(height, 13, sm);
+			}
+			&__add {
+				@include prop-vw(font-size, 13, sm);
+			}
+
+			// time grid (day / week) — readable rows
+			&__tcol-head {
+				@include prop-vw(padding, 8, sm);
+				span {
+					@include prop-vw(font-size, 13, sm);
+				}
+				b {
+					@include prop-vw(font-size, 12, sm);
+				}
+			}
+			&__hour {
+				@include prop-vw(padding-block, 10, sm);
+				@include prop-vw(padding-inline, 6, sm);
+				@include prop-vw(font-size, 13, sm);
+			}
+			&__tcell {
+				@include prop-vw(gap, 6, sm);
+				@include prop-vw(min-height, 52, sm);
+				@include prop-vw(padding, 8, sm);
+			}
+			&__tevent {
+				@include prop-vw(gap, 8, sm);
+			}
+			&__tevent-name {
+				@include prop-vw(font-size, 14, sm);
+			}
+			&__tevent-sub {
+				@include prop-vw(font-size, 12, sm);
+			}
+
+			// Day view fills the width (single column) — no horizontal scroll
+			&__body--day {
+				.vcal__tgrid {
+					overflow-x: visible;
+				}
+				.vcal__tgrid-inner {
+					min-width: 0;
+					grid-template-columns: #{vw-range(52, sm)} minmax(0, 1fr);
+				}
+			}
+		}
 	}
 
 	// --- floating event popup (appended to <body>): grey shell + white cards ---
@@ -532,6 +664,12 @@
 		&__cal {
 			flex: 1 1 auto;
 			min-width: 0;
+			// visits-plan uses align-items:flex-start, so the calendar column must be
+			// told to fill the width on mobile — otherwise the month/week grids' min-width
+			// blows the column (and the page) out instead of scrolling inside vcal__body
+			@include only(mobile) {
+				width: 100%;
+			}
 		}
 		&__target {
 			flex-shrink: 0;

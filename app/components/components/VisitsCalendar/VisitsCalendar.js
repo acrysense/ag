@@ -80,7 +80,9 @@ export default async function VisitsCalendar(root) {
 	// anchor: data-anchor="YYYY-MM-DD" or May 2026 (matches the design)
 	const anchorAttr = root.dataset.anchor
 	const start = anchorAttr ? new Date(anchorAttr) : new Date(2026, 4, 1)
-	let view = 'month'
+	// On mobile the single-column Day view is the usable default; desktop keeps Month.
+	const isMobile = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 743px)').matches
+	let view = isMobile ? 'day' : 'month'
 	let cursor = new Date(start.getFullYear(), start.getMonth(), isWeekend(start) ? start.getDate() + 1 : start.getDate())
 	cursor.setHours(0, 0, 0, 0)
 
