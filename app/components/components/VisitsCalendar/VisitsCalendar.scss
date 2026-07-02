@@ -182,7 +182,7 @@
 				color: $color-dark-grey;
 				text-decoration: line-through;
 				.vcal__dot {
-					opacity: 0.5;
+					opacity: 0.35;
 				}
 			}
 			@media screen and (hover: hover) {
@@ -197,6 +197,7 @@
 			@include prop-vw(height, 14, xl);
 			border-radius: 2px;
 			background: $color-grey;
+				opacity: 0.55; // softened/pastel by default — calmer than full colour
 		}
 		&__event--a .vcal__dot,
 		&__event--a.vcal__slot-event .vcal__dot {
