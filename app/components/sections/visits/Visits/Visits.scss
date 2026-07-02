@@ -98,17 +98,21 @@
 		.data-table__th:nth-child(6) { width: 6.429%; }
 		.data-table__th:nth-child(7) { width: 8.571%; }
 	}
-	// История визитов — колонки (px @ 1400): 100/120/80/60/410/200/70/70/290
+	// История визитов — колонки (px @ 1390): 120/120/80/60/380/200/70/70/290
 	.visits-history .data-table.visits-table {
-		.data-table__th:nth-child(1) { width: 7.143%; }
-		.data-table__th:nth-child(2) { width: 8.571%; }
-		.data-table__th:nth-child(3) { width: 5.714%; }
-		.data-table__th:nth-child(4) { width: 4.286%; }
-		.data-table__th:nth-child(5) { width: 29.286%; }
-		.data-table__th:nth-child(6) { width: 14.286%; }
-		.data-table__th:nth-child(7) { width: 5%; }
-		.data-table__th:nth-child(8) { width: 5%; }
-		.data-table__th:nth-child(9) { width: 20.714%; }
+		@include prop-vw(min-width, 1390, xl);
+		@include only(desktop) {
+			@include prop-vw(min-width, 1390, lg);
+		}
+		.data-table__th:nth-child(1) { width: 8.633%; }
+		.data-table__th:nth-child(2) { width: 8.633%; }
+		.data-table__th:nth-child(3) { width: 5.755%; }
+		.data-table__th:nth-child(4) { width: 4.317%; }
+		.data-table__th:nth-child(5) { width: 27.338%; }
+		.data-table__th:nth-child(6) { width: 14.388%; }
+		.data-table__th:nth-child(7) { width: 5.036%; }
+		.data-table__th:nth-child(8) { width: 5.036%; }
+		.data-table__th:nth-child(9) { width: 20.863%; }
 	}
 
 	// "Лист" score — coloured by result tone
