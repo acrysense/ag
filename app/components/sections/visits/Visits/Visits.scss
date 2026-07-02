@@ -2,6 +2,9 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
+	// Custom segmented tabs for the visits page (override the base .tabs look):
+	// grey #E7EFF4 track, blue active pill with a soft shadow. Scoped here so
+	// other pages' tabs are untouched.
 	.visits-page__tabs {
 		@include prop-vw(margin-top, 10, xl);
 
@@ -10,6 +13,70 @@
 		}
 		@include only(mobile) {
 			@include prop-vw(margin-top, 10, sm);
+		}
+
+		.tabs__list {
+			align-items: center;
+			width: fit-content;
+			@include prop-vw(height, 40, xl);
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(padding, 2, xl);
+			@include prop-vw(margin-bottom, 10, xl);
+			background: #e7eff4;
+			@include prop-vw(border-radius, 10, xl);
+
+			@include only(desktop) {
+				@include prop-vw(height, 40, lg);
+				@include prop-vw(gap, 10, lg);
+				@include prop-vw(padding, 2, lg);
+				@include prop-vw(margin-bottom, 10, lg);
+				@include prop-vw(border-radius, 10, lg);
+			}
+			@include only(mobile) {
+				@include prop-vw(height, 40, sm);
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(padding, 2, sm);
+				@include prop-vw(margin-bottom, 10, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
+		}
+		.tabs__tab {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(height, 36, xl);
+			padding-block: 0;
+			@include prop-vw(padding-inline, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			font-weight: normal;
+			line-height: 1;
+			color: $color-dark-grey;
+			background: transparent;
+			@include prop-vw(border-radius, 10, xl);
+
+			@include only(desktop) {
+				@include prop-vw(height, 36, lg);
+				@include prop-vw(padding-inline, 15, lg);
+				@include prop-vw(font-size, 14, lg);
+				@include prop-vw(border-radius, 10, lg);
+			}
+			@include only(mobile) {
+				@include prop-vw(height, 36, sm);
+				@include prop-vw(padding-inline, 15, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
+		}
+		.tabs__item.is--active .tabs__tab {
+			color: $color-white;
+			background: $color-blue;
+			box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-white;
+				}
+			}
 		}
 	}
 
