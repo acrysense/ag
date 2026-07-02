@@ -19,7 +19,6 @@
 			align-items: center;
 			width: fit-content;
 			@include prop-vw(height, 40, xl);
-			@include prop-vw(gap, 10, xl);
 			@include prop-vw(padding, 2, xl);
 			@include prop-vw(margin-bottom, 10, xl);
 			background: #e7eff4;
@@ -27,14 +26,12 @@
 
 			@include only(desktop) {
 				@include prop-vw(height, 40, lg);
-				@include prop-vw(gap, 10, lg);
 				@include prop-vw(padding, 2, lg);
 				@include prop-vw(margin-bottom, 10, lg);
 				@include prop-vw(border-radius, 10, lg);
 			}
 			@include only(mobile) {
 				@include prop-vw(height, 40, sm);
-				@include prop-vw(gap, 10, sm);
 				@include prop-vw(padding, 2, sm);
 				@include prop-vw(margin-bottom, 10, sm);
 				@include prop-vw(border-radius, 10, sm);
@@ -52,6 +49,9 @@
 			line-height: 1;
 			color: $color-dark-grey;
 			background: transparent;
+			// radius on ALL tabs + no transition → active pill appears instantly,
+			// no crossfade glitch on switch (base .tabs uses transition: all)
+			transition: none;
 			@include prop-vw(border-radius, 10, xl);
 
 			@include only(desktop) {
