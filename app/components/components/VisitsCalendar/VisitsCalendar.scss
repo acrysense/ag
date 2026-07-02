@@ -501,6 +501,16 @@
 				@include prop-vw(font-size, 12, sm);
 			}
 
+			// Full-bleed the horizontal scroll to the screen edges: cancel the
+			// data-panel's 10px side gutter with a negative margin and restore it
+			// as padding, so Неделя/Месяц scroll edge-to-edge instead of inset.
+			// (Month scrolls on __body--month; Week scrolls on __tgrid.)
+			&__body--month,
+			&__tgrid {
+				@include prop-vw(margin-inline, -10, sm);
+				@include prop-vw(padding-inline, 10, sm);
+			}
+
 			// Day view fills the width (single column) — no horizontal scroll
 			&__body--day {
 				.vcal__tgrid {
