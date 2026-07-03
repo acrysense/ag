@@ -594,7 +594,7 @@
 			display: block;
 			position: fixed;
 			inset: 0;
-			z-index: 199;
+			z-index: 1200;
 			background: rgba(#212121, 0.35);
 			backdrop-filter: blur(4px);
 			-webkit-backdrop-filter: blur(4px);
@@ -614,6 +614,28 @@
 		background: #f5f8fa;
 		@include prop-vw(border-radius, 20, xl);
 		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+
+		// mobile modal close button (top-right); desktop uses outside-click
+		&__close {
+			display: none;
+			@include only(mobile) {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				position: absolute;
+				z-index: 1;
+				@include prop-vw(top, 12, sm);
+				@include prop-vw(right, 12, sm);
+				@include prop-vw(width, 36, sm);
+				@include prop-vw(height, 36, sm);
+				padding: 0;
+				background: $color-bg;
+				border: none;
+				border-radius: 50%;
+				cursor: pointer;
+				& > svg { @include prop-vw(width, 16, sm); @include prop-vw(height, 16, sm); }
+			}
+		}
 
 		&__card {
 			display: flex;
@@ -781,6 +803,7 @@
 		// re-scale to sm so it is not tiny/cramped on phones
 		@include only(mobile) {
 			position: fixed;
+			z-index: 1201;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);

@@ -266,7 +266,9 @@ export default async function VisitsCalendar(root) {
 			? '<div class="vcal-pop__footer"><button type="button" class="btn">Начать визит</button><button type="button" class="vcal-pop__del">Удалить визит</button></div>'
 			: '<div class="vcal-pop__footer"><a href="/visit" class="btn">Подробнее</a></div>'
 
-		popup.innerHTML = head + mgr + body + footer
+		const closeBtn =
+			'<button type="button" class="vcal-pop__close" aria-label="Закрыть"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg></button>'
+		popup.innerHTML = closeBtn + head + mgr + body + footer
 		// mobile: a blurred backdrop turns the popup into a tap-to-dismiss modal
 		// (a plain positioned card is fiddly to close on touch); desktop keeps the
 		// small card anchored next to the trigger. The backdrop click closes via
@@ -322,6 +324,8 @@ export default async function VisitsCalendar(root) {
 
 	const onDocClick = (e) => {
 		if (!popup) return
+		// explicit close button (mobile modal)
+		if (e.target.closest('.vcal-pop__close')) return closePopup()
 		// a create/edit trigger opens the visit modal → close the floating popup first
 		if (e.target.closest('[data-visit-create]')) return closePopup()
 		// close when clicking outside the popup (and not on another event)
