@@ -6,7 +6,34 @@ export default (root) => {
 
 	const wrap = root.querySelector('.sidebar__wrap')
 	const btnClose = root.querySelector('.sidebar__close')
+	const btnCollapse = root.querySelector('[data-sidebar-collapse]')
 	const docEl = document.documentElement
+
+	// --- desktop collapse (icon-only rail), persisted across pages ---
+	const COLLAPSE_KEY = 'ag:sidebar-collapsed'
+	const setCollapsed = (on, persist = true) => {
+		root.classList.toggle('is-collapsed', on)
+		btnCollapse?.setAttribute('aria-expanded', on ? 'false' : 'true')
+		btnCollapse?.setAttribute('aria-label', on ? 'Развернуть меню' : 'Свернуть меню')
+		if (persist) {
+			try {
+				localStorage.setItem(COLLAPSE_KEY, on ? '1' : '0')
+			} catch {}
+		}
+	}
+	// apply the stored state on load without playing the transition
+	try {
+		if (localStorage.getItem(COLLAPSE_KEY) === '1') {
+			root.classList.add('no-collapse-anim')
+			setCollapsed(true, false)
+			requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('no-collapse-anim')))
+		}
+	} catch {}
+	const onCollapseClick = (e) => {
+		e.preventDefault()
+		setCollapsed(!root.classList.contains('is-collapsed'))
+	}
+	btnCollapse?.addEventListener('click', onCollapseClick)
 
 	const mql = window.matchMedia('(max-width: 743px)')
 	const isMobile = () => mql.matches
@@ -137,6 +164,7 @@ export default (root) => {
 		transitionCleanup?.()
 		root.removeEventListener('click', onRootClick, true)
 		btnClose?.removeEventListener('click', onCloseClick)
+		btnCollapse?.removeEventListener('click', onCollapseClick)
 		root.removeEventListener('keydown', onRootKeydown)
 		document.removeEventListener('sidebar:open', onOpen)
 		document.removeEventListener('sidebar:close', onClose)

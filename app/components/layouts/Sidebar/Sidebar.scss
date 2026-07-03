@@ -1,6 +1,11 @@
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
 
+// smooth, slightly characterful easing for the desktop collapse/expand
+$collapse-dur: 0.42s;
+$collapse-ease: cubic-bezier(0.65, 0, 0.35, 1);
+$collapse: $collapse-dur $collapse-ease;
+
 @layer layout {
     .sidebar {
         // position (no z-index yet → no stacking context) so it can be lifted
@@ -254,6 +259,124 @@
                     @include prop-vw(min-width, 16, sm);
                     @include prop-vw(width, 16, sm);
                     @include prop-vw(height, 16, sm);
+                }
+            }
+        }
+
+        // --- desktop collapse toggle: 36x36 always (only the bg toggles) ---
+        &__collapse {
+            display: none; // desktop only
+            position: absolute;
+            z-index: 2;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(top, 20, xl);
+            @include prop-vw(right, 16, xl);
+            @include prop-vw(width, 36, xl);
+            @include prop-vw(height, 36, xl);
+            padding: 0;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 14, xl);
+            cursor: pointer;
+            transition: background $collapse, right $collapse, transform $collapse, box-shadow $collapse;
+            & > svg {
+                @include prop-vw(min-width, 20, xl);
+                @include prop-vw(width, 20, xl);
+                @include prop-vw(height, 20, xl);
+                color: $color-dark-grey;
+                transition: color $transition-default;
+            }
+            @media screen and (hover: hover) {
+                &:hover > svg {
+                    color: $color-full-black;
+                }
+            }
+            @include up(desktop) {
+                display: flex;
+            }
+            @include only(desktop) {
+                @include prop-vw(top, 20, lg);
+                @include prop-vw(right, 16, lg);
+                @include prop-vw(width, 36, lg);
+                @include prop-vw(height, 36, lg);
+                @include prop-vw(border-radius, 14, lg);
+                & > svg {
+                    @include prop-vw(min-width, 20, lg);
+                    @include prop-vw(width, 20, lg);
+                    @include prop-vw(height, 20, lg);
+                }
+            }
+        }
+
+        // suppress the transition while the stored state is applied on load
+        &.no-collapse-anim,
+        &.no-collapse-anim * {
+            transition: none !important;
+        }
+
+        // --- desktop collapse animation + collapsed state ---
+        @include up(desktop) {
+            transition: max-width $collapse, padding $collapse;
+
+            &__wrap {
+                transition: padding-top $collapse;
+            }
+            &__label {
+                overflow: hidden;
+                white-space: nowrap;
+                max-height: 28px;
+                transition: opacity $collapse, max-height $collapse, margin-bottom $collapse;
+            }
+            &__link {
+                overflow: hidden;
+                white-space: nowrap;
+                transition: gap $collapse;
+                & > span {
+                    display: block;
+                    max-width: 220px;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    transition: opacity $collapse, max-width $collapse;
+                }
+            }
+
+            &.is-collapsed {
+                @include prop-vw(max-width, 76, xl);
+                @include prop-vw(padding-inline, 20, xl);
+                @include only(desktop) {
+                    @include prop-vw(max-width, 76, lg);
+                    @include prop-vw(padding-inline, 20, lg);
+                }
+
+                .sidebar__wrap {
+                    @include prop-vw(padding-top, 46, xl);
+                    @include only(desktop) {
+                        @include prop-vw(padding-top, 46, lg);
+                    }
+                }
+                .sidebar__label {
+                    opacity: 0;
+                    max-height: 0;
+                    margin-bottom: 0;
+                    pointer-events: none;
+                }
+                .sidebar__link {
+                    justify-content: center;
+                    gap: 0;
+                    & > span {
+                        opacity: 0;
+                        max-width: 0;
+                    }
+                }
+                .sidebar__banr {
+                    display: none;
+                }
+                .sidebar__collapse {
+                    right: 50%;
+                    transform: translateX(50%);
+                    background: $color-white;
+                    box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
                 }
             }
         }
