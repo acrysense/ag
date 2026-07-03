@@ -316,6 +316,10 @@ $collapse: $collapse-dur $collapse-ease;
         }
 
         // --- desktop collapse animation + collapsed state ---
+        // The icon stays flex-start and is centred purely by the rail's padding
+        // (so it only glides a couple of px — never snaps). The label/text just
+        // fade: quick on collapse, delayed on expand so nothing flickers while
+        // the rail is still narrow. Heights collapse from a snug value → 0.
         @include up(desktop) {
             transition: max-width $collapse, padding $collapse;
 
@@ -325,28 +329,29 @@ $collapse: $collapse-dur $collapse-ease;
             &__label {
                 overflow: hidden;
                 white-space: nowrap;
-                max-height: 28px;
-                transition: opacity $collapse, max-height $collapse, margin-bottom $collapse;
+                @include prop-vw(max-height, 20, xl);
+                transition: max-height $collapse, margin-bottom $collapse, opacity 0.22s ease 0.16s;
+                @include only(desktop) {
+                    @include prop-vw(max-height, 20, lg);
+                }
             }
             &__link {
                 overflow: hidden;
                 white-space: nowrap;
-                transition: gap $collapse;
                 & > span {
                     display: block;
-                    max-width: 220px;
-                    overflow: hidden;
-                    white-space: nowrap;
-                    transition: opacity $collapse, max-width $collapse;
+                    transition: opacity 0.24s ease 0.16s; // delayed fade-in on expand
                 }
             }
 
             &.is-collapsed {
-                @include prop-vw(max-width, 76, xl);
-                @include prop-vw(padding-inline, 20, xl);
+                // fluid so it interpolates cleanly with the fluid expanded width
+                // (a fixed px ↔ fluid max() never animates). 90 at the 1920 base.
+                @include prop-vw(max-width, 90, xl);
+                @include prop-vw(padding-inline, 34, xl); // centres the 20px icon
                 @include only(desktop) {
-                    @include prop-vw(max-width, 76, lg);
-                    @include prop-vw(padding-inline, 20, lg);
+                    @include prop-vw(max-width, 90, lg);
+                    @include prop-vw(padding-inline, 34, lg);
                 }
 
                 .sidebar__wrap {
@@ -360,14 +365,11 @@ $collapse: $collapse-dur $collapse-ease;
                     max-height: 0;
                     margin-bottom: 0;
                     pointer-events: none;
+                    transition: max-height $collapse, margin-bottom $collapse, opacity 0.14s ease; // quick fade-out
                 }
-                .sidebar__link {
-                    justify-content: center;
-                    gap: 0;
-                    & > span {
-                        opacity: 0;
-                        max-width: 0;
-                    }
+                .sidebar__link > span {
+                    opacity: 0;
+                    transition: opacity 0.14s ease; // quick fade-out on collapse
                 }
                 .sidebar__banr {
                     display: none;
