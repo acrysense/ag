@@ -77,6 +77,7 @@
 			border: none;
 			@include prop-vw(border-radius, 10, xl);
 			cursor: pointer;
+			transition: color $transition-default;
 			& > svg {
 				@include prop-vw(width, 12, xl);
 				@include prop-vw(height, 12, xl);
@@ -112,6 +113,7 @@
 			border: none;
 			@include prop-vw(border-radius, 14, xl);
 			cursor: pointer;
+			transition: background $transition-default;
 			& > svg {
 				flex-shrink: 0;
 				@include prop-vw(width, 16, xl);
@@ -253,6 +255,7 @@
 			background: $color-red;
 		}
 		&__add {
+			margin: 0;
 			padding: 0;
 			background: transparent;
 			border: none;
@@ -267,7 +270,6 @@
 		}
 		// month cell: compact "+ Создать визит" as plain text (the + is a char)
 		&__cell &__add {
-			@include prop-vw(margin-top, 4, xl);
 			width: fit-content;
 			@include prop-vw(height, 30, xl);
 			@include prop-vw(font-size, 12, xl);
@@ -277,16 +279,12 @@
 		// day/week time cell: chip with a sprite plus, centred so it never
 		// changes the 60px row height (absolute → out of flow)
 		&__tcell &__add {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
 			display: inline-flex;
 			align-items: center;
 			justify-content: center;
 			@include prop-vw(gap, 5, xl);
 			@include prop-vw(width, 140, xl);
-			@include prop-vw(height, 50, xl);
+			@include prop-vw(height, 40, xl);
 			@include prop-vw(font-size, 12, xl);
 			line-height: 1.25;
 			background: #f3f6fc;
@@ -679,6 +677,7 @@
 		}
 		&__link {
 			color: $color-blue;
+			transition: color $transition-default;
 			@media screen and (hover: hover) {
 				&:hover {
 					color: $color-blue-hover;
@@ -698,6 +697,7 @@
 			background: transparent;
 			border: none;
 			cursor: pointer;
+			transition: color $transition-default;
 			@media screen and (hover: hover) {
 				&:hover {
 					color: $color-red;

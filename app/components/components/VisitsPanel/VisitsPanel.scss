@@ -326,6 +326,7 @@
         &__score {
             color: $color-blue;
             white-space: nowrap;
+            transition: color $transition-default;
             @media screen and (hover: hover) {
                 &:hover {
                     color: $color-blue-hover;
@@ -655,6 +656,7 @@
             @include prop-vw(border-radius, 8, xl);
             text-align: left;
             cursor: pointer;
+            transition: background $transition-default, color $transition-default;
             &.is-active {
                 color: $color-blue;
             }
@@ -797,6 +799,7 @@
                 @include prop-vw(width, 16, xl);
                 @include prop-vw(height, 16, xl);
                 color: $color-dark-grey;
+                transition: color $transition-default;
             }
             @media screen and (hover: hover) {
                 &:hover {
@@ -1015,6 +1018,7 @@
             @include prop-vw(border-radius, 8, xl);
             text-align: left;
             cursor: pointer;
+            transition: background $transition-default, color $transition-default;
             &.is-active {
                 color: $color-blue;
             }

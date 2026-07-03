@@ -160,12 +160,14 @@
         background: transparent;
         border: none;
         cursor: pointer;
+        transition: color $transition-default;
         & > svg {
             flex-shrink: 0;
             @include prop-vw(min-width, 24, xl);
             @include prop-vw(width, 24, xl);
             @include prop-vw(height, 24, xl);
             color: $color-blue;
+            transition: color $transition-default;
         }
 
         @media screen and (hover: hover) {
