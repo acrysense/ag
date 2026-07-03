@@ -761,6 +761,62 @@
 				}
 			}
 		}
+
+		// mobile: popup is authored at xl scale (floors to ~0.53x under 1024) —
+		// re-scale to sm so it is not tiny/cramped on phones
+		@include only(mobile) {
+			@include prop-vw(width, 320, sm);
+			@include prop-vw(padding, 15, sm);
+			@include prop-vw(gap, 15, sm);
+			@include prop-vw(border-radius, 20, sm);
+			&__card {
+				@include prop-vw(gap, 5, sm);
+				@include prop-vw(padding, 10, sm);
+				@include prop-vw(border-radius, 12, sm);
+			}
+			&__who {
+				@include prop-vw(gap, 5, sm);
+				@include prop-vw(font-size, 14, sm);
+				.data-table__cat {
+					@include prop-vw(width, 20, sm);
+					@include prop-vw(height, 20, sm);
+					@include prop-vw(border-radius, 5, sm);
+					@include prop-vw(font-size, 12, sm);
+				}
+			}
+			&__when { @include prop-vw(font-size, 14, sm); }
+			&__muted {
+				@include prop-vw(font-size, 12, sm);
+				&--lg { @include prop-vw(font-size, 14, sm); }
+			}
+			&__edit {
+				@include prop-vw(margin-top, 5, sm);
+				@include prop-vw(min-width, 80, sm);
+				@include prop-vw(padding-block, 5.5, sm);
+				@include prop-vw(font-size, 12, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
+			&__row {
+				@include prop-vw(gap, 5, sm);
+				@include prop-vw(font-size, 14, sm);
+				& > svg { @include prop-vw(width, 20, sm); @include prop-vw(height, 20, sm); }
+			}
+			&__row--ok { @include prop-vw(gap, 10, sm); }
+			&__row--ok ~ * { @include prop-vw(padding-left, 30, sm); }
+			&__coords { @include prop-vw(font-size, 12, sm); }
+			&__field-group { @include prop-vw(gap, 10, sm); }
+			&__field { @include prop-vw(gap, 5, sm); @include prop-vw(font-size, 14, sm); }
+			&__label { @include prop-vw(font-size, 12, sm); }
+			&__link { @include prop-vw(font-size, 14, sm); }
+			&__comment { @include prop-vw(font-size, 14, sm); }
+			&__footer {
+				@include prop-vw(gap, 12, sm);
+				@include prop-vw(padding-top, 20, sm);
+				@include border-side(top, 1, solid, $color-border, sm);
+				.btn { @include prop-vw(padding-block, 16, sm); @include prop-vw(font-size, 14, sm); @include prop-vw(border-radius, 14, sm); }
+			}
+			&__del { @include prop-vw(font-size, 14, sm); }
+		}
 	}
 
 	// --- План визитов tab layout: calendar + target sidebar ---
