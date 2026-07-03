@@ -75,9 +75,23 @@
 				@include prop-vw(height, 12, xl);
 			}
 		}
+		// smooth collapse via animated grid rows (1fr <-> 0fr)
+		&__body {
+			display: grid;
+			grid-template-rows: 1fr;
+			transition: grid-template-rows 0.3s ease;
+		}
+		&__body-inner {
+			min-height: 0;
+			overflow: hidden;
+			transition: opacity 0.3s ease;
+		}
 		&.is-collapsed {
 			.visit-sec__body {
-				display: none;
+				grid-template-rows: 0fr;
+			}
+			.visit-sec__body-inner {
+				opacity: 0;
 			}
 			.visit-sec__toggle {
 				transform: rotate(180deg);
@@ -522,6 +536,7 @@
 		background: transparent;
 		border: none;
 		cursor: pointer;
+		transition: color $transition-default;
 		@media screen and (hover: hover) {
 			&:hover {
 				color: $color-red;
