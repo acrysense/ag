@@ -233,7 +233,8 @@
 			}
 		}
 		&-area {
-			resize: vertical;
+			resize: none;
+			overflow: hidden;
 			@include prop-vw(min-height, 72, xl);
 		}
 		&-actions {
@@ -411,13 +412,13 @@
 		&__field {
 			display: block;
 			width: 100%;
-			height: calc(100% - #{vw-range(28, xl)});
 			min-height: vw-range(120, xl);
 			@include prop-vw(padding, 16, xl);
 			@include prop-vw(font-size, 15, xl);
 			line-height: 1.5;
 			color: $color-black;
-			resize: vertical;
+			resize: none;
+			overflow: hidden;
 			@include border-all(1, solid, $color-border, xl);
 			@include prop-vw(border-radius, 12, xl);
 			&:focus {
