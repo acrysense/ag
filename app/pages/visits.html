@@ -42,23 +42,31 @@
 												<div class="visits-plan__stat">Выполнено визитов: <b>22</b></div>
 												<div class="visits-plan__stat">Процент выполнения: <b>8%</b></div>
 											</div>
-											<div class="visits-plan__legend">
-												<span class="visits-plan__legend-head"></span>
-												<span class="visits-plan__legend-head">Факт</span>
-												<span class="visits-plan__legend-head">План</span>
-												<span class="visits-plan__legend-head">Таргет</span>
-												{{#each (arr
-													(obj c="a" fact="12" plan="134" target="134")
-													(obj c="b" fact="9" plan="143" target="249")
-													(obj c="c" fact="1" plan="120" target="120")
-													(obj c="d" fact="0" plan="65" target="100")
-												)}}
-												<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
-												<span class="visits-plan__legend-cell">{{this.fact}}</span>
-												<span class="visits-plan__legend-cell">{{this.plan}}</span>
-												<span class="visits-plan__legend-cell">{{this.target}}</span>
-												{{/each}}
-											</div>
+											<table class="visits-plan__legend">
+												<thead>
+													<tr>
+														<th class="visits-plan__legend-head"></th>
+														<th class="visits-plan__legend-head">Факт</th>
+														<th class="visits-plan__legend-head">План</th>
+														<th class="visits-plan__legend-head">Таргет</th>
+													</tr>
+												</thead>
+												<tbody>
+													{{#each (arr
+														(obj c="a" fact="12" plan="134" target="134")
+														(obj c="b" fact="9" plan="143" target="249")
+														(obj c="c" fact="1" plan="120" target="120")
+														(obj c="d" fact="0" plan="65" target="100")
+													)}}
+													<tr>
+														<td class="visits-plan__legend-cell visits-plan__legend-cell--badge"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
+														<td class="visits-plan__legend-cell">{{this.fact}}</td>
+														<td class="visits-plan__legend-cell">{{this.plan}}</td>
+														<td class="visits-plan__legend-cell">{{this.target}}</td>
+													</tr>
+													{{/each}}
+												</tbody>
+											</table>
 										</section>
 									</aside>
 								</div>

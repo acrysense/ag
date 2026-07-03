@@ -775,19 +775,55 @@
 				@include prop-vw(font-size, 14, sm);
 			}
 		}
-		// legend table: badge column + Факт/План/Таргет, only a header rule
+		// legend as a real table: badge column + Факт/План/Таргет
 		&__legend {
-			display: grid;
-			grid-template-columns: #{vw-range(44, xl)} repeat(3, minmax(0, 1fr));
+			width: 100%;
+			border-collapse: collapse;
+			table-layout: fixed;
 			@include prop-vw(font-size, 14, xl);
 			color: $color-black;
 			@include only(mobile) {
-				grid-template-columns: #{vw-range(44, sm)} repeat(3, minmax(0, 1fr));
 				@include prop-vw(font-size, 14, sm);
 			}
+			// fixed badge column (header cell above it included)
+			th:first-child,
+			td:first-child {
+				@include prop-vw(width, 44, xl);
+				@include only(mobile) {
+					@include prop-vw(width, 44, sm);
+				}
+			}
+		}
+		&__legend-head {
+			@include prop-vw(height, 60, xl);
+			@include prop-vw(padding-inline, 10, xl);
+			@include border-side(bottom, 2, solid, $color-border, xl);
+			font-weight: normal; // reset <th> bold
+			text-align: left;
+			vertical-align: middle;
+			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(height, 60, sm);
+				@include prop-vw(padding-inline, 10, sm);
+			}
+		}
+		&__legend-cell {
+			@include prop-vw(height, 46, xl);
+			@include prop-vw(padding-inline, 10, xl);
+			text-align: left;
+			vertical-align: middle;
+			@include only(mobile) {
+				@include prop-vw(height, 46, sm);
+				@include prop-vw(padding-inline, 10, sm);
+			}
+			// 1px vertical separators between body columns (head keeps its 2px rule)
+			& + & {
+				@include border-side(left, 1, solid, $color-border, xl);
+			}
+		}
+		&__legend-cell--badge {
+			text-align: center;
 			.data-table__cat {
-				justify-self: center;
-				align-self: center;
 				@include prop-vw(font-size, 12, xl);
 				line-height: 1.25;
 				@include only(desktop) {
@@ -796,28 +832,6 @@
 				@include only(mobile) {
 					@include prop-vw(font-size, 12, sm);
 				}
-			}
-		}
-		&__legend-head {
-			display: flex;
-			align-items: center;
-			@include prop-vw(height, 60, xl);
-			@include prop-vw(padding-inline, 10, xl);
-			@include border-side(bottom, 2, solid, $color-border, xl);
-			color: $color-dark-grey;
-			@include only(mobile) {
-				@include prop-vw(height, 60, sm);
-				@include prop-vw(padding-inline, 10, sm);
-			}
-		}
-		&__legend-cell {
-			display: flex;
-			align-items: center;
-			@include prop-vw(height, 46, xl);
-			@include prop-vw(padding-inline, 10, xl);
-			@include only(mobile) {
-				@include prop-vw(height, 46, sm);
-				@include prop-vw(padding-inline, 10, sm);
 			}
 		}
 	}
