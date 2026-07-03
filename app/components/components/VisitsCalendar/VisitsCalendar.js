@@ -211,9 +211,12 @@ export default async function VisitsCalendar(root) {
 
 	// ---- event popup ------------------------------------------------------
 	let popup = null
+	let backdrop = null
 	const closePopup = () => {
 		popup?.remove()
+		backdrop?.remove()
 		popup = null
+		backdrop = null
 	}
 	const ICON_MGR = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-manager"></use></svg>'
 	const ICON_TYPE = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-visit-type"></use></svg>'
@@ -264,11 +267,20 @@ export default async function VisitsCalendar(root) {
 			: '<div class="vcal-pop__footer"><a href="/visit" class="btn">Подробнее</a></div>'
 
 		popup.innerHTML = head + mgr + body + footer
+		// mobile: a blurred backdrop turns the popup into a tap-to-dismiss modal
+		// (a plain positioned card is fiddly to close on touch); desktop keeps the
+		// small card anchored next to the trigger. The backdrop click closes via
+		// the existing outside-click handler.
+		backdrop = document.createElement('div')
+		backdrop.className = 'vcal-pop-backdrop'
+		document.body.appendChild(backdrop)
 		document.body.appendChild(popup)
-		const r = trigger.getBoundingClientRect()
-		const top = Math.min(window.scrollY + r.bottom + 6, window.scrollY + window.innerHeight - popup.offsetHeight - 12)
-		popup.style.top = `${Math.max(window.scrollY + 12, top)}px`
-		popup.style.left = `${Math.min(window.scrollX + r.left, window.scrollX + window.innerWidth - popup.offsetWidth - 12)}px`
+		if (!window.matchMedia('(max-width: 743px)').matches) {
+			const r = trigger.getBoundingClientRect()
+			const top = Math.min(window.scrollY + r.bottom + 6, window.scrollY + window.innerHeight - popup.offsetHeight - 12)
+			popup.style.top = `${Math.max(window.scrollY + 12, top)}px`
+			popup.style.left = `${Math.min(window.scrollX + r.left, window.scrollX + window.innerWidth - popup.offsetWidth - 12)}px`
+		}
 	}
 
 	// ---- one delegated handler --------------------------------------------

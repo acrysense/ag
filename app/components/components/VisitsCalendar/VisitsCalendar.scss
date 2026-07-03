@@ -586,6 +586,21 @@
 		}
 	}
 
+	// mobile-only blurred backdrop behind the event popup — makes it a
+	// tap-to-dismiss modal instead of a fiddly floating card
+	.vcal-pop-backdrop {
+		display: none;
+		@include only(mobile) {
+			display: block;
+			position: fixed;
+			inset: 0;
+			z-index: 199;
+			background: rgba(#212121, 0.35);
+			backdrop-filter: blur(4px);
+			-webkit-backdrop-filter: blur(4px);
+		}
+	}
+
 	// --- floating event popup (appended to <body>): grey shell + white cards ---
 	.vcal-pop {
 		position: absolute;
@@ -765,6 +780,13 @@
 		// mobile: popup is authored at xl scale (floors to ~0.53x under 1024) —
 		// re-scale to sm so it is not tiny/cramped on phones
 		@include only(mobile) {
+			position: fixed;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			max-height: calc(100dvh - 40px);
+			overflow-y: auto;
+			max-width: calc(100vw - 32px);
 			@include prop-vw(width, 320, sm);
 			@include prop-vw(padding, 15, sm);
 			@include prop-vw(gap, 15, sm);
