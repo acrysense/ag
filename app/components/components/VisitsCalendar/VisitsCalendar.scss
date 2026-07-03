@@ -682,20 +682,12 @@
 				color: $color-black;
 			}
 		}
-		&__check {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			@include prop-vw(width, 22, xl);
-			@include prop-vw(height, 22, xl);
-			color: $color-white;
-			background: $color-green;
-			border-radius: 50%;
-			& > svg {
-				@include prop-vw(width, 14, xl);
-				@include prop-vw(height, 14, xl);
-				color: $color-white;
-			}
+		&__row--ok {
+			@include prop-vw(gap, 10, xl);
+		}
+		// confirmed card: indent everything under the check row to line up with its text
+		&__row--ok ~ * {
+			@include prop-vw(padding-left, 30, xl);
 		}
 		&__comment {
 			@include prop-vw(font-size, 14, xl);
@@ -706,8 +698,9 @@
 			}
 		}
 		&__coords {
-			@include prop-vw(font-size, 13, xl);
-			color: $color-grey;
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			color: #adb4c1;
 		}
 		&__field {
 			@include prop-vw(margin-top, 6, xl);

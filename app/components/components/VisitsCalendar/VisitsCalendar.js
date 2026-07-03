@@ -217,7 +217,6 @@ export default async function VisitsCalendar(root) {
 	}
 	const ICON_MGR = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-manager"></use></svg>'
 	const ICON_TYPE = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-visit-type"></use></svg>'
-	const ICON_CHECK = '<svg viewBox="0 0 16 16" fill="none"><path d="M4.5 8.5l2.3 2.3L11.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 	function openPopup(trigger, ev) {
 		closePopup()
@@ -250,7 +249,7 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__comment vcal-pop__comment--muted">${esc(ev.comment)}</div>
 			</div>`
 			: `<div class="vcal-pop__card">
-				<div class="vcal-pop__row vcal-pop__row--ok"><span class="vcal-pop__check">${ICON_CHECK}</span><b>Визит подтвержден</b></div>
+				<div class="vcal-pop__row vcal-pop__row--ok"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-check-circle"></use></svg><b>Визит подтвержден</b></div>
 				<div class="vcal-pop__muted">${esc(ev.confirmedDate)}</div>
 				<div class="vcal-pop__coords">${esc(ev.coords)}</div>
 				<div class="vcal-pop__field"><span class="vcal-pop__label">Тип визита</span><div>${esc(ev.type)}</div></div>
