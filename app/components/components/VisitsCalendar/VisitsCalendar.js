@@ -216,7 +216,7 @@ export default async function VisitsCalendar(root) {
 		popup = null
 	}
 	const ICON_MGR = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-manager"></use></svg>'
-	const ICON_TYPE = '<svg viewBox="0 0 20 20" fill="none"><rect x="4.5" y="3.5" width="11" height="13" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 3.5h4M7 10l1.8 1.8L12.5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+	const ICON_TYPE = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-visit-type"></use></svg>'
 	const ICON_CHECK = '<svg viewBox="0 0 16 16" fill="none"><path d="M4.5 8.5l2.3 2.3L11.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
 	function openPopup(trigger, ev) {
@@ -229,15 +229,19 @@ export default async function VisitsCalendar(root) {
 		const head = `<div class="vcal-pop__card">
 			<div class="vcal-pop__who"><span class="data-table__cat data-table__cat--${esc(ev.cat)}">${esc(ev.cat)}</span><b>${esc(ev.name)}</b></div>
 			<div class="vcal-pop__when">${esc(ev.date)} в ${esc(ev.time)}</div>
-			<div class="vcal-pop__muted">${esc(ev.phone)}</div>
-			<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
+			<div class="vcal-pop__muted-group">
+				<div class="vcal-pop__muted">${esc(ev.phone)}</div>
+				<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
+			</div>
 			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ employee: ev.name, date: ev.date, time: ev.time, manager: ev.manager, type: ev.type, comment: ev.comment }))}">Изменить</button>` : ''}
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
 			<div class="vcal-pop__row">${ICON_MGR}<span>${esc(ev.manager)}</span></div>
-			<div class="vcal-pop__muted vcal-pop__muted--lg">${esc(ev.managerPhone)}</div>
-			<div class="vcal-pop__muted vcal-pop__muted--lg">${esc(ev.managerEmail)}</div>
+			<div class="vcal-pop__muted-group">
+				<div class="vcal-pop__muted vcal-pop__muted--lg">${esc(ev.managerPhone)}</div>
+				<div class="vcal-pop__muted vcal-pop__muted--lg">${esc(ev.managerEmail)}</div>
+			</div>
 		</div>`
 
 		const body = planned

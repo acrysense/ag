@@ -588,12 +588,12 @@
 	.vcal-pop {
 		position: absolute;
 		z-index: 200;
-		@include prop-vw(width, 360, xl);
+		@include prop-vw(width, 320, xl);
 		max-width: calc(100vw - 24px);
 		@include prop-vw(padding, 15, xl);
 		display: flex;
 		flex-direction: column;
-		@include prop-vw(gap, 12, xl);
+		@include prop-vw(gap, 15, xl);
 		background: #f5f8fa;
 		@include prop-vw(border-radius, 20, xl);
 		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
@@ -601,7 +601,7 @@
 		&__card {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(gap, 8, xl);
+			@include prop-vw(gap, 5, xl);
 			@include prop-vw(padding, 10, xl);
 			background: $color-white;
 			@include prop-vw(border-radius, 12, xl);
@@ -641,16 +641,24 @@
 				line-height: 1.57142857143;
 			}
 		}
+		&__muted-group {
+			display: flex;
+			flex-direction: column;
+			gap: 0; // muted lines stacked tight, no vertical gap
+		}
 		&__edit {
-			@include prop-vw(margin-top, 6, xl);
-			width: fit-content;
-			@include prop-vw(padding-block, 7, xl);
-			@include prop-vw(padding-inline, 14, xl);
-			@include prop-vw(font-size, 14, xl);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(margin-top, 5, xl); // + card gap 5 = 10 total above the button
+			@include prop-vw(width, 80, xl);
+			@include prop-vw(height, 26, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
 			color: $color-black;
-			background: $color-bg;
+			background: $color-bg; // #F3F6FC
 			border: none;
-			@include prop-vw(border-radius, 8, xl);
+			@include prop-vw(border-radius, 10, xl);
 			cursor: pointer;
 		}
 		&__row {
@@ -688,7 +696,7 @@
 		}
 		&__comment {
 			@include prop-vw(font-size, 14, xl);
-			line-height: 1.45;
+			line-height: 1.57142857143;
 			color: $color-black;
 			&--muted {
 				color: $color-dark-grey;
@@ -723,10 +731,21 @@
 			align-items: center;
 			justify-content: space-between;
 			@include prop-vw(gap, 12, xl);
-			@include prop-vw(padding-top, 4, xl);
+			@include prop-vw(padding-top, 20, xl);
+			@include border-side(top, 1, solid, $color-border, xl);
+			.btn {
+				@include prop-vw(height, 46, xl);
+				padding-block: 0;
+				@include prop-vw(font-size, 14, xl);
+				line-height: 1;
+				font-weight: bold;
+				@include prop-vw(border-radius, 14, xl);
+			}
 		}
 		&__del {
+			align-self: flex-end; // align to the bottom, not centre
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-dark-grey;
 			background: transparent;
 			border: none;
