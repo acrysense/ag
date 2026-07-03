@@ -2,7 +2,7 @@
 @use '@/assets/styles/base/vars' as *;
 
 // smooth, slightly characterful easing for the desktop collapse/expand
-$collapse-dur: 0.42s;
+$collapse-dur: 0.3s;
 $collapse-ease: cubic-bezier(0.65, 0, 0.35, 1);
 $collapse: $collapse-dur $collapse-ease;
 
@@ -330,7 +330,7 @@ $collapse: $collapse-dur $collapse-ease;
                 overflow: hidden;
                 white-space: nowrap;
                 @include prop-vw(max-height, 20, xl);
-                transition: max-height $collapse, margin-bottom $collapse, opacity 0.22s ease 0.16s;
+                transition: max-height $collapse, margin-bottom $collapse, opacity 0.16s ease 0.12s;
                 @include only(desktop) {
                     @include prop-vw(max-height, 20, lg);
                 }
@@ -340,7 +340,7 @@ $collapse: $collapse-dur $collapse-ease;
                 white-space: nowrap;
                 & > span {
                     display: block;
-                    transition: opacity 0.24s ease 0.16s; // delayed fade-in on expand
+                    transition: opacity 0.16s ease 0.12s; // delayed fade-in on expand
                 }
             }
 
@@ -365,11 +365,11 @@ $collapse: $collapse-dur $collapse-ease;
                     max-height: 0;
                     margin-bottom: 0;
                     pointer-events: none;
-                    transition: max-height $collapse, margin-bottom $collapse, opacity 0.14s ease; // quick fade-out
+                    transition: max-height $collapse, margin-bottom $collapse, opacity 0.1s ease; // quick fade-out
                 }
                 .sidebar__link > span {
                     opacity: 0;
-                    transition: opacity 0.14s ease; // quick fade-out on collapse
+                    transition: opacity 0.1s ease; // quick fade-out on collapse
                 }
                 .sidebar__banr {
                     display: none;
@@ -381,6 +381,14 @@ $collapse: $collapse-dur $collapse-ease;
                     box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
                 }
             }
+        }
+    }
+
+    // when the sidebar is collapsed, re-centre the main content in the wider
+    // space that opens up to the right of the thin rail
+    .sidebar-collapsed .wrapper__main {
+        @include up(desktop) {
+            margin-inline: auto;
         }
     }
 }
