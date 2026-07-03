@@ -586,6 +586,22 @@
 		}
 	}
 
+	// soft entrance for the event popup + its mobile backdrop
+	@keyframes vcal-pop-in {
+		from { opacity: 0; transform: translateY(8px) scale(0.98); }
+		to { opacity: 1; transform: none; }
+	}
+	@keyframes vcal-pop-in-mobile {
+		from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); }
+		to { opacity: 1; transform: translate(-50%, -50%); }
+	}
+	@keyframes vcal-pop-backdrop-in {
+		from { opacity: 0; }
+		to { opacity: 1; }
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.vcal-pop, .vcal-pop-backdrop { animation: none; }
+	}
 	// mobile-only blurred backdrop behind the event popup — makes it a
 	// tap-to-dismiss modal instead of a fiddly floating card
 	.vcal-pop-backdrop {
@@ -598,6 +614,7 @@
 			background: rgba(#212121, 0.35);
 			backdrop-filter: blur(4px);
 			-webkit-backdrop-filter: blur(4px);
+			animation: vcal-pop-backdrop-in 0.22s ease both;
 		}
 	}
 
@@ -614,6 +631,7 @@
 		background: #f5f8fa;
 		@include prop-vw(border-radius, 20, xl);
 		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+		animation: vcal-pop-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 
 		// mobile modal close button (top-right); desktop uses outside-click
 		&__close {
@@ -804,6 +822,7 @@
 		@include only(mobile) {
 			position: fixed;
 			z-index: 1201;
+			animation-name: vcal-pop-in-mobile;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
