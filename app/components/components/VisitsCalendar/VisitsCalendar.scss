@@ -702,18 +702,27 @@
 			line-height: 1.25;
 			color: #adb4c1;
 		}
+		&__field-group {
+			display: flex;
+			flex-direction: column;
+			@include prop-vw(gap, 10, xl); // 10px between fields
+		}
 		&__field {
-			@include prop-vw(margin-top, 6, xl);
-			@include prop-vw(font-size, 15, xl);
+			display: flex;
+			flex-direction: column;
+			@include prop-vw(gap, 5, xl); // 5px label -> value
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 		}
 		&__label {
-			display: block;
-			@include prop-vw(margin-bottom, 4, xl);
-			@include prop-vw(font-size, 13, xl);
-			color: $color-dark-grey;
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			color: $color-dark-grey; // #737F8C
 		}
 		&__link {
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-blue;
 			transition: color $transition-default;
 			@media screen and (hover: hover) {

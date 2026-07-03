@@ -252,9 +252,11 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__row vcal-pop__row--ok"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-check-circle"></use></svg><b>Визит подтвержден</b></div>
 				<div class="vcal-pop__muted">${esc(ev.confirmedDate)}</div>
 				<div class="vcal-pop__coords">${esc(ev.coords)}</div>
-				<div class="vcal-pop__field"><span class="vcal-pop__label">Тип визита</span><div>${esc(ev.type)}</div></div>
-				<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="/visit" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
-				<div class="vcal-pop__field"><span class="vcal-pop__label">Комментарии</span><div class="vcal-pop__comment">${esc(ev.comment)}</div></div>
+				<div class="vcal-pop__field-group">
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Тип визита</span><div>${esc(ev.type)}</div></div>
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="/visit" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Комментарии</span><div class="vcal-pop__comment">${esc(ev.comment)}</div></div>
+				</div>
 			</div>`
 
 		const footer = planned
