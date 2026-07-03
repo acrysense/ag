@@ -13,7 +13,6 @@ export default (root) => {
 	const COLLAPSE_KEY = 'ag:sidebar-collapsed'
 	const setCollapsed = (on, persist = true) => {
 		root.classList.toggle('is-collapsed', on)
-		docEl.classList.toggle('sidebar-collapsed', on) // lets the content area re-centre
 		btnCollapse?.setAttribute('aria-expanded', on ? 'false' : 'true')
 		btnCollapse?.setAttribute('aria-label', on ? 'Развернуть меню' : 'Свернуть меню')
 		if (persist) {
@@ -176,7 +175,6 @@ export default (root) => {
 		releaseScroll = null
 		root.classList.remove('is-open')
 		docEl.classList.remove('sidebar-open')
-		docEl.classList.remove('sidebar-collapsed')
 		delete docEl.dataset.sidebarBusy
 	}
 }

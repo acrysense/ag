@@ -384,9 +384,13 @@ $collapse: $collapse-dur $collapse-ease;
         }
     }
 
-    // when the sidebar is collapsed, re-centre the main content in the wider
-    // space that opens up to the right of the thin rail
-    .sidebar-collapsed .wrapper__main {
+    // Centre the main content in whatever space is left beside the sidebar.
+    // Always on (desktop): while the rail is expanded there's no spare room, so
+    // margin:auto resolves to 0 and the content stays flush-left. As the rail
+    // collapses the freed space splits evenly, and because margin:auto tracks the
+    // flex free space every frame, the content re-centres smoothly in step with
+    // the width animation — no snap when toggling a class on/off.
+    .wrapper__main {
         @include up(desktop) {
             margin-inline: auto;
         }
