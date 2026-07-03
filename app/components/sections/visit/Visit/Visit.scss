@@ -486,9 +486,13 @@
 		}
 		&__top {
 			display: flex;
-			align-items: center;
+			align-items: flex-start;
 			@include prop-vw(gap, 10, xl);
 			@include prop-vw(margin-bottom, 10, xl);
+		}
+		&__info {
+			@include prop-vw(padding-bottom, 5, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
 		}
 		&__avatar {
 			flex-shrink: 0;
@@ -566,15 +570,17 @@
 			display: block;
 			@include prop-vw(margin-bottom, 8, xl);
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-dark-grey;
 		}
 		&__value {
-			@include prop-vw(font-size, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 		}
 		&__text {
 			@include prop-vw(font-size, 14, xl);
-			line-height: 1.5;
+			line-height: 1.57142857143;
 			color: $color-black;
 		}
 	}
@@ -584,7 +590,7 @@
 		&__list {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(gap, 14, xl);
+			@include prop-vw(gap, 16, xl);
 			@include prop-vw(margin-top, 16, xl);
 			@include prop-vw(max-height, 420, xl);
 			overflow-y: auto;
@@ -596,11 +602,11 @@
 		}
 		&__score {
 			flex-shrink: 0;
-			@include prop-vw(min-width, 56, xl);
+			@include prop-vw(min-width, 60, xl);
 			@include prop-vw(padding-block, 4, xl);
-			@include prop-vw(padding-inline, 8, xl);
-			@include prop-vw(font-size, 13, xl);
-			font-weight: 600;
+			@include prop-vw(padding-inline, 6, xl);
+			@include prop-vw(font-size, 12, xl);
+			font-weight: normal;
 			text-align: center;
 			@include prop-vw(border-radius, 8, xl);
 			&--green {
