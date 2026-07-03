@@ -20,17 +20,19 @@
 	// ---- checklist panel ----
 	.visit {
 		&__head {
-			@include prop-vw(margin-bottom, 24, xl);
+			@include prop-vw(margin-bottom, 40, xl);
 		}
 		&__title {
-			@include prop-vw(font-size, 22, xl);
+			@include prop-vw(font-size, 26, xl);
 			font-weight: bold;
+			line-height: 1.07692307692;
 			color: $color-black;
 		}
 		&__date {
 			display: block;
-			@include prop-vw(margin-top, 6, xl);
+			@include prop-vw(margin-top, 10, xl);
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-dark-grey;
 		}
 	}
@@ -45,27 +47,32 @@
 			align-items: center;
 			justify-content: space-between;
 			@include prop-vw(gap, 12, xl);
-			@include prop-vw(margin-bottom, 16, xl);
+			@include prop-vw(padding-bottom, 10, xl);
+			@include prop-vw(margin-bottom, 10, xl);
+			@include border-side(bottom, 2, solid, $color-border, xl);
 		}
 		&__title {
-			@include prop-vw(font-size, 17, xl);
+			@include prop-vw(font-size, 16, xl);
 			font-weight: bold;
+			line-height: 1.1875;
 			color: $color-black;
 		}
 		&__toggle {
+			flex-shrink: 0;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			@include prop-vw(width, 28, xl);
-			@include prop-vw(height, 28, xl);
+			@include prop-vw(width, 24, xl);
+			@include prop-vw(height, 24, xl);
 			color: $color-dark-grey;
-			background: transparent;
+			background: $color-bg;
 			border: none;
+			border-radius: 50%;
 			cursor: pointer;
 			transition: transform $transition-default;
 			& > svg {
-				@include prop-vw(width, 20, xl);
-				@include prop-vw(height, 20, xl);
+				@include prop-vw(width, 12, xl);
+				@include prop-vw(height, 12, xl);
 			}
 		}
 		&.is-collapsed {
