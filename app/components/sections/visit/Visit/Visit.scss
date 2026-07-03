@@ -94,7 +94,7 @@
 			display: flex;
 			align-items: flex-start;
 			@include prop-vw(gap, 16, xl);
-			@include prop-vw(padding-top, 20, xl);
+			@include prop-vw(padding-top, 10, xl);
 			@include prop-vw(padding-bottom, 5, xl);
 			@include prop-vw(padding-left, 5, xl);
 			// bottom divider, offset 92 from the left so it starts under the body
@@ -106,10 +106,6 @@
 				bottom: 0;
 				height: 1px;
 				background: $color-border;
-			}
-			// first item sits closer to the section head
-			&:first-child {
-				@include prop-vw(padding-top, 10, xl);
 			}
 			&:last-child::before {
 				content: none;
@@ -144,7 +140,8 @@
 			}
 			&--no {
 				@include prop-vw(width, 35, xl);
-				color: $color-dark-grey;
+				font-weight: normal;
+				color: #BC4141;
 				background: rgba($color-red, 0.1);
 				&.is-active {
 					color: $color-white;
