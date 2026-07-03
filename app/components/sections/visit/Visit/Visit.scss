@@ -476,19 +476,25 @@
 
 	// ---- right sidebar: employee card ----
 	.visit-emp {
+		// two-column layout: the left panel sits below the back button, so nudge
+		// the right column down by the button's height (20) + its margin (20)
+		@include up(tablet) {
+			@include prop-vw(margin-top, 40, xl);
+		}
+		@include only(desktop) {
+			@include prop-vw(margin-top, 40, lg);
+		}
 		&__top {
 			display: flex;
 			align-items: center;
-			@include prop-vw(gap, 14, xl);
-			@include prop-vw(margin-bottom, 20, xl);
-			@include border-side(bottom, 1, solid, $color-border, xl);
-			@include prop-vw(padding-bottom, 20, xl);
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(margin-bottom, 10, xl);
 		}
 		&__avatar {
 			flex-shrink: 0;
-			@include prop-vw(width, 56, xl);
-			@include prop-vw(height, 56, xl);
-			@include prop-vw(border-radius, 12, xl);
+			@include prop-vw(width, 85, xl);
+			@include prop-vw(height, 85, xl);
+			@include prop-vw(border-radius, 10, xl);
 			overflow: hidden;
 			img {
 				width: 100%;
@@ -498,29 +504,43 @@
 		}
 		&__name {
 			@include prop-vw(font-size, 16, xl);
+			line-height: 1.1875;
 			font-weight: bold;
 			color: $color-black;
 		}
 		&__rating {
 			display: flex;
 			align-items: center;
-			@include prop-vw(gap, 8, xl);
+			@include prop-vw(gap, 10, xl);
 			@include prop-vw(margin-top, 8, xl);
 			@include prop-vw(font-size, 14, xl);
-			color: $color-dark-grey;
-		}
-		&__rating-val {
+			line-height: 1.57142857143;
+			font-weight: normal;
 			color: $color-black;
+			.data-table__cat {
+				@include prop-vw(width, 24, xl);
+				@include prop-vw(height, 24, xl);
+				@include prop-vw(border-radius, 7, xl);
+				@include prop-vw(font-size, 12, xl);
+				line-height: 1;
+				font-weight: 600;
+			}
+		}
+		&__rating-date {
+			color: $color-dark-grey;
 		}
 		&__rows {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(gap, 12, xl);
+			@include prop-vw(gap, 10, xl);
 		}
 		&__row {
 			display: flex;
-			@include prop-vw(gap, 8, xl);
+			@include prop-vw(gap, 10, xl);
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
+			font-weight: normal;
+			color: $color-black;
 		}
 		&__label {
 			flex-shrink: 0;
@@ -528,6 +548,7 @@
 		}
 		&__link {
 			color: $color-blue;
+			transition: color $transition-default;
 			@media screen and (hover: hover) {
 				&:hover {
 					color: $color-blue-hover;
