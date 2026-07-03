@@ -491,6 +491,10 @@
 			@include prop-vw(margin-bottom, 10, xl);
 		}
 		&__info {
+			display: flex;
+			flex-direction: column;
+			justify-content: space-between;
+			@include prop-vw(min-height, 85, xl); // at least the avatar height; grows if the name wraps
 			@include prop-vw(padding-bottom, 5, xl);
 			@include border-side(bottom, 1, solid, $color-border, xl);
 		}
@@ -590,25 +594,39 @@
 		&__list {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(gap, 16, xl);
 			@include prop-vw(margin-top, 16, xl);
 			@include prop-vw(max-height, 420, xl);
 			overflow-y: auto;
 		}
 		&__item {
+			position: relative;
 			display: flex;
 			align-items: center;
 			@include prop-vw(gap, 12, xl);
+			@include prop-vw(padding-bottom, 21, xl); // spacing between items (last one included)
+			// divider inset past the score chip, sitting 10px above the item's bottom
+			&::before {
+				content: '';
+				position: absolute;
+				left: #{vw-range(70, xl)};
+				right: 0;
+				bottom: #{vw-range(10, xl)};
+				height: 1px;
+				background: $color-border;
+			}
 		}
 		&__score {
 			flex-shrink: 0;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
 			@include prop-vw(min-width, 60, xl);
-			@include prop-vw(padding-block, 4, xl);
+			@include prop-vw(padding-block, 6, xl); // 12px line + 2×6 = 24 tall
 			@include prop-vw(padding-inline, 6, xl);
 			@include prop-vw(font-size, 12, xl);
+			line-height: 1;
 			font-weight: normal;
-			text-align: center;
-			@include prop-vw(border-radius, 8, xl);
+			@include prop-vw(border-radius, 7, xl);
 			&--green {
 				color: $color-green;
 				background: #e8f5e9;
@@ -624,7 +642,11 @@
 		}
 		&__text {
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
+		}
+		&__type {
+			color: $color-dark-grey;
 		}
 	}
 }
