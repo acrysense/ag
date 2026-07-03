@@ -90,27 +90,45 @@
 		display: flex;
 		flex-direction: column;
 		&__item {
+			position: relative;
 			display: flex;
 			align-items: flex-start;
 			@include prop-vw(gap, 16, xl);
-			@include prop-vw(padding-block, 16, xl);
-			@include border-side(bottom, 1, solid, $color-border, xl);
-			&:last-child {
-				border-bottom: none;
+			@include prop-vw(padding-top, 20, xl);
+			@include prop-vw(padding-bottom, 5, xl);
+			@include prop-vw(padding-left, 5, xl);
+			// bottom divider, offset 92 from the left so it starts under the body
+			&::before {
+				content: '';
+				position: absolute;
+				left: #{vw-range(92, xl)};
+				right: 0;
+				bottom: 0;
+				height: 1px;
+				background: $color-border;
+			}
+			// first item sits closer to the section head
+			&:first-child {
+				@include prop-vw(padding-top, 10, xl);
+			}
+			&:last-child::before {
+				content: none;
 			}
 		}
 		&__toggle {
 			flex-shrink: 0;
 			display: flex;
-			@include prop-vw(gap, 6, xl);
+			@include prop-vw(gap, 10, xl);
 		}
 		&__yn {
-			@include prop-vw(padding-block, 6, xl);
+			// height 24: line 10*1 + padding 7*2 = 24
+			@include prop-vw(padding-block, 7, xl);
 			@include prop-vw(padding-inline, 16, xl);
-			@include prop-vw(font-size, 14, xl);
-			font-weight: 500;
+			@include prop-vw(font-size, 10, xl);
+			font-weight: 600;
+			line-height: 1;
 			border: none;
-			@include prop-vw(border-radius, 8, xl);
+			@include prop-vw(border-radius, 7, xl);
 			cursor: pointer;
 			&--yes {
 				color: $color-green;
@@ -134,13 +152,14 @@
 			min-width: 0;
 		}
 		&__name {
-			@include prop-vw(font-size, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 		}
 		&__desc {
-			@include prop-vw(margin-top, 6, xl);
-			@include prop-vw(font-size, 14, xl);
-			line-height: 1.45;
+			@include prop-vw(margin-top, 5, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
 			color: $color-dark-grey;
 		}
 	}
