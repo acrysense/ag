@@ -816,10 +816,10 @@
 				@include prop-vw(height, 46, sm);
 				@include prop-vw(padding-inline, 10, sm);
 			}
-			// 1px vertical separators between body columns (head keeps its 2px rule)
-			& + & {
-				@include border-side(left, 1, solid, $color-border, xl);
-			}
+		}
+		// 1px horizontal separators between body rows (head keeps its 2px rule)
+		&__legend tbody tr + tr td {
+			@include border-side(top, 1, solid, $color-border, xl);
 		}
 		&__legend-cell--badge {
 			text-align: center;
