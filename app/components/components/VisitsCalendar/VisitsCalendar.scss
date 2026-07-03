@@ -162,16 +162,19 @@
 			display: grid;
 			grid-template-columns: repeat(5, minmax(0, 1fr));
 		}
+		// month weekday header — styled like the week/day column headers
 		&__weekdays {
-			@include prop-vw(gap, 1, xl);
-			@include prop-vw(margin-bottom, 8, xl);
+			@include border-side(bottom, 1, solid, $color-border, xl);
 			span {
+				@include prop-vw(padding-top, 5, xl);
+				@include prop-vw(padding-inline, 10, xl);
 				@include prop-vw(font-size, 14, xl);
+				line-height: 1.57142857143;
+				font-weight: normal;
 				color: $color-black;
 			}
 		}
 		&__grid {
-			@include border-side(top, 1, solid, $color-border, xl);
 			@include border-side(left, 1, solid, $color-border, xl);
 		}
 		&__row {
@@ -180,8 +183,8 @@
 		}
 		&__cell {
 			min-height: 0;
-			@include prop-vw(min-height, 130, xl);
-			@include prop-vw(padding, 10, xl);
+			@include prop-vw(min-height, 202, xl);
+			@include prop-vw(padding, 5, xl);
 			@include border-side(right, 1, solid, $color-border, xl);
 			@include border-side(bottom, 1, solid, $color-border, xl);
 			&.is-out {
@@ -190,9 +193,10 @@
 		}
 		&__daynum {
 			display: block;
-			@include prop-vw(font-size, 13, xl);
-			color: $color-dark-grey;
-			@include prop-vw(margin-bottom, 8, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.25;
+			color: #adb4c1;
+			@include prop-vw(margin-bottom, 20, xl);
 			.vcal__cell.is-out & {
 				color: $color-grey;
 			}
@@ -200,25 +204,23 @@
 		&__events {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(gap, 6, xl);
+			@include prop-vw(gap, 5, xl);
 		}
 		&__event {
 			display: flex;
 			align-items: center;
-			@include prop-vw(gap, 8, xl);
+			@include prop-vw(gap, 5, xl);
 			padding: 0;
 			background: transparent;
 			border: none;
 			text-align: left;
 			cursor: pointer;
-			@include prop-vw(font-size, 14, xl);
-			color: $color-black;
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			color: $color-dark-grey; // #737F8C
 			&.is-cancelled {
-				color: $color-dark-grey;
+				opacity: 0.5; // keep colours; only dim the block + strike the text
 				text-decoration: line-through;
-				.vcal__dot {
-					opacity: 0.35;
-				}
 			}
 			@media screen and (hover: hover) {
 				&:hover .vcal__event-name {
@@ -226,13 +228,16 @@
 				}
 			}
 		}
+		&__event-name {
+			transition: color $transition-default;
+		}
 		&__dot {
 			flex-shrink: 0;
-			@include prop-vw(width, 3, xl);
-			@include prop-vw(height, 14, xl);
-			border-radius: 2px;
+			@include prop-vw(width, 5, xl);
+			@include prop-vw(height, 12, xl);
+			@include prop-vw(border-radius, 14, xl);
 			background: $color-grey;
-				opacity: 0.55; // softened/pastel by default — calmer than full colour
+			opacity: 0.55; // softened/pastel by default — calmer than full colour
 		}
 		&__event--a .vcal__dot,
 		&__event--a.vcal__slot-event .vcal__dot {
@@ -248,19 +253,48 @@
 			background: $color-red;
 		}
 		&__add {
-			@include prop-vw(margin-top, 4, xl);
 			padding: 0;
-			width: fit-content;
-			@include prop-vw(font-size, 14, xl);
-			color: $color-blue;
 			background: transparent;
 			border: none;
+			color: $color-blue;
 			cursor: pointer;
 			opacity: 0;
 			transition: opacity $transition-default;
 			.vcal__cell:hover &,
 			.vcal__tcell:hover & {
 				opacity: 1;
+			}
+		}
+		// month cell: compact "+ Создать визит" as plain text (the + is a char)
+		&__cell &__add {
+			@include prop-vw(margin-top, 4, xl);
+			width: fit-content;
+			@include prop-vw(height, 30, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			font-weight: normal;
+		}
+		// day/week time cell: chip with a sprite plus, centred so it never
+		// changes the 60px row height (absolute → out of flow)
+		&__tcell &__add {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(gap, 5, xl);
+			@include prop-vw(width, 140, xl);
+			@include prop-vw(height, 50, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			background: #f3f6fc;
+			@include prop-vw(border-radius, 7, xl);
+			& > svg {
+				flex-shrink: 0;
+				@include prop-vw(width, 12, xl);
+				@include prop-vw(height, 12, xl);
 			}
 		}
 
@@ -337,6 +371,7 @@
 			}
 		}
 		&__tcell {
+			position: relative; // anchor for the absolutely-centred "+" add chip
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(gap, 6, xl);
@@ -395,6 +430,7 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			transition: color $transition-default; // smooth hover, like elsewhere
 			@include only(mobile) {
 				@include prop-vw(font-size, 12, sm);
 			}
@@ -408,9 +444,6 @@
 			@include only(mobile) {
 				@include prop-vw(font-size, 12, sm);
 			}
-		}
-		&__tcell .vcal__add {
-			margin-top: 0;
 		}
 
 		// month grid needs a min width so the 5-col grid never squishes on mobile
@@ -484,34 +517,33 @@
 				}
 			}
 
-			// month grid — readable, compact cells
-			&__weekdays {
-				@include prop-vw(margin-bottom, 8, sm);
-				span {
-					@include prop-vw(font-size, 13, sm);
-				}
+			// month grid — same look, sizes scaled for mobile (shorter cells)
+			&__weekdays span {
+				@include prop-vw(padding-top, 5, sm);
+				@include prop-vw(padding-inline, 10, sm);
+				@include prop-vw(font-size, 14, sm);
 			}
 			&__cell {
-				@include prop-vw(min-height, 108, sm);
-				@include prop-vw(padding, 8, sm);
+				@include prop-vw(min-height, 150, sm);
+				@include prop-vw(padding, 5, sm);
 			}
 			&__daynum {
-				@include prop-vw(font-size, 13, sm);
-				@include prop-vw(margin-bottom, 6, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(margin-bottom, 12, sm);
 			}
 			&__events {
-				@include prop-vw(gap, 6, sm);
+				@include prop-vw(gap, 5, sm);
 			}
 			&__event {
-				@include prop-vw(gap, 8, sm);
-				@include prop-vw(font-size, 13, sm);
+				@include prop-vw(gap, 5, sm);
+				@include prop-vw(font-size, 12, sm);
 			}
 			&__dot {
-				@include prop-vw(width, 3, sm);
-				@include prop-vw(height, 13, sm);
+				@include prop-vw(width, 5, sm);
+				@include prop-vw(height, 12, sm);
 			}
-			&__add {
-				@include prop-vw(font-size, 13, sm);
+			&__cell &__add {
+				@include prop-vw(font-size, 12, sm);
 			}
 
 			// (time-grid sm sizes are co-located in the time-grid section above)

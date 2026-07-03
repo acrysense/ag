@@ -165,7 +165,7 @@ export default async function VisitsCalendar(root) {
 							</button>`
 						)
 						.join('')
-					return `<div class="vcal__tcell">${inner || '<button type="button" class="vcal__add" data-visit-create>+ Создать визит</button>'}</div>`
+					return `<div class="vcal__tcell">${inner || '<button type="button" class="vcal__add" data-visit-create><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>'}</div>`
 				})
 				.join('')
 		}
