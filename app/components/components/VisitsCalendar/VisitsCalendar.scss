@@ -555,6 +555,10 @@
 				@include prop-vw(margin-inline, -10, sm);
 				@include prop-vw(padding-inline, 10, sm);
 			}
+			// day/week: grey time column flush to the left edge (no left gutter)
+			&__tgrid {
+				padding-left: 0;
+			}
 
 			// Day view fills the width (single column) — no horizontal scroll
 			&__body--day {
