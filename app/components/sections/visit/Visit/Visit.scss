@@ -5,13 +5,13 @@
 	// vertical rhythm between the left-column panels + the footer
 	.wrapper__left > .data-panel + .data-panel,
 	.wrapper__left > .data-panel + .visit__footer {
-		@include prop-vw(margin-top, 20, xl);
+		@include prop-vw(margin-top, 10, xl);
 		@include only(mobile) {
 			@include prop-vw(margin-top, 10, sm);
 		}
 	}
 	.wrapper__right > .data-panel + .data-panel {
-		@include prop-vw(margin-top, 20, xl);
+		@include prop-vw(margin-top, 10, xl);
 		@include only(mobile) {
 			@include prop-vw(margin-top, 10, sm);
 		}
@@ -448,21 +448,40 @@
 		align-items: center;
 		justify-content: space-between;
 		@include prop-vw(gap, 16, xl);
-		@include prop-vw(margin-top, 20, xl);
+		@include prop-vw(margin-top, 10, xl);
 		&-main {
 			display: flex;
-			@include prop-vw(gap, 12, xl);
+			@include prop-vw(gap, 20, xl);
 			@include only(mobile) {
 				flex-wrap: wrap;
 			}
-		}
-		.btn--ghost {
-			color: $color-dark-grey;
-			background: transparent;
+			.btn {
+				// height 46 via padding: line 14*1.571≈22 + 12*2 = 46
+				@include prop-vw(min-width, 122, xl);
+				@include prop-vw(padding-block, 12, xl);
+				@include prop-vw(font-size, 14, xl);
+				line-height: 1.57142857143;
+				font-weight: normal;
+				@include prop-vw(border-radius, 14, xl);
+			}
+			.btn.btn--secondary,
+			.btn.btn--ghost {
+				background: transparent;
+				color: $color-black;
+			}
+			.btn.btn--secondary {
+				@include prop-vw(min-width, 191, xl);
+			}
+			.btn.btn--ghost {
+				@include prop-vw(min-width, 101, xl);
+			}
 		}
 	}
 	.visit__delete {
+		align-self: flex-end;
+		padding: 0;
 		@include prop-vw(font-size, 14, xl);
+		line-height: 1.57142857143;
 		color: $color-dark-grey;
 		background: transparent;
 		border: none;
@@ -591,12 +610,20 @@
 
 	// ---- right sidebar: visits history ----
 	.visit-hist {
+		.data-panel__title {
+			@include prop-vw(margin-bottom, 40, xl);
+			@include prop-vw(font-size, 22, xl);
+			line-height: 1.09090909091;
+
+			@include only(mobile) {
+				@include prop-vw(margin-bottom, 40, sm);
+				@include prop-vw(font-size, 22, sm);
+			}
+		}
 		&__list {
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(margin-top, 16, xl);
-			@include prop-vw(max-height, 420, xl);
-			overflow-y: auto;
 		}
 		&__item {
 			position: relative;
