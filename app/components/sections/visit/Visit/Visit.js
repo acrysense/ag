@@ -23,7 +23,7 @@ const EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-q-edit-f
 	</div>
 	<div class="visit-q__edit-field">
 		<label class="visit-q__edit-label">Комментарий</label>
-		<textarea class="visit-q__edit-area" data-q-edit-comment data-autosize data-autosize-max-rows="8" placeholder="Комментарий">${escHtml(comment)}</textarea>
+		<textarea class="visit-q__edit-area" data-q-edit-comment data-autosize placeholder="Комментарий">${escHtml(comment)}</textarea>
 	</div>
 	<div class="visit-q__edit-actions">
 		<button type="submit" class="btn btn--sm">Сохранить</button>
