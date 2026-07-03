@@ -581,39 +581,56 @@
 		z-index: 200;
 		@include prop-vw(width, 360, xl);
 		max-width: calc(100vw - 24px);
-		@include prop-vw(padding, 12, xl);
+		@include prop-vw(padding, 15, xl);
 		display: flex;
 		flex-direction: column;
 		@include prop-vw(gap, 12, xl);
 		background: #f5f8fa;
-		@include prop-vw(border-radius, 16, xl);
-		box-shadow: 0 16px 50px rgba(0, 0, 0, 0.18);
+		@include prop-vw(border-radius, 20, xl);
+		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 
 		&__card {
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(gap, 8, xl);
-			@include prop-vw(padding, 16, xl);
+			@include prop-vw(padding, 10, xl);
 			background: $color-white;
 			@include prop-vw(border-radius, 12, xl);
-			box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+			box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 		}
 		&__who {
 			display: flex;
 			align-items: center;
-			@include prop-vw(gap, 10, xl);
+			@include prop-vw(gap, 5, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
+			font-weight: bold;
+			color: $color-black;
 			b {
-				@include prop-vw(font-size, 15, xl);
 				color: $color-black;
+			}
+			.data-table__cat {
+				@include prop-vw(width, 20, xl);
+				@include prop-vw(height, 20, xl);
+				@include prop-vw(border-radius, 5, xl);
+				@include prop-vw(font-size, 12, xl);
+				line-height: 1;
+				font-weight: 600;
 			}
 		}
 		&__when {
-			@include prop-vw(font-size, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 		}
 		&__muted {
-			@include prop-vw(font-size, 14, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
 			color: $color-dark-grey;
+			&--lg {
+				@include prop-vw(font-size, 14, xl);
+				line-height: 1.57142857143;
+			}
 		}
 		&__edit {
 			@include prop-vw(margin-top, 6, xl);
@@ -630,13 +647,15 @@
 		&__row {
 			display: flex;
 			align-items: center;
-			@include prop-vw(gap, 10, xl);
-			@include prop-vw(font-size, 15, xl);
+			@include prop-vw(gap, 5, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
+			font-weight: normal;
 			color: $color-black;
 			& > svg {
 				flex-shrink: 0;
-				@include prop-vw(width, 18, xl);
-				@include prop-vw(height, 18, xl);
+				@include prop-vw(width, 20, xl);
+				@include prop-vw(height, 20, xl);
 				color: $color-dark-grey;
 			}
 			b {

@@ -215,7 +215,7 @@ export default async function VisitsCalendar(root) {
 		popup?.remove()
 		popup = null
 	}
-	const ICON_MGR = '<svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6.5" r="3" stroke="currentColor" stroke-width="1.4"/><path d="M4.5 16c0-3 2.4-4.8 5.5-4.8S15.5 13 15.5 16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>'
+	const ICON_MGR = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-manager"></use></svg>'
 	const ICON_TYPE = '<svg viewBox="0 0 20 20" fill="none"><rect x="4.5" y="3.5" width="11" height="13" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M8 3.5h4M7 10l1.8 1.8L12.5 8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 	const ICON_CHECK = '<svg viewBox="0 0 16 16" fill="none"><path d="M4.5 8.5l2.3 2.3L11.5 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
@@ -235,9 +235,9 @@ export default async function VisitsCalendar(root) {
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
-			<div class="vcal-pop__row">${ICON_MGR}<b>${esc(ev.manager)}</b></div>
-			<div class="vcal-pop__muted">${esc(ev.managerPhone)}</div>
-			<div class="vcal-pop__muted">${esc(ev.managerEmail)}</div>
+			<div class="vcal-pop__row">${ICON_MGR}<span>${esc(ev.manager)}</span></div>
+			<div class="vcal-pop__muted vcal-pop__muted--lg">${esc(ev.managerPhone)}</div>
+			<div class="vcal-pop__muted vcal-pop__muted--lg">${esc(ev.managerEmail)}</div>
 		</div>`
 
 		const body = planned
