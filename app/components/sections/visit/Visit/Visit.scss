@@ -121,9 +121,12 @@
 			@include prop-vw(gap, 10, xl);
 		}
 		&__yn {
-			// height 24: line 10*1 + padding 7*2 = 24
+			// height 24: line 10*1 + padding 7*2 = 24; fixed widths per design
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
 			@include prop-vw(padding-block, 7, xl);
-			@include prop-vw(padding-inline, 16, xl);
+			padding-inline: 0;
 			@include prop-vw(font-size, 10, xl);
 			font-weight: 600;
 			line-height: 1;
@@ -131,6 +134,7 @@
 			@include prop-vw(border-radius, 7, xl);
 			cursor: pointer;
 			&--yes {
+				@include prop-vw(width, 39, xl);
 				color: $color-green;
 				background: #e8f5e9;
 				&.is-active {
@@ -139,6 +143,7 @@
 				}
 			}
 			&--no {
+				@include prop-vw(width, 35, xl);
 				color: $color-dark-grey;
 				background: rgba($color-red, 0.1);
 				&.is-active {
@@ -164,72 +169,77 @@
 		}
 	}
 
-	// ---- per-item actions menu ----
-	.visit-menu {
-		position: relative;
+	// ---- per-item actions menu (reuses the global .actions-menu dropdown) ----
+	.visit-q__menu {
 		flex-shrink: 0;
-		&__trigger {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			@include prop-vw(width, 28, xl);
-			@include prop-vw(height, 28, xl);
-			color: $color-dark-grey;
-			background: transparent;
-			border: none;
-			cursor: pointer;
+		align-self: flex-start;
+		// larger 46x46 trigger for the checklist rows (icon 24)
+		.actions-menu__trigger {
+			@include prop-vw(min-width, 46, xl);
+			@include prop-vw(width, 46, xl);
+			@include prop-vw(height, 46, xl);
 			& > svg {
-				@include prop-vw(width, 20, xl);
-				@include prop-vw(height, 20, xl);
+				@include prop-vw(min-width, 24, xl);
+				@include prop-vw(width, 24, xl);
+				@include prop-vw(height, 24, xl);
 			}
 		}
-		&__panel {
-			position: absolute;
-			top: 100%;
-			right: 0;
-			z-index: 20;
+	}
+	// three-dots reveal on row hover (pointer devices); an open menu stays shown
+	@media screen and (hover: hover) {
+		.visit-q__item {
+			.actions-menu__trigger {
+				opacity: 0;
+				transition: opacity $transition-default;
+			}
+			&:hover .actions-menu__trigger,
+			.actions-menu.is-open .actions-menu__trigger {
+				opacity: 1;
+			}
+		}
+	}
+
+	// ---- inline edit form (title + comment), opened from "Редактировать" ----
+	.visit-q__edit {
+		flex: 1 1 auto;
+		min-width: 0;
+		display: flex;
+		flex-direction: column;
+		@include prop-vw(gap, 12, xl);
+		&-field {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(width, 180, xl);
-			@include prop-vw(padding, 6, xl);
+			@include prop-vw(gap, 5, xl);
+		}
+		&-label {
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			color: $color-dark-grey;
+		}
+		&-input,
+		&-area {
+			display: block;
+			width: 100%;
+			@include prop-vw(padding-block, 10, xl);
+			@include prop-vw(padding-inline, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
+			color: $color-black;
 			background: $color-white;
 			@include border-all(1, solid, $color-border, xl);
-			@include prop-vw(border-radius, 12, xl);
-			box-shadow: 0 8px 30px rgba(0, 0, 0, 0.14);
-			&[hidden] {
-				display: none;
+			@include prop-vw(border-radius, 10, xl);
+			&:focus {
+				outline: none;
+				border-color: $color-blue;
 			}
 		}
-		&__item {
+		&-area {
+			resize: vertical;
+			@include prop-vw(min-height, 72, xl);
+		}
+		&-actions {
 			display: flex;
-			align-items: center;
 			@include prop-vw(gap, 10, xl);
-			@include prop-vw(padding-block, 9, xl);
-			@include prop-vw(padding-inline, 10, xl);
-			@include prop-vw(font-size, 14, xl);
-			color: $color-black;
-			background: transparent;
-			border: none;
-			@include prop-vw(border-radius, 8, xl);
-			text-align: left;
-			cursor: pointer;
-			& > svg {
-				flex-shrink: 0;
-				@include prop-vw(width, 18, xl);
-				@include prop-vw(height, 18, xl);
-				color: $color-dark-grey;
-			}
-			@media screen and (hover: hover) {
-				&:hover {
-					background: $color-bg;
-				}
-			}
-			&--danger {
-				color: $color-red;
-				& > svg {
-					color: $color-red;
-				}
-			}
 		}
 	}
 
