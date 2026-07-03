@@ -304,14 +304,14 @@
 		}
 		&__tgrid-inner {
 			display: grid;
-			grid-template-columns: #{vw-range(56, xl)} repeat(var(--days, 5), minmax(0, 1fr));
+			grid-template-columns: #{vw-range(66, xl)} repeat(var(--days, 5), minmax(0, 1fr));
 			overflow: hidden; // clip cells' trailing shadows → only internal grid lines, no outer frame
 
 			@include only(desktop) {
-				grid-template-columns: #{vw-range(56, lg)} repeat(var(--days, 5), minmax(0, 1fr));
+				grid-template-columns: #{vw-range(66, lg)} repeat(var(--days, 5), minmax(0, 1fr));
 			}
 			@include only(mobile) {
-				grid-template-columns: #{vw-range(48, sm)} repeat(var(--days, 5), minmax(0, 1fr));
+				grid-template-columns: #{vw-range(58, sm)} repeat(var(--days, 5), minmax(0, 1fr));
 				@include prop-vw(min-width, 640, sm);
 			}
 		}
@@ -320,11 +320,13 @@
 		&__hour {
 			display: flex;
 			align-items: center;
-			justify-content: center;
+			justify-content: flex-start; // time hugs the left edge
 			@include prop-vw(min-height, 60, xl);
+			@include prop-vw(padding-left, 10, xl);
 			background: #f5f8fa;
 			@include only(mobile) {
 				@include prop-vw(min-height, 60, sm);
+				@include prop-vw(padding-left, 10, sm);
 			}
 		}
 		&__hour {
@@ -567,7 +569,7 @@
 				}
 				.vcal__tgrid-inner {
 					min-width: 0;
-					grid-template-columns: #{vw-range(52, sm)} minmax(0, 1fr);
+					grid-template-columns: #{vw-range(62, sm)} minmax(0, 1fr);
 				}
 			}
 		}
