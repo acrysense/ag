@@ -114,6 +114,7 @@
 		&__toggle {
 			flex-shrink: 0;
 			display: flex;
+			@include prop-vw(margin-top, 10, xl);
 			@include prop-vw(gap, 10, xl);
 		}
 		&__yn {
@@ -152,6 +153,7 @@
 		&__body {
 			flex: 1 1 auto;
 			min-width: 0;
+			@include prop-vw(margin-top, 10, xl);
 		}
 		&__name {
 			@include prop-vw(font-size, 14, xl);
