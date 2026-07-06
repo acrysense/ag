@@ -22,12 +22,19 @@
 				@include prop-vw(border-radius, 10, lg);
 			}
 			@include only(mobile) {
+				// fill the row (minus 10px gutters) so both edges sit 10px in —
+				// tabs flex to share the width, never sticking to the screen edges
+				width: auto;
 				@include prop-vw(height, 40, sm);
 				@include prop-vw(padding, 2, sm);
 				@include prop-vw(margin-bottom, 10, sm);
-				// 10px breathing room from the screen edges (was sticking to them)
 				@include prop-vw(margin-inline, 10, sm);
 				@include prop-vw(border-radius, 10, sm);
+			}
+		}
+		.tabs__item {
+			@include only(mobile) {
+				flex: 1 1 auto; // grow from content width to fill the row (no clipping)
 			}
 		}
 		.tabs__tab {
@@ -54,6 +61,7 @@
 				@include prop-vw(border-radius, 10, lg);
 			}
 			@include only(mobile) {
+				width: 100%;
 				@include prop-vw(height, 36, sm);
 				@include prop-vw(padding-inline, 10, sm);
 				@include prop-vw(font-size, 14, sm);
