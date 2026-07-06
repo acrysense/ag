@@ -21,14 +21,16 @@ export default (root) => {
 			} catch {}
 		}
 	}
-	// apply the stored state on load without playing the transition
+	// On load, suppress every sidebar transition for the first frames so nothing
+	// animates/flies in — the sidebar should just appear, like the rest of the
+	// page. This also applies the stored collapsed state without playing it.
+	root.classList.add('no-collapse-anim')
 	try {
-		if (localStorage.getItem(COLLAPSE_KEY) === '1') {
-			root.classList.add('no-collapse-anim')
-			setCollapsed(true, false)
-			requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('no-collapse-anim')))
-		}
+		if (localStorage.getItem(COLLAPSE_KEY) === '1') setCollapsed(true, false)
 	} catch {}
+	const clearNoAnim = () => root.classList.remove('no-collapse-anim')
+	requestAnimationFrame(() => requestAnimationFrame(clearNoAnim))
+	setTimeout(clearNoAnim, 100) // fallback: rAF is paused in background tabs
 	const onCollapseClick = (e) => {
 		e.preventDefault()
 		setCollapsed(!root.classList.contains('is-collapsed'))
