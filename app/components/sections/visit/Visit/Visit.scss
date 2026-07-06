@@ -566,16 +566,15 @@
 		}
 	}
 	.visit-geo {
-		// no top divider/padding; a 2px divider closes the block instead
-		@include border-side(bottom, 2, solid, $color-border, xl);
-		@include prop-vw(padding-bottom, 10, xl);
-		@include prop-vw(margin-bottom, 10, xl);
+		// no top divider/padding; the divider sits under the title instead
 		&__title {
 			@include prop-vw(font-size, 16, xl);
 			font-weight: bold;
 			line-height: 1.1875;
 			color: $color-black;
-			@include prop-vw(margin-bottom, 16, xl);
+			@include prop-vw(padding-bottom, 10, xl);
+			@include prop-vw(margin-bottom, 10, xl);
+			@include border-side(bottom, 2, solid, $color-border, xl);
 		}
 		&__rows {
 			display: flex;
