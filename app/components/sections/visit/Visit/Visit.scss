@@ -351,6 +351,7 @@
 			text-align: left;
 			vertical-align: bottom;
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			font-weight: normal;
 			color: $color-dark-grey;
 			@include only(mobile) {
@@ -361,6 +362,7 @@
 			span {
 				display: block;
 				@include prop-vw(font-size, 12, xl);
+				line-height: 1.25;
 				@include only(mobile) {
 					@include prop-vw(font-size, 12, sm);
 				}
@@ -369,9 +371,10 @@
 				text-align: center;
 			}
 			&--sub {
-				@include prop-vw(font-size, 13, xl);
+				@include prop-vw(font-size, 12, xl);
+				line-height: 1.25;
 				@include only(mobile) {
-					@include prop-vw(font-size, 13, sm);
+					@include prop-vw(font-size, 12, sm);
 				}
 			}
 			&--idx {
@@ -388,15 +391,16 @@
 			@include border-side(top, 1, solid, $color-border, xl);
 		}
 		&__td {
-			@include prop-vw(padding-block, 12, xl);
+			@include prop-vw(padding-block, 10, xl);
 			@include prop-vw(padding-right, 16, xl);
 			vertical-align: middle;
-			@include prop-vw(font-size, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 			@include only(mobile) {
-				@include prop-vw(padding-block, 12, sm);
+				@include prop-vw(padding-block, 10, sm);
 				@include prop-vw(padding-right, 16, sm);
-				@include prop-vw(font-size, 15, sm);
+				@include prop-vw(font-size, 14, sm);
 			}
 			&--idx {
 				color: $color-dark-grey;
@@ -416,20 +420,21 @@
 			}
 		}
 		&__input {
-			@include prop-vw(width, 70, xl);
-			@include prop-vw(padding-block, 9, xl);
-			@include prop-vw(padding-inline, 12, xl);
-			@include prop-vw(font-size, 15, xl);
+			@include prop-vw(width, 64, xl);
+			@include prop-vw(padding-block, 8, xl);
+			@include prop-vw(padding-inline, 10, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 			background: $color-white;
 			@include border-all(1, solid, $color-border, xl);
-			@include prop-vw(border-radius, 10, xl);
+			@include prop-vw(border-radius, 8, xl);
 			@include only(mobile) {
-				@include prop-vw(width, 70, sm);
-				@include prop-vw(padding-block, 9, sm);
-				@include prop-vw(padding-inline, 12, sm);
-				@include prop-vw(font-size, 15, sm);
-				@include prop-vw(border-radius, 10, sm);
+				@include prop-vw(width, 64, sm);
+				@include prop-vw(padding-block, 8, sm);
+				@include prop-vw(padding-inline, 10, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(border-radius, 8, sm);
 			}
 			&:focus {
 				outline: none;
@@ -495,7 +500,7 @@
 			}
 		}
 		&__value {
-			@include prop-vw(font-size, 34, xl);
+			@include prop-vw(font-size, 30, xl);
 			font-weight: bold;
 			color: $color-red;
 			.visit-score__box--norm & {
@@ -522,7 +527,8 @@
 			@include prop-vw(row-gap, 8, xl);
 		}
 		&__range {
-			@include prop-vw(font-size, 13, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
 			color: $color-dark-grey;
 			b {
 				display: block;
@@ -543,8 +549,8 @@
 			width: 100%;
 			min-height: vw-range(120, xl);
 			@include prop-vw(padding, 16, xl);
-			@include prop-vw(font-size, 15, xl);
-			line-height: 1.5;
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-black;
 			resize: none;
 			overflow: hidden;
@@ -560,8 +566,9 @@
 		@include border-side(top, 1, solid, $color-border, xl);
 		@include prop-vw(padding-top, 24, xl);
 		&__title {
-			@include prop-vw(font-size, 17, xl);
+			@include prop-vw(font-size, 16, xl);
 			font-weight: bold;
+			line-height: 1.1875;
 			color: $color-black;
 			@include prop-vw(margin-bottom, 16, xl);
 		}
@@ -589,6 +596,11 @@
 			}
 		}
 		&__btn.btn {
+			// house button sizing (matches the footer buttons), not the big base
+			@include prop-vw(padding-block, 12, xl);
+			@include prop-vw(padding-inline, 26, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-white;
 			background: $color-black;
 			@media screen and (hover: hover) {
