@@ -462,9 +462,10 @@
 	// ---- result: score + comment + geolocation ----
 	.visit-result__grid {
 		display: grid;
-		grid-template-columns: minmax(0, 3fr) minmax(0, 4fr);
-		@include prop-vw(gap, 24, xl);
-		@include prop-vw(margin-bottom, 28, xl);
+		// 3:7 ratio → 300 / 700 at the 1920 base (fluid, so it scales down cleanly)
+		grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+		@include prop-vw(gap, 40, xl);
+		@include prop-vw(margin-bottom, 40, xl);
 		@include only(mobile) {
 			grid-template-columns: 1fr;
 			@include prop-vw(gap, 16, sm);
@@ -476,19 +477,20 @@
 			display: block;
 		}
 		&__label {
-			@include prop-vw(margin-bottom, 12, xl);
+			@include prop-vw(margin-bottom, 5, xl);
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 			color: $color-dark-grey;
 		}
 		&__box {
+			// total height ≈ 88: padding 10*2 + value(30*1.2=36) + gap 10 + date(14*1.571=22)
 			display: flex;
 			flex-direction: column;
 			align-items: flex-start;
-			justify-content: space-between;
-			@include prop-vw(min-height, 120, xl);
-			@include prop-vw(padding, 20, xl);
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(padding, 10, xl);
 			@include prop-vw(border-radius, 14, xl);
-			@include prop-vw(margin-bottom, 16, xl);
+			@include prop-vw(margin-bottom, 20, xl);
 			&--bad {
 				background: rgba($color-red, 0.1);
 			}
@@ -502,6 +504,7 @@
 		&__value {
 			@include prop-vw(font-size, 30, xl);
 			font-weight: bold;
+			line-height: 1.2;
 			color: $color-red;
 			.visit-score__box--norm & {
 				color: #a07a00;
@@ -512,28 +515,26 @@
 		}
 		&__date {
 			@include prop-vw(font-size, 14, xl);
-			color: $color-red;
-			.visit-score__box--norm & {
-				color: #a07a00;
-			}
-			.visit-score__box--good & {
-				color: $color-green;
-			}
+			line-height: 1.57142857143;
+			color: $color-dark-grey; // always #737F8C, independent of the score
 		}
 		&__scale {
 			display: flex;
 			flex-wrap: wrap;
-			@include prop-vw(column-gap, 24, xl);
-			@include prop-vw(row-gap, 8, xl);
+			@include prop-vw(gap, 10, xl);
 		}
 		&__range {
+			@include prop-vw(width, 70, xl);
 			@include prop-vw(font-size, 12, xl);
 			line-height: 1.25;
-			color: $color-dark-grey;
+			font-weight: normal;
 			b {
 				display: block;
-				color: $color-black;
-				font-weight: 600;
+				color: $color-dark-grey; // label — grey #737F8C
+				font-weight: normal;
+			}
+			span {
+				color: $color-black; // number — black
 			}
 		}
 	}
