@@ -164,10 +164,12 @@
 			display: grid;
 			grid-template-columns: repeat(5, minmax(0, 1fr));
 		}
-		// month weekday header — styled like the week/day column headers
+		// month weekday header — 60px tall plate, text centred vertically
 		&__weekdays {
+			align-items: center;
+			@include prop-vw(min-height, 60, xl);
+			@include prop-vw(margin-bottom, 5, xl);
 			span {
-				@include prop-vw(padding-top, 5, xl);
 				@include prop-vw(padding-inline, 10, xl);
 				@include prop-vw(font-size, 14, xl);
 				line-height: 1.57142857143;
@@ -176,8 +178,9 @@
 			}
 		}
 		&__row {
-			// only horizontal separators between weeks — no vertical borders
+			// horizontal separator + 5px gap between weeks — no vertical borders
 			& + & {
+				@include prop-vw(margin-top, 5, xl);
 				@include border-side(top, 1, solid, $color-border, xl);
 			}
 		}
