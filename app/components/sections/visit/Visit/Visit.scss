@@ -136,12 +136,12 @@
 			position: relative;
 			display: flex;
 			align-items: flex-start;
-			@include prop-vw(gap, 16, xl);
+			// asymmetric spacing: 16 to the title (toggle margin), less to the
+			// 3-dots menu (menu margin) so the body is a touch wider
 			@include prop-vw(padding-top, 10, xl);
 			@include prop-vw(padding-bottom, 5, xl);
 			@include prop-vw(padding-left, 5, xl);
 			@include only(mobile) {
-				@include prop-vw(gap, 16, sm);
 				@include prop-vw(padding-top, 10, sm);
 				@include prop-vw(padding-bottom, 5, sm);
 				@include prop-vw(padding-left, 5, sm);
@@ -167,9 +167,11 @@
 			flex-shrink: 0;
 			display: flex;
 			@include prop-vw(margin-top, 10, xl);
+			@include prop-vw(margin-right, 16, xl);
 			@include prop-vw(gap, 10, xl);
 			@include only(mobile) {
 				@include prop-vw(margin-top, 10, sm);
+				@include prop-vw(margin-right, 16, sm);
 				@include prop-vw(gap, 10, sm);
 			}
 		}
@@ -255,6 +257,10 @@
 	.visit-q__menu {
 		flex-shrink: 0;
 		align-self: flex-start;
+		@include prop-vw(margin-left, 8, xl); // smaller gap than toggle→body
+		@include only(mobile) {
+			@include prop-vw(margin-left, 8, sm);
+		}
 		// larger 46x46 trigger for the checklist rows (icon 24)
 		.actions-menu__trigger {
 			@include prop-vw(min-width, 46, xl);
@@ -696,11 +702,21 @@
 		justify-content: space-between;
 		@include prop-vw(gap, 16, xl);
 		@include prop-vw(margin-top, 10, xl);
+		// mobile: stack the button group + delete; buttons go full width, inset
+		// 10px to line up with the panels' content (which have padding-inline 10)
+		@include only(mobile) {
+			flex-direction: column;
+			align-items: stretch;
+			@include prop-vw(gap, 10, sm);
+			@include prop-vw(margin-top, 10, sm);
+			@include prop-vw(padding-inline, 10, sm);
+		}
 		&-main {
 			display: flex;
 			@include prop-vw(gap, 20, xl);
 			@include only(mobile) {
-				flex-wrap: wrap;
+				flex-direction: column;
+				@include prop-vw(gap, 10, sm);
 			}
 			.btn {
 				// height 46 via padding: line 14*1.571≈22 + 12*2 = 46
@@ -710,6 +726,12 @@
 				line-height: 1.57142857143;
 				font-weight: normal;
 				@include prop-vw(border-radius, 14, xl);
+				@include only(mobile) {
+					width: 100%;
+					@include prop-vw(padding-block, 12, sm);
+					@include prop-vw(font-size, 14, sm);
+					@include prop-vw(border-radius, 14, sm);
+				}
 			}
 			.btn.btn--secondary,
 			.btn.btn--ghost {
@@ -734,6 +756,9 @@
 		border: none;
 		cursor: pointer;
 		transition: color $transition-default;
+		@include only(mobile) {
+			@include prop-vw(font-size, 14, sm);
+		}
 		@media screen and (hover: hover) {
 			&:hover {
 				color: $color-red;
@@ -741,12 +766,12 @@
 		}
 	}
 
-	// right-column panels: on mobile .data-panel zeroes padding-top, so restore
-	// a top padding equal to the bottom so content doesn't hug the panel edge
-	// (compound selector to beat the global .data-panel padding-top: 0)
+	// panels whose top padding must match the bottom on mobile (global .data-panel
+	// zeroes padding-top there). Compound selector beats the global padding-top: 0.
 	.data-panel.visit-emp,
 	.data-panel.visit-meta,
-	.data-panel.visit-hist {
+	.data-panel.visit-hist,
+	.data-panel.visit-result {
 		@include only(mobile) {
 			@include prop-vw(padding-top, 20, sm);
 		}
