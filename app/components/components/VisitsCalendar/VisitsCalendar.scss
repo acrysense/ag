@@ -164,13 +164,15 @@
 			display: grid;
 			grid-template-columns: repeat(5, minmax(0, 1fr));
 		}
-		// month weekday header — 60px tall plate, text centred vertically
+		// month weekday header — tall plate, text centred vertically, no side padding
 		&__weekdays {
 			align-items: center;
 			@include prop-vw(min-height, 60, xl);
 			@include prop-vw(margin-bottom, 5, xl);
+			@include only(mobile) {
+				@include prop-vw(min-height, 40, sm);
+			}
 			span {
-				@include prop-vw(padding-inline, 10, xl);
 				@include prop-vw(font-size, 14, xl);
 				line-height: 1.57142857143;
 				font-weight: normal;
@@ -533,8 +535,6 @@
 
 			// month grid — same look, sizes scaled for mobile (shorter cells)
 			&__weekdays span {
-				@include prop-vw(padding-top, 5, sm);
-				@include prop-vw(padding-inline, 10, sm);
 				@include prop-vw(font-size, 14, sm);
 			}
 			&__cell {
