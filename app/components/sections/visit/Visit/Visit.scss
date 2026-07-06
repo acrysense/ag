@@ -566,8 +566,10 @@
 		}
 	}
 	.visit-geo {
-		@include border-side(top, 1, solid, $color-border, xl);
-		@include prop-vw(padding-top, 24, xl);
+		// no top divider/padding; a 2px divider closes the block instead
+		@include border-side(bottom, 2, solid, $color-border, xl);
+		@include prop-vw(padding-bottom, 10, xl);
+		@include prop-vw(margin-bottom, 10, xl);
 		&__title {
 			@include prop-vw(font-size, 16, xl);
 			font-weight: bold;
@@ -578,13 +580,14 @@
 		&__rows {
 			display: flex;
 			flex-direction: column;
-			@include prop-vw(gap, 12, xl);
-			@include prop-vw(margin-bottom, 20, xl);
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(margin-bottom, 10, xl);
 		}
 		&__row {
 			display: flex;
-			@include prop-vw(gap, 8, xl);
+			@include prop-vw(gap, 10, xl);
 			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
 		}
 		&__label {
 			flex-shrink: 0;
@@ -599,11 +602,17 @@
 			}
 		}
 		&__btn.btn {
-			// house button sizing (matches the footer buttons), not the big base
+			// 46 tall via padding (12*2 + 22 line), 202 wide via min-width — no fixed h/w
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(min-width, 202, xl);
 			@include prop-vw(padding-block, 12, xl);
-			@include prop-vw(padding-inline, 26, xl);
+			@include prop-vw(padding-inline, 20, xl);
 			@include prop-vw(font-size, 14, xl);
+			font-weight: normal;
 			line-height: 1.57142857143;
+			@include prop-vw(border-radius, 14, xl);
 			color: $color-white;
 			background: $color-black;
 			@media screen and (hover: hover) {
@@ -613,8 +622,9 @@
 			}
 		}
 		&__error {
-			@include prop-vw(margin-top, 12, xl);
-			@include prop-vw(font-size, 14, xl);
+			@include prop-vw(margin-top, 10, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
 			color: $color-red;
 			&[hidden] {
 				display: none;
