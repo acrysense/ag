@@ -5,6 +5,7 @@
 		<script type="module" src="/app.js"></script>
 	</head>
 	<body>
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		{{> sections/shared/Auth/Auth auth=(obj recovery=true) }}
 	</body>
 </html>

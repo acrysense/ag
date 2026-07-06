@@ -4,6 +4,17 @@
 
 <title>{{head.title}}</title>
 
+<!-- initial-load overlay: critical inline styles so it shows before the bundle
+     loads and hides the FOUC (sprite injection / style application) -->
+<style>
+    .app-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:#f5f8fa;transition:opacity .4s ease,visibility 0s linear .4s}
+    .app-loader.is-hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .app-loader__spinner{width:44px;height:44px;border-radius:50%;border:3px solid #dfe7f1;border-top-color:#0081ff;animation:app-loader-spin .7s linear infinite}
+    @keyframes app-loader-spin{to{transform:rotate(360deg)}}
+    @media (prefers-reduced-motion:reduce){.app-loader__spinner{animation-duration:1.6s}}
+</style>
+<script>window.addEventListener("load",function(){var l=document.querySelector("[data-app-loader]");if(l){l.classList.add("is-hidden");setTimeout(function(){l.parentNode&&l.remove()},500)}})</script>
+
 <meta name="description" content="{{or head.description site.seoDefaults.description 'Описание сайта'}}" />
 
 {{#each meta}}
