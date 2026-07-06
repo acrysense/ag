@@ -274,18 +274,32 @@
 			@include prop-vw(font-size, 14, xl);
 			font-weight: normal;
 			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(padding-block, 10, sm);
+				@include prop-vw(padding-right, 16, sm);
+				@include prop-vw(font-size, 14, sm);
+			}
 			span {
 				display: block;
 				@include prop-vw(font-size, 12, xl);
+				@include only(mobile) {
+					@include prop-vw(font-size, 12, sm);
+				}
 			}
 			&--group {
 				text-align: center;
 			}
 			&--sub {
 				@include prop-vw(font-size, 13, xl);
+				@include only(mobile) {
+					@include prop-vw(font-size, 13, sm);
+				}
 			}
 			&--idx {
 				@include prop-vw(width, 28, xl);
+				@include only(mobile) {
+					@include prop-vw(width, 28, sm);
+				}
 			}
 			&--pct {
 				text-align: right;
@@ -300,11 +314,19 @@
 			vertical-align: middle;
 			@include prop-vw(font-size, 15, xl);
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(padding-block, 12, sm);
+				@include prop-vw(padding-right, 16, sm);
+				@include prop-vw(font-size, 15, sm);
+			}
 			&--idx {
 				color: $color-dark-grey;
 			}
 			&--crit {
 				@include prop-vw(min-width, 240, xl);
+				@include only(mobile) {
+					@include prop-vw(min-width, 240, sm);
+				}
 			}
 			&--pct {
 				text-align: right;
@@ -323,6 +345,13 @@
 			background: $color-white;
 			@include border-all(1, solid, $color-border, xl);
 			@include prop-vw(border-radius, 10, xl);
+			@include only(mobile) {
+				@include prop-vw(width, 70, sm);
+				@include prop-vw(padding-block, 9, sm);
+				@include prop-vw(padding-inline, 12, sm);
+				@include prop-vw(font-size, 15, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
 			&:focus {
 				outline: none;
 				border-color: $color-form-focus;
@@ -332,9 +361,16 @@
 			display: inline-flex;
 			@include prop-vw(margin-left, 12, xl);
 			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(margin-left, 12, sm);
+			}
 			& > svg {
 				@include prop-vw(width, 18, xl);
 				@include prop-vw(height, 18, xl);
+				@include only(mobile) {
+					@include prop-vw(width, 18, sm);
+					@include prop-vw(height, 18, sm);
+				}
 			}
 		}
 	}
@@ -559,6 +595,10 @@
 			align-items: flex-start;
 			@include prop-vw(gap, 10, xl);
 			@include prop-vw(margin-bottom, 10, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(margin-bottom, 10, sm);
+			}
 		}
 		&__info {
 			display: flex;
@@ -567,6 +607,10 @@
 			@include prop-vw(min-height, 85, xl); // at least the avatar height; grows if the name wraps
 			@include prop-vw(padding-bottom, 5, xl);
 			@include border-side(bottom, 1, solid, $color-border, xl);
+			@include only(mobile) {
+				@include prop-vw(min-height, 85, sm);
+				@include prop-vw(padding-bottom, 5, sm);
+			}
 		}
 		&__avatar {
 			flex-shrink: 0;
@@ -574,6 +618,11 @@
 			@include prop-vw(height, 85, xl);
 			@include prop-vw(border-radius, 10, xl);
 			overflow: hidden;
+			@include only(mobile) {
+				@include prop-vw(width, 85, sm);
+				@include prop-vw(height, 85, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
 			img {
 				width: 100%;
 				height: 100%;
@@ -585,6 +634,9 @@
 			line-height: 1.1875;
 			font-weight: bold;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 16, sm);
+			}
 		}
 		&__rating {
 			display: flex;
@@ -595,6 +647,11 @@
 			line-height: 1.57142857143;
 			font-weight: normal;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(margin-top, 8, sm);
+				@include prop-vw(font-size, 14, sm);
+			}
 			.data-table__cat {
 				@include prop-vw(width, 24, xl);
 				@include prop-vw(height, 24, xl);
@@ -602,6 +659,12 @@
 				@include prop-vw(font-size, 12, xl);
 				line-height: 1;
 				font-weight: 600;
+				@include only(mobile) {
+					@include prop-vw(width, 24, sm);
+					@include prop-vw(height, 24, sm);
+					@include prop-vw(border-radius, 7, sm);
+					@include prop-vw(font-size, 12, sm);
+				}
 			}
 		}
 		&__rating-date {
@@ -611,6 +674,9 @@
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(gap, 10, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+			}
 		}
 		&__row {
 			display: flex;
@@ -619,6 +685,10 @@
 			line-height: 1.57142857143;
 			font-weight: normal;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 		&__label {
 			flex-shrink: 0;
@@ -639,6 +709,9 @@
 	.visit-meta {
 		&__block + &__block {
 			@include prop-vw(margin-top, 20, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-top, 20, sm);
+			}
 		}
 		&__label {
 			display: block;
@@ -646,16 +719,26 @@
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(margin-bottom, 8, sm);
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 		&__value {
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 		&__text {
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 	}
 
@@ -667,7 +750,7 @@
 			line-height: 1.09090909091;
 
 			@include only(mobile) {
-				@include prop-vw(margin-bottom, 40, sm);
+				@include prop-vw(margin-bottom, 20, sm);
 				@include prop-vw(font-size, 22, sm);
 			}
 		}
@@ -675,6 +758,9 @@
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(margin-top, 16, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-top, 16, sm);
+			}
 		}
 		&__item {
 			position: relative;
@@ -682,6 +768,10 @@
 			align-items: center;
 			@include prop-vw(gap, 12, xl);
 			@include prop-vw(padding-bottom, 21, xl); // spacing between items (last one included)
+			@include only(mobile) {
+				@include prop-vw(gap, 12, sm);
+				@include prop-vw(padding-bottom, 21, sm);
+			}
 			// divider inset past the score chip, sitting 10px above the item's bottom
 			&::before {
 				content: '';
@@ -691,6 +781,10 @@
 				bottom: #{vw-range(10, xl)};
 				height: 1px;
 				background: $color-border;
+				@include only(mobile) {
+					left: #{vw-range(70, sm)};
+					bottom: #{vw-range(10, sm)};
+				}
 			}
 		}
 		&__score {
@@ -705,6 +799,13 @@
 			line-height: 1;
 			font-weight: normal;
 			@include prop-vw(border-radius, 7, xl);
+			@include only(mobile) {
+				@include prop-vw(min-width, 60, sm);
+				@include prop-vw(padding-block, 6, sm);
+				@include prop-vw(padding-inline, 6, sm);
+				@include prop-vw(font-size, 12, sm);
+				@include prop-vw(border-radius, 7, sm);
+			}
 			&--green {
 				color: $color-green;
 				background: #e8f5e9;
@@ -722,6 +823,9 @@
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 		&__type {
 			color: $color-dark-grey;
