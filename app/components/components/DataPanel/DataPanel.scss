@@ -36,6 +36,10 @@
                 @include prop-vw(height, 10, sm);
                 background: #F5F8FA;
             }
+            // no separator strip above the first panel (right after the "Назад" link)
+            .wrapper__back + &::before {
+                content: none;
+            }
         }
 
         &__header {

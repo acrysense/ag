@@ -21,12 +21,18 @@
 	.visit {
 		&__head {
 			@include prop-vw(margin-bottom, 40, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-bottom, 20, sm);
+			}
 		}
 		&__title {
 			@include prop-vw(font-size, 26, xl);
 			font-weight: bold;
 			line-height: 1.07692307692;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 22, sm);
+			}
 		}
 		&__date {
 			display: block;
@@ -34,6 +40,10 @@
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(margin-top, 10, sm);
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 	}
 
@@ -41,6 +51,9 @@
 	.visit-sec {
 		& + & {
 			@include prop-vw(margin-top, 24, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-top, 24, sm);
+			}
 		}
 		&__head {
 			display: flex;
@@ -50,12 +63,20 @@
 			@include prop-vw(padding-bottom, 10, xl);
 			@include prop-vw(margin-bottom, 10, xl);
 			@include border-side(bottom, 2, solid, $color-border, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 12, sm);
+				@include prop-vw(padding-bottom, 10, sm);
+				@include prop-vw(margin-bottom, 10, sm);
+			}
 		}
 		&__title {
 			@include prop-vw(font-size, 16, xl);
 			font-weight: bold;
 			line-height: 1.1875;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 16, sm);
+			}
 		}
 		&__toggle {
 			flex-shrink: 0;
@@ -70,9 +91,17 @@
 			border-radius: 50%;
 			cursor: pointer;
 			transition: transform $transition-default;
+			@include only(mobile) {
+				@include prop-vw(width, 24, sm);
+				@include prop-vw(height, 24, sm);
+			}
 			& > svg {
 				@include prop-vw(width, 12, xl);
 				@include prop-vw(height, 12, xl);
+				@include only(mobile) {
+					@include prop-vw(width, 12, sm);
+					@include prop-vw(height, 12, sm);
+				}
 			}
 		}
 		// smooth collapse via animated grid rows (1fr <-> 0fr)
@@ -111,6 +140,12 @@
 			@include prop-vw(padding-top, 10, xl);
 			@include prop-vw(padding-bottom, 5, xl);
 			@include prop-vw(padding-left, 5, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 16, sm);
+				@include prop-vw(padding-top, 10, sm);
+				@include prop-vw(padding-bottom, 5, sm);
+				@include prop-vw(padding-left, 5, sm);
+			}
 			// bottom divider, offset 92 from the left so it starts under the body
 			&::before {
 				content: '';
@@ -120,6 +155,9 @@
 				bottom: 0;
 				height: 1px;
 				background: $color-border;
+				@include only(mobile) {
+					left: #{vw-range(92, sm)};
+				}
 			}
 			&:last-child::before {
 				content: none;
@@ -130,6 +168,10 @@
 			display: flex;
 			@include prop-vw(margin-top, 10, xl);
 			@include prop-vw(gap, 10, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-top, 10, sm);
+				@include prop-vw(gap, 10, sm);
+			}
 		}
 		&__yn {
 			// height 24: line 10*1 + padding 7*2 = 24; fixed widths per design
@@ -144,10 +186,18 @@
 			border: none;
 			@include prop-vw(border-radius, 7, xl);
 			cursor: pointer;
+			@include only(mobile) {
+				@include prop-vw(padding-block, 7, sm);
+				@include prop-vw(font-size, 10, sm);
+				@include prop-vw(border-radius, 7, sm);
+			}
 			&--yes {
 				@include prop-vw(width, 39, xl);
 				color: $color-green;
 				background: #e8f5e9;
+				@include only(mobile) {
+					@include prop-vw(width, 39, sm);
+				}
 				&.is-active {
 					color: $color-white;
 					background: $color-green;
@@ -158,6 +208,9 @@
 				font-weight: normal;
 				color: #BC4141;
 				background: rgba($color-red, 0.1);
+				@include only(mobile) {
+					@include prop-vw(width, 35, sm);
+				}
 				&.is-active {
 					color: $color-white;
 					background: $color-red;
@@ -168,17 +221,27 @@
 			flex: 1 1 auto;
 			min-width: 0;
 			@include prop-vw(margin-top, 10, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-top, 10, sm);
+			}
 		}
 		&__name {
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-black;
+			@include only(mobile) {
+				@include prop-vw(font-size, 14, sm);
+			}
 		}
 		&__desc {
 			@include prop-vw(margin-top, 5, xl);
 			@include prop-vw(font-size, 12, xl);
 			line-height: 1.25;
 			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(margin-top, 5, sm);
+				@include prop-vw(font-size, 12, sm);
+			}
 		}
 	}
 
@@ -191,10 +254,20 @@
 			@include prop-vw(min-width, 46, xl);
 			@include prop-vw(width, 46, xl);
 			@include prop-vw(height, 46, xl);
+			@include only(mobile) {
+				@include prop-vw(min-width, 46, sm);
+				@include prop-vw(width, 46, sm);
+				@include prop-vw(height, 46, sm);
+			}
 			& > svg {
 				@include prop-vw(min-width, 24, xl);
 				@include prop-vw(width, 24, xl);
 				@include prop-vw(height, 24, xl);
+				@include only(mobile) {
+					@include prop-vw(min-width, 24, sm);
+					@include prop-vw(width, 24, sm);
+					@include prop-vw(height, 24, sm);
+				}
 			}
 		}
 	}
@@ -577,6 +650,17 @@
 			&:hover {
 				color: $color-red;
 			}
+		}
+	}
+
+	// right-column panels: on mobile .data-panel zeroes padding-top, so restore
+	// a top padding equal to the bottom so content doesn't hug the panel edge
+	// (compound selector to beat the global .data-panel padding-top: 0)
+	.data-panel.visit-emp,
+	.data-panel.visit-meta,
+	.data-panel.visit-hist {
+		@include only(mobile) {
+			@include prop-vw(padding-top, 20, sm);
 		}
 	}
 
