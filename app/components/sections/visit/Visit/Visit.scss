@@ -524,7 +524,9 @@
 			@include prop-vw(gap, 10, xl);
 		}
 		&__range {
-			@include prop-vw(width, 70, xl);
+			// 65px so all four fit one row inside the 300px score column
+			// (4*65 + 3*10 gap = 290 < 300)
+			@include prop-vw(width, 65, xl);
 			@include prop-vw(font-size, 12, xl);
 			line-height: 1.25;
 			font-weight: normal;
