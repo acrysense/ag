@@ -25,6 +25,8 @@
 				@include prop-vw(height, 40, sm);
 				@include prop-vw(padding, 2, sm);
 				@include prop-vw(margin-bottom, 10, sm);
+				// 10px breathing room from the screen edges (was sticking to them)
+				@include prop-vw(margin-inline, 10, sm);
 				@include prop-vw(border-radius, 10, sm);
 			}
 		}
@@ -53,7 +55,7 @@
 			}
 			@include only(mobile) {
 				@include prop-vw(height, 36, sm);
-				@include prop-vw(padding-inline, 15, sm);
+				@include prop-vw(padding-inline, 10, sm);
 				@include prop-vw(font-size, 14, sm);
 				@include prop-vw(border-radius, 10, sm);
 			}
