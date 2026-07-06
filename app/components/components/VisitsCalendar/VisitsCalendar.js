@@ -3,6 +3,10 @@
 // from the anchor month so it renders without a backend. Replace `eventsForDay`
 // (or feed real data via a [data-calendar-data] JSON blob) for live data.
 
+// base-aware link to the visit page (Vite sets BASE_URL per build:
+// "/" locally, "/ag/" on GitHub Pages, "/bitrix/templates/auth/" for cms)
+const VISIT_HREF = import.meta.env.BASE_URL + 'visit'
+
 const WEEKDAYS = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']
 const WEEKDAYS_SHORT = ['понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота', 'воскресенье']
 const MONTHS = ['январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь']
@@ -257,14 +261,14 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__coords">${esc(ev.coords)}</div>
 				<div class="vcal-pop__field-group">
 					<div class="vcal-pop__field"><span class="vcal-pop__label">Тип визита</span><div>${esc(ev.type)}</div></div>
-					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="/visit" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="${VISIT_HREF}" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
 					<div class="vcal-pop__field"><span class="vcal-pop__label">Комментарии</span><div class="vcal-pop__comment">${esc(ev.comment)}</div></div>
 				</div>
 			</div>`
 
 		const footer = planned
 			? '<div class="vcal-pop__footer"><button type="button" class="btn">Начать визит</button><button type="button" class="vcal-pop__del">Удалить визит</button></div>'
-			: '<div class="vcal-pop__footer"><a href="/visit" class="btn">Подробнее</a></div>'
+			: `<div class="vcal-pop__footer"><a href="${VISIT_HREF}" class="btn">Подробнее</a></div>`
 
 		const closeBtn =
 			'<button type="button" class="vcal-pop__close" aria-label="Закрыть"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg></button>'

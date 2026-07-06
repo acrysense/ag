@@ -166,7 +166,6 @@
 		}
 		// month weekday header — styled like the week/day column headers
 		&__weekdays {
-			@include border-side(bottom, 1, solid, $color-border, xl);
 			span {
 				@include prop-vw(padding-top, 5, xl);
 				@include prop-vw(padding-inline, 10, xl);
@@ -176,19 +175,16 @@
 				color: $color-black;
 			}
 		}
-		&__grid {
-			@include border-side(left, 1, solid, $color-border, xl);
-		}
 		&__row {
+			// only horizontal separators between weeks — no vertical borders
 			& + & {
+				@include border-side(top, 1, solid, $color-border, xl);
 			}
 		}
 		&__cell {
 			min-height: 0;
 			@include prop-vw(min-height, 202, xl);
 			@include prop-vw(padding, 5, xl);
-			@include border-side(right, 1, solid, $color-border, xl);
-			@include border-side(bottom, 1, solid, $color-border, xl);
 			&.is-out {
 				background: #fbfcfe;
 			}
