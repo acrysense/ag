@@ -35,6 +35,16 @@ const EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-q-edit-f
 	</div>
 </form>`
 
+// inline editor for a quantitative row's criterion title (input + save/cancel,
+// reuses the .task-comment save/cancel buttons)
+const QUANT_TITLE_HTML = (title) => `<div class="visit-quant__crit-edit" data-quant-edit-form>
+	<input type="text" class="visit-quant__crit-input" data-quant-edit-title value="${escAttr(title)}" autocomplete="off">
+	<div class="task-comment__actions">
+		<button type="button" class="task-comment__btn task-comment__btn--save" data-quant-edit-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg></button>
+		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-quant-edit-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg></button>
+	</div>
+</div>`
+
 export default function Visit(root) {
 	if (root.__visitBound) return
 	root.__visitBound = true
@@ -242,6 +252,42 @@ export default function Visit(root) {
 		})
 	}
 
+	// --- inline edit of a quantitative row's criterion title ---
+	const openQuantEdit = (row) => {
+		const cell = row.querySelector('.visit-quant__td--crit')
+		if (!cell) return
+		const crit = cell.querySelector('.visit-quant__crit')
+		if (!crit || cell.querySelector('[data-quant-edit-form]')) return
+		const tmp = document.createElement('div')
+		tmp.innerHTML = QUANT_TITLE_HTML(crit.textContent.trim()).trim()
+		const editor = tmp.firstElementChild
+		const input = editor.querySelector('[data-quant-edit-title]')
+		crit.hidden = true
+		crit.after(editor)
+		input.focus()
+		input.select()
+
+		const close = (save) => {
+			if (save) {
+				const v = input.value.trim()
+				if (v) crit.textContent = v
+			}
+			crit.hidden = false
+			editor.remove()
+		}
+		editor.querySelector('[data-quant-edit-save]').addEventListener('click', () => close(true))
+		editor.querySelector('[data-quant-edit-cancel]').addEventListener('click', () => close(false))
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault()
+				close(true)
+			} else if (e.key === 'Escape') {
+				e.preventDefault()
+				close(false)
+			}
+		})
+	}
+
 	// --- delete confirm modal ---
 	const delModal = root.querySelector('[data-q-delete-modal]')
 	let pendingDeleteItem = null
@@ -296,10 +342,12 @@ export default function Visit(root) {
 				}
 				return
 			}
-			// quantitative-table row actions (comment lives under the criterion)
+			// quantitative-table row actions (comment under the criterion; edit
+			// changes the criterion title itself)
 			const row = menuItem.closest('.visit-quant__row')
 			if (row) {
-				if (menuItem.matches('[data-quant-comment], [data-quant-edit]')) openQuantComment(row)
+				if (menuItem.matches('[data-quant-comment]')) openQuantComment(row)
+				else if (menuItem.matches('[data-quant-edit]')) openQuantEdit(row)
 				else if (menuItem.matches('[data-quant-delete]')) {
 					pendingDeleteItem = row
 					setDelOpen(true)
