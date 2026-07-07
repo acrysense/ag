@@ -40,26 +40,37 @@ export default function Visit(root) {
 	root.__visitBound = true
 
 	// --- actions dropdown (one open at a time) ---
-	// The quant-table menus sit inside a horizontal-scroll container (mobile) that
-	// would clip an absolutely-positioned dropdown — pin the panel with
-	// position:fixed so it escapes the clip. Only kicks in when the table actually
-	// scrolls; closed menus (and any scroll) reset it.
+	// The menus sit inside clipping containers (the section's overflow:hidden used
+	// for the collapse animation, and the quant table's horizontal scroll), which
+	// would cut off an absolutely-positioned dropdown. Pin the panel with
+	// position:fixed so it escapes any clip; flip it above the trigger when there's
+	// no room below. Closed menus (and any scroll) reset it.
 	const pinPanel = (menu) => {
-		const scroll = menu.closest('.visit-quant__scroll')
-		if (!scroll || scroll.scrollWidth <= scroll.clientWidth + 1) return
 		const panel = menu.querySelector('[data-actions-panel]')
 		const trig = menu.querySelector('[data-actions-trigger]')
 		if (!panel || !trig) return
 		const r = trig.getBoundingClientRect()
 		panel.style.position = 'fixed'
-		panel.style.top = `${Math.round(r.bottom + 6)}px`
 		panel.style.right = `${Math.round(window.innerWidth - r.right)}px`
 		panel.style.left = 'auto'
+		panel.style.top = 'auto'
+		panel.style.bottom = 'auto'
+		const ph = panel.offsetHeight // measurable — the panel is already display:flex
+		// open below, unless it would overflow the viewport bottom and there's room above
+		if (r.bottom + 6 + ph > window.innerHeight && r.top - 6 - ph >= 0) {
+			panel.style.bottom = `${Math.round(window.innerHeight - r.top + 6)}px`
+		} else {
+			panel.style.top = `${Math.round(r.bottom + 6)}px`
+		}
 	}
 	const unpinPanel = (menu) => {
 		const panel = menu.querySelector('[data-actions-panel]')
-		if (panel && panel.style.position === 'fixed')
-			panel.style.cssText = panel.style.cssText.replace(/(position|top|right|left)\s*:[^;]*;?/g, '')
+		if (!panel) return
+		panel.style.position = ''
+		panel.style.top = ''
+		panel.style.right = ''
+		panel.style.left = ''
+		panel.style.bottom = ''
 	}
 	const setMenuOpen = (menu, state) => {
 		menu.classList.toggle('is-open', state)
