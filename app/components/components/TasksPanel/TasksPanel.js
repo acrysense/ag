@@ -1,4 +1,5 @@
 import { mountDatepicker } from '@/utils/datepicker'
+import { MAX_COMMENT_LEN, limitLineBreaks } from '@/utils/comment-limits'
 
 // ---- JSON-driven task list -------------------------------------------------
 const escTask = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
@@ -636,10 +637,13 @@ export default async (root) => {
 		})
 	}
 
-	// --- Inline comment (the "Комментировать" action): edit an input that, on
-	// save, becomes the row's __desc (grey description). ---
+	// --- Inline comment (the "Комментировать" action): edit a textarea that, on
+	// save, becomes the row's __desc (grey description). A growing textarea (not a
+	// single-line input) so long comments wrap and stay visible; length + line
+	// breaks are capped client-side. The saved value is still a plain string, so
+	// the backend contract is unchanged. ---
 	const COMMENT_HTML = `<div class="task-comment" data-task-comment-editor>
-		<input type="text" class="task-comment__input" data-task-comment-input placeholder="Комментарий" autocomplete="off">
+		<textarea class="task-comment__input" data-task-comment-input rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий" autocomplete="off"></textarea>
 		<div class="task-comment__actions">
 			<button type="button" class="task-comment__btn task-comment__btn--save" data-task-comment-save aria-label="Сохранить">
 				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg>
@@ -662,6 +666,7 @@ export default async (root) => {
 		tmp.innerHTML = COMMENT_HTML.trim()
 		const editor = tmp.firstElementChild
 		const input = editor.querySelector('[data-task-comment-input]')
+		limitLineBreaks(input)
 		input.value = desc ? desc.textContent.trim() : ''
 
 		// place the editor where the __desc sits (or would sit)
@@ -707,11 +712,9 @@ export default async (root) => {
 		}
 		editor.querySelector('[data-task-comment-save]').addEventListener('click', () => close(true))
 		editor.querySelector('[data-task-comment-cancel]').addEventListener('click', () => close(false))
+		// Enter inserts a new line (multi-line textarea); save via the check button
 		input.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') {
-				e.preventDefault()
-				close(true)
-			} else if (e.key === 'Escape') {
+			if (e.key === 'Escape') {
 				e.preventDefault()
 				close(false)
 			}

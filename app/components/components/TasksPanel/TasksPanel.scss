@@ -1229,6 +1229,9 @@
         &__input {
             display: block;
             width: 100%;
+            // textarea: autosize drives the height, so no manual resize handle
+            resize: none;
+            overflow: hidden;
             @include prop-vw(padding-block, 12, xl);
             @include prop-vw(padding-inline, 15, xl);
             background: transparent;

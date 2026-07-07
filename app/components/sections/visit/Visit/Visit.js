@@ -3,40 +3,10 @@
 // three-dots on row hover → dropdown → comment / edit / delete) and the
 // geolocation retry. Demo only — the markup is the source of truth.
 
+import { MAX_COMMENT_LEN, limitLineBreaks } from '@/utils/comment-limits'
+
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
-
-// Comment field limits: cap the length (via native maxlength) so the box can't
-// grow without bound, and cap the number of line breaks so it can't be spammed
-// into a wall of blank lines. Both the "Комментировать" and the edit-form
-// comment use these.
-const MAX_COMMENT_LEN = 500
-const MAX_COMMENT_BREAKS = 10
-
-// Block line breaks past the cap: typing Enter is a no-op at the limit, and a
-// paste that carries too many breaks has the surplus stripped (then autosize is
-// re-run on the cleaned value). Character count is enforced by maxlength.
-const limitLineBreaks = (el, max = MAX_COMMENT_BREAKS) => {
-	const breaks = (s) => (s.match(/\n/g) || []).length
-	el.addEventListener('keydown', (e) => {
-		if (e.key === 'Enter' && !e.isComposing && breaks(el.value) >= max) e.preventDefault()
-	})
-	let guard = false
-	el.addEventListener('input', () => {
-		if (guard || breaks(el.value) <= max) return
-		guard = true
-		const before = el.value
-		const pos = el.selectionStart
-		let n = 0
-		el.value = before.replace(/\n/g, (m) => (++n <= max ? m : ''))
-		const np = Math.max(0, pos - (before.length - el.value.length))
-		try {
-			el.setSelectionRange(np, np)
-		} catch {}
-		el.dispatchEvent(new Event('input', { bubbles: true })) // re-run autosize
-		guard = false
-	})
-}
 
 // inline comment editor (same shell as the tasks page), saved into __desc.
 // A growing textarea (not a single-line input) so long comments wrap and stay
