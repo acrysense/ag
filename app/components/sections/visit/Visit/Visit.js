@@ -6,11 +6,43 @@
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 
+// Comment field limits: cap the length (via native maxlength) so the box can't
+// grow without bound, and cap the number of line breaks so it can't be spammed
+// into a wall of blank lines. Both the "Комментировать" and the edit-form
+// comment use these.
+const MAX_COMMENT_LEN = 500
+const MAX_COMMENT_BREAKS = 10
+
+// Block line breaks past the cap: typing Enter is a no-op at the limit, and a
+// paste that carries too many breaks has the surplus stripped (then autosize is
+// re-run on the cleaned value). Character count is enforced by maxlength.
+const limitLineBreaks = (el, max = MAX_COMMENT_BREAKS) => {
+	const breaks = (s) => (s.match(/\n/g) || []).length
+	el.addEventListener('keydown', (e) => {
+		if (e.key === 'Enter' && !e.isComposing && breaks(el.value) >= max) e.preventDefault()
+	})
+	let guard = false
+	el.addEventListener('input', () => {
+		if (guard || breaks(el.value) <= max) return
+		guard = true
+		const before = el.value
+		const pos = el.selectionStart
+		let n = 0
+		el.value = before.replace(/\n/g, (m) => (++n <= max ? m : ''))
+		const np = Math.max(0, pos - (before.length - el.value.length))
+		try {
+			el.setSelectionRange(np, np)
+		} catch {}
+		el.dispatchEvent(new Event('input', { bubbles: true })) // re-run autosize
+		guard = false
+	})
+}
+
 // inline comment editor (same shell as the tasks page), saved into __desc.
 // A growing textarea (not a single-line input) so long comments wrap and stay
 // visible instead of scrolling off the side.
 const COMMENT_HTML = `<div class="task-comment" data-q-comment-editor>
-	<textarea class="task-comment__input" data-q-comment-input rows="1" data-autosize placeholder="Комментарий" autocomplete="off"></textarea>
+	<textarea class="task-comment__input" data-q-comment-input rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий" autocomplete="off"></textarea>
 	<div class="task-comment__actions">
 		<button type="button" class="task-comment__btn task-comment__btn--save" data-q-comment-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg></button>
 		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-q-comment-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg></button>
@@ -25,7 +57,7 @@ const EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-q-edit-f
 	</div>
 	<div class="visit-q__edit-field">
 		<label class="visit-q__edit-label">Комментарий</label>
-		<textarea class="visit-q__edit-area" data-q-edit-comment data-autosize placeholder="Комментарий">${escHtml(comment)}</textarea>
+		<textarea class="visit-q__edit-area" data-q-edit-comment data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий">${escHtml(comment)}</textarea>
 	</div>
 	<div class="visit-q__edit-actions">
 		<button type="submit" class="btn btn--sm">Сохранить</button>
@@ -57,6 +89,7 @@ export default function Visit(root) {
 		tmp.innerHTML = COMMENT_HTML.trim()
 		const editor = tmp.firstElementChild
 		const input = editor.querySelector('[data-q-comment-input]')
+		limitLineBreaks(input)
 		input.value = desc ? desc.textContent.trim() : ''
 		if (desc) {
 			desc.hidden = true
@@ -110,6 +143,7 @@ export default function Visit(root) {
 		const tmp = document.createElement('div')
 		tmp.innerHTML = EDIT_HTML(title, comment).trim()
 		const form = tmp.firstElementChild
+		limitLineBreaks(form.querySelector('[data-q-edit-comment]'))
 		body.hidden = true
 		item.classList.add('is-editing') // mobile: lets the form span the full row
 		body.after(form)
