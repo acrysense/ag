@@ -87,6 +87,7 @@
 														<th class="visit-quant__th" rowspan="2">Качество<span>Балы, 1-5</span></th>
 														<th class="visit-quant__th visit-quant__th--group" colspan="2">Оценка количества</th>
 														<th class="visit-quant__th visit-quant__th--pct" rowspan="2">%</th>
+														<th class="visit-quant__th visit-quant__th--menu" rowspan="2"></th>
 													</tr>
 													<tr>
 														<th class="visit-quant__th visit-quant__th--sub">Покупателей</th>
@@ -103,13 +104,22 @@
 													)}}
 													<tr class="visit-quant__row">
 														<td class="visit-quant__td visit-quant__td--idx">{{this.n}}.</td>
-														<td class="visit-quant__td visit-quant__td--crit">{{this.crit}}</td>
+														<td class="visit-quant__td visit-quant__td--crit"><span class="visit-quant__crit">{{this.crit}}</span></td>
 														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.q}}" inputmode="numeric"></td>
 														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.buyers}}" inputmode="numeric"></td>
 														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.recs}}" inputmode="numeric"></td>
-														<td class="visit-quant__td visit-quant__td--pct">
-															<span>{{this.pct}}</span>
-															{{#if this.menu}}<span class="visit-quant__dots"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></span>{{/if}}
+														<td class="visit-quant__td visit-quant__td--pct">{{this.pct}}</td>
+														<td class="visit-quant__td visit-quant__td--menu">
+															<div class="actions-menu visit-quant__menu" data-actions>
+																<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
+																	<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-three-dots"></use></svg>
+																</button>
+																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Добавить комментарий</span></button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать коммент</span></button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
+																</div>
+															</div>
 														</td>
 													</tr>
 													{{/each}}

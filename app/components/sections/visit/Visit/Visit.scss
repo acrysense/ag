@@ -446,6 +446,9 @@
 			&--pct {
 				text-align: right;
 			}
+			&--menu {
+				width: 1%;
+			}
 		}
 		&__row {
 			@include border-side(top, 1, solid, $color-border, xl);
@@ -453,7 +456,9 @@
 		&__td {
 			@include prop-vw(padding-block, 10, xl);
 			@include prop-vw(padding-right, 16, xl);
-			vertical-align: middle;
+			// top-aligned so the numbers/percent line up with the criterion text
+			// when a comment is added below it (the crit cell grows taller)
+			vertical-align: top;
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-black;
@@ -474,9 +479,32 @@
 			&--pct {
 				text-align: right;
 				white-space: nowrap;
-				span {
-					color: $color-black;
-				}
+			}
+			// 3-dots actions column: shrink to the trigger, no trailing padding
+			&--menu {
+				width: 1%;
+				padding-right: 0;
+				text-align: right;
+			}
+		}
+		// criterion text + its optional comment (added via the row actions menu)
+		&__crit {
+			display: block;
+		}
+		&__comment {
+			@include prop-vw(margin-top, 6, xl);
+			@include prop-vw(font-size, 12, xl);
+			line-height: 1.25;
+			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(margin-top, 6, sm);
+				@include prop-vw(font-size, 12, sm);
+			}
+		}
+		// actions menu in the table — grey trigger (not the default blue)
+		&__menu {
+			.actions-menu__trigger {
+				color: $color-dark-grey;
 			}
 		}
 		&__input {
@@ -499,22 +527,6 @@
 			&:focus {
 				outline: none;
 				border-color: $color-form-focus;
-			}
-		}
-		&__dots {
-			display: inline-flex;
-			@include prop-vw(margin-left, 12, xl);
-			color: $color-dark-grey;
-			@include only(mobile) {
-				@include prop-vw(margin-left, 12, sm);
-			}
-			& > svg {
-				@include prop-vw(width, 18, xl);
-				@include prop-vw(height, 18, xl);
-				@include only(mobile) {
-					@include prop-vw(width, 18, sm);
-					@include prop-vw(height, 18, sm);
-				}
 			}
 		}
 	}

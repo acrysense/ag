@@ -40,10 +40,33 @@ export default function Visit(root) {
 	root.__visitBound = true
 
 	// --- actions dropdown (one open at a time) ---
+	// The quant-table menus sit inside a horizontal-scroll container (mobile) that
+	// would clip an absolutely-positioned dropdown — pin the panel with
+	// position:fixed so it escapes the clip. Only kicks in when the table actually
+	// scrolls; closed menus (and any scroll) reset it.
+	const pinPanel = (menu) => {
+		const scroll = menu.closest('.visit-quant__scroll')
+		if (!scroll || scroll.scrollWidth <= scroll.clientWidth + 1) return
+		const panel = menu.querySelector('[data-actions-panel]')
+		const trig = menu.querySelector('[data-actions-trigger]')
+		if (!panel || !trig) return
+		const r = trig.getBoundingClientRect()
+		panel.style.position = 'fixed'
+		panel.style.top = `${Math.round(r.bottom + 6)}px`
+		panel.style.right = `${Math.round(window.innerWidth - r.right)}px`
+		panel.style.left = 'auto'
+	}
+	const unpinPanel = (menu) => {
+		const panel = menu.querySelector('[data-actions-panel]')
+		if (panel && panel.style.position === 'fixed')
+			panel.style.cssText = panel.style.cssText.replace(/(position|top|right|left)\s*:[^;]*;?/g, '')
+	}
 	const setMenuOpen = (menu, state) => {
 		menu.classList.toggle('is-open', state)
 		menu.querySelector('[data-actions-trigger]')?.setAttribute('aria-expanded', state ? 'true' : 'false')
 		menu.querySelector('[data-actions-panel]')?.setAttribute('aria-hidden', state ? 'false' : 'true')
+		if (state) pinPanel(menu)
+		else unpinPanel(menu)
 	}
 	const closeAllMenus = () => root.querySelectorAll('[data-actions].is-open').forEach((m) => setMenuOpen(m, false))
 
@@ -154,6 +177,60 @@ export default function Visit(root) {
 		})
 	}
 
+	// --- inline comment for a quantitative row (shown under the criterion) ---
+	const openQuantComment = (row) => {
+		const cell = row.querySelector('.visit-quant__td--crit')
+		if (!cell) return
+		const existing = cell.querySelector('[data-q-comment-editor]')
+		if (existing) return existing.querySelector('[data-q-comment-input]')?.focus()
+		const crit = cell.querySelector('.visit-quant__crit')
+		const desc = cell.querySelector('.visit-quant__comment')
+		const tmp = document.createElement('div')
+		tmp.innerHTML = COMMENT_HTML.trim()
+		const editor = tmp.firstElementChild
+		const input = editor.querySelector('[data-q-comment-input]')
+		limitLineBreaks(input)
+		input.value = desc ? desc.textContent.trim() : ''
+		if (desc) {
+			desc.hidden = true
+			desc.after(editor)
+		} else if (crit) {
+			crit.after(editor)
+		}
+		input.focus()
+
+		const close = (save) => {
+			if (!save) {
+				const d = cell.querySelector('.visit-quant__comment')
+				if (d) d.hidden = false
+				editor.remove()
+				return
+			}
+			const val = input.value.trim()
+			let d = cell.querySelector('.visit-quant__comment')
+			if (val) {
+				if (!d) {
+					d = document.createElement('div')
+					d.className = 'visit-quant__comment'
+					editor.before(d)
+				}
+				d.textContent = val
+				d.hidden = false
+			} else if (d) {
+				d.hidden = false
+			}
+			editor.remove()
+		}
+		editor.querySelector('[data-q-comment-save]').addEventListener('click', () => close(true))
+		editor.querySelector('[data-q-comment-cancel]').addEventListener('click', () => close(false))
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				e.preventDefault()
+				close(false)
+			}
+		})
+	}
+
 	// --- delete confirm modal ---
 	const delModal = root.querySelector('[data-q-delete-modal]')
 	let pendingDeleteItem = null
@@ -196,13 +273,24 @@ export default function Visit(root) {
 		// dropdown item picked → run the action, then close the menu
 		const menuItem = e.target.closest('.actions-menu__item')
 		if (menuItem) {
-			const item = menuItem.closest('.visit-q__item')
 			closeAllMenus()
+			// checklist item actions
+			const item = menuItem.closest('.visit-q__item')
 			if (item) {
 				if (menuItem.matches('[data-q-comment]')) openComment(item)
 				else if (menuItem.matches('[data-q-edit]')) openEdit(item)
 				else if (menuItem.matches('[data-q-delete]')) {
 					pendingDeleteItem = item
+					setDelOpen(true)
+				}
+				return
+			}
+			// quantitative-table row actions (comment lives under the criterion)
+			const row = menuItem.closest('.visit-quant__row')
+			if (row) {
+				if (menuItem.matches('[data-quant-comment], [data-quant-edit]')) openQuantComment(row)
+				else if (menuItem.matches('[data-quant-delete]')) {
+					pendingDeleteItem = row
 					setDelOpen(true)
 				}
 			}
@@ -241,14 +329,22 @@ export default function Visit(root) {
 		closeAllMenus()
 	}
 
+	// close open menus on any scroll (window or the quant table) so a pinned
+	// fixed panel can't drift away from its trigger
+	const onScroll = () => {
+		if (root.querySelector('[data-actions].is-open')) closeAllMenus()
+	}
+
 	root.addEventListener('click', onClick)
 	document.addEventListener('pointerdown', onDocDown, true)
 	document.addEventListener('keydown', onDocKey, true)
+	window.addEventListener('scroll', onScroll, { passive: true, capture: true })
 
 	return () => {
 		root.removeEventListener('click', onClick)
 		document.removeEventListener('pointerdown', onDocDown, true)
 		document.removeEventListener('keydown', onDocKey, true)
+		window.removeEventListener('scroll', onScroll, true)
 		document.documentElement.style.overflow = ''
 		delete root.__visitBound
 	}
