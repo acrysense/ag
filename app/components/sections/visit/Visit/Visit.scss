@@ -367,11 +367,18 @@
 	// the "Комментировать" editor is a growing textarea — no manual resize
 	// handle (autosize drives the height as the comment wraps). No side padding
 	// so the text lines up with the item title on the left (desktop had a 15px
-	// indent from the shared .task-comment__input; mobile is already flush).
+	// indent from the shared .task-comment__input; mobile is already flush), and
+	// no top padding so the comment doesn't sit too low under the title.
 	.visit-q .task-comment__input {
 		resize: none;
 		overflow: hidden;
 		padding-inline: 0;
+		padding-top: 0;
+	}
+	// save/cancel buttons flush with the comment text on the left (desktop had a
+	// 15px indent; mobile is already flush)
+	.visit-q .task-comment__actions {
+		margin-left: 0;
 	}
 
 	// mobile: while an item is being edited, stack it into a column so the edit
