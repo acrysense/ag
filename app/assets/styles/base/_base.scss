@@ -17,5 +17,12 @@
 	svg {
 		transition: color 0.25s ease-in-out;
 	}
+
+	// shared spinner rotation (used by the tasks / visits-calendar / news loaders)
+	@keyframes spin {
+		to {
+			transform: rotate(360deg);
+		}
+	}
 }
 

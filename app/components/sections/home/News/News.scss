@@ -96,7 +96,7 @@
             @include prop-vw(width, 24, xl);
             @include prop-vw(height, 24, xl);
             color: $color-blue;
-			animation: news-spin .8s linear infinite;
+			animation: spin .8s linear infinite;
 
             @include only(desktop) {
                 @include prop-vw(min-width, 24, lg);
@@ -386,10 +386,6 @@
                 @include prop-vw(font-size, 14, sm);
             }
         }
-    }
-
-	@keyframes news-spin {
-        to { transform: rotate(360deg); }
     }
 
     @keyframes news-fade {

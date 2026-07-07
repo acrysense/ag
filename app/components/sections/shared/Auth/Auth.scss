@@ -319,7 +319,7 @@
                     background-repeat: no-repeat;
                     background-size: contain;
                     background-position: center center;
-                    animation: auth-spin .8s linear infinite;
+                    animation: spin .8s linear infinite;
                 }
             }
 
@@ -344,9 +344,4 @@
         }
     }
 
-    @keyframes auth-spin {
-        to {
-            transform: rotate(360deg);
-        }
-    }
 }

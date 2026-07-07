@@ -63,12 +63,7 @@
         border: 3px solid $color-grey;
         border-top-color: $color-blue;
         border-radius: 50%;
-        animation: data-table-spin 0.7s linear infinite;
-    }
-    @keyframes data-table-spin {
-        to {
-            transform: rotate(360deg);
-        }
+        animation: spin 0.7s linear infinite;
     }
     @media (prefers-reduced-motion: reduce) {
         .data-table__spinner {
