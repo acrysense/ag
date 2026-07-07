@@ -868,7 +868,8 @@
 			max-height: none;
 			overflow-y: auto;
 			border-radius: 0;
-			@include prop-vw(padding, 20, sm);
+			@include prop-vw(padding-block, 20, sm);
+			@include prop-vw(padding-inline, 10, sm);
 			// clear the top-right close button (like the "Создать визит" modal head)
 			@include prop-vw(padding-top, 56, sm);
 			@include prop-vw(gap, 15, sm);

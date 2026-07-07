@@ -789,7 +789,8 @@
 	.data-panel.visit-emp,
 	.data-panel.visit-meta,
 	.data-panel.visit-hist,
-	.data-panel.visit-result {
+	.data-panel.visit-result,
+	.data-panel.visit {
 		@include only(mobile) {
 			@include prop-vw(padding-top, 20, sm);
 		}
@@ -1054,9 +1055,25 @@
 		.visit-page .wrapper__right {
 			display: contents;
 		}
+		// the .wrapper__double flex gap already spaces the flattened panels — drop
+		// the DOM-adjacency margins (they'd double the spacing after flattening)
+		.visit-page .wrapper__left > .data-panel + .data-panel,
+		.visit-page .wrapper__left > .data-panel + .visit__footer,
+		.visit-page .wrapper__right > .data-panel + .data-panel {
+			margin-top: 0;
+		}
+		// "Назад" → employee card: a bit of white spacing under the link and no
+		// grey strip between them (pull the card up over the flex gap)
+		.visit-page .wrapper__back {
+			@include prop-vw(padding-bottom, 10, sm);
+		}
 		// .wrapper__back keeps default order 0 (stays at the very top)
-		.visit-emp {
+		.data-panel.visit-emp {
 			order: 1;
+			margin-top: calc(0px - #{vw-range(10, sm)}); // cancel the flex gap
+			&::before {
+				content: none; // no grey separator above the first block
+			}
 		}
 		.visit-meta {
 			order: 2;
