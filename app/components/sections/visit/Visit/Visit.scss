@@ -702,11 +702,11 @@
 		justify-content: space-between;
 		@include prop-vw(gap, 16, xl);
 		@include prop-vw(margin-top, 10, xl);
-		// mobile: stack the button group + delete; buttons go full width, inset
-		// 10px to line up with the panels' content (which have padding-inline 10)
+		// mobile: 2×2 grid of buttons — the main group flows into the grid via
+		// display:contents, and delete becomes a real red button (4th cell)
 		@include only(mobile) {
-			flex-direction: column;
-			align-items: stretch;
+			display: grid;
+			grid-template-columns: 1fr 1fr;
 			@include prop-vw(gap, 10, sm);
 			@include prop-vw(margin-top, 10, sm);
 			@include prop-vw(padding-inline, 10, sm);
@@ -715,8 +715,7 @@
 			display: flex;
 			@include prop-vw(gap, 20, xl);
 			@include only(mobile) {
-				flex-direction: column;
-				@include prop-vw(gap, 10, sm);
+				display: contents;
 			}
 			.btn {
 				// height 46 via padding: line 14*1.571≈22 + 12*2 = 46
@@ -728,7 +727,9 @@
 				@include prop-vw(border-radius, 14, xl);
 				@include only(mobile) {
 					width: 100%;
+					white-space: nowrap;
 					@include prop-vw(padding-block, 12, sm);
+					@include prop-vw(padding-inline, 8, sm);
 					@include prop-vw(font-size, 14, sm);
 					@include prop-vw(border-radius, 14, sm);
 				}
@@ -737,6 +738,10 @@
 			.btn.btn--ghost {
 				background: transparent;
 				color: $color-black;
+				// on mobile give them a light fill so the 2×2 grid reads as buttons
+				@include only(mobile) {
+					background: $color-bg;
+				}
 			}
 			.btn.btn--secondary {
 				@include prop-vw(min-width, 191, xl);
@@ -756,12 +761,25 @@
 		border: none;
 		cursor: pointer;
 		transition: color $transition-default;
+		// mobile: full red button filling its cell in the 2×2 footer grid
 		@include only(mobile) {
+			align-self: stretch;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			@include prop-vw(padding-block, 12, sm);
 			@include prop-vw(font-size, 14, sm);
+			@include prop-vw(border-radius, 14, sm);
+			color: $color-white;
+			background: $color-red;
 		}
-		@media screen and (hover: hover) {
-			&:hover {
-				color: $color-red;
+		// hover-red only for the desktop/tablet text link (not the mobile red button)
+		@include up(tablet) {
+			@media screen and (hover: hover) {
+				&:hover {
+					color: $color-red;
+				}
 			}
 		}
 	}

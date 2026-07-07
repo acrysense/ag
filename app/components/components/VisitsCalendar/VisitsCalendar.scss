@@ -520,7 +520,7 @@
 				flex-direction: column;
 				align-items: stretch;
 				@include prop-vw(gap, 10, sm);
-				@include prop-vw(margin-top, 16, sm);
+				@include prop-vw(margin-top, 10, sm);
 				@include prop-vw(margin-bottom, 20, sm);
 			}
 			&__views {
@@ -866,6 +866,8 @@
 			overflow-y: auto;
 			border-radius: 0;
 			@include prop-vw(padding, 20, sm);
+			// clear the top-right close button (like the "Создать визит" modal head)
+			@include prop-vw(padding-top, 56, sm);
 			@include prop-vw(gap, 15, sm);
 			&__card {
 				@include prop-vw(gap, 5, sm);
