@@ -845,13 +845,18 @@
 
 	// panels whose top padding must match the bottom on mobile (global .data-panel
 	// zeroes padding-top there). Compound selector beats the global padding-top: 0.
-	.data-panel.visit-emp,
 	.data-panel.visit-meta,
 	.data-panel.visit-hist,
 	.data-panel.visit-result,
 	.data-panel.visit {
 		@include only(mobile) {
 			@include prop-vw(padding-top, 20, sm);
+		}
+	}
+	// employee card sits right under the "Назад" link — a smaller top padding
+	.data-panel.visit-emp {
+		@include only(mobile) {
+			@include prop-vw(padding-top, 10, sm);
 		}
 	}
 
