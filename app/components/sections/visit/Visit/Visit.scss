@@ -304,15 +304,24 @@
 		display: flex;
 		flex-direction: column;
 		@include prop-vw(gap, 12, xl);
+		@include only(mobile) {
+			@include prop-vw(gap, 12, sm);
+		}
 		&-field {
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(gap, 5, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 5, sm);
+			}
 		}
 		&-label {
 			@include prop-vw(font-size, 12, xl);
 			line-height: 1.25;
 			color: $color-dark-grey;
+			@include only(mobile) {
+				@include prop-vw(font-size, 12, sm);
+			}
 		}
 		&-input,
 		&-area {
@@ -330,15 +339,54 @@
 				outline: none;
 				border-color: $color-blue;
 			}
+			@include only(mobile) {
+				@include prop-vw(padding-block, 10, sm);
+				@include prop-vw(padding-inline, 12, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include border-all(1, solid, $color-border, sm);
+				@include prop-vw(border-radius, 10, sm);
+			}
 		}
 		&-area {
 			resize: none;
 			overflow: hidden;
 			@include prop-vw(min-height, 72, xl);
+			@include only(mobile) {
+				@include prop-vw(min-height, 72, sm);
+			}
 		}
 		&-actions {
 			display: flex;
 			@include prop-vw(gap, 10, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+			}
+		}
+	}
+
+	// the "Комментировать" editor is a growing textarea — no manual resize
+	// handle (autosize drives the height as the comment wraps)
+	.visit-q .task-comment__input {
+		resize: none;
+		overflow: hidden;
+	}
+
+	// mobile: while an item is being edited, stack it into a column so the edit
+	// form spans the full row (the cramped ~196px body column is too narrow to
+	// type a title into); the 3-dots menu is hidden as it's unused mid-edit
+	@include only(mobile) {
+		.visit-q__item.is-editing {
+			flex-direction: column;
+			.visit-q__toggle {
+				margin-top: 0;
+			}
+			.visit-q__menu {
+				display: none;
+			}
+			.visit-q__edit {
+				width: 100%;
+				@include prop-vw(margin-top, 12, sm);
+			}
 		}
 	}
 

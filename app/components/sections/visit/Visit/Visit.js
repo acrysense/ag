@@ -6,9 +6,11 @@
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 
-// inline comment editor (same shell as the tasks page), saved into __desc
+// inline comment editor (same shell as the tasks page), saved into __desc.
+// A growing textarea (not a single-line input) so long comments wrap and stay
+// visible instead of scrolling off the side.
 const COMMENT_HTML = `<div class="task-comment" data-q-comment-editor>
-	<input type="text" class="task-comment__input" data-q-comment-input placeholder="Комментарий" autocomplete="off">
+	<textarea class="task-comment__input" data-q-comment-input rows="1" data-autosize placeholder="Комментарий" autocomplete="off"></textarea>
 	<div class="task-comment__actions">
 		<button type="button" class="task-comment__btn task-comment__btn--save" data-q-comment-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg></button>
 		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-q-comment-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg></button>
@@ -88,11 +90,9 @@ export default function Visit(root) {
 		}
 		editor.querySelector('[data-q-comment-save]').addEventListener('click', () => close(true))
 		editor.querySelector('[data-q-comment-cancel]').addEventListener('click', () => close(false))
+		// Enter inserts a new line (multi-line textarea); save via the check button
 		input.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') {
-				e.preventDefault()
-				close(true)
-			} else if (e.key === 'Escape') {
+			if (e.key === 'Escape') {
 				e.preventDefault()
 				close(false)
 			}
@@ -111,6 +111,7 @@ export default function Visit(root) {
 		tmp.innerHTML = EDIT_HTML(title, comment).trim()
 		const form = tmp.firstElementChild
 		body.hidden = true
+		item.classList.add('is-editing') // mobile: lets the form span the full row
 		body.after(form)
 		form.querySelector('[data-q-edit-title]')?.focus()
 
@@ -134,6 +135,7 @@ export default function Visit(root) {
 			}
 			form.remove()
 			body.hidden = false
+			item.classList.remove('is-editing')
 		}
 		form.addEventListener('submit', (e) => {
 			e.preventDefault()
