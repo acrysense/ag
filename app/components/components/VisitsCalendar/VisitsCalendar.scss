@@ -276,11 +276,10 @@
 			line-height: 1.25;
 			font-weight: normal;
 		}
-		// day/week time cell: chip with a sprite plus, centred so it never
-		// changes the 60px row height (absolute → out of flow)
+		// day/week time cell: chip with a sprite plus, pinned to the left edge
 		&__tcell &__add {
 			display: inline-flex;
-			align-self: center;
+			align-self: flex-start;
 			align-items: center;
 			justify-content: center;
 			@include prop-vw(gap, 5, xl);

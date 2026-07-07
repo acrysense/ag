@@ -120,17 +120,17 @@
 			}
 		}
 	}
-	// История визитов — колонки (px @ 1390): 120/120/80/60/380/200/70/70/290
+	// История визитов — колонки (px @ 1390): 120/120/80/60/360/200/70/90/290
 	.visits-history .data-table.visits-table {
 		@include prop-vw(min-width, 1390, xl);
 		.data-table__th:nth-child(1) { width: 8.633%; }
 		.data-table__th:nth-child(2) { width: 8.633%; }
 		.data-table__th:nth-child(3) { width: 5.755%; }
 		.data-table__th:nth-child(4) { width: 4.317%; }
-		.data-table__th:nth-child(5) { width: 27.338%; }
+		.data-table__th:nth-child(5) { width: 25.899%; } // Сотрудник 380 -> 360
 		.data-table__th:nth-child(6) { width: 14.388%; }
 		.data-table__th:nth-child(7) { width: 5.036%; }
-		.data-table__th:nth-child(8) { width: 5.036%; }
+		.data-table__th:nth-child(8) { width: 6.475%; } // Визиты 70 -> 90
 		.data-table__th:nth-child(9) { width: 20.863%; }
 		@include only(mobile) {
 			@include prop-vw(min-width, 1390, sm);
@@ -150,6 +150,7 @@
 		}
 		&--blue {
 			color: $color-blue;
+			font-weight: normal; // blue score is regular, not bold
 		}
 		&--red {
 			color: $color-red;
