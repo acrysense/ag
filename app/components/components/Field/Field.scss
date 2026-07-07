@@ -73,7 +73,7 @@
             line-height: 1;
             color: $color-black;
             background: $color-white;
-            @include border-all(1, solid, #E1E1E1, xl);
+            @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 14, xl);
             transition: background $transition-default, border $transition-default;
             &::placeholder {
@@ -87,7 +87,7 @@
             }
             &[disabled] {
                 color: $color-dark-grey;
-                background: #F3F6FC;
+                background: $color-bg;
                 border-color: $color-border;
             }
 
@@ -102,7 +102,7 @@
                 @include prop-vw(padding-block, 12.75, lg);
                 @include prop-vw(padding-inline, 15, lg);
                 @include prop-vw(font-size, 16, lg);
-                @include border-all(1, solid, #E1E1E1, lg);
+                @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 14, lg);
                 &::placeholder {
                     @include prop-vw(font-size, 14, lg);
@@ -112,7 +112,7 @@
                 @include prop-vw(padding-block, 12.75, sm);
                 @include prop-vw(padding-inline, 15, sm);
                 @include prop-vw(font-size, 16, sm);
-                @include border-all(1, solid, #E1E1E1, sm);
+                @include border-all(1, solid, $color-border, sm);
                 @include prop-vw(border-radius, 14, sm);
                 &::placeholder {
                     @include prop-vw(font-size, 14, sm);

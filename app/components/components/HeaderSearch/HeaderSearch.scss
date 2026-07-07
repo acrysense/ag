@@ -195,7 +195,7 @@
             @include prop-vw(padding-right, 44, xl);
             @include prop-vw(font-size, 15, xl);
             color: $color-black;
-            background: #F5F8FA;
+            background: $color-bg-light;
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 14, xl);
             transition: border-color $transition-default;
@@ -223,7 +223,7 @@
                 @include prop-vw(padding-right, 38, sm);
                 @include prop-vw(font-size, 12, sm);
                 line-height: 1.25;
-                background: #f5f8fa;
+                background: $color-bg-light;
                 border: none;
                 @include prop-vw(border-radius, 7, sm);
             }
@@ -620,7 +620,7 @@
         font-weight: normal;
         line-height: 1.57142857143;
         color: $color-dark-grey;
-        background: #E7EFF4;
+        background: $color-track;
         border: none;
         @include prop-vw(border-radius, 14, xl);
         cursor: pointer;

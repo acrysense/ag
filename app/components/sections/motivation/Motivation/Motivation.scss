@@ -107,7 +107,7 @@
                     display: block;
                     width: 100vw;
                     @include prop-vw(height, 10, sm);
-                    background: #F5F8FA;
+                    background: $color-bg-light;
                     pointer-events: none;
                 }
             }
@@ -208,7 +208,7 @@
                 display: block;
                 @include prop-vw(width, 15, xl);
                 @include prop-vw(height, 1, xl);
-                background: #ADB4C1;
+                background: $color-mid-grey;
             }
 
             @include only(desktop) {

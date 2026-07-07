@@ -182,7 +182,7 @@
 			}
 			&--a {
 				color: $color-green;
-				background: #e8f5e9;
+				background: $color-green-light;
 			}
 			&--b {
 				color: $color-blue;
@@ -190,7 +190,7 @@
 			}
 			&--c {
 				color: #a07a00;
-				background: rgba(#ffcc00, 0.2);
+				background: rgba($color-yellow, 0.2);
 			}
 			&--d {
 				color: $color-red;
@@ -232,7 +232,7 @@
 		&__prog--green {
 			.pharmacy__prog-val {
 				color: $color-green;
-				background: #e8f5e9;
+				background: $color-green-light;
 			}
 			.pharmacy__prog-fill {
 				background: $color-green;
@@ -250,7 +250,7 @@
 		&__prog--yellow {
 			.pharmacy__prog-val {
 				color: #a07a00;
-				background: rgba(#ffcc00, 0.2);
+				background: rgba($color-yellow, 0.2);
 			}
 			.pharmacy__prog-fill {
 				background: #ffc107;
@@ -343,7 +343,7 @@
 			@include prop-vw(border-radius, 8, xl);
 			&--green {
 				color: $color-green;
-				background: #e8f5e9;
+				background: $color-green-light;
 			}
 			&--blue {
 				color: $color-blue;

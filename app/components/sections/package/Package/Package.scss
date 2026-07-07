@@ -107,7 +107,7 @@
                     display: block;
                     width: 100vw;
                     @include prop-vw(height, 10, sm);
-                    background: #F5F8FA;
+                    background: $color-bg-light;
                     pointer-events: none;
                 }
             }
@@ -197,7 +197,7 @@
             overflow: hidden;
             width: 100%;
             @include prop-vw(height, 30, xl);
-            background: #F3F6FC;
+            background: $color-bg;
             @include prop-vw(border-radius, 8, xl);
 
             @include only(desktop) {
@@ -237,7 +237,7 @@
             text-align: center;
             background-image:
                 linear-gradient(to right, white, white),
-                linear-gradient(to right, #737F8C, #737F8C);
+                linear-gradient(to right, $color-dark-grey, $color-dark-grey);
             background-repeat: no-repeat, no-repeat;
             background-position: left center, left center;
             background-size: 0% 100%, 100% 100%;
@@ -280,7 +280,7 @@
                 display: block;
                 width: 100%;
                 @include prop-vw(height, 5, sm);
-                background: #E1E1E1;
+                background: $color-border;
             }
         }
 
@@ -305,8 +305,8 @@
             @include prop-vw(font-size, 12, xl);
             font-weight: normal;
             line-height: 1.5;
-            background: #FFFFFF;
-            @include border-all(1, solid, #E1E1E1, xl);
+            background: $color-white;
+            @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 10, xl);
             transition: all 0.25s ease-in-out;
             &::placeholder {
@@ -322,14 +322,14 @@
                 @include prop-vw(padding-block, 8, lg);
                 @include prop-vw(padding-inline, 10, lg);
                 @include prop-vw(font-size, 12, lg);
-                @include border-all(1, solid, #E1E1E1, lg);
+                @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 10, lg);
             }
             @include only(mobile) {
                 @include prop-vw(padding-block, 8, sm);
                 @include prop-vw(padding-inline, 10, sm);
                 @include prop-vw(font-size, 12, sm);
-                @include border-all(1, solid, #E1E1E1, sm);
+                @include border-all(1, solid, $color-border, sm);
                 @include prop-vw(border-radius, 10, sm);
             }
         }
@@ -374,10 +374,10 @@
                 color: #575F76;
             }
             &.is--active {
-                color: #FFFFFF;
+                color: $color-white;
                 background: $color-blue;
                 &:hover {
-                    color: #FFFFFF;
+                    color: $color-white;
                 }
             }
 
@@ -426,7 +426,7 @@
         }
         &__head {
             .n-package-table__item:not(.n-package-table__item--empty) {
-                @include border-side(top, 1, solid, #E1E1E1, xl);
+                @include border-side(top, 1, solid, $color-border, xl);
             }
             .n-package-table__item + .n-package-table__item {
                 @include border-side(left, 1, solid, transparent, xl);
@@ -434,7 +434,7 @@
 
             @include only(desktop) {
                 .n-package-table__item:not(.n-package-table__item--empty) {
-                    @include border-side(top, 1, solid, #E1E1E1, lg);
+                    @include border-side(top, 1, solid, $color-border, lg);
                 }
                 .n-package-table__item + .n-package-table__item {
                     @include border-side(left, 1, solid, transparent, lg);
@@ -451,35 +451,35 @@
         }
         &__body {
             .n-package-table__item:not(.n-package-table__item--empty) {
-                @include border-side(top, 1, solid, #E1E1E1, xl);
+                @include border-side(top, 1, solid, $color-border, xl);
             }
             .n-package-table__row:last-child .n-package-table__item:not(.n-package-table__item--empty) {
-                @include border-side(bottom, 1, solid, #E1E1E1, xl);
+                @include border-side(bottom, 1, solid, $color-border, xl);
             }
             .n-package-table__item + .n-package-table__item {
-                @include border-side(left, 1, solid, #E1E1E1, xl);
+                @include border-side(left, 1, solid, $color-border, xl);
             }
 
             @include only(desktop) {
                 .n-package-table__item:not(.n-package-table__item--empty) {
-                    @include border-side(top, 1, solid, #E1E1E1, lg);
+                    @include border-side(top, 1, solid, $color-border, lg);
                 }
                 .n-package-table__row:last-child .n-package-table__item:not(.n-package-table__item--empty) {
-                    @include border-side(bottom, 1, solid, #E1E1E1, lg);
+                    @include border-side(bottom, 1, solid, $color-border, lg);
                 }
                 .n-package-table__item + .n-package-table__item {
-                    @include border-side(left, 1, solid, #E1E1E1, lg);
+                    @include border-side(left, 1, solid, $color-border, lg);
                 }
             }
             @include only(mobile) {
                 .n-package-table__item:not(.n-package-table__item--empty) {
-                    @include border-side(top, 1, solid, #E1E1E1, sm);
+                    @include border-side(top, 1, solid, $color-border, sm);
                 }
                 .n-package-table__row:last-child .n-package-table__item:not(.n-package-table__item--empty) {
-                    @include border-side(bottom, 1, solid, #E1E1E1, sm);
+                    @include border-side(bottom, 1, solid, $color-border, sm);
                 }
                 .n-package-table__item + .n-package-table__item {
-                    @include border-side(left, 1, solid, #E1E1E1, sm);
+                    @include border-side(left, 1, solid, $color-border, sm);
                 }
             }
         }
@@ -497,7 +497,7 @@
             &.is--active {
                 .n-package-table {
                     &__item {
-                        background: rgba(#F3F6FC, 0.4);
+                        background: rgba($color-bg, 0.4);
                     }
                     &__trigger {
                         .minus {
@@ -554,13 +554,13 @@
                 @include prop-vw(width, 260, xl);
             }
             &--light-green {
-                background: #E8F5E9;
+                background: $color-green-light;
             }
             &--green {
                 background: rgba(#63AC39, 0.2);
             }
             &--yellow {
-                background: rgba(#FFCC00, 0.2);
+                background: rgba($color-yellow, 0.2);
             }
             &--empty {
                 border: none;
@@ -679,20 +679,20 @@
             line-height: 1.69230769231;
             text-align: center;
             color: #262626;
-            background: #F3F6FC;
-            @include border-side(top, 1, solid, #E1E1E1, xl);
+            background: $color-bg;
+            @include border-side(top, 1, solid, $color-border, xl);
 
             @include only(desktop) {
                 @include prop-vw(padding-block, 8, lg);
                 @include prop-vw(padding-inline, 10, lg);
                 @include prop-vw(font-size, 13, lg);
-                @include border-side(top, 1, solid, #E1E1E1, lg);
+                @include border-side(top, 1, solid, $color-border, lg);
             }
             @include only(mobile) {
                 @include prop-vw(padding-block, 8, sm);
                 @include prop-vw(padding-inline, 10, sm);
                 @include prop-vw(font-size, 13, sm);
-                @include border-side(top, 1, solid, #E1E1E1, sm);
+                @include border-side(top, 1, solid, $color-border, sm);
             }
         }
         &__value {

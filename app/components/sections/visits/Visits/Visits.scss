@@ -3,7 +3,7 @@
 
 @layer components {
 	// Custom segmented tabs for the visits page (override the base .tabs look):
-	// grey #E7EFF4 track, blue active pill with a soft shadow. Scoped here so
+	// grey $color-track track, blue active pill with a soft shadow. Scoped here so
 	// other pages' tabs are untouched.
 	.visits-page__tabs {
 		.tabs__list {
@@ -12,7 +12,7 @@
 			@include prop-vw(height, 40, xl);
 			@include prop-vw(padding, 2, xl);
 			@include prop-vw(margin-bottom, 20, xl);
-			background: #e7eff4;
+			background: $color-track;
 			@include prop-vw(border-radius, 10, xl);
 
 			@include only(desktop) {

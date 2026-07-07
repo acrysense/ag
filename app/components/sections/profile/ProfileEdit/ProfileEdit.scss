@@ -39,17 +39,17 @@
         &__section + &__section {
             @include prop-vw(margin-top, 40, xl);
             @include prop-vw(padding-top, 40, xl);
-            @include border-side(top, 1, solid, #D3D8DE, xl);
+            @include border-side(top, 1, solid, $color-light-grey, xl);
 
             @include only(desktop) {
                 @include prop-vw(margin-top, 40, lg);
                 @include prop-vw(padding-top, 40, lg);
-                @include border-side(top, 1, solid, #D3D8DE, lg);
+                @include border-side(top, 1, solid, $color-light-grey, lg);
             }
             @include only(mobile) {
                 @include prop-vw(margin-top, 40, sm);
                 @include prop-vw(padding-top, 40, sm);
-                @include border-side(top, 1, solid, #D3D8DE, sm);
+                @include border-side(top, 1, solid, $color-light-grey, sm);
             }
         }
         &__data {

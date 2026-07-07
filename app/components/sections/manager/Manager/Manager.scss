@@ -71,7 +71,7 @@
         &__visits-tabs {
             display: flex;
             @include prop-vw(gap, 2, xl);
-            background: #E7EFF4;
+            background: $color-track;
             @include prop-vw(border-radius, 8, xl);
             @include prop-vw(padding, 2, xl);
         }

@@ -13,7 +13,7 @@
 	}
 
 	.bg-light {
-		background: #f5f8fa;
+		background: $color-bg-light;
 	}
 
 	.wrapper {
@@ -79,7 +79,7 @@
 			@include only(mobile) {
 				flex-direction: column;
 				@include prop-vw(gap, 10, sm);
-            	background: #F5F8FA;
+            	background: $color-bg-light;
 			}
 		}
 		&__left {

@@ -196,7 +196,7 @@
 			&--yes {
 				@include prop-vw(width, 39, xl);
 				color: $color-green;
-				background: #e8f5e9;
+				background: $color-green-light;
 				@include only(mobile) {
 					@include prop-vw(width, 39, sm);
 				}
@@ -570,10 +570,10 @@
 				background: rgba($color-red, 0.1);
 			}
 			&--norm {
-				background: rgba(#ffcc00, 0.18);
+				background: rgba($color-yellow, 0.18);
 			}
 			&--good {
-				background: #e8f5e9;
+				background: $color-green-light;
 			}
 		}
 		&__value {
@@ -594,7 +594,7 @@
 		&__date {
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
-			color: $color-dark-grey; // always #737F8C, independent of the score
+			color: $color-dark-grey; // always $color-dark-grey, independent of the score
 			@include only(mobile) {
 				@include prop-vw(font-size, 14, sm);
 			}
@@ -620,7 +620,7 @@
 			}
 			b {
 				display: block;
-				color: $color-dark-grey; // label — grey #737F8C
+				color: $color-dark-grey; // label — grey $color-dark-grey
 				font-weight: normal;
 			}
 			span {
@@ -1088,7 +1088,7 @@
 			}
 			&--green {
 				color: $color-green;
-				background: #e8f5e9;
+				background: $color-green-light;
 			}
 			&--blue {
 				color: $color-blue;

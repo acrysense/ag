@@ -33,7 +33,7 @@
             @include prop-vw(min-width, 180, xl);
             @include prop-vw(width, 180, xl);
             @include prop-vw(height, 180, xl);
-            background: #D2DCE5;
+            background: $color-grey;
             @include prop-vw(border-radius, 10, xl);
             img {
                 display: block;

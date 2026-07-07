@@ -32,7 +32,7 @@
         }
         @include only(mobile) {
             @include prop-vw(gap, 10, sm);
-            background: #F5F8FA;
+            background: $color-bg-light;
         }
 
         &__card {
@@ -130,7 +130,7 @@
             justify-content: space-between;
             @include prop-vw(gap, 10, xl);
             @include prop-vw(padding, 10, xl);
-            background: #F9DBDB;
+            background: $color-red-light;
             @include prop-vw(border-radius, 14, xl);
 
             @include only(desktop) {
@@ -313,7 +313,7 @@
                 right: 0;
                 display: block;
                 @include prop-vw(height, 1, xl);
-                background: #E1E1E1;
+                background: $color-border;
 
                 @include only(desktop) {
                     @include prop-vw(left, 40, lg);
@@ -356,15 +356,15 @@
             }
             &--b {
                 color: $color-blue;
-                background: #F3F6FC;
+                background: $color-bg;
             }
             &--c {
-                color: #FFCC00;
+                color: $color-yellow;
                 background: #FFF0D6;
             }
             &--d {
                 color: $color-red;
-                background: #F9DBDB;
+                background: $color-red-light;
             }
 
             @include only(desktop) {

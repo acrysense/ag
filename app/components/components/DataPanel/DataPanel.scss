@@ -34,7 +34,7 @@
                 display: block;
                 width: 100vw;
                 @include prop-vw(height, 10, sm);
-                background: #F5F8FA;
+                background: $color-bg-light;
             }
             // no separator strip above the first panel (right after the "Назад" link)
             .wrapper__back + &::before {
@@ -122,7 +122,7 @@
                 @include prop-vw(min-width, 16, sm);
                 @include prop-vw(width, 16, sm);
                 @include prop-vw(height, 16, sm);
-                color: #ADB4C1;
+                color: $color-mid-grey;
             }
         }
         &__export-short {

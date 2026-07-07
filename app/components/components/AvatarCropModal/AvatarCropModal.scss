@@ -134,7 +134,7 @@
                     display: block;
                     @include prop-vw(width, 120, sm);
                     @include prop-vw(height, 6, sm);
-                    background: #D2DCE5;
+                    background: $color-grey;
                     @include prop-vw(border-radius, 40, sm);
                 }
                 & > svg {
