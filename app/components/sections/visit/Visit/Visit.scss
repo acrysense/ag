@@ -208,7 +208,7 @@
 			&--no {
 				@include prop-vw(width, 35, xl);
 				font-weight: normal;
-				color: #BC4141;
+				color: $color-red;
 				background: rgba($color-red, 0.1);
 				@include only(mobile) {
 					@include prop-vw(width, 35, sm);

@@ -179,7 +179,7 @@
             @include prop-vw(font-size, 16, xl);
             font-weight: normal;
             line-height: 1;
-            color: #0F1A24;
+            color: $color-black;
 
             @include only(desktop) {
                 @include prop-vw(margin-bottom, 5, lg);

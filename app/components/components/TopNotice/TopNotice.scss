@@ -9,7 +9,7 @@
 		overflow: hidden;
 		width: 100%;
         color: $color-white;
-		background: #0F1A24;
+		background: $color-black;
 		max-height: var(--h);
 		opacity: 1;
 		transition: max-height .25s ease, opacity .25s ease;
