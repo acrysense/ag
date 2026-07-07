@@ -184,8 +184,18 @@ export default async (root) => {
 			restoreHome()
 			setOpen(false)
 		}
+		// A fresh task can pre-select an assignee by default — e.g. the person
+		// whose page we're on. Backend opts in either with data-default-assignee
+		// on the panel, or data-default on that person's <button> option. Value
+		// must match an option's data-value. Edit mode still prefills from the row.
+		const defaultAssignee = () =>
+			root.dataset.defaultAssignee ||
+			assigneeSelect?.querySelector('.ui-select__option[data-default]')?.dataset.value ||
+			''
 		const openCreate = () => {
 			closeForm()
+			const preset = defaultAssignee()
+			if (preset) setSelect(assigneeSelect, preset)
 			setOpen(true)
 		}
 		const openEdit = (row) => {
