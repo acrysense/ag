@@ -33,6 +33,9 @@
 @forward '@/components/components/ProfileDropdown/ProfileDropdown';
 @forward '@/components/components/Button/Button';
 @forward '@/components/components/Field/Field';
+// shared form primitives — loaded before feature panels so their overrides win
+@forward '@/components/components/UiSelect/UiSelect';
+@forward '@/components/components/UiDatepicker/UiDatepicker';
 @forward '@/components/components/AvatarUpload/AvatarUpload';
 @forward '@/components/components/AvatarCropModal/AvatarCropModal';
 @forward '@/components/components/PhotoViewer/PhotoViewer';

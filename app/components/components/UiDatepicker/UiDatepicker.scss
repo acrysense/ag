@@ -1,0 +1,220 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+// Reusable date-picker primitive (field control + popover calendar).
+// Extracted from TasksPanel so it's a shared component, not buried in a feature.
+@layer components {
+    // --- Reusable datepicker (field control + popover calendar) ---
+    .ui-datepicker {
+        &__toggle {
+            position: absolute;
+            top: 50%;
+            @include prop-vw(right, 15, xl);
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            @include prop-vw(width, 24, xl);
+            @include prop-vw(height, 24, xl);
+            background: transparent;
+            border: none;
+            color: $color-dark-grey;
+            cursor: pointer;
+            & > svg {
+                @include prop-vw(width, 16, xl);
+                @include prop-vw(height, 16, xl);
+                color: $color-black;
+            }
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(right, 15, lg);
+                @include prop-vw(width, 24, lg);
+                @include prop-vw(height, 24, lg);
+                & > svg {
+                    @include prop-vw(width, 16, lg);
+                    @include prop-vw(height, 16, lg);
+                }
+            }
+            @include only(mobile) {
+                @include prop-vw(right, 15, sm);
+                @include prop-vw(width, 24, sm);
+                @include prop-vw(height, 24, sm);
+                & > svg {
+                    @include prop-vw(width, 16, sm);
+                    @include prop-vw(height, 16, sm);
+                }
+            }
+        }
+        &__input {
+            @include prop-vw(padding-right, 44, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-right, 44, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-right, 44, sm);
+            }
+        }
+        &__pop {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            z-index: 20;
+            @include prop-vw(width, 280, xl);
+            @include prop-vw(padding, 16, xl);
+            background: $color-white;
+            @include border-all(1, solid, $color-border, xl);
+            @include prop-vw(border-radius, 16, xl);
+            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
+            &[hidden] {
+                display: none;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(width, 280, lg);
+                @include prop-vw(padding, 16, lg);
+                @include prop-vw(border-radius, 16, lg);
+            }
+            @include only(mobile) {
+                // anchor left so it can't run off the right/left edge of the screen
+                right: auto;
+                left: 0;
+                @include prop-vw(width, 300, sm);
+                max-width: calc(100vw - 40px);
+                @include prop-vw(padding, 16, sm);
+                @include prop-vw(border-radius, 16, sm);
+            }
+        }
+        &__head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            @include prop-vw(margin-bottom, 10, xl);
+
+            @include only(mobile) {
+                @include prop-vw(margin-bottom, 12, sm);
+            }
+        }
+        &__caption {
+            @include prop-vw(font-size, 15, xl);
+            font-weight: 600;
+            color: $color-black;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 15, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 16, sm);
+            }
+        }
+        &__nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(width, 28, xl);
+            @include prop-vw(height, 28, xl);
+            @include prop-vw(font-size, 20, xl);
+            color: $color-dark-grey;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 8, xl);
+            cursor: pointer;
+            transition: color $transition-default, background $transition-default;
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: $color-blue;
+                    background: $color-bg;
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(width, 28, lg);
+                @include prop-vw(height, 28, lg);
+                @include prop-vw(font-size, 20, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(width, 36, sm);
+                @include prop-vw(height, 36, sm);
+                @include prop-vw(font-size, 24, sm);
+            }
+        }
+        &__weekdays {
+            display: grid;
+            // minmax(0, …) lets columns shrink to the panel width — plain 1fr
+            // keeps a min-content floor that the aspect-ratio cells overflow
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            @include prop-vw(gap, 2, xl);
+            @include prop-vw(margin-bottom, 4, xl);
+            & > span {
+                text-align: center;
+                @include prop-vw(font-size, 12, xl);
+                color: $color-dark-grey;
+
+                @include only(desktop) {
+                    @include prop-vw(font-size, 12, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(font-size, 13, sm);
+                }
+            }
+
+            @include only(mobile) {
+                @include prop-vw(gap, 4, sm);
+                @include prop-vw(margin-bottom, 6, sm);
+            }
+        }
+        &__grid {
+            display: grid;
+            grid-template-columns: repeat(7, minmax(0, 1fr));
+            @include prop-vw(gap, 2, xl);
+
+            @include only(mobile) {
+                @include prop-vw(gap, 4, sm);
+            }
+        }
+        &__cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1;
+            @include prop-vw(font-size, 14, xl);
+            color: $color-black;
+            background: transparent;
+            border: none;
+            @include prop-vw(border-radius, 8, xl);
+            cursor: pointer;
+            transition: color $transition-default, background $transition-default;
+            &.is-empty {
+                pointer-events: none;
+            }
+            &.is-selected {
+                color: $color-white;
+                background: $color-blue;
+            }
+            // days inside a selected from–to range
+            &.is-range {
+                background: rgba($color-blue, 0.12);
+            }
+            @media screen and (hover: hover) {
+                &:not(.is-empty):not(.is-selected):hover {
+                    background: $color-bg;
+                }
+            }
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 8, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 16, sm);
+                @include prop-vw(border-radius, 10, sm);
+            }
+        }
+    }
+}
