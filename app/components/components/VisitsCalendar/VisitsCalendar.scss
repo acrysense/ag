@@ -844,9 +844,12 @@
 			border: none;
 			cursor: pointer;
 			transition: color $transition-default;
-			@media screen and (hover: hover) {
-				&:hover {
-					color: $color-red;
+			// hover-red only for the desktop text link (mobile is a red button)
+			@include up(tablet) {
+				@media screen and (hover: hover) {
+					&:hover {
+						color: $color-red;
+					}
 				}
 			}
 		}
@@ -911,12 +914,35 @@
 			&__comment { @include prop-vw(font-size, 14, sm); }
 			&__footer {
 				margin-top: auto; // pin the action bar to the bottom of the sheet
-				@include prop-vw(gap, 12, sm);
+				@include prop-vw(gap, 10, sm);
 				@include prop-vw(padding-top, 20, sm);
 				@include border-side(top, 1, solid, $color-border, sm);
-				.btn { @include prop-vw(padding-block, 16, sm); @include prop-vw(font-size, 14, sm); @include prop-vw(border-radius, 14, sm); }
+				// full width when alone ("Подробнее"); 50/50 when paired with delete
+				// (equal padding-inline + min-width:0 so flex:1 splits evenly)
+				.btn {
+					flex: 1 1 0;
+					min-width: 0;
+					@include prop-vw(padding-block, 16, sm);
+					@include prop-vw(padding-inline, 10, sm);
+					@include prop-vw(font-size, 14, sm);
+					@include prop-vw(border-radius, 14, sm);
+				}
 			}
-			&__del { @include prop-vw(font-size, 14, sm); }
+			// delete becomes a real red button, 50% width beside "Начать визит"
+			&__del {
+				flex: 1 1 0;
+				min-width: 0;
+				align-self: auto;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: $color-white;
+				background: $color-red;
+				@include prop-vw(padding-block, 16, sm);
+				@include prop-vw(padding-inline, 10, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(border-radius, 14, sm);
+			}
 		}
 	}
 
