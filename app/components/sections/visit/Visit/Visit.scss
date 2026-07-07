@@ -405,24 +405,12 @@
 		width: 100%;
 		table-layout: fixed; // fixed widths → editing/typing never reflows columns
 		border-collapse: collapse;
-		// column widths (colgroup). The criterion column is auto and absorbs the
-		// slack; the rest are fixed.
-		&__col--idx {
-			@include prop-vw(width, 39, xl);
-			@include only(mobile) { @include prop-vw(width, 39, sm); }
-		}
-		&__col--num {
-			@include prop-vw(width, 95, xl);
-			@include only(mobile) { @include prop-vw(width, 95, sm); }
-		}
-		&__col--pct {
-			@include prop-vw(width, 50, xl);
-			@include only(mobile) { @include prop-vw(width, 50, sm); }
-		}
-		&__col--menu {
-			@include prop-vw(width, 24, xl);
-			@include only(mobile) { @include prop-vw(width, 24, sm); }
-		}
+		// Column widths live on the header <th> cells, NOT on <col> — WebKit/Safari
+		// ignores a <col> `width` set with a CSS math function (max()/clamp(), which
+		// prop-vw emits), collapsing every column to an equal 1/n share. Regular
+		// cells honour those widths everywhere. table-layout:fixed reads the first
+		// row, so the header th widths define the columns. The criterion th stays
+		// auto and absorbs the slack.
 		// on mobile the fixed columns exceed the viewport → scroll; keep the
 		// criterion readable with a table min-width
 		@include only(mobile) {
@@ -455,8 +443,20 @@
 					@include prop-vw(font-size, 12, sm);
 				}
 			}
+			// widths (border-box: value already includes the 15px padding-right)
+			&--idx {
+				@include prop-vw(width, 39, xl);
+				@include only(mobile) { @include prop-vw(width, 39, sm); }
+			}
+			&--num {
+				@include prop-vw(width, 95, xl);
+				@include only(mobile) { @include prop-vw(width, 95, sm); }
+			}
 			&--group {
 				text-align: center;
+				// spans the two count columns (95 each) → fixed-layout splits it evenly
+				@include prop-vw(width, 190, xl);
+				@include only(mobile) { @include prop-vw(width, 190, sm); }
 			}
 			&--sub {
 				@include prop-vw(font-size, 12, xl);
@@ -467,6 +467,12 @@
 			}
 			&--pct {
 				text-align: right;
+				@include prop-vw(width, 50, xl);
+				@include only(mobile) { @include prop-vw(width, 50, sm); }
+			}
+			&--menu {
+				@include prop-vw(width, 24, xl);
+				@include only(mobile) { @include prop-vw(width, 24, sm); }
 			}
 		}
 		&__row {
