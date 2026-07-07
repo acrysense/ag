@@ -934,6 +934,12 @@
 			@include only(mobile) {
 				width: 100%;
 			}
+			// data-panel zeroes padding-top on mobile — restore it to match the bottom
+			.data-panel {
+				@include only(mobile) {
+					@include prop-vw(padding-top, 20, sm);
+				}
+			}
 		}
 		// "Таргет посещений" card uses a smaller title than the default data-panel
 		&__target .data-panel__title {
