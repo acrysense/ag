@@ -16,29 +16,41 @@
 
         // --- top row: profile card + visits panel ---
         &__top {
-            display: flex;
-            align-items: flex-start;
+            display: grid;
+            align-items: start;
             @include prop-vw(gap, 20, xl);
+            // left column = card + KPI stacked (flexible); right column = visits
+            // (fixed width, spans both rows)
+            grid-template-columns: minmax(0, 1fr) #{vw-range(360, xl)};
+            grid-template-areas:
+                "card   visits"
+                "kpi    visits";
 
             @include only(desktop) {
                 @include prop-vw(gap, 20, lg);
+                grid-template-columns: minmax(0, 1fr) #{vw-range(320, lg)};
             }
             @include only(mobile) {
-                flex-direction: column;
                 @include prop-vw(gap, 10, sm);
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "card"
+                    "kpi"
+                    "visits";
             }
         }
         &__card {
-            flex: 1 1 auto;
+            grid-area: card;
             min-width: 0;
             .employee__profile {
                 display: flex;
                 align-items: flex-start;
                 @include prop-vw(gap, 20, xl);
             }
-            @include only(mobile) {
-                width: 100%;
-            }
+        }
+        &__kpi {
+            grid-area: kpi;
+            min-width: 0; // let the wide KPI table scroll inside the column
         }
         &__rating {
             flex-shrink: 0;
@@ -50,16 +62,7 @@
             width: 100%;
         }
         &__visits {
-            flex-shrink: 0;
-            @include prop-vw(width, 360, xl);
-            align-self: stretch;
-
-            @include only(desktop) {
-                @include prop-vw(width, 320, lg);
-            }
-            @include only(mobile) {
-                width: 100%;
-            }
+            grid-area: visits; // width from the grid column; spans card + KPI height
         }
         &__visits-head {
             display: flex;
