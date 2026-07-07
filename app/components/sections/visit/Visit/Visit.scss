@@ -350,10 +350,6 @@
 		&-area {
 			resize: none;
 			overflow: hidden;
-			@include prop-vw(min-height, 72, xl);
-			@include only(mobile) {
-				@include prop-vw(min-height, 72, sm);
-			}
 		}
 		&-actions {
 			display: flex;
@@ -767,6 +763,7 @@
 			align-items: stretch;
 			@include prop-vw(gap, 10, sm);
 			@include prop-vw(margin-top, 10, sm);
+			@include prop-vw(margin-bottom, 40, sm); // отступ под «Удалить визит»
 			@include prop-vw(padding-inline, 10, sm);
 		}
 		&-main {
@@ -845,18 +842,13 @@
 
 	// panels whose top padding must match the bottom on mobile (global .data-panel
 	// zeroes padding-top there). Compound selector beats the global padding-top: 0.
+	.data-panel.visit-emp,
 	.data-panel.visit-meta,
 	.data-panel.visit-hist,
 	.data-panel.visit-result,
 	.data-panel.visit {
 		@include only(mobile) {
 			@include prop-vw(padding-top, 20, sm);
-		}
-	}
-	// employee card sits right under the "Назад" link — a smaller top padding
-	.data-panel.visit-emp {
-		@include only(mobile) {
-			@include prop-vw(padding-top, 10, sm);
 		}
 	}
 
@@ -1112,47 +1104,4 @@
 		}
 	}
 
-	// ---- mobile reorder: employee card + visit meta first, history stays last ----
-	// flatten the two columns so their panels can reorder across them
-	@include only(mobile) {
-		.visit-page .wrapper__left,
-		.visit-page .wrapper__right {
-			display: contents;
-		}
-		// the .wrapper__double flex gap already spaces the flattened panels — drop
-		// the DOM-adjacency margins (they'd double the spacing after flattening)
-		.visit-page .wrapper__left > .data-panel + .data-panel,
-		.visit-page .wrapper__left > .data-panel + .visit__footer,
-		.visit-page .wrapper__right > .data-panel + .data-panel {
-			margin-top: 0;
-		}
-		// "Назад" → employee card: a bit of white spacing under the link and no
-		// grey strip between them (pull the card up over the flex gap)
-		.visit-page .wrapper__back {
-			@include prop-vw(padding-bottom, 10, sm);
-		}
-		// .wrapper__back keeps default order 0 (stays at the very top)
-		.data-panel.visit-emp {
-			order: 1;
-			margin-top: calc(0px - #{vw-range(10, sm)}); // cancel the flex gap
-			&::before {
-				content: none; // no grey separator above the first block
-			}
-		}
-		.visit-meta {
-			order: 2;
-		}
-		.data-panel.visit {
-			order: 3;
-		}
-		.visit-result {
-			order: 4;
-		}
-		.visit__footer {
-			order: 5;
-		}
-		.visit-hist {
-			order: 6;
-		}
-	}
 }

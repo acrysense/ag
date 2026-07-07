@@ -143,14 +143,13 @@
 
 	// "Лист" score — coloured by result tone
 	.visits-score {
-		font-weight: 600;
+		font-weight: normal; // все значения листа — regular, не bold
 		white-space: nowrap;
 		&--green {
 			color: $color-green;
 		}
 		&--blue {
 			color: $color-blue;
-			font-weight: normal; // blue score is regular, not bold
 		}
 		&--red {
 			color: $color-red;
