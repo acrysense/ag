@@ -350,6 +350,10 @@
 		&-area {
 			resize: none;
 			overflow: hidden;
+			// textarea UA default is break-word — with pre-wrap it shoves a
+			// wrap-boundary space to the next line's start (visible gap in some
+			// browsers). Wrap at spaces only.
+			overflow-wrap: normal;
 		}
 		&-actions {
 			display: flex;
@@ -657,6 +661,7 @@
 			color: $color-black;
 			resize: none;
 			overflow: hidden;
+			overflow-wrap: normal; // avoid the break-word + pre-wrap wrap-gap
 			@include border-all(1, solid, $color-border, xl);
 			@include prop-vw(border-radius, 12, xl);
 			@include only(mobile) {

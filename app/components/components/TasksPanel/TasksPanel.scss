@@ -1017,9 +1017,12 @@
         &__input {
             display: block;
             width: 100%;
-            // textarea: autosize drives the height, so no manual resize handle
+            // textarea: autosize drives the height, so no manual resize handle;
+            // overflow-wrap:normal overrides the textarea UA default (break-word),
+            // which with pre-wrap leaves a gap at wrapped-line starts in some browsers
             resize: none;
             overflow: hidden;
+            overflow-wrap: normal;
             @include prop-vw(padding-block, 12, xl);
             @include prop-vw(padding-inline, 15, xl);
             background: transparent;
