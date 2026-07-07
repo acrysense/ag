@@ -190,8 +190,9 @@
 			min-height: 0;
 			@include prop-vw(min-height, 202, xl);
 			@include prop-vw(padding, 5, xl);
+			// days from adjacent months: no background, just lighten the content
 			&.is-out {
-				background: #fbfcfe;
+				opacity: 0.5;
 			}
 		}
 		&__daynum {
@@ -200,9 +201,6 @@
 			line-height: 1.25;
 			color: #adb4c1;
 			@include prop-vw(margin-bottom, 20, xl);
-			.vcal__cell.is-out & {
-				color: $color-grey;
-			}
 		}
 		&__events {
 			display: flex;
