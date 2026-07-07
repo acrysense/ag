@@ -113,6 +113,7 @@
             line-height: 1.57142857143;
             color: $color-blue;
             cursor: pointer;
+            transition: color $transition-default;
 
             @media screen and (hover: hover) {
                 &:hover {
@@ -532,6 +533,7 @@
             border: none;
             @include prop-vw(border-radius, 8, xl);
             cursor: pointer;
+            transition: color $transition-default, background $transition-default;
             @media screen and (hover: hover) {
                 &:hover {
                     color: $color-blue;
@@ -595,6 +597,7 @@
             border: none;
             @include prop-vw(border-radius, 8, xl);
             cursor: pointer;
+            transition: color $transition-default, background $transition-default;
             &.is-empty {
                 pointer-events: none;
             }
@@ -862,6 +865,9 @@
             font-weight: normal;
             line-height: 1.57142857143;
             color: $color-black;
+            // muted rows lighten the title to grey and restore it on hover —
+            // fade the colour so it doesn't snap (the status dot already fades)
+            transition: color $transition-default;
 
             @include only(desktop) {
                 @include prop-vw(margin-top, 1, lg);
@@ -973,6 +979,7 @@
         }
         &__cancel {
             color: $color-blue;
+            transition: color $transition-default;
             @media screen and (hover: hover) {
                 &:hover {
                     color: $color-blue-hover;

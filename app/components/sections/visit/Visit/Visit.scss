@@ -705,6 +705,7 @@
 		}
 		&__link {
 			color: $color-blue;
+			transition: color $transition-default;
 			@media screen and (hover: hover) {
 				&:hover {
 					color: $color-blue-hover;

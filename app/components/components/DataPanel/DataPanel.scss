@@ -97,6 +97,7 @@
             line-height: 1.57142857143;
             color: $color-blue;
             white-space: nowrap;
+            transition: color $transition-default;
 
             @media screen and (hover: hover) {
                 &:hover {
