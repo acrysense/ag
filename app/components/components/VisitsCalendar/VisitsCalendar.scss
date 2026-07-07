@@ -290,10 +290,22 @@
 			line-height: 1.25;
 			background: #f3f6fc;
 			@include prop-vw(border-radius, 7, xl);
+			@include only(mobile) {
+				@include prop-vw(gap, 5, sm);
+				@include prop-vw(min-width, 140, sm);
+				@include prop-vw(padding-block, 12.5, sm);
+				@include prop-vw(padding-inline, 10, sm);
+				@include prop-vw(font-size, 12, sm);
+				@include prop-vw(border-radius, 7, sm);
+			}
 			& > svg {
 				flex-shrink: 0;
 				@include prop-vw(width, 12, xl);
 				@include prop-vw(height, 12, xl);
+				@include only(mobile) {
+					@include prop-vw(width, 12, sm);
+					@include prop-vw(height, 12, sm);
+				}
 			}
 		}
 
@@ -314,6 +326,7 @@
 			@include only(mobile) {
 				grid-template-columns: #{vw-range(58, sm)} repeat(var(--days, 5), minmax(0, 1fr));
 				@include prop-vw(min-width, 780, sm); // wider day columns so they don't cramp
+				overflow: visible; // an intervening overflow:hidden breaks the sticky time column
 			}
 		}
 		// time column + top-left corner: shaded strip, no borders, text centred
@@ -326,6 +339,13 @@
 			@include prop-vw(padding-left, 10, xl);
 			background: #f5f8fa;
 			@include only(mobile) {
+				// pin the time column to the left while the grid scrolls sideways;
+				// the shadow extends the shaded strip over the grid's 10px left
+				// padding so scrolled cells don't peek beside it
+				position: sticky;
+				left: 0;
+				z-index: 2;
+				box-shadow: -12px 0 0 #f5f8fa;
 				@include prop-vw(min-height, 60, sm);
 				@include prop-vw(padding-left, 10, sm);
 			}
@@ -340,16 +360,17 @@
 			}
 		}
 		// rounded left edge of the shaded time column (top corner + last 18:00 hour)
+		// — desktop only; on mobile the column is square (and sticky)
 		&__tcorner {
 			@include prop-vw(border-top-left-radius, 10, xl);
 			@include only(mobile) {
-				@include prop-vw(border-top-left-radius, 10, sm);
+				border-top-left-radius: 0;
 			}
 		}
 		&__hour:last-of-type {
 			@include prop-vw(border-bottom-left-radius, 10, xl);
 			@include only(mobile) {
-				@include prop-vw(border-bottom-left-radius, 10, sm);
+				border-bottom-left-radius: 0;
 			}
 		}
 		&__tcol-head {
@@ -890,6 +911,8 @@
 		}
 		@include only(mobile) {
 			flex-direction: column;
+			// grey gutter shows in the 10px gap between the stacked white panels
+			background: #f5f8fa;
 			@include prop-vw(gap, 10, sm);
 		}
 		&__cal {
