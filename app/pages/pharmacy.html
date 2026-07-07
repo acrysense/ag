@@ -201,7 +201,7 @@
 								<!-- category history -->
 								<section class="data-panel pharmacy__history">
 									<h2 class="data-panel__title">История категорий аптеки</h2>
-									<ul class="pharmacy__history-list">
+									<ul class="employee-history__list">
 										{{#each (arr
 											(obj c="b" v="0.83" d="10.03.2026")
 											(obj c="a" v="1.22" d="10.02.2026")
@@ -214,9 +214,9 @@
 											(obj c="a" v="1.34" d="10.08.2025")
 											(obj c="b" v="0.78" d="10.07.2025")
 										)}}
-										<li class="pharmacy__history-item">
-											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
-											<span class="pharmacy__history-text"><b>{{this.v}}</b>, {{this.d}}</span>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--{{this.c}}">{{this.c}}</span>
+											<span class="employee-history__text"><b>{{this.v}}</b> {{this.d}}</span>
 										</li>
 										{{/each}}
 									</ul>
@@ -259,7 +259,7 @@
 											<button type="button" class="manager__visits-tab">История</button>
 										</div>
 									</div>
-									<ul class="pharmacy__visits-list">
+									<ul class="visit-hist__list pharmacy__visits-list">
 										{{#each (arr
 											(obj tone="blue" score="78/100" d="10.02.2026" type="Коучинг")
 											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
@@ -277,9 +277,9 @@
 											(obj tone="red" score="29/100" d="10.02.2026" type="Контроль")
 											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
 										)}}
-										<li class="pharmacy__visit">
-											<span class="pharmacy__visit-score pharmacy__visit-score--{{this.tone}}">{{this.score}}</span>
-											<span class="pharmacy__visit-text">{{this.d}}, {{this.type}}</span>
+										<li class="visit-hist__item">
+											<span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
+											<span class="visit-hist__text">{{this.d}}, <span class="visit-hist__type">{{this.type}}</span></span>
 										</li>
 										{{/each}}
 									</ul>

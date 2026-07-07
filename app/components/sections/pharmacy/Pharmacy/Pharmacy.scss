@@ -257,22 +257,13 @@
 			}
 		}
 
-		// --- category history list (aside) ---
-		&__history-list {
-			display: flex;
-			flex-direction: column;
-			@include prop-vw(gap, 16, xl);
-			@include prop-vw(margin-top, 16, xl);
-		}
-		&__history-item {
-			display: flex;
-			align-items: center;
-			@include prop-vw(gap, 12, xl);
-			@include prop-vw(font-size, 14, xl);
-			color: $color-dark-grey;
-			b {
-				font-weight: 600;
-				color: $color-black;
+		// --- category history (aside) — reuses .employee-history list styles ---
+		&__history {
+			.employee-history__list {
+				@include prop-vw(margin-top, 16, xl);
+			}
+			.employee-history__badge {
+				text-transform: uppercase; // data feeds lowercase category letters
 			}
 		}
 
@@ -320,43 +311,11 @@
 			@include prop-vw(gap, 12, xl);
 			@include prop-vw(margin-bottom, 16, xl);
 		}
+		// visit-hist__list already stacks/spaces/divides the items — here just cap
+		// the list height with an internal scroll
 		&__visits-list {
-			display: flex;
-			flex-direction: column;
-			@include prop-vw(gap, 14, xl);
 			@include prop-vw(max-height, 520, xl);
 			overflow-y: auto;
-		}
-		&__visit {
-			display: flex;
-			align-items: center;
-			@include prop-vw(gap, 12, xl);
-		}
-		&__visit-score {
-			flex-shrink: 0;
-			@include prop-vw(min-width, 56, xl);
-			@include prop-vw(padding-block, 4, xl);
-			@include prop-vw(padding-inline, 8, xl);
-			@include prop-vw(font-size, 13, xl);
-			font-weight: 600;
-			text-align: center;
-			@include prop-vw(border-radius, 8, xl);
-			&--green {
-				color: $color-green;
-				background: $color-green-light;
-			}
-			&--blue {
-				color: $color-blue;
-				background: rgba($color-blue, 0.1);
-			}
-			&--red {
-				color: $color-red;
-				background: rgba($color-red, 0.12);
-			}
-		}
-		&__visit-text {
-			@include prop-vw(font-size, 14, xl);
-			color: $color-black;
 		}
 	}
 
