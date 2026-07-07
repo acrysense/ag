@@ -601,6 +601,9 @@
 				.vcal__tgrid-inner {
 					min-width: 0;
 					grid-template-columns: #{vw-range(62, sm)} minmax(0, 1fr);
+					// no horizontal scroll here → no sticky needed, so re-clip the
+					// cells' trailing shadows (bottom line was poking out below 18:00)
+					overflow: hidden;
 				}
 			}
 			// Week columns are narrow — shrink the "+ Создать визит" chip to fit
@@ -620,6 +623,11 @@
 	@keyframes vcal-pop-in-mobile {
 		from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); }
 		to { opacity: 1; transform: translate(-50%, -50%); }
+	}
+	// full-screen sheet entrance (mobile popup)
+	@keyframes vcal-pop-in-sheet {
+		from { opacity: 0; transform: translateY(16px); }
+		to { opacity: 1; transform: none; }
 	}
 	@keyframes vcal-pop-backdrop-in {
 		from { opacity: 0; }
@@ -846,19 +854,19 @@
 		// mobile: popup is authored at xl scale (floors to ~0.53x under 1024) —
 		// re-scale to sm so it is not tiny/cramped on phones
 		@include only(mobile) {
+			// full-screen sheet, like the "Создать визит" modal
 			position: fixed;
+			inset: 0;
 			z-index: 1201;
-			animation-name: vcal-pop-in-mobile;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			max-height: calc(100dvh - 40px);
+			animation-name: vcal-pop-in-sheet;
+			transform: none;
+			width: 100%;
+			max-width: none;
+			max-height: none;
 			overflow-y: auto;
-			max-width: calc(100vw - 32px);
-			@include prop-vw(width, 320, sm);
-			@include prop-vw(padding, 15, sm);
+			border-radius: 0;
+			@include prop-vw(padding, 20, sm);
 			@include prop-vw(gap, 15, sm);
-			@include prop-vw(border-radius, 20, sm);
 			&__card {
 				@include prop-vw(gap, 5, sm);
 				@include prop-vw(padding, 10, sm);
@@ -900,6 +908,7 @@
 			&__link { @include prop-vw(font-size, 14, sm); }
 			&__comment { @include prop-vw(font-size, 14, sm); }
 			&__footer {
+				margin-top: auto; // pin the action bar to the bottom of the sheet
 				@include prop-vw(gap, 12, sm);
 				@include prop-vw(padding-top, 20, sm);
 				@include border-side(top, 1, solid, $color-border, sm);
