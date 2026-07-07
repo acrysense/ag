@@ -47,6 +47,13 @@
             &--danger:hover:not([disabled]) {
                 background: #a83a3a;
             }
+            // secondary / ghost (Отмена, Сбросить, «Сохранить черновик» …) stay
+            // neutral on hover — a soft grey fill, not the blue promote (перебор)
+            &--secondary:hover:not([disabled]),
+            &--ghost:hover:not([disabled]) {
+                color: $color-black;
+                background: $color-grey;
+            }
         }
         @include only(desktop) {
             @include prop-vw(padding-block, 17, lg);
