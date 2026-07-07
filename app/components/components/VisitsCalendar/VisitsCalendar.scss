@@ -919,9 +919,12 @@
 				@include border-side(top, 1, solid, $color-border, sm);
 				// full width when alone ("Подробнее"); 50/50 when paired with delete
 				// (equal padding-inline + min-width:0 so flex:1 splits evenly)
+				// both 46 tall (line-height 1 + padding 16, no fixed height), regular
 				.btn {
 					flex: 1 1 0;
 					min-width: 0;
+					font-weight: normal;
+					line-height: 1;
 					@include prop-vw(padding-block, 16, sm);
 					@include prop-vw(padding-inline, 10, sm);
 					@include prop-vw(font-size, 14, sm);
@@ -936,6 +939,8 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+				font-weight: normal;
+				line-height: 1;
 				color: $color-white;
 				background: $color-red;
 				@include prop-vw(padding-block, 16, sm);

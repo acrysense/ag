@@ -1046,4 +1046,32 @@
 			color: $color-dark-grey;
 		}
 	}
+
+	// ---- mobile reorder: employee card + visit meta first, history stays last ----
+	// flatten the two columns so their panels can reorder across them
+	@include only(mobile) {
+		.visit-page .wrapper__left,
+		.visit-page .wrapper__right {
+			display: contents;
+		}
+		// .wrapper__back keeps default order 0 (stays at the very top)
+		.visit-emp {
+			order: 1;
+		}
+		.visit-meta {
+			order: 2;
+		}
+		.data-panel.visit {
+			order: 3;
+		}
+		.visit-result {
+			order: 4;
+		}
+		.visit__footer {
+			order: 5;
+		}
+		.visit-hist {
+			order: 6;
+		}
+	}
 }
