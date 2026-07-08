@@ -371,20 +371,22 @@
 		}
 	}
 
-	// the "Комментировать" editor is a growing textarea — no manual resize
-	// handle (autosize drives the height as the comment wraps). No side padding
-	// so the text lines up with the item title on the left (desktop had a 15px
-	// indent from the shared .task-comment__input; mobile is already flush), and
-	// no top padding so the comment doesn't sit too low under the title.
-	.visit-q .task-comment__input {
-		resize: none;
-		overflow: hidden;
-		padding-inline: 0;
+	// the comment editor (qualitative + quantitative rows) is a growing textarea.
+	// No top/side padding so the text lines up with the title on the left (the
+	// shared .task-comment__input adds a 12/15 padding meant for the tasks panel);
+	// a 10px bottom padding gives the buttons below a little breathing room.
+	.visit-q .task-comment__input,
+	.visit-quant .task-comment__input {
 		padding-top: 0;
+		padding-inline: 0;
+		@include prop-vw(padding-bottom, 10, xl);
+		@include only(mobile) {
+			@include prop-vw(padding-bottom, 10, sm);
+		}
 	}
-	// save/cancel buttons flush with the comment text on the left (desktop had a
-	// 15px indent; mobile is already flush)
-	.visit-q .task-comment__actions {
+	// save/cancel buttons flush with the comment text on the left
+	.visit-q .task-comment__actions,
+	.visit-quant .task-comment__actions {
 		margin-left: 0;
 	}
 
