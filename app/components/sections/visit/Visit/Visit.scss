@@ -452,47 +452,61 @@
 		&__th {
 			@include prop-vw(padding-block, 10, xl);
 			@include prop-vw(padding-right, 15, xl);
-			@include prop-vw(font-size, 14, xl);
-			line-height: 1.57142857143;
-			font-weight: normal;
-			color: $color-dark-grey;
+			// small meta labels: Критерий, %, Покупателей, Рекомендации, «Балы, 1-5»
+			@include prop-vw(font-size, 10, xl);
+			line-height: 1.2;
+			font-weight: 600;
+			color: $color-dark-grey; // #737F8C
 			@include only(mobile) {
 				@include prop-vw(padding-block, 10, sm);
 				@include prop-vw(padding-right, 15, sm);
-				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(font-size, 10, sm);
 			}
-			span {
-				display: block;
+			// grid placement: 7 columns × 2 header rows.
+			// Widths come from the tracks: each fixed track minus the 15px right
+			// padding gives the visible label box — 95−15 = 80 over each input,
+			// 190−15 = 175 for the group, and the 1fr criterion column matches the
+			// body cell — so every label sits exactly over its column.
+			&--idx { grid-column: 1; grid-row: 1 / span 2; }
+			// «Критерий» — same 1fr column as .visit-quant__td--crit → exact overlap
+			&--crit { grid-column: 2; grid-row: 1 / span 2; }
+			// «Качество» — larger regular label; its 80px box sits over the input
+			&--num {
+				grid-column: 3;
+				grid-row: 1 / span 2;
 				@include prop-vw(font-size, 12, xl);
 				line-height: 1.25;
+				font-weight: normal;
 				@include only(mobile) {
 					@include prop-vw(font-size, 12, sm);
 				}
+				// «Балы, 1-5» — back to the small meta style
+				span {
+					display: block;
+					@include prop-vw(font-size, 10, xl);
+					line-height: 1.2;
+					font-weight: 600;
+					@include only(mobile) {
+						@include prop-vw(font-size, 10, sm);
+					}
+				}
 			}
-			// grid placement: 7 columns × 2 header rows
-			&--idx { grid-column: 1; grid-row: 1 / span 2; }
-			&--crit { grid-column: 2; grid-row: 1 / span 2; }
-			&--num { grid-column: 3; grid-row: 1 / span 2; }
+			// «Оценка количества» — 175px box (spans both count columns), left
+			// aligned so it starts over «Покупателей» and ends over «Рекомендации»
 			&--group {
 				grid-column: 4 / span 2;
 				grid-row: 1;
-				text-align: center;
-			}
-			&--sub {
 				@include prop-vw(font-size, 12, xl);
 				line-height: 1.25;
-				grid-row: 2;
+				font-weight: normal;
 				@include only(mobile) {
 					@include prop-vw(font-size, 12, sm);
 				}
 			}
+			&--sub { grid-row: 2; } // «Покупателей» / «Рекомендации» — base meta style
 			&--sub-a { grid-column: 4; }
 			&--sub-b { grid-column: 5; }
-			&--pct {
-				grid-column: 6;
-				grid-row: 1 / span 2;
-				text-align: right;
-			}
+			&--pct { grid-column: 6; grid-row: 1 / span 2; } // left-aligned, base style
 			&--menu {
 				grid-column: 7;
 				grid-row: 1 / span 2;
