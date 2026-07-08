@@ -71,17 +71,22 @@
             @include prop-vw(gap, 12, xl);
             @include prop-vw(margin-bottom, 16, xl);
         }
+        // segmented control: container 32 tall (1px inner padding + 30px buttons),
+        // heights come from padding — not fixed — so text/line-height drive them
         &__visits-tabs {
             display: flex;
-            @include prop-vw(gap, 2, xl);
+            @include prop-vw(gap, 10, xl);
             background: $color-track;
             @include prop-vw(border-radius, 8, xl);
-            @include prop-vw(padding, 2, xl);
+            @include prop-vw(padding, 1, xl);
         }
         &__visits-tab {
-            @include prop-vw(padding-block, 5, xl);
-            @include prop-vw(padding-inline, 12, xl);
-            @include prop-vw(font-size, 13, xl);
+            // 30px tall: font 14 × line-height 1 = 14, + 8px padding top/bottom
+            @include prop-vw(padding-block, 8, xl);
+            @include prop-vw(padding-inline, 15, xl);
+            @include prop-vw(font-size, 14, xl);
+            font-weight: normal;
+            line-height: 1;
             color: $color-dark-grey;
             background: transparent;
             border: none;

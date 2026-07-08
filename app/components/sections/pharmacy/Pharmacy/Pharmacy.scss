@@ -260,7 +260,7 @@
 		// --- category history (aside) — reuses .employee-history list styles ---
 		&__history {
 			.employee-history__list {
-				@include prop-vw(margin-top, 16, xl);
+				@include prop-vw(margin-top, 40, xl);
 			}
 			.employee-history__badge {
 				text-transform: uppercase; // data feeds lowercase category letters
@@ -304,19 +304,28 @@
 		}
 
 		// --- visits (aside) ---
+		&__visits {
+			// «Визиты» uses the smaller (22) title on desktop too, not the default 26
+			.data-panel__title {
+				@include prop-vw(font-size, 22, xl);
+				line-height: 1.09090909091;
+				@include only(desktop) {
+					@include prop-vw(font-size, 22, lg);
+				}
+				@include only(mobile) {
+					@include prop-vw(font-size, 22, sm);
+				}
+			}
+		}
 		&__visits-head {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
 			@include prop-vw(gap, 12, xl);
-			@include prop-vw(margin-bottom, 16, xl);
+			@include prop-vw(margin-bottom, 40, xl);
 		}
-		// visit-hist__list already stacks/spaces/divides the items — here just cap
-		// the list height with an internal scroll
-		&__visits-list {
-			@include prop-vw(max-height, 520, xl);
-			overflow-y: auto;
-		}
+		// visit-hist__list already stacks/spaces/divides the items; no height cap /
+		// scroll here — the panel grows to show every visit
 	}
 
 	// KPI table: 4 columns, content-sized, progress cell stays wide
