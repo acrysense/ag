@@ -411,6 +411,13 @@ export default (root) => {
 	}
 	const onInputFocus = () => setOpen(true)
 	const onDocDown = (e) => {
+		// collapse an open field's dropdown (e.g. the Регион list) when clicking
+		// anywhere outside that field — even inside the filter panel — while keeping
+		// the panel itself open
+		const openField = fields.find((f) => f.classList.contains('is-open'))
+		if (openField && !openField.contains(e.target)) {
+			openField.classList.remove('is-open')
+		}
 		if (open && !root.contains(e.target)) {
 			setOpen(false)
 			fields.forEach((f) => f.classList.remove('is-open'))
