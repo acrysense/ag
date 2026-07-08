@@ -279,15 +279,29 @@
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
+			@include prop-vw(gap, 4, xl);
 			pointer-events: none;
 			span {
-				@include prop-vw(font-size, 13, xl);
+				@include prop-vw(font-size, 14, xl);
+				font-weight: 500;
+				line-height: 1.42857142857;
 				color: $color-dark-grey;
 			}
 			b {
 				@include prop-vw(font-size, 28, xl);
 				font-weight: bold;
+				line-height: 1.14285714286;
 				color: $color-black;
+			}
+			// keep the same look on mobile (donut is the same size) — rescale the px
+			@include only(mobile) {
+				@include prop-vw(gap, 4, sm);
+				span {
+					@include prop-vw(font-size, 14, sm);
+				}
+				b {
+					@include prop-vw(font-size, 28, sm);
+				}
 			}
 		}
 		// legend reuses the .employee-history list styles (same markup/structure as
