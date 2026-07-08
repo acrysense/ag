@@ -594,11 +594,19 @@
 				@include prop-vw(font-size, 12, sm);
 			}
 		}
-		// while editing (the "Редактировать" form), let the form take the whole row:
-		// span the criterion cell across the numeric columns and hide the rest.
-		// Top-aligned so the row number lines up with the form's first field.
-		&__row.is-editing {
+		// editing, commenting, or a shown comment all make the criterion cell tall —
+		// top-align the row so the number stays on the first line (at the criterion
+		// title) instead of centring against the tall cell.
+		&__row.is-editing,
+		&__row.is-commenting {
 			align-items: start;
+		}
+		// separate rule so browsers without :has() still honour the classes above
+		&__row:has(.visit-quant__comment:not([hidden])) {
+			align-items: start;
+		}
+		// editing only: the form takes the whole row (numeric cells hidden)
+		&__row.is-editing {
 			.visit-quant__td--crit {
 				grid-column: 2 / -1;
 			}

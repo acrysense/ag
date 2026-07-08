@@ -225,6 +225,7 @@ export default function Visit(root) {
 		} else if (crit) {
 			crit.after(editor)
 		}
+		row.classList.add('is-commenting') // top-align so the number stays at the title
 		input.focus()
 
 		const close = (save) => {
@@ -232,6 +233,7 @@ export default function Visit(root) {
 				const d = cell.querySelector('.visit-quant__comment')
 				if (d) d.hidden = false
 				editor.remove()
+				row.classList.remove('is-commenting')
 				return
 			}
 			const val = input.value.trim()
@@ -248,6 +250,7 @@ export default function Visit(root) {
 				d.hidden = false
 			}
 			editor.remove()
+			row.classList.remove('is-commenting')
 		}
 		editor.querySelector('[data-q-comment-save]').addEventListener('click', () => close(true))
 		editor.querySelector('[data-q-comment-cancel]').addEventListener('click', () => close(false))
