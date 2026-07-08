@@ -592,36 +592,16 @@
 				@include prop-vw(font-size, 12, sm);
 			}
 		}
-		// inline editor for the criterion title (opened via "Редактировать")
-		&__crit-edit {
-			display: flex;
-			align-items: center;
-			@include prop-vw(gap, 10, xl);
-			@include only(mobile) {
-				@include prop-vw(gap, 10, sm);
+		// while editing (the "Редактировать" form), let the form take the whole row:
+		// span the criterion cell across the numeric columns and hide the rest.
+		// Top-aligned so the row number lines up with the form's first field.
+		&__row.is-editing {
+			align-items: start;
+			.visit-quant__td--crit {
+				grid-column: 2 / -1;
 			}
-		}
-		&__crit-input {
-			flex: 1 1 auto;
-			min-width: 0;
-			@include prop-vw(padding-block, 6, xl);
-			@include prop-vw(padding-inline, 10, xl);
-			@include prop-vw(font-size, 14, xl);
-			line-height: 1.57142857143;
-			color: $color-black;
-			background: $color-white;
-			@include border-all(1, solid, $color-border, xl);
-			@include prop-vw(border-radius, 8, xl);
-			&:focus {
-				outline: none;
-				border-color: $color-form-focus;
-			}
-			@include only(mobile) {
-				@include prop-vw(padding-block, 6, sm);
-				@include prop-vw(padding-inline, 10, sm);
-				@include prop-vw(font-size, 14, sm);
-				@include border-all(1, solid, $color-border, sm);
-				@include prop-vw(border-radius, 8, sm);
+			.visit-quant__td:not(.visit-quant__td--idx):not(.visit-quant__td--crit) {
+				display: none;
 			}
 		}
 		// actions menu in the table — grey trigger (not the default blue)

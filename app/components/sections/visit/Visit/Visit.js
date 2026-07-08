@@ -35,15 +35,22 @@ const EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-q-edit-f
 	</div>
 </form>`
 
-// inline editor for a quantitative row's criterion title (input + save/cancel,
-// reuses the .task-comment save/cancel buttons)
-const QUANT_TITLE_HTML = (title) => `<div class="visit-quant__crit-edit" data-quant-edit-form>
-	<input type="text" class="visit-quant__crit-input" data-quant-edit-title value="${escAttr(title)}" autocomplete="off">
-	<div class="task-comment__actions">
-		<button type="button" class="task-comment__btn task-comment__btn--save" data-quant-edit-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg></button>
-		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-quant-edit-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg></button>
+// inline edit form for a quantitative row — same shell/styling as the checklist
+// edit above (title + comment + Сохранить/Отмена), so both blocks match
+const QUANT_EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-quant-edit-form novalidate>
+	<div class="visit-q__edit-field">
+		<label class="visit-q__edit-label">Заголовок</label>
+		<input type="text" class="visit-q__edit-input" data-quant-edit-title value="${escAttr(title)}" autocomplete="off">
 	</div>
-</div>`
+	<div class="visit-q__edit-field">
+		<label class="visit-q__edit-label">Комментарий</label>
+		<textarea class="visit-q__edit-area" data-quant-edit-comment rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий">${escHtml(comment)}</textarea>
+	</div>
+	<div class="visit-q__edit-actions">
+		<button type="submit" class="btn btn--sm">Сохранить</button>
+		<button type="button" class="btn btn--sm btn--secondary" data-quant-edit-cancel>Отмена</button>
+	</div>
+</form>`
 
 export default function Visit(root) {
 	if (root.__visitBound) return
@@ -252,36 +259,54 @@ export default function Visit(root) {
 		})
 	}
 
-	// --- inline edit of a quantitative row's criterion title ---
+	// --- inline edit of a quantitative row (title + comment, like the checklist) ---
 	const openQuantEdit = (row) => {
 		const cell = row.querySelector('.visit-quant__td--crit')
 		if (!cell) return
 		const crit = cell.querySelector('.visit-quant__crit')
 		if (!crit || cell.querySelector('[data-quant-edit-form]')) return
+		const desc = cell.querySelector('.visit-quant__comment')
 		const tmp = document.createElement('div')
-		tmp.innerHTML = QUANT_TITLE_HTML(crit.textContent.trim()).trim()
-		const editor = tmp.firstElementChild
-		const input = editor.querySelector('[data-quant-edit-title]')
+		tmp.innerHTML = QUANT_EDIT_HTML(crit.textContent.trim(), desc ? desc.textContent.trim() : '').trim()
+		const form = tmp.firstElementChild
+		limitLineBreaks(form.querySelector('[data-quant-edit-comment]'))
 		crit.hidden = true
-		crit.after(editor)
-		input.focus()
-		input.select()
+		if (desc) desc.hidden = true
+		row.classList.add('is-editing') // form spans the full row, numeric cells hidden
+		cell.appendChild(form)
+		form.querySelector('[data-quant-edit-title]')?.focus()
 
 		const close = (save) => {
 			if (save) {
-				const v = input.value.trim()
-				if (v) crit.textContent = v
+				const t = form.querySelector('[data-quant-edit-title]').value.trim()
+				const c = form.querySelector('[data-quant-edit-comment]').value.trim()
+				if (t) crit.textContent = t
+				let d = cell.querySelector('.visit-quant__comment')
+				if (c) {
+					if (!d) {
+						d = document.createElement('div')
+						d.className = 'visit-quant__comment'
+						crit.after(d)
+					}
+					d.textContent = c
+					d.hidden = false
+				} else if (d) {
+					d.remove()
+				}
+			} else if (desc) {
+				desc.hidden = false
 			}
+			form.remove()
 			crit.hidden = false
-			editor.remove()
+			row.classList.remove('is-editing')
 		}
-		editor.querySelector('[data-quant-edit-save]').addEventListener('click', () => close(true))
-		editor.querySelector('[data-quant-edit-cancel]').addEventListener('click', () => close(false))
-		input.addEventListener('keydown', (e) => {
-			if (e.key === 'Enter') {
-				e.preventDefault()
-				close(true)
-			} else if (e.key === 'Escape') {
+		form.addEventListener('submit', (e) => {
+			e.preventDefault()
+			close(true)
+		})
+		form.querySelector('[data-quant-edit-cancel]').addEventListener('click', () => close(false))
+		form.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
 				e.preventDefault()
 				close(false)
 			}
