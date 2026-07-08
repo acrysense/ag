@@ -100,9 +100,9 @@
 												<div class="visit-quant__row">
 													<div class="visit-quant__td visit-quant__td--idx">{{this.n}}.</div>
 													<div class="visit-quant__td visit-quant__td--crit"><span class="visit-quant__crit">{{this.crit}}</span></div>
-													<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)"><input class="visit-quant__input" type="text" value="{{this.q}}" inputmode="numeric"></div>
-													<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей"><input class="visit-quant__input" type="text" value="{{this.buyers}}" inputmode="numeric"></div>
-													<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации"><input class="visit-quant__input" type="text" value="{{this.recs}}" inputmode="numeric"></div>
+													<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)"><input class="visit-quant__input" name="quant-{{this.n}}-quality" type="text" value="{{this.q}}" inputmode="numeric"></div>
+													<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей"><input class="visit-quant__input" name="quant-{{this.n}}-buyers" type="text" value="{{this.buyers}}" inputmode="numeric"></div>
+													<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации"><input class="visit-quant__input" name="quant-{{this.n}}-recs" type="text" value="{{this.recs}}" inputmode="numeric"></div>
 													<div class="visit-quant__td visit-quant__td--pct" data-label="%">{{this.pct}}</div>
 													<div class="visit-quant__td visit-quant__td--menu">
 														<div class="actions-menu visit-quant__menu" data-actions>
@@ -143,7 +143,7 @@
 									</div>
 									<div class="visit-comment">
 										<span class="visit-comment__label">Комментарий</span>
-										<textarea class="visit-comment__field" rows="5" data-autosize>Сотрудник демонстрирует хороший уровень обслуживания. Рекомендуется усилить работу с СТМ и допродажами.</textarea>
+										<textarea class="visit-comment__field" name="visit-comment" rows="5" data-autosize>Сотрудник демонстрирует хороший уровень обслуживания. Рекомендуется усилить работу с СТМ и допродажами.</textarea>
 									</div>
 								</div>
 

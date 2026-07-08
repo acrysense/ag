@@ -12,7 +12,7 @@ const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 // A growing textarea (not a single-line input) so long comments wrap and stay
 // visible instead of scrolling off the side.
 const COMMENT_HTML = `<div class="task-comment" data-q-comment-editor>
-	<textarea class="task-comment__input" data-q-comment-input rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий" autocomplete="off"></textarea>
+	<textarea class="task-comment__input" name="q-comment" data-q-comment-input rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий" autocomplete="off"></textarea>
 	<div class="task-comment__actions">
 		<button type="button" class="task-comment__btn task-comment__btn--save" data-q-comment-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg></button>
 		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-q-comment-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg></button>
@@ -23,11 +23,11 @@ const COMMENT_HTML = `<div class="task-comment" data-q-comment-editor>
 const EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-q-edit-form novalidate>
 	<div class="visit-q__edit-field">
 		<label class="visit-q__edit-label">Заголовок</label>
-		<input type="text" class="visit-q__edit-input" data-q-edit-title value="${escAttr(title)}" autocomplete="off">
+		<input type="text" class="visit-q__edit-input" name="q-edit-title" data-q-edit-title value="${escAttr(title)}" autocomplete="off">
 	</div>
 	<div class="visit-q__edit-field">
 		<label class="visit-q__edit-label">Комментарий</label>
-		<textarea class="visit-q__edit-area" data-q-edit-comment rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий">${escHtml(comment)}</textarea>
+		<textarea class="visit-q__edit-area" name="q-edit-comment" data-q-edit-comment rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий">${escHtml(comment)}</textarea>
 	</div>
 	<div class="visit-q__edit-actions">
 		<button type="submit" class="btn btn--sm">Сохранить</button>
@@ -40,11 +40,11 @@ const EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-q-edit-f
 const QUANT_EDIT_HTML = (title, comment) => `<form class="visit-q__edit" data-quant-edit-form novalidate>
 	<div class="visit-q__edit-field">
 		<label class="visit-q__edit-label">Заголовок</label>
-		<input type="text" class="visit-q__edit-input" data-quant-edit-title value="${escAttr(title)}" autocomplete="off">
+		<input type="text" class="visit-q__edit-input" name="quant-edit-title" data-quant-edit-title value="${escAttr(title)}" autocomplete="off">
 	</div>
 	<div class="visit-q__edit-field">
 		<label class="visit-q__edit-label">Комментарий</label>
-		<textarea class="visit-q__edit-area" data-quant-edit-comment rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий">${escHtml(comment)}</textarea>
+		<textarea class="visit-q__edit-area" name="quant-edit-comment" data-quant-edit-comment rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий">${escHtml(comment)}</textarea>
 	</div>
 	<div class="visit-q__edit-actions">
 		<button type="submit" class="btn btn--sm">Сохранить</button>
