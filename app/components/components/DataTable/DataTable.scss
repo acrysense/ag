@@ -127,6 +127,9 @@
             color: $color-dark-grey;
             user-select: none;
             white-space: normal;
+            // break an over-long word instead of letting it run under the sort
+            // chevron (which is absolutely pinned inside the right padding)
+            overflow-wrap: break-word;
             @include border-side(bottom, 2, solid, $color-border, xl);
             &--center {
                 text-align: center;
@@ -596,20 +599,22 @@
         .data-table__th:nth-child(12) { width: 8%; }
     }
     // pharmacies table has 14 columns
+    // 13 columns (Тип территории removed). Long-word sortable headers
+    // (Товарооборот, Наполняемость) get extra width so the word fits before the
+    // sort chevron instead of running under it.
     .pharmacies-table {
-        .data-table__th:nth-child(1)  { width: 10%; }
-        .data-table__th:nth-child(2)  { width: 7%; }
-        .data-table__th:nth-child(3)  { width: 9%; }
-        .data-table__th:nth-child(4)  { width: 9%; }
-        .data-table__th:nth-child(5)  { width: 5%; }
-        .data-table__th:nth-child(6)  { width: 10%; }
-        .data-table__th:nth-child(7)  { width: 7%; }
-        .data-table__th:nth-child(8)  { width: 5%; }
-        .data-table__th:nth-child(9)  { width: 7%; }
-        .data-table__th:nth-child(10) { width: 8%; }
-        .data-table__th:nth-child(11) { width: 6%; }
-        .data-table__th:nth-child(12) { width: 5%; }
-        .data-table__th:nth-child(13) { width: 7%; }
-        .data-table__th:nth-child(14) { width: 5%; }
+        .data-table__th:nth-child(1)  { width: 10%; }  // Аптека
+        .data-table__th:nth-child(2)  { width: 7%; }   // Бренд
+        .data-table__th:nth-child(3)  { width: 9%; }   // Регион
+        .data-table__th:nth-child(4)  { width: 5%; }   // Кластер
+        .data-table__th:nth-child(5)  { width: 10%; }  // Розничная компания
+        .data-table__th:nth-child(6)  { width: 8%; }   // Индекс команды
+        .data-table__th:nth-child(7)  { width: 5%; }   // Кат. команды
+        .data-table__th:nth-child(8)  { width: 8%; }   // Индекс региона
+        .data-table__th:nth-child(9)  { width: 10%; }  // Товарооборот РОЗН
+        .data-table__th:nth-child(10) { width: 7%; }   // Кол-во чеков
+        .data-table__th:nth-child(11) { width: 5%; }   // Ср. чек
+        .data-table__th:nth-child(12) { width: 11%; }  // Наполняемость чека
+        .data-table__th:nth-child(13) { width: 5%; }   // Доля СТМ, %
     }
 }
