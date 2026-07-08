@@ -77,7 +77,7 @@
             display: flex;
             @include prop-vw(gap, 10, xl);
             background: $color-track;
-            @include prop-vw(border-radius, 8, xl);
+            @include prop-vw(border-radius, 10, xl);
             @include prop-vw(padding, 1, xl);
         }
         &__visits-tab {
@@ -90,11 +90,12 @@
             color: $color-dark-grey;
             background: transparent;
             border: none;
-            @include prop-vw(border-radius, 6, xl);
+            @include prop-vw(border-radius, 10, xl);
             cursor: pointer;
             &.is-active {
                 color: $color-black;
                 background: $color-white;
+                box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
             }
         }
         &__visits-list {

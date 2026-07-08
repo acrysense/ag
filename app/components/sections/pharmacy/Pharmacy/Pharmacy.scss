@@ -270,7 +270,7 @@
 		// --- donut (aside) ---
 		&__donut {
 			position: relative;
-			@include prop-vw(margin-block, 16, xl);
+			@include prop-vw(margin-block, 40, xl);
 		}
 		&__donut-center {
 			position: absolute;
@@ -290,17 +290,11 @@
 				color: $color-black;
 			}
 		}
-		&__legend {
-			display: flex;
-			flex-direction: column;
-			@include prop-vw(gap, 12, xl);
-		}
-		&__legend-item {
-			display: flex;
-			align-items: center;
-			@include prop-vw(gap, 10, xl);
-			@include prop-vw(font-size, 14, xl);
-			color: $color-dark-grey;
+		// legend reuses the .employee-history list styles (same markup/structure as
+		// the "История категорий" table above); only the uppercase category letter
+		// needs re-applying in this context
+		&__legend .employee-history__badge {
+			text-transform: uppercase;
 		}
 
 		// --- visits (aside) ---

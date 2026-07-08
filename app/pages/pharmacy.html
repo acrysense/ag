@@ -235,16 +235,16 @@
 											</div>
 										</div>
 									</div>
-									<ul class="pharmacy__legend">
+									<ul class="employee-history__list pharmacy__legend">
 										{{#each (arr
 											(obj c="a" p="58%" n="12 чел")
 											(obj c="b" p="28%" n="6 чел")
 											(obj c="c" p="8%" n="3 чел")
 											(obj c="d" p="18%" n="1 чел")
 										)}}
-										<li class="pharmacy__legend-item">
-											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
-											<span class="pharmacy__legend-text">{{this.p}}, {{this.n}}</span>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--{{this.c}}">{{this.c}}</span>
+											<span class="employee-history__text"><b>{{this.p}}</b> {{this.n}}</span>
 										</li>
 										{{/each}}
 									</ul>
