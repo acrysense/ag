@@ -64,6 +64,11 @@
 			background: none;
 			border-radius: 0;
 			box-shadow: none;
+			// data-panel zeroes its top padding on mobile; the card content would
+			// otherwise touch the panel's top edge — restore a 20px top inset.
+			@include only(mobile) {
+				@include prop-vw(padding-top, 20, sm);
+			}
 		}
 		&__card .employee__profile {
 			justify-content: space-between;
@@ -96,6 +101,10 @@
 			background: none;
 			border-radius: 0;
 			box-shadow: none;
+			// same as the card: give the KPI controls a 20px top inset on mobile.
+			@include only(mobile) {
+				@include prop-vw(padding-top, 20, sm);
+			}
 		}
 		&__kpi .employee-kpi__head,
 		&__kpi .employee-kpi__row {
@@ -183,19 +192,23 @@
 
 	// staff table: explicit column widths (table-layout fixed so the px are
 	// honoured; overrides the manager-table auto/min-width). Widths sum to 1049.
+	// Desktop only — the xl widths floor below 1024 and would squash the columns
+	// on mobile, so there we keep the base manager-table (auto layout + scroll).
 	.pharmacy__staff .data-table.manager-table {
-		table-layout: fixed;
-		@include prop-vw(min-width, 1049, xl);
-		.data-table__th:nth-child(1)  { @include prop-vw(width, 119, xl); }
-		.data-table__th:nth-child(2)  { @include prop-vw(width, 60, xl); }
-		.data-table__th:nth-child(3)  { @include prop-vw(width, 80, xl); }
-		.data-table__th:nth-child(4)  { @include prop-vw(width, 60, xl); }
-		.data-table__th:nth-child(5)  { @include prop-vw(width, 130, xl); }
-		.data-table__th:nth-child(6)  { @include prop-vw(width, 110, xl); }
-		.data-table__th:nth-child(7)  { @include prop-vw(width, 80, xl); }
-		.data-table__th:nth-child(8)  { @include prop-vw(width, 110, xl); }
-		.data-table__th:nth-child(9)  { @include prop-vw(width, 80, xl); }
-		.data-table__th:nth-child(10) { @include prop-vw(width, 100, xl); }
-		.data-table__th:nth-child(11) { @include prop-vw(width, 120, xl); }
+		@include up(desktop) {
+			table-layout: fixed;
+			@include prop-vw(min-width, 1049, xl);
+			.data-table__th:nth-child(1)  { @include prop-vw(width, 119, xl); }
+			.data-table__th:nth-child(2)  { @include prop-vw(width, 60, xl); }
+			.data-table__th:nth-child(3)  { @include prop-vw(width, 80, xl); }
+			.data-table__th:nth-child(4)  { @include prop-vw(width, 60, xl); }
+			.data-table__th:nth-child(5)  { @include prop-vw(width, 130, xl); }
+			.data-table__th:nth-child(6)  { @include prop-vw(width, 110, xl); }
+			.data-table__th:nth-child(7)  { @include prop-vw(width, 80, xl); }
+			.data-table__th:nth-child(8)  { @include prop-vw(width, 110, xl); }
+			.data-table__th:nth-child(9)  { @include prop-vw(width, 80, xl); }
+			.data-table__th:nth-child(10) { @include prop-vw(width, 100, xl); }
+			.data-table__th:nth-child(11) { @include prop-vw(width, 120, xl); }
+		}
 	}
 }
