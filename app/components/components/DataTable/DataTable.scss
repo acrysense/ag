@@ -127,9 +127,6 @@
             color: $color-dark-grey;
             user-select: none;
             white-space: normal;
-            // break an over-long word instead of letting it run under the sort
-            // chevron (which is absolutely pinned inside the right padding)
-            overflow-wrap: break-word;
             @include border-side(bottom, 2, solid, $color-border, xl);
             &--center {
                 text-align: center;
@@ -141,6 +138,9 @@
             // — only sortable headers (JS adds .data-table__sort) are interactive
             &.data-table__sort {
                 cursor: pointer;
+                // only sortable headers need this: break an over-long word rather
+                // than let it run under the chevron pinned in the right padding
+                overflow-wrap: break-word;
                 @include prop-vw(padding-right, 24, xl);
                 &::after {
                     content: "";
@@ -599,22 +599,33 @@
         .data-table__th:nth-child(12) { width: 8%; }
     }
     // pharmacies table has 14 columns
-    // 13 columns (Тип территории removed). Long-word sortable headers
-    // (Товарооборот, Наполняемость) get extra width so the word fits before the
-    // sort chevron instead of running under it.
+    // 13 columns (Тип территории removed). Widths follow the macro
+    // (150/100/100/80/120/100/80/90/130/100/100/100/100 = 1350) expressed as % so
+    // the columns stretch to fill the panel — no horizontal scroll, no squishing.
+    // Reuse the base min-width lowered to the macro sum so it fits.
     .pharmacies-table {
-        .data-table__th:nth-child(1)  { width: 10%; }  // Аптека
-        .data-table__th:nth-child(2)  { width: 7%; }   // Бренд
-        .data-table__th:nth-child(3)  { width: 9%; }   // Регион
-        .data-table__th:nth-child(4)  { width: 5%; }   // Кластер
-        .data-table__th:nth-child(5)  { width: 10%; }  // Розничная компания
-        .data-table__th:nth-child(6)  { width: 8%; }   // Индекс команды
-        .data-table__th:nth-child(7)  { width: 5%; }   // Кат. команды
-        .data-table__th:nth-child(8)  { width: 8%; }   // Индекс региона
-        .data-table__th:nth-child(9)  { width: 10%; }  // Товарооборот РОЗН
-        .data-table__th:nth-child(10) { width: 7%; }   // Кол-во чеков
-        .data-table__th:nth-child(11) { width: 5%; }   // Ср. чек
-        .data-table__th:nth-child(12) { width: 11%; }  // Наполняемость чека
-        .data-table__th:nth-child(13) { width: 5%; }   // Доля СТМ, %
+        // fill the panel instead of forcing a wider scroll (overrides the base
+        // .data-table min-width). Font/padding/columns all scale together, so the
+        // header words keep fitting at any width.
+        .data-table {
+            min-width: 0;
+            width: 100%;
+        }
+        .data-table__th:nth-child(1)  { width: 8.89%; }  // Аптека 120 (macro 150 − 30
+                                                          //   given to Наполняемость,
+                                                          //   whose word needs room
+                                                          //   before its sort chevron)
+        .data-table__th:nth-child(2)  { width: 7.41%; }  // Бренд 100
+        .data-table__th:nth-child(3)  { width: 7.41%; }  // Регион 100
+        .data-table__th:nth-child(4)  { width: 5.93%; }  // Кластер 80
+        .data-table__th:nth-child(5)  { width: 8.89%; }  // Розничная компания 120
+        .data-table__th:nth-child(6)  { width: 7.41%; }  // Индекс команды 100
+        .data-table__th:nth-child(7)  { width: 5.93%; }  // Кат. команды 80
+        .data-table__th:nth-child(8)  { width: 6.67%; }  // Индекс региона 90
+        .data-table__th:nth-child(9)  { width: 9.63%; }  // Товарооборот РОЗН 130
+        .data-table__th:nth-child(10) { width: 7.41%; }  // Кол-во чеков 100
+        .data-table__th:nth-child(11) { width: 7.41%; }  // Ср. чек 100
+        .data-table__th:nth-child(12) { width: 9.63%; }  // Наполняемость чека 130
+        .data-table__th:nth-child(13) { width: 7.41%; }  // Доля СТМ, % 100
     }
 }
