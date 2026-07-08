@@ -107,6 +107,13 @@
 		// smooth collapse via animated grid rows (1fr <-> 0fr)
 		&__body {
 			display: grid;
+			// Explicit full-width column. Without it the single implicit column is
+			// `auto` — sized to the content's max-content, NOT stretched to fill —
+			// so a nested grid (the quant table) shrink-wraps its row to content
+			// width. Chrome leniently stretches auto tracks and hides this; Safari
+			// follows the spec and the rows collapse to ~635px. minmax(0,1fr) fills
+			// the width in both, while min 0 keeps the mobile inner-scroll working.
+			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: 1fr;
 			transition: grid-template-rows 0.3s ease;
 		}
@@ -402,30 +409,49 @@
 
 	// ---- quantitative table ----
 	.visit-quant {
+		// Built as a CSS grid of <div>s, NOT a <table>: WebKit/Safari mis-maps
+		// column widths in a fixed-layout table whose header has rowspan/colspan
+		// cells (and ignores CSS math widths on <col>), collapsing the columns.
+		// A grid gives explicit, stable tracks that every browser honours. The
+		// header and every body row share the same template, so columns align 1:1.
+		// Tracks are border-box, so each fixed width already includes its 15px
+		// right padding; the criterion is the 1fr slack column.
+		--quant-cols:
+			#{vw-range(39, xl)}
+			minmax(0, 1fr)
+			#{vw-range(95, xl)}
+			#{vw-range(95, xl)}
+			#{vw-range(95, xl)}
+			#{vw-range(50, xl)}
+			#{vw-range(24, xl)};
 		width: 100%;
-		table-layout: fixed; // fixed widths → editing/typing never reflows columns
-		border-collapse: collapse;
-		// Column widths live on the header <th> cells, NOT on <col> — WebKit/Safari
-		// ignores a <col> `width` set with a CSS math function (max()/clamp(), which
-		// prop-vw emits), collapsing every column to an equal 1/n share. Regular
-		// cells honour those widths everywhere. table-layout:fixed reads the first
-		// row, so the header th widths define the columns. The criterion th stays
-		// auto and absorbs the slack.
 		// on mobile the fixed columns exceed the viewport → scroll; keep the
-		// criterion readable with a table min-width
+		// criterion readable with a min-width, and rebuild the tracks at sm scale
 		@include only(mobile) {
 			@include prop-vw(min-width, 638, sm);
+			--quant-cols:
+				#{vw-range(39, sm)}
+				minmax(0, 1fr)
+				#{vw-range(95, sm)}
+				#{vw-range(95, sm)}
+				#{vw-range(95, sm)}
+				#{vw-range(50, sm)}
+				#{vw-range(24, sm)};
 		}
 		&__scroll {
 			@include only(mobile) {
 				overflow-x: auto;
 			}
 		}
+		&__head {
+			display: grid;
+			grid-template-columns: var(--quant-cols);
+			grid-template-rows: auto auto;
+			align-items: end; // labels sit on the bottom baseline (2-row header)
+		}
 		&__th {
 			@include prop-vw(padding-block, 10, xl);
 			@include prop-vw(padding-right, 15, xl);
-			text-align: left;
-			vertical-align: bottom;
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			font-weight: normal;
@@ -443,47 +469,48 @@
 					@include prop-vw(font-size, 12, sm);
 				}
 			}
-			// widths (border-box: value already includes the 15px padding-right)
-			&--idx {
-				@include prop-vw(width, 39, xl);
-				@include only(mobile) { @include prop-vw(width, 39, sm); }
-			}
-			&--num {
-				@include prop-vw(width, 95, xl);
-				@include only(mobile) { @include prop-vw(width, 95, sm); }
-			}
+			// grid placement: 7 columns × 2 header rows
+			&--idx { grid-column: 1; grid-row: 1 / span 2; }
+			&--crit { grid-column: 2; grid-row: 1 / span 2; }
+			&--num { grid-column: 3; grid-row: 1 / span 2; }
 			&--group {
+				grid-column: 4 / span 2;
+				grid-row: 1;
 				text-align: center;
-				// spans the two count columns (95 each) → fixed-layout splits it evenly
-				@include prop-vw(width, 190, xl);
-				@include only(mobile) { @include prop-vw(width, 190, sm); }
 			}
 			&--sub {
 				@include prop-vw(font-size, 12, xl);
 				line-height: 1.25;
+				grid-row: 2;
 				@include only(mobile) {
 					@include prop-vw(font-size, 12, sm);
 				}
 			}
+			&--sub-a { grid-column: 4; }
+			&--sub-b { grid-column: 5; }
 			&--pct {
+				grid-column: 6;
+				grid-row: 1 / span 2;
 				text-align: right;
-				@include prop-vw(width, 50, xl);
-				@include only(mobile) { @include prop-vw(width, 50, sm); }
 			}
 			&--menu {
-				@include prop-vw(width, 24, xl);
-				@include only(mobile) { @include prop-vw(width, 24, sm); }
+				grid-column: 7;
+				grid-row: 1 / span 2;
+				padding-right: 0;
 			}
 		}
 		&__row {
+			display: grid;
+			grid-template-columns: var(--quant-cols);
+			// centre the numbers/percent against the criterion text; a row with a
+			// comment grows and everything stays vertically centred
+			align-items: center;
 			@include border-side(top, 1, solid, $color-border, xl);
 		}
 		&__td {
+			min-width: 0; // let the criterion cell shrink/wrap instead of overflowing
 			@include prop-vw(padding-block, 10, xl);
 			@include prop-vw(padding-right, 15, xl);
-			// middle-aligned so the numbers/percent line up with the criterion text
-			// (the input fills the row height, so they centre together)
-			vertical-align: middle;
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
 			color: $color-black;
@@ -494,20 +521,17 @@
 			}
 			&--idx {
 				color: $color-dark-grey;
-				@include prop-vw(font-size, 14, xl);
-				line-height: 1.57142857143;
-				@include only(mobile) {
-					@include prop-vw(font-size, 14, sm);
-				}
 			}
 			&--pct {
 				text-align: right;
 				white-space: nowrap;
 			}
-			// 3-dots actions column: no trailing padding (width from the colgroup)
+			// 3-dots actions column: no trailing padding, button pinned right
 			&--menu {
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
 				padding-right: 0;
-				text-align: right;
 			}
 		}
 		// criterion text + its optional comment (added via the row actions menu)

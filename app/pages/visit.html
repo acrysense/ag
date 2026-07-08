@@ -79,52 +79,46 @@
 									<div class="visit-sec__body">
 										<div class="visit-sec__body-inner">
 										<div class="visit-quant__scroll">
-											<table class="visit-quant">
-												<thead>
-													<tr>
-														<th class="visit-quant__th visit-quant__th--idx" rowspan="2"></th>
-														<th class="visit-quant__th" rowspan="2">Критерий</th>
-														<th class="visit-quant__th visit-quant__th--num" rowspan="2">Качество<span>Балы, 1-5</span></th>
-														<th class="visit-quant__th visit-quant__th--group" colspan="2">Оценка количества</th>
-														<th class="visit-quant__th visit-quant__th--pct" rowspan="2">%</th>
-														<th class="visit-quant__th visit-quant__th--menu" rowspan="2"></th>
-													</tr>
-													<tr>
-														<th class="visit-quant__th visit-quant__th--sub">Покупателей</th>
-														<th class="visit-quant__th visit-quant__th--sub">Рекомендации</th>
-													</tr>
-												</thead>
-												<tbody>
-													{{#each (arr
-														(obj n="1" crit="Предложил акционный товар" q="12" buyers="4" recs="5" pct="78%")
-														(obj n="2" crit="Распродал все запасы парацетамола" q="12" buyers="4" recs="5" pct="23%" menu=true)
-														(obj n="3" crit="Выполнил все задачи из поставленных менеджером в ходе планового совещания" q="12")
-														(obj n="4" crit="Выполняет план по СТМ" q="12" buyers="4" recs="5" pct="67%")
-														(obj n="5" crit="Скорость обслуживания" q="12" buyers="4" recs="5" pct="90%")
-													)}}
-													<tr class="visit-quant__row">
-														<td class="visit-quant__td visit-quant__td--idx">{{this.n}}.</td>
-														<td class="visit-quant__td visit-quant__td--crit"><span class="visit-quant__crit">{{this.crit}}</span></td>
-														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.q}}" inputmode="numeric"></td>
-														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.buyers}}" inputmode="numeric"></td>
-														<td class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.recs}}" inputmode="numeric"></td>
-														<td class="visit-quant__td visit-quant__td--pct">{{this.pct}}</td>
-														<td class="visit-quant__td visit-quant__td--menu">
-															<div class="actions-menu visit-quant__menu" data-actions>
-																<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
-																	<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-three-dots"></use></svg>
-																</button>
-																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
-																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Добавить комментарий</span></button>
-																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
-																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
-																</div>
+											<div class="visit-quant">
+												<div class="visit-quant__head">
+													<div class="visit-quant__th visit-quant__th--idx"></div>
+													<div class="visit-quant__th visit-quant__th--crit">Критерий</div>
+													<div class="visit-quant__th visit-quant__th--num">Качество<span>Балы, 1-5</span></div>
+													<div class="visit-quant__th visit-quant__th--group">Оценка количества</div>
+													<div class="visit-quant__th visit-quant__th--sub visit-quant__th--sub-a">Покупателей</div>
+													<div class="visit-quant__th visit-quant__th--sub visit-quant__th--sub-b">Рекомендации</div>
+													<div class="visit-quant__th visit-quant__th--pct">%</div>
+													<div class="visit-quant__th visit-quant__th--menu"></div>
+												</div>
+												{{#each (arr
+													(obj n="1" crit="Предложил акционный товар" q="12" buyers="4" recs="5" pct="78%")
+													(obj n="2" crit="Распродал все запасы парацетамола" q="12" buyers="4" recs="5" pct="23%" menu=true)
+													(obj n="3" crit="Выполнил все задачи из поставленных менеджером в ходе планового совещания" q="12")
+													(obj n="4" crit="Выполняет план по СТМ" q="12" buyers="4" recs="5" pct="67%")
+													(obj n="5" crit="Скорость обслуживания" q="12" buyers="4" recs="5" pct="90%")
+												)}}
+												<div class="visit-quant__row">
+													<div class="visit-quant__td visit-quant__td--idx">{{this.n}}.</div>
+													<div class="visit-quant__td visit-quant__td--crit"><span class="visit-quant__crit">{{this.crit}}</span></div>
+													<div class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.q}}" inputmode="numeric"></div>
+													<div class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.buyers}}" inputmode="numeric"></div>
+													<div class="visit-quant__td"><input class="visit-quant__input" type="text" value="{{this.recs}}" inputmode="numeric"></div>
+													<div class="visit-quant__td visit-quant__td--pct">{{this.pct}}</div>
+													<div class="visit-quant__td visit-quant__td--menu">
+														<div class="actions-menu visit-quant__menu" data-actions>
+															<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
+																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-three-dots"></use></svg>
+															</button>
+															<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Добавить комментарий</span></button>
+																<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
+																<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
 															</div>
-														</td>
-													</tr>
-													{{/each}}
-												</tbody>
-											</table>
+														</div>
+													</div>
+												</div>
+												{{/each}}
+											</div>
 										</div>
 										</div>
 									</div>
