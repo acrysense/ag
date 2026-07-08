@@ -594,19 +594,13 @@
 				@include prop-vw(font-size, 12, sm);
 			}
 		}
-		// editing, commenting, or a shown comment all make the criterion cell tall —
-		// top-align the row so the number stays on the first line (at the criterion
-		// title) instead of centring against the tall cell.
-		&__row.is-editing,
-		&__row.is-commenting {
-			align-items: start;
-		}
-		// separate rule so browsers without :has() still honour the classes above
-		&__row:has(.visit-quant__comment:not([hidden])) {
-			align-items: start;
-		}
-		// editing only: the form takes the whole row (numeric cells hidden)
+		// editing: the form takes the whole row (numeric cells hidden), so top-
+		// aligning keeps the number on the first line without shifting the %/menu
+		// (they're hidden here). Commenting deliberately keeps the default centring —
+		// there the numeric/%/menu cells stay visible and must not jump when the row
+		// grows to fit the comment.
 		&__row.is-editing {
+			align-items: start;
 			.visit-quant__td--crit {
 				grid-column: 2 / -1;
 			}
