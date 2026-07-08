@@ -1023,7 +1023,7 @@
             resize: none;
             overflow: hidden;
             overflow-wrap: normal;
-            @include prop-vw(padding-top, 12, xl);
+            padding-top: 0;
             @include prop-vw(padding-bottom, 10, xl);
             @include prop-vw(padding-inline, 15, xl);
             background: transparent;
@@ -1040,13 +1040,11 @@
             }
 
             @include only(desktop) {
-                @include prop-vw(padding-top, 12, lg);
                 @include prop-vw(padding-bottom, 10, lg);
                 @include prop-vw(padding-inline, 15, lg);
                 @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
-                @include prop-vw(padding-top, 12, sm);
                 @include prop-vw(padding-bottom, 10, sm);
                 padding-inline: 0;
                 @include prop-vw(font-size, 14, sm);
