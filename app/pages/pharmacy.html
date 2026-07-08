@@ -52,43 +52,92 @@
 								</section>
 
 								<!-- KPI -->
-								<section class="data-panel pharmacy__kpi">
-									<div class="data-table__scroll">
-										<table class="data-table pharmacy-kpi-table">
-											<thead>
-												<tr>
-													<th class="data-table__th">Показатель</th>
-													<th class="data-table__th data-table__th--num">План</th>
-													<th class="data-table__th data-table__th--num">Факт</th>
-													<th class="data-table__th">Прогресс, %</th>
-												</tr>
-											</thead>
-											<tbody>
-												{{#each (arr
-													(obj name="Товарооборот РОЗН" plan="989 000" fact="872 000" prog="100" tone="green")
-													(obj name="Количество чеков" plan="120 000" fact="98 000" prog="100" tone="green")
-													(obj name="Средний чек" plan="+0%" fact="98 000" prog="100" tone="green")
-													(obj name="Наполняемость чека, %" plan="+12%" fact="-12%" prog="20" tone="red")
-													(obj name="Доля СТМ, %" plan="0%" fact="0%" prog="50" tone="yellow")
-													(obj name="Доля товаров 4-6 ранга ,%" plan="0%" fact="0%" prog="100" tone="green")
-													(obj name="Пенетрация карт лояльности, %" plan="0%" fact="0%" prog="100" tone="green")
-													(obj name="Индекс региона" plan="0%" fact="0%" prog="50" tone="yellow")
-													(obj name="Индекс бренда" plan="0%" fact="0%" prog="100" tone="green")
-												)}}
-												<tr class="data-table__row">
-													<td class="data-table__td">{{this.name}}</td>
-													<td class="data-table__td data-table__td--num">{{this.plan}}</td>
-													<td class="data-table__td data-table__td--num">{{this.fact}}</td>
-													<td class="data-table__td">
-														<span class="pharmacy__prog pharmacy__prog--{{this.tone}}">
-															<span class="pharmacy__prog-val">{{this.prog}}</span>
-															<span class="pharmacy__prog-bar"><span class="pharmacy__prog-fill" style="width: {{this.prog}}%"></span></span>
+								<section class="data-panel pharmacy__kpi" data-module="Employee" data-path="sections/employee">
+									<div class="employee-kpi">
+										<div class="employee-kpi__controls">
+											<div class="employee-kpi__sort" data-kpi-sort>
+												<button type="button" class="employee-kpi__sort-trigger" data-kpi-sort-trigger aria-haspopup="listbox" aria-expanded="false">
+													<span data-kpi-sort-value>Сортировать по</span>
+													<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+												</button>
+												<div class="employee-kpi__sort-panel" data-kpi-sort-panel role="listbox" aria-hidden="true">
+													<button type="button" class="employee-kpi__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
+													<button type="button" class="employee-kpi__sort-option" role="option" data-sort="name" data-dir="asc">Название (А–Я)</button>
+													<button type="button" class="employee-kpi__sort-option" role="option" data-sort="name" data-dir="desc">Название (Я–А)</button>
+												</div>
+											</div>
+											<button type="button" class="employee-kpi__ctrl is-active" data-kpi-view="list" aria-label="Список" aria-pressed="true">
+												<svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg>
+											</button>
+											<button type="button" class="employee-kpi__ctrl" data-kpi-view="table" aria-label="Таблица" aria-pressed="false">
+												<svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg>
+											</button>
+										</div>
+
+										<div class="employee-kpi__grid-scroll">
+										<div class="employee-kpi__grid" role="table" aria-label="Показатели">
+											<div class="employee-kpi__head" role="row">
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="text">Показатель</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">План</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">Факт</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">Прогресс, %</button>
+											</div>
+											{{#each (arr
+												(obj name="Товарооборот РОЗН" plan="989 000" fact="872 000" prog="100" tone="green")
+												(obj name="Количество чеков" plan="120 000" fact="98 000" prog="100" tone="green")
+												(obj name="Средний чек" plan="+0%" fact="98 000" prog="100" tone="green")
+												(obj name="Наполняемость чека, %" plan="+12%" fact="-12%" prog="20" tone="red")
+												(obj name="Доля СТМ, %" plan="0%" fact="0%" prog="50" tone="yellow")
+												(obj name="Доля товаров 4-6 ранга ,%" plan="0%" fact="0%" prog="100" tone="green")
+												(obj name="Пенетрация карт лояльности, %" plan="0%" fact="0%" prog="100" tone="green")
+												(obj name="Индекс региона" plan="0%" fact="0%" prog="50" tone="yellow")
+												(obj name="Индекс бренда" plan="0%" fact="0%" prog="100" tone="green")
+											)}}
+											<div class="employee-kpi__row" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">{{this.name}}</span>
+												<span class="employee-kpi__cell" role="cell">{{this.plan}}</span>
+												<span class="employee-kpi__cell" role="cell">{{this.fact}}</span>
+												<span class="employee-kpi__cell" role="cell">
+													<span class="employee-kpi__progress">
+														<span class="employee-kpi__badge employee-kpi__badge--{{this.tone}}">{{this.prog}}</span>
+														<span class="employee-kpi__track">
+															<span class="employee-kpi__bar employee-kpi__bar--{{this.tone}}" style="width: {{this.prog}}%"></span>
 														</span>
-													</td>
-												</tr>
-												{{/each}}
-											</tbody>
-										</table>
+													</span>
+												</span>
+											</div>
+											{{/each}}
+										</div>
+										</div>
+
+										<div class="employee-kpi__mlist">
+											<div class="employee-kpi__mhead">Показатель</div>
+											{{#each (arr
+												(obj name="Товарооборот РОЗН" plan="989 000" fact="872 000" prog="100" tone="green")
+												(obj name="Количество чеков" plan="120 000" fact="98 000" prog="100" tone="green")
+												(obj name="Средний чек" plan="+0%" fact="98 000" prog="100" tone="green")
+												(obj name="Наполняемость чека, %" plan="+12%" fact="-12%" prog="20" tone="red")
+												(obj name="Доля СТМ, %" plan="0%" fact="0%" prog="50" tone="yellow")
+												(obj name="Доля товаров 4-6 ранга ,%" plan="0%" fact="0%" prog="100" tone="green")
+												(obj name="Пенетрация карт лояльности, %" plan="0%" fact="0%" prog="100" tone="green")
+												(obj name="Индекс региона" plan="0%" fact="0%" prog="50" tone="yellow")
+												(obj name="Индекс бренда" plan="0%" fact="0%" prog="100" tone="green")
+											)}}
+											<div class="employee-kpi__mitem">
+												<h3 class="employee-kpi__mname">{{this.name}}</h3>
+												<div class="employee-kpi__mrows">
+													<div class="employee-kpi__mrow"><span>План:</span><b>{{this.plan}}</b></div>
+													<div class="employee-kpi__mrow"><span>Факт:</span><b>{{this.fact}}</b></div>
+													<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+														<span>Прогресс:</span><b>{{this.prog}}%</b>
+														<span class="employee-kpi__track employee-kpi__track--m">
+															<span class="employee-kpi__bar employee-kpi__bar--{{this.tone}}" style="width: {{this.prog}}%"></span>
+														</span>
+													</div>
+												</div>
+											</div>
+											{{/each}}
+										</div>
 									</div>
 								</section>
 
@@ -123,13 +172,13 @@
 													<th class="data-table__th data-table__th--center">Кат.</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Инд.</th>
 													<th class="data-table__th data-table__th--center">Тренд</th>
-													<th class="data-table__th data-table__th--num">Товарооборот РОЗН</th>
-													<th class="data-table__th data-table__th--num">Количество чеков</th>
-													<th class="data-table__th data-table__th--num">Ср. чек</th>
-													<th class="data-table__th data-table__th--num">Наполняемость чека</th>
-													<th class="data-table__th data-table__th--num">Доля СТМ</th>
-													<th class="data-table__th data-table__th--num">Доля 4-6 ранга, %</th>
-													<th class="data-table__th data-table__th--num">Пенетрация карт лояльности</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="turnover" data-sort-type="number">Товарооборот РОЗН</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Количество чеков</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="avgcheck" data-sort-type="number">Ср. чек</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="fill" data-sort-type="number">Наполняемость чека</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="stm" data-sort-type="number">Доля СТМ</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="rank" data-sort-type="number">Доля 4-6 ранга, %</th>
+													<th class="data-table__th data-table__th--num" data-sort-key="loyalty" data-sort-type="number">Пенетрация карт лояльности</th>
 												</tr>
 											</thead>
 											<tbody>

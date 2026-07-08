@@ -198,63 +198,18 @@
 			}
 		}
 
-		// --- KPI progress cell (value chip + track) ---
-		&__prog {
-			display: inline-flex;
-			align-items: center;
-			@include prop-vw(gap, 10, xl);
+		// --- KPI: reuses the employee-kpi grid + logic. The data-panel is already
+		// the card, so strip the inner .employee-kpi card chrome. Columns: name is
+		// the 1fr slack (~682) then план / факт (104) and прогресс (150).
+		&__kpi .employee-kpi {
+			padding: 0;
+			background: none;
+			border-radius: 0;
+			box-shadow: none;
 		}
-		&__prog-val {
-			flex-shrink: 0;
-			@include prop-vw(min-width, 36, xl);
-			@include prop-vw(padding-block, 3, xl);
-			@include prop-vw(padding-inline, 8, xl);
-			@include prop-vw(font-size, 13, xl);
-			font-weight: 600;
-			text-align: center;
-			@include prop-vw(border-radius, 6, xl);
-		}
-		&__prog-bar {
-			@include prop-vw(width, 130, xl);
-			@include prop-vw(height, 4, xl);
-			background: $color-bg;
-			border-radius: 4px;
-			overflow: hidden;
-			@include only(desktop) {
-				@include prop-vw(width, 100, lg);
-			}
-		}
-		&__prog-fill {
-			display: block;
-			height: 100%;
-			border-radius: 4px;
-		}
-		&__prog--green {
-			.pharmacy__prog-val {
-				color: $color-green;
-				background: $color-green-light;
-			}
-			.pharmacy__prog-fill {
-				background: $color-green;
-			}
-		}
-		&__prog--red {
-			.pharmacy__prog-val {
-				color: $color-red;
-				background: rgba($color-red, 0.12);
-			}
-			.pharmacy__prog-fill {
-				background: $color-red;
-			}
-		}
-		&__prog--yellow {
-			.pharmacy__prog-val {
-				color: #a07a00;
-				background: rgba($color-yellow, 0.2);
-			}
-			.pharmacy__prog-fill {
-				background: #ffc107;
-			}
+		&__kpi .employee-kpi__head,
+		&__kpi .employee-kpi__row {
+			grid-template-columns: minmax(0, 1fr) #{vw-range(104, xl)} #{vw-range(104, xl)} #{vw-range(150, xl)};
 		}
 
 		// --- category history (aside) — reuses .employee-history list styles ---
@@ -336,17 +291,21 @@
 		// scroll here — the panel grows to show every visit
 	}
 
-	// KPI table: 4 columns, content-sized, progress cell stays wide
-	.data-table.pharmacy-kpi-table {
-		table-layout: auto;
-		min-width: 0;
-		th,
-		td {
-			width: auto;
-		}
-		.data-table__th:last-child,
-		.data-table__td:last-child {
-			@include prop-vw(width, 200, xl);
-		}
+	// staff table: explicit column widths (table-layout fixed so the px are
+	// honoured; overrides the manager-table auto/min-width). Widths sum to 1049.
+	.pharmacy__staff .data-table.manager-table {
+		table-layout: fixed;
+		@include prop-vw(min-width, 1049, xl);
+		.data-table__th:nth-child(1)  { @include prop-vw(width, 119, xl); }
+		.data-table__th:nth-child(2)  { @include prop-vw(width, 60, xl); }
+		.data-table__th:nth-child(3)  { @include prop-vw(width, 80, xl); }
+		.data-table__th:nth-child(4)  { @include prop-vw(width, 60, xl); }
+		.data-table__th:nth-child(5)  { @include prop-vw(width, 130, xl); }
+		.data-table__th:nth-child(6)  { @include prop-vw(width, 110, xl); }
+		.data-table__th:nth-child(7)  { @include prop-vw(width, 80, xl); }
+		.data-table__th:nth-child(8)  { @include prop-vw(width, 110, xl); }
+		.data-table__th:nth-child(9)  { @include prop-vw(width, 80, xl); }
+		.data-table__th:nth-child(10) { @include prop-vw(width, 100, xl); }
+		.data-table__th:nth-child(11) { @include prop-vw(width, 120, xl); }
 	}
 }
