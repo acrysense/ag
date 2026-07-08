@@ -205,12 +205,28 @@ export default function Visit(root) {
 		})
 	}
 
+	// only one inline editor per quant row: close any open comment/edit form (and
+	// restore the criterion + saved comment) before opening another, so a row can't
+	// be commented and edited at the same time
+	const resetQuantRow = (row) => {
+		const cell = row.querySelector('.visit-quant__td--crit')
+		if (!cell) return
+		cell.querySelector('[data-q-comment-editor]')?.remove()
+		cell.querySelector('[data-quant-edit-form]')?.remove()
+		const crit = cell.querySelector('.visit-quant__crit')
+		if (crit) crit.hidden = false
+		const desc = cell.querySelector('.visit-quant__comment')
+		if (desc) desc.hidden = false
+		row.classList.remove('is-editing')
+	}
+
 	// --- inline comment for a quantitative row (shown under the criterion) ---
 	const openQuantComment = (row) => {
 		const cell = row.querySelector('.visit-quant__td--crit')
 		if (!cell) return
 		const existing = cell.querySelector('[data-q-comment-editor]')
 		if (existing) return existing.querySelector('[data-q-comment-input]')?.focus()
+		resetQuantRow(row) // close an open edit form first
 		const crit = cell.querySelector('.visit-quant__crit')
 		const desc = cell.querySelector('.visit-quant__comment')
 		const tmp = document.createElement('div')
@@ -265,6 +281,7 @@ export default function Visit(root) {
 		if (!cell) return
 		const crit = cell.querySelector('.visit-quant__crit')
 		if (!crit || cell.querySelector('[data-quant-edit-form]')) return
+		resetQuantRow(row) // close an open comment editor first
 		const desc = cell.querySelector('.visit-quant__comment')
 		const tmp = document.createElement('div')
 		tmp.innerHTML = QUANT_EDIT_HTML(crit.textContent.trim(), desc ? desc.textContent.trim() : '').trim()

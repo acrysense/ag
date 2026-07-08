@@ -673,6 +673,8 @@
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
+				// same height as the input rows so the % row lines up / centres too
+				@include prop-vw(min-height, 46, sm);
 				@include prop-vw(gap, 12, sm);
 				&::before {
 					content: attr(data-label);
