@@ -58,16 +58,16 @@
                                                 <th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
                                                 <th class="data-table__th">Бренд</th>
                                                 <th class="data-table__th">Регион</th>
-                                                <th class="data-table__th data-table__th--center">Кластер</th>
+                                                <th class="data-table__th">Кластер</th>
                                                 <th class="data-table__th">Розничная компания</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="teamindex" data-sort-type="number">Индекс команды</th>
-                                                <th class="data-table__th data-table__th--center">Кат. команды</th>
+                                                <th class="data-table__th">Кат. команды</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="regionindex" data-sort-type="number">Индекс региона</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="turnover" data-sort-type="number">Товарооборот РОЗН</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Кол-во чеков</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Ср. чек</th>
                                                 <th class="data-table__th data-table__th--num" data-sort-key="fill" data-sort-type="number">Наполняемость чека</th>
-                                                <th class="data-table__th data-table__th--num">Доля СТМ, %</th>
+                                                <th class="data-table__th data-table__th--num" data-sort-key="stm" data-sort-type="number">Доля СТМ, %</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -92,10 +92,10 @@
                                                 <td class="data-table__td" data-filter-key="pharmacy"><a href="/pharmacy" class="data-table__link">{{this.name}}</a></td>
                                                 <td class="data-table__td" data-filter-key="brand">{{this.brand}}</td>
                                                 <td class="data-table__td" data-filter-key="region">{{this.region}}</td>
-                                                <td class="data-table__td data-table__td--center" data-filter-key="cluster"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
+                                                <td class="data-table__td" data-filter-key="cluster"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
                                                 <td class="data-table__td">ООО Амадей</td>
                                                 <td class="data-table__td data-table__td--num">{{this.idx}}</td>
-                                                <td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
+                                                <td class="data-table__td" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
                                                 <td class="data-table__td data-table__td--num">{{this.idx}}</td>
                                                 <td class="data-table__td data-table__td--num">{{this.num}}</td>
                                                 <td class="data-table__td data-table__td--num">{{this.num}}</td>
