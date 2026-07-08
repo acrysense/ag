@@ -15,6 +15,10 @@
 		.apexcharts-tooltip-text {
 			fill: $color-dark-grey;
 		}
+		// axis labels: 12px / 1.25 line-height (per the mockup)
+		.chart__axis-label {
+			line-height: 1.25;
+		}
 		.apexcharts-tooltip {
 			@include prop-vw(border-radius, 10, xl);
 			border: 1px solid $color-border;

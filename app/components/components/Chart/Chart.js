@@ -49,19 +49,27 @@ function lineOptions(cfg) {
 		stroke: { curve: 'smooth', width: 2.5, lineCap: 'round' },
 		markers: { size: 5, colors: [cfg.colors?.[0] || C.blue], strokeColors: C.white, strokeWidth: 2, hover: { size: 6 } },
 		dataLabels: { enabled: false },
-		grid: { borderColor: C.border, strokeDashArray: 0, padding: { left: 10, right: 10, top: 0 } },
+		// full grid frame — vertical + horizontal lines close the plot on all sides
+		// (matches the mockup; default only draws the horizontal y-lines)
+		grid: {
+			borderColor: C.border,
+			strokeDashArray: 0,
+			xaxis: { lines: { show: true } },
+			yaxis: { lines: { show: true } },
+			padding: { left: 10, right: 10, top: 0 },
+		},
 		xaxis: {
 			categories: cfg.categories || [],
 			axisBorder: { show: false },
 			axisTicks: { show: false },
-			labels: { style: { colors: C.grey, fontSize: '13px' } },
+			labels: { style: { colors: C.grey, fontSize: '12px', cssClass: 'chart__axis-label' } },
 			tooltip: { enabled: false },
 		},
 		yaxis: {
 			min: cfg.min ?? 50,
 			max: cfg.max ?? 80,
 			tickAmount: cfg.tickAmount ?? 3,
-			labels: { formatter: (v) => `${Math.round(v)}%`, style: { colors: C.grey, fontSize: '13px' } },
+			labels: { formatter: (v) => `${Math.round(v)}%`, style: { colors: C.grey, fontSize: '12px', cssClass: 'chart__axis-label' } },
 		},
 		tooltip: { y: { formatter: (v) => `${v}%` } },
 	}
