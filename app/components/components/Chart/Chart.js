@@ -44,7 +44,7 @@ function donutOptions(cfg) {
 function lineOptions(cfg) {
 	return {
 		chart: { type: 'line', fontFamily: 'inherit', height: cfg.height || 230, toolbar: { show: false }, zoom: { enabled: false }, parentHeightOffset: 0 },
-		series: [{ name: cfg.name || '', data: cfg.data || [] }],
+		series: [{ name: cfg.name || '', data: (cfg.categories || []).map((c, i) => ({ x: c, y: (cfg.data || [])[i] })) }],
 		colors: cfg.colors || [C.blue],
 		stroke: { curve: 'smooth', width: 2.5, lineCap: 'round' },
 		markers: { size: 5, colors: [cfg.colors?.[0] || C.blue], strokeColors: C.white, strokeWidth: 2, hover: { size: 6 } },
@@ -60,6 +60,8 @@ function lineOptions(cfg) {
 		},
 		xaxis: {
 			categories: cfg.categories || [],
+			// labels sit in the middle of each grid cell, not on the vertical lines
+			tickPlacement: 'between',
 			axisBorder: { show: false },
 			axisTicks: { show: false },
 			labels: { style: { colors: C.grey, fontSize: '12px', cssClass: 'chart__axis-label' } },
