@@ -55,15 +55,15 @@
 									</div>
 								</section>
 
-								<section class="data-panel manager__visits">
+								<section class="data-panel manager__visits" data-module="VisitsTabs" data-path="components">
 									<div class="manager__visits-head">
 										<h2 class="data-panel__title">Визиты</h2>
-										<div class="manager__visits-tabs">
-											<button type="button" class="manager__visits-tab is-active">Новые</button>
-											<button type="button" class="manager__visits-tab">История</button>
+										<div class="manager__visits-tabs" role="tablist">
+											<button type="button" class="manager__visits-tab is-active" role="tab" data-visits-tab>Новые</button>
+											<button type="button" class="manager__visits-tab" role="tab" data-visits-tab>История</button>
 										</div>
 									</div>
-									<ul class="manager__visits-list">
+									<ul class="manager__visits-list" data-visits-panel>
 										{{#each (arr
 											(obj cat="b" name="Дрозд В.В." date="10.03.2026")
 											(obj cat="a" name="Орлова Т.Д." date="10.02.2026")
@@ -76,6 +76,25 @@
 											(obj cat="c" name="Сорока С.В." date="10.03.2026")
 											(obj cat="c" name="Воробей М.В." date="10.03.2026")
 											(obj cat="d" name="Сорока С.В." date="10.03.2026")
+										)}}
+										<li class="manager__visit">
+											<span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span>
+											<span class="manager__visit-text">{{this.name}}, {{this.date}}</span>
+										</li>
+										{{/each}}
+									</ul>
+									<ul class="manager__visits-list" data-visits-panel hidden>
+										{{#each (arr
+											(obj cat="a" name="Лебедев А.К." date="18.01.2026")
+											(obj cat="b" name="Голубева Н.П." date="05.01.2026")
+											(obj cat="c" name="Журавлёв И.С." date="22.12.2025")
+											(obj cat="a" name="Соловьёв Д.М." date="10.12.2025")
+											(obj cat="b" name="Чайкина В.А." date="27.11.2025")
+											(obj cat="d" name="Грачёв П.П." date="13.11.2025")
+											(obj cat="b" name="Ласточкина Е.В." date="30.10.2025")
+											(obj cat="c" name="Скворцов Т.Н." date="16.10.2025")
+											(obj cat="a" name="Аистова М.Р." date="02.10.2025")
+											(obj cat="b" name="Кукушкин С.В." date="18.09.2025")
 										)}}
 										<li class="manager__visit">
 											<span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span>

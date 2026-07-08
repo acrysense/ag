@@ -1261,6 +1261,10 @@
 				color: $color-red;
 				background: rgba($color-red, 0.12);
 			}
+			&--yellow {
+				color: #a07a00;
+				background: rgba($color-yellow, 0.2);
+			}
 		}
 		&__text {
 			@include prop-vw(font-size, 14, xl);
