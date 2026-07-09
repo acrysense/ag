@@ -56,7 +56,9 @@ function lineOptions(cfg) {
 			strokeDashArray: 0,
 			xaxis: { lines: { show: true } },
 			yaxis: { lines: { show: true } },
-			padding: { left: 4, right: -12, top: 0 },
+			// left/right insets trimmed so the plot fills the panel (the y-axis
+			// labels are pulled to the edge with yaxis.labels.offsetX below)
+			padding: { left: -10, right: -12, top: 0 },
 		},
 		xaxis: {
 			categories: cfg.categories || [],
@@ -71,7 +73,7 @@ function lineOptions(cfg) {
 			min: cfg.min ?? 50,
 			max: cfg.max ?? 80,
 			tickAmount: cfg.tickAmount ?? 3,
-			labels: { formatter: (v) => `${Math.round(v)}%`, style: { colors: C.grey, fontSize: '12px', cssClass: 'chart__axis-label' } },
+			labels: { offsetX: -14, formatter: (v) => `${Math.round(v)}%`, style: { colors: C.grey, fontSize: '12px', cssClass: 'chart__axis-label' } },
 		},
 		tooltip: { y: { formatter: (v) => `${v}%` } },
 	}
