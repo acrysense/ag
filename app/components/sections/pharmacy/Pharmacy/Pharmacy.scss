@@ -70,6 +70,20 @@
 			border-radius: 0;
 			box-shadow: none;
 		}
+		// long values (address / coordinates) truncate with … instead of wrapping
+		&__card {
+			.employee__label {
+				flex-shrink: 0;
+			}
+			.employee__value,
+			.employee__link {
+				flex: 1 1 auto;
+				min-width: 0;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
 		&__card .employee__profile {
 			justify-content: space-between;
 			@include only(mobile) {
@@ -81,16 +95,61 @@
 			display: flex;
 			flex-direction: column;
 			@include prop-vw(gap, 10, xl);
+			// on mobile the big rating cards are replaced by the compact
+			// label + pill rows (.pharmacy__ratings-inline)
 			@include only(mobile) {
-				align-self: stretch; // full-width badges on mobile (profile is stacked)
-				@include prop-vw(gap, 10, sm);
+				display: none;
 			}
 		}
-		// .employee__rating hides on mobile (there it falls back to the avatar's
-		// mobile-rating); this card has no avatar, so keep both ratings visible
-		&__card .employee__rating {
+		// mobile-only: category ratings as «label: [grade value]» rows, sitting
+		// right under the pharmacy name (hidden on tablet & up)
+		&__ratings-inline {
+			display: none;
 			@include only(mobile) {
 				display: flex;
+				flex-direction: column;
+				@include prop-vw(gap, 5, sm);
+				@include prop-vw(margin-bottom, 5, sm);
+				.employee__row {
+					align-items: center;
+				}
+			}
+		}
+		&__rating-pill {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			flex-shrink: 0;
+			@include prop-vw(gap, 4, sm);
+			@include prop-vw(min-width, 60, sm);
+			@include prop-vw(height, 24, sm);
+			@include prop-vw(padding-inline, 8, sm);
+			@include prop-vw(border-radius, 7, sm);
+			@include prop-vw(font-size, 12, sm);
+			font-weight: normal;
+			line-height: 1;
+			color: $color-black;
+			background: $color-bg;
+			b {
+				font-weight: 600;
+				color: $color-blue;
+			}
+			// tint by category — mirrors .employee__rating-grade / history badge
+			&--blue {
+				background: rgba($color-blue, 0.1);
+				b { color: $color-blue; }
+			}
+			&--green {
+				background: #E8F6EE;
+				b { color: $color-green; }
+			}
+			&--yellow {
+				background: #FFF0D6;
+				b { color: $color-yellow; }
+			}
+			&--red {
+				background: $color-red-light;
+				b { color: $color-red; }
 			}
 		}
 		// --- KPI: reuses the employee-kpi grid + logic. The data-panel is already
@@ -233,6 +292,61 @@
 			.data-table__th:nth-child(9)  { @include prop-vw(width, 80, xl); }
 			.data-table__th:nth-child(10) { @include prop-vw(width, 100, xl); }
 			.data-table__th:nth-child(11) { @include prop-vw(width, 120, xl); }
+		}
+	}
+
+	// staff controls: search (shared .field, same as the header) + category tabs.
+	// The base .data-table__controls is mobile-only — surface it on every size.
+	.pharmacy__staff .data-table__controls {
+		display: flex;
+		align-items: center;
+		@include prop-vw(gap, 16, xl);
+		@include prop-vw(margin-bottom, 20, xl);
+
+		@include only(desktop) {
+			@include prop-vw(gap, 16, lg);
+			@include prop-vw(margin-bottom, 20, lg);
+		}
+		@include only(mobile) {
+			flex-wrap: wrap;
+			@include prop-vw(gap, 10, sm);
+			@include prop-vw(margin-bottom, 16, sm);
+		}
+
+		// search grows to fill; the tabs sit on the right (full-width search on mobile)
+		.manager__staff-search {
+			flex: 1 1 auto;
+			min-width: 0;
+			width: auto;
+			margin-right: 0;
+
+			@include only(mobile) {
+				flex-basis: 100%;
+			}
+		}
+		// segmented category tabs — 36px tall (32px button + 2px container padding)
+		.manager__staff-cats {
+			flex-shrink: 0;
+
+			@include only(mobile) {
+				@include prop-vw(gap, 2, sm);
+				@include prop-vw(border-radius, 8, sm);
+				@include prop-vw(padding, 2, sm);
+			}
+		}
+		.manager__staff-cat {
+			@include prop-vw(height, 32, xl);
+
+			@include only(desktop) {
+				@include prop-vw(height, 32, lg);
+			}
+			@include only(mobile) {
+				flex: 1 1 auto;
+				@include prop-vw(height, 32, sm);
+				@include prop-vw(min-width, 32, sm);
+				@include prop-vw(font-size, 13, sm);
+				@include prop-vw(border-radius, 6, sm);
+			}
 		}
 	}
 }
