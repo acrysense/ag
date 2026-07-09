@@ -18,17 +18,17 @@
         &__top {
             display: grid;
             align-items: start;
-            @include prop-vw(gap, 20, xl);
-            // left column = card + KPI stacked (flexible); right column = visits
-            // (fixed width, spans both rows)
-            grid-template-columns: minmax(0, 1fr) #{vw-range(360, xl)};
+            @include prop-vw(gap, 10, xl);
+            // left column = card + KPI stacked (fills to 1080 = 1440 content − 350 − 10
+            // gap); right column = visits (350, spans both rows)
+            grid-template-columns: minmax(0, 1fr) #{vw-range(350, xl)};
             grid-template-areas:
                 "card   visits"
                 "kpi    visits";
 
             @include only(desktop) {
-                @include prop-vw(gap, 20, lg);
-                grid-template-columns: minmax(0, 1fr) #{vw-range(320, lg)};
+                @include prop-vw(gap, 10, lg);
+                grid-template-columns: minmax(0, 1fr) #{vw-range(350, lg)};
             }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
@@ -81,9 +81,17 @@
         &__settings.btn {
             width: 100%;
             padding-block: 0;
+            font-weight: normal;
+            color: $color-dark-grey; // #737F8C
             @include prop-vw(height, 36, xl);
             @include prop-vw(font-size, 14, xl);
             @include prop-vw(border-radius, 7, xl);
+
+            @media screen and (hover: hover) {
+                &:hover:not([disabled]) {
+                    color: $color-dark-grey;
+                }
+            }
 
             @include only(desktop) {
                 @include prop-vw(height, 36, lg);
