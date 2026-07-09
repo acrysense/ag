@@ -55,54 +55,7 @@
 									</div>
 								</section>
 
-								<section class="data-panel manager__visits" data-module="VisitsTabs" data-path="components">
-									<div class="manager__visits-head">
-										<h2 class="data-panel__title">Визиты</h2>
-										<div class="manager__visits-tabs" role="tablist">
-											<button type="button" class="manager__visits-tab is-active" role="tab" data-visits-tab>Новые</button>
-											<button type="button" class="manager__visits-tab" role="tab" data-visits-tab>История</button>
-										</div>
-									</div>
-									<ul class="visit-hist__list" data-visits-panel>
-										{{#each (arr
-											(obj tone="yellow" score="78/100" d="10.02.2026" type="Коучинг")
-											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
-											(obj tone="red" score="2/100" d="10.02.2026" type="Диагностика")
-											(obj tone="red" score="29/100" d="09.02.2026" type="Контроль")
-											(obj tone="yellow" score="78/100" d="08.02.2026" type="Контроль")
-											(obj tone="yellow" score="78/100" d="07.02.2026" type="Диагностика")
-											(obj tone="green" score="100/100" d="06.02.2026" type="Коучинг")
-											(obj tone="yellow" score="78/100" d="05.02.2026" type="Коучинг")
-											(obj tone="red" score="29/100" d="04.02.2026" type="Контроль")
-											(obj tone="yellow" score="78/100" d="03.02.2026" type="Контроль")
-											(obj tone="green" score="100/100" d="02.02.2026" type="Коучинг")
-										)}}
-										<li class="visit-hist__item">
-											<span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
-											<span class="visit-hist__text">{{this.d}}, <span class="visit-hist__type">{{this.type}}</span></span>
-										</li>
-										{{/each}}
-									</ul>
-									<ul class="visit-hist__list" data-visits-panel hidden>
-										{{#each (arr
-											(obj tone="green" score="100/100" d="28.01.2026" type="Коучинг")
-											(obj tone="yellow" score="78/100" d="14.01.2026" type="Контроль")
-											(obj tone="red" score="12/100" d="03.01.2026" type="Диагностика")
-											(obj tone="green" score="95/100" d="20.12.2025" type="Коучинг")
-											(obj tone="red" score="18/100" d="09.12.2025" type="Контроль")
-											(obj tone="yellow" score="64/100" d="25.11.2025" type="Диагностика")
-											(obj tone="green" score="88/100" d="11.11.2025" type="Коучинг")
-											(obj tone="red" score="31/100" d="28.10.2025" type="Контроль")
-											(obj tone="yellow" score="70/100" d="14.10.2025" type="Коучинг")
-											(obj tone="green" score="83/100" d="30.09.2025" type="Коучинг")
-										)}}
-										<li class="visit-hist__item">
-											<span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
-											<span class="visit-hist__text">{{this.d}}, <span class="visit-hist__type">{{this.type}}</span></span>
-										</li>
-										{{/each}}
-									</ul>
-								</section>
+								{{> components/VisitsHist/VisitsHist }}
 
 							<!-- KPI -->
 							<section class="data-panel manager__kpi">

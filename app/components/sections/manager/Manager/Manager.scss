@@ -61,87 +61,13 @@
         &__settings {
             width: 100%;
         }
-        &__visits {
-            grid-area: visits; // width from the grid column; spans card + KPI height
+        // the shared visits component (.visit-hist partial) sits in the top row's
+        // right column, spanning the card + KPI height
+        .visit-hist {
+            grid-area: visits;
         }
-        &__visits-head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            @include prop-vw(gap, 12, xl);
-            @include prop-vw(margin-bottom, 16, xl);
-
-            @include only(mobile) {
-                @include prop-vw(gap, 12, sm);
-                @include prop-vw(margin-bottom, 16, sm);
-            }
-        }
-        // segmented control: container 32 tall (1px inner padding + 30px buttons),
-        // heights come from padding — not fixed — so text/line-height drive them
-        &__visits-tabs {
-            display: flex;
-            @include prop-vw(gap, 10, xl);
-            background: $color-track;
-            @include prop-vw(border-radius, 10, xl);
-            @include prop-vw(padding, 1, xl);
-
-            @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
-                @include prop-vw(border-radius, 10, sm);
-                @include prop-vw(padding, 1, sm);
-            }
-        }
-        &__visits-tab {
-            // 30px tall: font 14 × line-height 1 = 14, + 8px padding top/bottom
-            @include prop-vw(padding-block, 8, xl);
-            @include prop-vw(padding-inline, 15, xl);
-            @include prop-vw(font-size, 14, xl);
-            font-weight: normal;
-            line-height: 1;
-            color: $color-dark-grey;
-            background: transparent;
-            border: none;
-            @include prop-vw(border-radius, 10, xl);
-            cursor: pointer;
-            &.is-active {
-                color: $color-black;
-                background: $color-white;
-                box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
-            }
-
-            @include only(mobile) {
-                @include prop-vw(padding-block, 8, sm);
-                @include prop-vw(padding-inline, 15, sm);
-                @include prop-vw(font-size, 14, sm);
-                @include prop-vw(border-radius, 10, sm);
-            }
-        }
-        &__visits-list {
-            display: flex;
-            flex-direction: column;
-            @include prop-vw(gap, 14, xl);
-
-            @include only(mobile) {
-                @include prop-vw(gap, 14, sm);
-            }
-        }
-        &__visit {
-            display: flex;
-            align-items: center;
-            @include prop-vw(gap, 12, xl);
-
-            @include only(mobile) {
-                @include prop-vw(gap, 12, sm);
-            }
-        }
-        &__visit-text {
-            @include prop-vw(font-size, 14, xl);
-            color: $color-black;
-
-            @include only(mobile) {
-                @include prop-vw(font-size, 14, sm);
-            }
-        }
+        // visits block styling now lives in the shared .visit-hist component
+        // (app/components/components/VisitsHist), used here and on /pharmacy
 
         // --- KPI progress cell ---
         &__progress {

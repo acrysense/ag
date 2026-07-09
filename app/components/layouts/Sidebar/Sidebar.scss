@@ -396,11 +396,12 @@ $collapse: $collapse-dur $collapse-ease;
         }
     }
 
-    // centred content container capped at 1440 with asymmetric side padding
-    // (60 left / 70 right). Reusable — wrap a page's content in .wrapper__mid.
+    // centred content container — inner content is 1440 wide, plus asymmetric
+    // side padding (60 left / 70 right), so the box is 1440 + 130 = 1570.
+    // Reusable — wrap a page's content in .wrapper__mid.
     .wrapper__mid {
         width: 100%;
-        max-width: 1440px;
+        max-width: 1570px;
         margin-inline: auto;
         @include prop-vw(padding-left, 60, xl);
         @include prop-vw(padding-right, 70, xl);

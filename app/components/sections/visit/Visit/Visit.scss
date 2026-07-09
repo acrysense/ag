@@ -1187,14 +1187,63 @@
 
 	// ---- right sidebar: visits history ----
 	.visit-hist {
-		.data-panel__title {
+		// head: «Визиты» title + Новые/История tabs, with the gap to the list below
+		&__head {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			@include prop-vw(gap, 12, xl);
 			@include prop-vw(margin-bottom, 40, xl);
+
+			@include only(mobile) {
+				@include prop-vw(gap, 12, sm);
+				@include prop-vw(margin-bottom, 20, sm);
+			}
+		}
+		.data-panel__title {
 			@include prop-vw(font-size, 22, xl);
 			line-height: 1.09090909091;
 
 			@include only(mobile) {
-				@include prop-vw(margin-bottom, 20, sm);
 				@include prop-vw(font-size, 22, sm);
+			}
+		}
+		// segmented Новые/История control (1px inner padding + ~30px tall buttons)
+		&__tabs {
+			display: flex;
+			@include prop-vw(gap, 10, xl);
+			background: $color-track;
+			@include prop-vw(border-radius, 10, xl);
+			@include prop-vw(padding, 1, xl);
+
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(border-radius, 10, sm);
+				@include prop-vw(padding, 1, sm);
+			}
+		}
+		&__tab {
+			@include prop-vw(padding-block, 8, xl);
+			@include prop-vw(padding-inline, 15, xl);
+			@include prop-vw(font-size, 14, xl);
+			font-weight: normal;
+			line-height: 1;
+			color: $color-dark-grey;
+			background: transparent;
+			border: none;
+			@include prop-vw(border-radius, 10, xl);
+			cursor: pointer;
+			&.is-active {
+				color: $color-black;
+				background: $color-white;
+				box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
+			}
+
+			@include only(mobile) {
+				@include prop-vw(padding-block, 8, sm);
+				@include prop-vw(padding-inline, 15, sm);
+				@include prop-vw(font-size, 14, sm);
+				@include prop-vw(border-radius, 10, sm);
 			}
 		}
 		&__list {
