@@ -53,6 +53,11 @@
 			@include only(desktop) {
 				@include prop-vw(width, 320, lg);
 			}
+			// mobile: full width (the xl width above floors to ~192px and would
+			// otherwise win over the shared &__main,&__aside 100% rule)
+			@include only(mobile) {
+				width: 100%;
+			}
 		}
 
 		// --- pharmacy card ---
@@ -64,11 +69,6 @@
 			background: none;
 			border-radius: 0;
 			box-shadow: none;
-			// data-panel zeroes its top padding on mobile; the card content would
-			// otherwise touch the panel's top edge — restore a 20px top inset.
-			@include only(mobile) {
-				@include prop-vw(padding-top, 20, sm);
-			}
 		}
 		&__card .employee__profile {
 			justify-content: space-between;
@@ -101,14 +101,15 @@
 			background: none;
 			border-radius: 0;
 			box-shadow: none;
-			// same as the card: give the KPI controls a 20px top inset on mobile.
-			@include only(mobile) {
-				@include prop-vw(padding-top, 20, sm);
-			}
 		}
 		&__kpi .employee-kpi__head,
 		&__kpi .employee-kpi__row {
 			grid-template-columns: minmax(0, 1fr) #{vw-range(104, xl)} #{vw-range(104, xl)} #{vw-range(150, xl)};
+			// mobile table-view: the xl widths floor and squash план/факт/прогресс
+			// while the name column bloats — rebalance with fluid fr columns.
+			@include only(mobile) {
+				grid-template-columns: minmax(0, 1.7fr) 1fr 1fr 1.3fr;
+			}
 		}
 
 		// --- category history (aside) — reuses .employee-history list styles ---
@@ -188,6 +189,25 @@
 		}
 		// visit-hist__list already stacks/spaces/divides the items; no height cap /
 		// scroll here — the panel grows to show every visit
+
+		@include only(mobile) {
+			// data-panel zeroes its top padding on mobile — give every panel a
+			// consistent 20px top inset (card, KPI, staff, chart, history, donut,
+			// visits). `.pharmacy .data-panel` (0-2-0) beats the base `.data-panel`.
+			.data-panel {
+				@include prop-vw(padding-top, 20, sm);
+			}
+			// card + KPI read as one continuous block: drop the grey separator strip
+			// and the grid gap between them so the total card→controls gap is 20px
+			// (provided by the card's own padding-bottom).
+			&__kpi.data-panel {
+				padding-top: 0;
+				@include prop-vw(margin-top, -10, sm);
+				&::before {
+					content: none;
+				}
+			}
+		}
 	}
 
 	// staff table: explicit column widths (table-layout fixed so the px are
@@ -195,6 +215,11 @@
 	// Desktop only — the xl widths floor below 1024 and would squash the columns
 	// on mobile, so there we keep the base manager-table (auto layout + scroll).
 	.pharmacy__staff .data-table.manager-table {
+		// mobile: widen the whole table so the long headers wrap to 2 lines max
+		// (base manager-table min-width 900 leaves ~85px columns → 4-line headers).
+		@include only(mobile) {
+			@include prop-vw(min-width, 1400, sm);
+		}
 		@include up(desktop) {
 			table-layout: fixed;
 			@include prop-vw(min-width, 1049, xl);
