@@ -382,6 +382,24 @@
                 @include prop-vw(border-radius, 7, sm);
             }
         }
+        // whole-row link wrapper (badge + text) — neutral colour, no underline,
+        // so it reads like the plain history row but is clickable
+        &__link {
+            display: flex;
+            align-items: center;
+            flex: 1 1 auto;
+            min-width: 0;
+            @include prop-vw(gap, 10, xl);
+            color: inherit;
+            text-decoration: none;
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+            }
+        }
         &__text {
             display: block;
             width: fit-content;
