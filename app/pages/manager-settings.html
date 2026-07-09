@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light manager-page">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__mid wrapper__mid--narrow">
+						<a href="/manager" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+
+						<div class="manager-settings">
+							<div class="manager-settings__main">
+								<!-- manager card (reused from /manager) -->
+								<section class="data-panel manager__card">
+									<div class="employee__profile">
+										<div class="employee__avatar">
+											<img src="/assets/images/ava.jpg" alt="Петров Алексей Иванович">
+										</div>
+										<div class="employee__info">
+											<h1 class="employee__name">Петров Алексей Иванович</h1>
+											<div class="employee__rows">
+												<div class="employee__row"><span class="employee__label">Регион:</span><span class="employee__value">Минская область</span></div>
+												<div class="employee__row"><span class="employee__label">Аптек:</span><a href="/" class="employee__link">67</a></div>
+												<div class="employee__row"><span class="employee__label">Ставка:</span><span class="employee__value">1.25</span></div>
+											</div>
+										</div>
+										<div class="manager__rating">
+											<div class="employee__rating">
+												<div class="employee__rating-body">
+													<span class="employee__rating-value">0.83</span>
+													<span class="employee__rating-date">12.04.2026</span>
+												</div>
+												<span class="employee__rating-grade">B</span>
+											</div>
+											<a href="/manager-settings" class="btn btn--sm btn--secondary manager__settings">Настройки</a>
+										</div>
+									</div>
+								</section>
+
+								<!-- settings form: visit targets per category -->
+								<section class="data-panel manager-settings__form">
+									<h2 class="data-panel__title">Настройки</h2>
+									<span class="manager-settings__subtitle">Таргет визитов</span>
+									<div class="manager-settings__targets">
+										{{#each (arr (obj c="a" v="134") (obj c="b" v="249") (obj c="c" v="120") (obj c="d" v="100"))}}
+										<div class="manager-settings__row">
+											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
+											<div class="field manager-settings__field">
+												<div class="field__control">
+													<input class="field__input" name="target-{{this.c}}" type="text" value="{{this.v}}" autocomplete="off">
+												</div>
+											</div>
+										</div>
+										{{/each}}
+									</div>
+									<div class="manager-settings__divider"></div>
+									<div class="manager-settings__actions">
+										<button type="button" class="btn btn--sm">Сохранить</button>
+										<button type="button" class="btn btn--sm btn--secondary">Отмена</button>
+									</div>
+								</section>
+							</div>
+
+							<!-- visit target summary + breakdown -->
+							<aside class="manager-settings__aside">
+								<section class="data-panel manager-settings__stats">
+									<h2 class="data-panel__title">Таргет посещений</h2>
+									<div class="manager-settings__divider"></div>
+									<ul class="manager-settings__summary">
+										<li class="manager-settings__summary-item"><span>Таргет визитов:</span> <b>603</b></li>
+										<li class="manager-settings__summary-item"><span>Запланировано визитов:</span> <b>462</b></li>
+										<li class="manager-settings__summary-item"><span>Выполнено визитов:</span> <b>22</b></li>
+										<li class="manager-settings__summary-item"><span>Процент выполнения:</span> <b>8%</b></li>
+									</ul>
+									<div class="manager-settings__divider"></div>
+									<div class="manager-settings__table">
+										<div class="manager-settings__thead">
+											<span></span>
+											<span>Факт</span>
+											<span>План</span>
+											<span>Таргет</span>
+										</div>
+										{{#each (arr
+											(obj c="a" f="12" p="134" t="134")
+											(obj c="b" f="9" p="143" t="249")
+											(obj c="c" f="1" p="120" t="120")
+											(obj c="d" f="0" p="65" t="100")
+										)}}
+										<div class="manager-settings__trow">
+											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
+											<span>{{this.f}}</span>
+											<span>{{this.p}}</span>
+											<span>{{this.t}}</span>
+										</div>
+										{{/each}}
+									</div>
+								</section>
+							</aside>
+						</div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>
