@@ -241,6 +241,7 @@
             align-items: center;
             @include prop-vw(gap, 10, xl);
             @include prop-vw(margin-bottom, 40, xl);
+            font-family: $font-secondary;
             @include prop-vw(font-size, 22, xl);
             line-height: 1.09090909091;
             font-weight: 600;
