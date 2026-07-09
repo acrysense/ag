@@ -69,9 +69,12 @@
             .employee-kpi__grid-scroll {
                 overflow-x: auto;
             }
+            // first col 250 (was 320) so the 8 columns + gaps fit the 1080 panel
+            // without a horizontal scroll on desktop; 250 still clears the longest
+            // indicator name (~195px)
             .employee-kpi__head,
             .employee-kpi__row {
-                grid-template-columns: #{vw-range(320, xl)} #{vw-range(90, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(110, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(100, xl)};
+                grid-template-columns: #{vw-range(250, xl)} #{vw-range(90, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(110, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(100, xl)};
             }
         }
         &__rating {
