@@ -63,42 +63,42 @@
 											<button type="button" class="manager__visits-tab" role="tab" data-visits-tab>История</button>
 										</div>
 									</div>
-									<ul class="manager__visits-list" data-visits-panel>
+									<ul class="visit-hist__list" data-visits-panel>
 										{{#each (arr
-											(obj cat="b" name="Дрозд В.В." date="10.03.2026")
-											(obj cat="a" name="Орлова Т.Д." date="10.02.2026")
-											(obj cat="a" name="Синица С.С." date="10.03.2026")
-											(obj cat="b" name="Воробей М.В." date="10.01.2026")
-											(obj cat="b" name="Сорока С.В." date="10.03.2026")
-											(obj cat="c" name="Сорока С.В." date="10.03.2026")
-											(obj cat="b" name="Дрозд В.В." date="10.03.2026")
-											(obj cat="b" name="Воробей М.В." date="10.03.2026")
-											(obj cat="c" name="Сорока С.В." date="10.03.2026")
-											(obj cat="c" name="Воробей М.В." date="10.03.2026")
-											(obj cat="d" name="Сорока С.В." date="10.03.2026")
+											(obj tone="yellow" score="78/100" d="10.02.2026" type="Коучинг")
+											(obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
+											(obj tone="red" score="2/100" d="10.02.2026" type="Диагностика")
+											(obj tone="red" score="29/100" d="09.02.2026" type="Контроль")
+											(obj tone="yellow" score="78/100" d="08.02.2026" type="Контроль")
+											(obj tone="yellow" score="78/100" d="07.02.2026" type="Диагностика")
+											(obj tone="green" score="100/100" d="06.02.2026" type="Коучинг")
+											(obj tone="yellow" score="78/100" d="05.02.2026" type="Коучинг")
+											(obj tone="red" score="29/100" d="04.02.2026" type="Контроль")
+											(obj tone="yellow" score="78/100" d="03.02.2026" type="Контроль")
+											(obj tone="green" score="100/100" d="02.02.2026" type="Коучинг")
 										)}}
-										<li class="manager__visit">
-											<span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span>
-											<span class="manager__visit-text">{{this.name}}, {{this.date}}</span>
+										<li class="visit-hist__item">
+											<span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
+											<span class="visit-hist__text">{{this.d}}, <span class="visit-hist__type">{{this.type}}</span></span>
 										</li>
 										{{/each}}
 									</ul>
-									<ul class="manager__visits-list" data-visits-panel hidden>
+									<ul class="visit-hist__list" data-visits-panel hidden>
 										{{#each (arr
-											(obj cat="a" name="Лебедев А.К." date="18.01.2026")
-											(obj cat="b" name="Голубева Н.П." date="05.01.2026")
-											(obj cat="c" name="Журавлёв И.С." date="22.12.2025")
-											(obj cat="a" name="Соловьёв Д.М." date="10.12.2025")
-											(obj cat="b" name="Чайкина В.А." date="27.11.2025")
-											(obj cat="d" name="Грачёв П.П." date="13.11.2025")
-											(obj cat="b" name="Ласточкина Е.В." date="30.10.2025")
-											(obj cat="c" name="Скворцов Т.Н." date="16.10.2025")
-											(obj cat="a" name="Аистова М.Р." date="02.10.2025")
-											(obj cat="b" name="Кукушкин С.В." date="18.09.2025")
+											(obj tone="green" score="100/100" d="28.01.2026" type="Коучинг")
+											(obj tone="yellow" score="78/100" d="14.01.2026" type="Контроль")
+											(obj tone="red" score="12/100" d="03.01.2026" type="Диагностика")
+											(obj tone="green" score="95/100" d="20.12.2025" type="Коучинг")
+											(obj tone="red" score="18/100" d="09.12.2025" type="Контроль")
+											(obj tone="yellow" score="64/100" d="25.11.2025" type="Диагностика")
+											(obj tone="green" score="88/100" d="11.11.2025" type="Коучинг")
+											(obj tone="red" score="31/100" d="28.10.2025" type="Контроль")
+											(obj tone="yellow" score="70/100" d="14.10.2025" type="Коучинг")
+											(obj tone="green" score="83/100" d="30.09.2025" type="Коучинг")
 										)}}
-										<li class="manager__visit">
-											<span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span>
-											<span class="manager__visit-text">{{this.name}}, {{this.date}}</span>
+										<li class="visit-hist__item">
+											<span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
+											<span class="visit-hist__text">{{this.d}}, <span class="visit-hist__type">{{this.type}}</span></span>
 										</li>
 										{{/each}}
 									</ul>
