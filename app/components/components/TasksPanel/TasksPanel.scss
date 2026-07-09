@@ -499,13 +499,24 @@
     }
     
     .task-row {
+        position: relative;
         display: flex;
         align-items: flex-start;
         @include prop-vw(gap, 15, xl);
         @include prop-vw(padding-block, 9.5, xl);
-        @include border-side(top, 1, solid, $color-border, xl);
-        &:first-child {
-            border-top: none;
+        // divider between rows: a left-inset stripe (same as .tasks-list::before),
+        // not a full-width top border
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            @include prop-vw(left, 38, xl);
+            right: 0;
+            height: 1px;
+            background: $color-border;
+        }
+        &:first-child::before {
+            content: none;
         }
         &.is-hidden {
             display: none;
@@ -535,7 +546,9 @@
         @include only(desktop) {
             @include prop-vw(gap, 15, lg);
             @include prop-vw(padding-block, 9.5, lg);
-            @include border-side(top, 1, solid, $color-border, lg);
+            &::before {
+                @include prop-vw(left, 38, lg);
+            }
         }
         // --- Mobile layout (JS rebuilds the DOM into .task-row__lead) --------
         // lead = [status | headtext(title + meta) | tools], flex-centred so the
@@ -544,7 +557,9 @@
         @include only(mobile) {
             display: block;
             @include prop-vw(padding-block, 9.5, sm);
-            @include border-side(top, 1, solid, $color-border, sm);
+            &::before {
+                @include prop-vw(left, 34, sm);
+            }
 
             .task-row__lead {
                 display: flex;
