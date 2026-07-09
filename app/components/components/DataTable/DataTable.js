@@ -83,14 +83,19 @@ function buildTable(root, config, empty) {
 			sortOpts.push(`<button type="button" class="data-table__sort-option" role="option" data-sort="${esc(c.key)}" data-dir="asc">${esc(c.label)} ↑</button>`)
 			sortOpts.push(`<button type="button" class="data-table__sort-option" role="option" data-sort="${esc(c.key)}" data-dir="desc">${esc(c.label)} ↓</button>`)
 		})
-	const controls = `<div class="data-table__controls"><div class="data-table__sort" data-dt-sort><button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button><div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">${sortOpts.join('')}</div></div><button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></button><button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></button></div>`
+	// pages that supply their own controls (a local search + category tabs) pass
+	// controls:false so the built-in sort/view controls aren't emitted
+	const controls = config.controls === false ? '' : `<div class="data-table__controls"><div class="data-table__sort" data-dt-sort><button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button><div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">${sortOpts.join('')}</div></div><button type="button" class="data-table__ctrl is-active" data-dt-view="cards" aria-label="Карточки" aria-pressed="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="4" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="10" cy="16" r="1.6"/></svg></button><button type="button" class="data-table__ctrl" data-dt-view="table" aria-label="Таблица" aria-pressed="false"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="4" cy="10" r="1.6"/><circle cx="10" cy="10" r="1.6"/><circle cx="16" cy="10" r="1.6"/></svg></button></div>`
 
 	const pageSizeOpts = sizes
 		.map((s) => `<button type="button" class="page-size__option${s === pageSize ? ' is-active' : ''}" role="option" data-value="${s}">${s}</button>`)
 		.join('')
 	const footer = `<div class="data-table__footer"><nav class="ui-pagination" aria-label="Страницы"></nav><div class="data-table__total"><span class="data-table__total-text">Всего: <span data-total>${esc(config.total ?? rows.length)}</span></span><div class="page-size" data-page-size><button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false"><span data-page-size-value>${pageSize}</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button><div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">${pageSizeOpts}</div></div></div></div>`
 
-	const tableCls = `data-table is-cards-view${config.table ? ' ' + esc(config.table) : ''}`
+	// cardsView:false keeps a horizontal-scroll table on mobile (no card layout) —
+	// used by wide tables like the pharmacy staff / manager-table
+	const cardsView = config.cardsView === false ? '' : ' is-cards-view'
+	const tableCls = `data-table${cardsView}${config.table ? ' ' + esc(config.table) : ''}`
 	const wrap = document.createElement('div')
 	wrap.innerHTML = `${controls}<div class="data-table__scroll"><table class="${tableCls}"><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table><div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div></div>${footer}`
 	while (wrap.firstChild) root.appendChild(wrap.firstChild)
@@ -559,6 +564,37 @@ export default async (root) => {
 			currentPage = 1
 			recompute()
 		},
+	}
+
+	// --- Local controls: [data-dt-search] input + [data-dt-cat] category tabs ---
+	// A page can supply its own search box and category buttons above the table;
+	// they drive the same applyFilters() the header uses. The category is an
+	// exclusive, toggleable filter (re-clicking the active tab clears it).
+	const localSearch = root.querySelector('[data-dt-search]')
+	const localCats = [...root.querySelectorAll('[data-dt-cat]')]
+	if (localSearch || localCats.length) {
+		let lq = ''
+		let lcat = ''
+		const applyLocal = () =>
+			root.__dataTable.applyFilters({ query: lq, filters: lcat ? [{ key: 'category', value: lcat }] : [] })
+		if (localSearch) {
+			const onInput = () => {
+				lq = localSearch.value
+				applyLocal()
+			}
+			localSearch.addEventListener('input', onInput)
+			disposers.push(() => localSearch.removeEventListener('input', onInput))
+		}
+		localCats.forEach((btn) => {
+			const onClick = () => {
+				const val = btn.dataset.dtCat || ''
+				lcat = lcat === val ? '' : val
+				localCats.forEach((b) => b.classList.toggle('is-active', b.dataset.dtCat === lcat))
+				applyLocal()
+			}
+			btn.addEventListener('click', onClick)
+			disposers.push(() => btn.removeEventListener('click', onClick))
+		})
 	}
 
 	// --- Restore state from a shared URL (sole client table only) ---

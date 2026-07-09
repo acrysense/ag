@@ -396,6 +396,10 @@
 			gap: 0;
 			@include prop-vw(padding, 1, xl);
 			@include prop-vw(border-radius, 11, xl);
+			// pinned to the right edge (desktop/tablet); on mobile they wrap below
+			@include up(tablet) {
+				margin-left: auto;
+			}
 
 			@include only(desktop) {
 				@include prop-vw(padding, 1, lg);
