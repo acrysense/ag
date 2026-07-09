@@ -50,16 +50,51 @@
         }
         &__kpi {
             grid-area: kpi;
-            min-width: 0; // let the wide KPI table scroll inside the column
+            min-width: 0; // let the wide KPI grid scroll inside the column
+            // reuses the employee-kpi component; the data-panel is already the card,
+            // so strip the inner employee-kpi chrome
+            .employee-kpi {
+                padding: 0;
+                background: none;
+                border-radius: 0;
+                box-shadow: none;
+            }
+            // 8 fixed columns (Показатель + 7 metrics) — scroll horizontally if wide
+            .employee-kpi__grid-scroll {
+                overflow-x: auto;
+            }
+            .employee-kpi__head,
+            .employee-kpi__row {
+                grid-template-columns: #{vw-range(320, xl)} #{vw-range(90, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(110, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(100, xl)};
+            }
         }
         &__rating {
             flex-shrink: 0;
+            align-self: stretch; // fill the card height so the button drops to the bottom
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             @include prop-vw(gap, 10, xl);
         }
-        &__settings {
+        // «Настройки» — pinned to the bottom of the rating column (space-between
+        // above). Compound with .btn to override the base button radius/size.
+        &__settings.btn {
             width: 100%;
+            padding-block: 0;
+            @include prop-vw(height, 36, xl);
+            @include prop-vw(font-size, 14, xl);
+            @include prop-vw(border-radius, 7, xl);
+
+            @include only(desktop) {
+                @include prop-vw(height, 36, lg);
+                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(border-radius, 7, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(height, 36, sm);
+                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(border-radius, 7, sm);
+            }
         }
         // the shared visits component (.visit-hist partial) sits in the top row's
         // right column, spanning the card + KPI height
