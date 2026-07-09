@@ -309,18 +309,18 @@
                 content: '';
                 position: absolute;
                 bottom: 0;
-                @include prop-vw(left, 40, xl);
+                @include prop-vw(left, 34, xl);
                 right: 0;
                 display: block;
                 @include prop-vw(height, 1, xl);
                 background: $color-border;
 
                 @include only(desktop) {
-                    @include prop-vw(left, 40, lg);
+                    @include prop-vw(left, 34, lg);
                     @include prop-vw(height, 1, lg);
                 }
                 @include only(mobile) {
-                    @include prop-vw(left, 40, sm);
+                    @include prop-vw(left, 34, sm);
                     @include prop-vw(height, 1, sm);
                 }
             }

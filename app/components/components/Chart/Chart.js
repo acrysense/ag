@@ -56,7 +56,7 @@ function lineOptions(cfg) {
 			strokeDashArray: 0,
 			xaxis: { lines: { show: true } },
 			yaxis: { lines: { show: true } },
-			padding: { left: 10, right: 10, top: 0 },
+			padding: { left: 4, right: -12, top: 0 },
 		},
 		xaxis: {
 			categories: cfg.categories || [],

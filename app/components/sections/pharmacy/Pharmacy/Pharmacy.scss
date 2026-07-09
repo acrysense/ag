@@ -192,17 +192,16 @@
 
 		@include only(mobile) {
 			// data-panel zeroes its top padding on mobile — give every panel a
-			// consistent 20px top inset (card, KPI, staff, chart, history, donut,
-			// visits). `.pharmacy .data-panel` (0-2-0) beats the base `.data-panel`.
+			// consistent 20px top inset (KPI, staff, chart, history, donut, visits).
+			// `.pharmacy .data-panel` (0-2-0) beats the base `.data-panel`.
 			.data-panel {
 				@include prop-vw(padding-top, 20, sm);
 			}
-			// card + KPI read as one continuous block: drop the grey separator strip
-			// and the grid gap between them so the total card→controls gap is 20px
-			// (provided by the card's own padding-bottom).
-			&__kpi.data-panel {
+			// card is the first panel (right after «Назад»): drop its grey separator
+			// strip and its own top padding so the gap from the back link to the card
+			// is a single 20px (the back link's own margin-bottom), not 20 + strip + 20.
+			&__card.data-panel {
 				padding-top: 0;
-				@include prop-vw(margin-top, -10, sm);
 				&::before {
 					content: none;
 				}
