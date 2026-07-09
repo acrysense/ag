@@ -250,11 +250,24 @@
                 @include prop-vw(gap, 10, sm);
             }
         }
+        // container only — the badge (.data-table__cat) and the heading text
+        // (.manager__cat-title-text) style themselves
         &__cat-title {
             display: flex;
             align-items: center;
             @include prop-vw(gap, 10, xl);
             @include prop-vw(margin-bottom, 40, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+                @include prop-vw(margin-bottom, 40, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(gap, 10, sm);
+                @include prop-vw(margin-bottom, 40, sm);
+            }
+        }
+        &__cat-title-text {
             font-family: $font-secondary;
             @include prop-vw(font-size, 22, xl);
             line-height: 1.09090909091;
@@ -262,24 +275,10 @@
             color: $color-black;
 
             @include only(desktop) {
-                @include prop-vw(gap, 10, lg);
-                @include prop-vw(margin-bottom, 40, lg);
                 @include prop-vw(font-size, 22, lg);
             }
             @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
-                @include prop-vw(margin-bottom, 40, sm);
                 @include prop-vw(font-size, 22, sm);
-            }
-            // category badge: 24×24 / r7 / 600 (from .data-table__cat) — only font→12
-            .data-table__cat {
-                @include prop-vw(font-size, 12, xl);
-                @include only(desktop) {
-                    @include prop-vw(font-size, 12, lg);
-                }
-                @include only(mobile) {
-                    @include prop-vw(font-size, 12, sm);
-                }
             }
         }
         &__cat-list {
