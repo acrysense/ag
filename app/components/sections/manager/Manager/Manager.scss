@@ -14,33 +14,40 @@
             }
         }
 
-        // --- top row: profile card + visits panel ---
+        // --- top row: left column (card + KPI) + visits on the right ---
+        // flex (not grid) so the left column's height is its own content — switching
+        // the visits tabs no longer makes the card/KPI jump.
         &__top {
-            display: grid;
-            align-items: start;
+            display: flex;
+            align-items: flex-start;
             @include prop-vw(gap, 10, xl);
-            // left column = card + KPI stacked (fills to 1080 = 1440 content − 350 − 10
-            // gap); right column = visits (350, spans both rows)
-            grid-template-columns: minmax(0, 1fr) #{vw-range(350, xl)};
-            grid-template-areas:
-                "card   visits"
-                "kpi    visits";
 
             @include only(desktop) {
                 @include prop-vw(gap, 10, lg);
-                grid-template-columns: minmax(0, 1fr) #{vw-range(350, lg)};
             }
             @include only(mobile) {
+                flex-direction: column;
                 @include prop-vw(gap, 10, sm);
-                grid-template-columns: 1fr;
-                grid-template-areas:
-                    "card"
-                    "kpi"
-                    "visits";
+            }
+        }
+        // left column: card + KPI stacked with a 10px gap; fills to 1080 (= 1440
+        // content − 350 visits − 10 gap)
+        &__top-main {
+            flex: 1 1 auto;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            @include prop-vw(gap, 10, xl);
+
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
+            @include only(mobile) {
+                width: 100%;
+                @include prop-vw(gap, 10, sm);
             }
         }
         &__card {
-            grid-area: card;
             min-width: 0;
             .employee__profile {
                 display: flex;
@@ -49,7 +56,6 @@
             }
         }
         &__kpi {
-            grid-area: kpi;
             min-width: 0; // let the wide KPI grid scroll inside the column
             // reuses the employee-kpi component; the data-panel is already the card,
             // so strip the inner employee-kpi chrome
@@ -104,10 +110,18 @@
                 @include prop-vw(border-radius, 7, sm);
             }
         }
-        // the shared visits component (.visit-hist partial) sits in the top row's
-        // right column, spanning the card + KPI height
+        // the shared visits component (.visit-hist partial) — fixed 350 column on
+        // the right of the top row (its height is independent of the left column)
         .visit-hist {
-            grid-area: visits;
+            flex-shrink: 0;
+            @include prop-vw(width, 350, xl);
+
+            @include only(desktop) {
+                @include prop-vw(width, 350, lg);
+            }
+            @include only(mobile) {
+                width: 100%;
+            }
         }
         // visits block styling now lives in the shared .visit-hist component
         // (app/components/components/VisitsHist), used here and on /pharmacy
@@ -271,39 +285,36 @@
         &__cat-list {
             display: flex;
             flex-direction: column;
-            @include prop-vw(gap, 10, xl);
-
-            @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
-            }
         }
         &__cat-item {
             position: relative;
             display: flex;
             align-items: center;
             @include prop-vw(gap, 10, xl);
+            @include prop-vw(padding-bottom, 21, xl);
             @include prop-vw(font-size, 14, xl);
             line-height: 1.57142857143;
             font-weight: normal;
 
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
+                @include prop-vw(padding-bottom, 21, sm);
                 @include prop-vw(font-size, 14, sm);
             }
-            // divider inset 34 from the left, centred in the 10px gap — on EVERY item
-            // (incl. the last: its line sits just below, in the card padding)
+            // divider inset 34 from the left, sitting 10px above the item's bottom —
+            // on EVERY item, incl. the last
             &::before {
                 content: '';
                 position: absolute;
                 right: 0;
                 @include prop-vw(left, 34, xl);
-                @include prop-vw(bottom, -5, xl);
+                @include prop-vw(bottom, 10, xl);
                 height: 1px;
                 background: $color-border;
 
                 @include only(mobile) {
                     @include prop-vw(left, 34, sm);
-                    @include prop-vw(bottom, -5, sm);
+                    @include prop-vw(bottom, 10, sm);
                 }
             }
         }

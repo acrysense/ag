@@ -20,6 +20,7 @@
 						<div class="manager">
 							<!-- top: profile card + visits panel -->
 							<div class="manager__top">
+								<div class="manager__top-main">
 								<section class="data-panel manager__card">
 									<div class="employee__profile">
 										<div class="employee__avatar">
@@ -54,8 +55,6 @@
 										</div>
 									</div>
 								</section>
-
-								{{> components/VisitsHist/VisitsHist }}
 
 							<!-- KPI -->
 							<section class="data-panel manager__kpi" data-module="Employee" data-path="sections/employee">
@@ -141,6 +140,9 @@
 									</div>
 								</div>
 							</section>
+								</div>
+
+								{{> components/VisitsHist/VisitsHist }}
 							</div>
 
 							<!-- pharmacies under management -->
