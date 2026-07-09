@@ -70,39 +70,41 @@
 								</section>
 							</div>
 
-							<!-- visit target summary + breakdown -->
-							<aside class="manager-settings__aside">
-								<section class="data-panel manager-settings__stats">
+							<!-- visit target summary + breakdown — reused from /visits (visits-plan__target) -->
+							<aside class="visits-plan__target">
+								<section class="data-panel">
 									<h2 class="data-panel__title">Таргет посещений</h2>
-									<div class="manager-settings__divider"></div>
-									<ul class="manager-settings__summary">
-										<li class="manager-settings__summary-item"><span>Таргет визитов:</span> <b>603</b></li>
-										<li class="manager-settings__summary-item"><span>Запланировано визитов:</span> <b>462</b></li>
-										<li class="manager-settings__summary-item"><span>Выполнено визитов:</span> <b>22</b></li>
-										<li class="manager-settings__summary-item"><span>Процент выполнения:</span> <b>8%</b></li>
-									</ul>
-									<div class="manager-settings__divider"></div>
-									<div class="manager-settings__table">
-										<div class="manager-settings__thead">
-											<span></span>
-											<span>Факт</span>
-											<span>План</span>
-											<span>Таргет</span>
-										</div>
-										{{#each (arr
-											(obj c="a" f="12" p="134" t="134")
-											(obj c="b" f="9" p="143" t="249")
-											(obj c="c" f="1" p="120" t="120")
-											(obj c="d" f="0" p="65" t="100")
-										)}}
-										<div class="manager-settings__trow">
-											<span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span>
-											<span>{{this.f}}</span>
-											<span>{{this.p}}</span>
-											<span>{{this.t}}</span>
-										</div>
-										{{/each}}
+									<div class="visits-plan__stats">
+										<div class="visits-plan__stat">Таргет визитов: <b>603</b></div>
+										<div class="visits-plan__stat">Запланировано визитов: <b>462</b></div>
+										<div class="visits-plan__stat">Выполнено визитов: <b>22</b></div>
+										<div class="visits-plan__stat">Процент выполнения: <b>8%</b></div>
 									</div>
+									<table class="visits-plan__legend">
+										<thead>
+											<tr>
+												<th class="visits-plan__legend-head"></th>
+												<th class="visits-plan__legend-head">Факт</th>
+												<th class="visits-plan__legend-head">План</th>
+												<th class="visits-plan__legend-head">Таргет</th>
+											</tr>
+										</thead>
+										<tbody>
+											{{#each (arr
+												(obj c="a" fact="12" plan="134" target="134")
+												(obj c="b" fact="9" plan="143" target="249")
+												(obj c="c" fact="1" plan="120" target="120")
+												(obj c="d" fact="0" plan="65" target="100")
+											)}}
+											<tr>
+												<td class="visits-plan__legend-cell visits-plan__legend-cell--badge"><span class="data-table__cat data-table__cat--{{this.c}}">{{this.c}}</span></td>
+												<td class="visits-plan__legend-cell">{{this.fact}}</td>
+												<td class="visits-plan__legend-cell">{{this.plan}}</td>
+												<td class="visits-plan__legend-cell">{{this.target}}</td>
+											</tr>
+											{{/each}}
+										</tbody>
+									</table>
 								</section>
 							</aside>
 						</div>

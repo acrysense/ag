@@ -400,17 +400,8 @@
                 @include prop-vw(gap, 10, sm);
             }
         }
-        &__aside {
-            flex-shrink: 0;
-            @include prop-vw(width, 320, xl);
-
-            @include only(desktop) {
-                @include prop-vw(width, 320, lg);
-            }
-            @include only(mobile) {
-                width: 100%;
-            }
-        }
+        // right column is the shared .visits-plan__target block (it carries its
+        // own width / mobile-full-width rules)
 
         // --- form: «Таргет визитов» ---
         &__subtitle {
@@ -481,86 +472,7 @@
                 @include prop-vw(gap, 12, sm);
             }
         }
-
-        // --- summary + breakdown table («Таргет посещений») ---
-        &__summary {
-            list-style: none;
-            padding-left: 0;
-            display: flex;
-            flex-direction: column;
-            @include prop-vw(gap, 12, xl);
-
-            @include only(desktop) {
-                @include prop-vw(gap, 12, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(gap, 12, sm);
-            }
-        }
-        &__summary-item {
-            @include prop-vw(font-size, 14, xl);
-            line-height: 1.4;
-            color: $color-dark-grey;
-            b {
-                font-weight: normal;
-                color: $color-black;
-            }
-
-            @include only(desktop) {
-                @include prop-vw(font-size, 14, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(font-size, 14, sm);
-            }
-        }
-        &__table {
-            display: flex;
-            flex-direction: column;
-        }
-        &__thead,
-        &__trow {
-            display: grid;
-            grid-template-columns: #{vw-range(30, xl)} 1fr 1fr 1fr;
-            align-items: center;
-            @include prop-vw(gap, 10, xl);
-
-            @include only(mobile) {
-                grid-template-columns: #{vw-range(30, sm)} 1fr 1fr 1fr;
-                @include prop-vw(gap, 10, sm);
-            }
-        }
-        &__thead {
-            @include prop-vw(padding-bottom, 15, xl);
-            @include prop-vw(font-size, 13, xl);
-            color: $color-dark-grey;
-            @include border-side(bottom, 1, solid, $color-border, xl);
-
-            @include only(desktop) {
-                @include prop-vw(padding-bottom, 15, lg);
-                @include prop-vw(font-size, 13, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(padding-bottom, 15, sm);
-                @include prop-vw(font-size, 13, sm);
-            }
-        }
-        &__trow {
-            @include prop-vw(padding-block, 15, xl);
-            @include prop-vw(font-size, 14, xl);
-            color: $color-black;
-            @include border-side(bottom, 1, solid, $color-border, xl);
-            &:last-child {
-                border-bottom: none;
-            }
-
-            @include only(desktop) {
-                @include prop-vw(padding-block, 15, lg);
-                @include prop-vw(font-size, 14, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(padding-block, 15, sm);
-                @include prop-vw(font-size, 14, sm);
-            }
-        }
+        // «Таргет посещений» reuses the visits-plan__target block (styled in
+        // VisitsCalendar.scss) — no bespoke summary/table styles needed here
     }
 }
