@@ -246,10 +246,13 @@ export default async (root) => {
 			e.preventDefault()
 			closeForm()
 		}
-		// build + insert a new task row on the list (used after a successful create)
+		// build + insert a new task row on the list (used after a successful create).
+		// The backend returns the new task's id at data.id (i.e. response → data → id),
+		// so read that first; fall back to a flat id for other response shapes.
 		const addRow = (vals, data) => {
+			const newId = data?.data?.id ?? data?.id
 			const tmp = document.createElement('div')
-			tmp.innerHTML = taskRowHTML({ ...vals, id: data?.id })
+			tmp.innerHTML = taskRowHTML({ ...vals, id: newId })
 			const row = tmp.firstElementChild
 			enhanceRow(row)
 			const first = list?.querySelector('.task-row')
