@@ -76,6 +76,19 @@
                 }
             }
         }
+        // mobile: .data-panel zeroes its own padding-top (the separator strip stands
+        // in for the gap) — these panels want a real 20 above their content. The
+        // `.data-panel` compound is needed: plain `&__kpi` ties on specificity and
+        // DataPanel.scss is forwarded later, so it would win on source order.
+        @include only(mobile) {
+            &__kpi.data-panel,
+            &__cat-card.data-panel,
+            &__staff.data-panel,
+            &__pharmacies.data-panel {
+                @include prop-vw(padding-top, 20, sm);
+            }
+        }
+
         &__kpi {
             min-width: 0; // let the wide KPI grid scroll inside the column
             // reuses the employee-kpi component; the data-panel is already the card,
