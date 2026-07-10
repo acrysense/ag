@@ -137,9 +137,21 @@ export default async (root) => {
 		const dueInput = form.querySelector('[name="due"]')
 		const assigneeSelect = form.querySelector('[data-task-assignee]')
 		const submitBtn = form.querySelector('[type="submit"]')
+		// Read the assignee by its field name, not from inside the custom select: the
+		// backend may drop the picker and post a bare hidden input (e.g. a 1C code).
+		// The select's own hidden input carries the same name, so both markups work.
+		const assigneeValue = () => form.querySelector('[name="assignee"]')?.value.trim() || ''
+		// what the task row shows — the picker's visible label, else the raw value
+		// (isConnected: the picker may have been torn out of the form after mount)
+		const assigneeLabel = () => {
+			const label = assigneeSelect?.isConnected
+				? assigneeSelect.querySelector('[data-select-value]')?.textContent.trim()
+				: ''
+			return label || assigneeValue()
+		}
 		const formValues = () => ({
 			title: titleInput?.value.trim() || '',
-			assignee: assigneeSelect?.querySelector('[data-select-input]')?.value.trim() || '',
+			assignee: assigneeValue(),
 			due: dueInput?.value.trim() || '',
 			hidden: form.querySelector('[data-task-hide-input]')?.value === '1',
 		})
@@ -214,7 +226,7 @@ export default async (root) => {
 		}
 		const saveEdit = (row) => {
 			const title = titleInput?.value.trim()
-			const assignee = assigneeSelect?.querySelector('[data-select-input]')?.value.trim()
+			const assignee = assigneeLabel() // display name, not the posted code
 			const due = dueInput?.value.trim()
 			const t = row.querySelector('.task-row__title')
 			const a = row.querySelector('.task-row__assignee')
@@ -270,8 +282,10 @@ export default async (root) => {
 					closeForm()
 				}, { el: submitBtn, errorMsg: 'Не удалось сохранить задачу' })
 			} else {
+				// post the raw value, but render the row with the human-readable label
+				const label = assigneeLabel()
 				runAction('create', { ...vals }, (data) => {
-					addRow(vals, data)
+					addRow({ ...vals, assignee: label }, data)
 					closeForm()
 				}, { el: submitBtn, errorMsg: 'Не удалось создать задачу' })
 			}
