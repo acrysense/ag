@@ -228,8 +228,10 @@
             border: none;
             cursor: pointer;
         }
-        &__pharmacy-row.is-selected {
-            background: $color-bg;
+        &__pharmacies .data-table__row.is-selected {
+            .data-table__td {
+                background: $color-bg;
+            }
             .manager__pharmacy-btn {
                 font-weight: 600;
             }

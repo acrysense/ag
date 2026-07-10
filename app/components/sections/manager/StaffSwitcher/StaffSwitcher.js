@@ -23,14 +23,21 @@ export default (head) => {
 	if (!order.length) return
 
 	const titleEl = panel.querySelector('[data-staff-title]')
-	const rows = [...master.querySelectorAll('[data-pharmacy]')]
 	let current = byKey[source.default] ? source.default : order[0]
+
+	// the master table re-creates its rows on every sort/filter/page change, so the
+	// highlight is re-applied from the key rather than held on element references
+	const markSelected = () => {
+		master.querySelectorAll('[data-row-key]').forEach((row) => {
+			row.classList.toggle('is-selected', row.dataset.rowKey === current)
+		})
+	}
 
 	const render = () => {
 		const item = byKey[current]
 		if (!item) return
 		if (titleEl) titleEl.textContent = item.name
-		rows.forEach((row) => row.classList.toggle('is-selected', row.dataset.pharmacy === current))
+		markSelected()
 		// filters and sort survive the swap — a search/category stays applied
 		panel.__dataTable?.setRows(item.rows || [])
 	}
@@ -51,10 +58,14 @@ export default (head) => {
 		disposers.push(() => el.removeEventListener(ev, fn))
 	}
 
-	rows.forEach((row) => {
-		const btn = row.querySelector('[data-pharmacy-select]')
-		if (btn) on(btn, 'click', () => select(row.dataset.pharmacy))
+	// delegated: the clicked button may not have existed when this module mounted
+	on(master, 'click', (e) => {
+		const btn = e.target.closest('[data-dt-select]')
+		const row = btn?.closest('[data-row-key]')
+		if (row) select(row.dataset.rowKey)
 	})
+	on(master, 'datatable:render', markSelected)
+
 	const prev = head.querySelector('[data-staff-prev]')
 	const next = head.querySelector('[data-staff-next]')
 	if (prev) on(prev, 'click', () => step(-1))

@@ -43,6 +43,9 @@ function cellHTML(col, row) {
 			return `<span class="manager__trend manager__trend--${esc(v)}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>`
 		case 'index':
 			return `<span class="manager__index manager__index--${esc(row[col.trendKey] || '')}">${esc(v)}</span>`
+		// looks like a link but drives another table on the page instead of navigating
+		case 'select':
+			return `<button type="button" class="data-table__link${col.className ? ' ' + esc(col.className) : ''}" data-dt-select>${esc(v)}</button>`
 		default:
 			return esc(v)
 	}
@@ -55,8 +58,30 @@ function tdHTML(col, row) {
 	const label = col.label ? ` data-label="${esc(col.label)}"` : ''
 	return `<td class="data-table__td${alignCls(col.align, 'data-table__td')}"${fAttr}${label}>${cellHTML(col, row)}</td>`
 }
-function tbodyHTML(cols, rows) {
-	return rows.map((row) => `<tr class="data-table__row">${cols.map((c) => tdHTML(c, row)).join('')}</tr>`).join('')
+// config.rowKey names the row field to expose as data-row-key, so a page script
+// can tell which record a row stands for after any re-render (sort/page/filter)
+function tbodyHTML(cols, rows, rowKey) {
+	return rows
+		.map((row) => {
+			const keyAttr = rowKey && row[rowKey] != null ? ` data-row-key="${esc(row[rowKey])}"` : ''
+			return `<tr class="data-table__row"${keyAttr}>${cols.map((c) => tdHTML(c, row)).join('')}</tr>`
+		})
+		.join('')
+}
+// a pinned summary row ("Итого"): never filtered, sorted or paginated — it is
+// re-appended below the current page on every render
+function totalRowHTML(cols, total, cls) {
+	if (!total) return ''
+	const cells = cols
+		.map((c) => {
+			// summary cells keep visual types (a category badge stays a badge) but never
+			// become interactive — "Итого" is not a link and picks nothing
+			const inert = c.type === 'select' || c.type === 'link'
+			const body = inert ? esc(total[c.key] ?? '') : cellHTML(c, total)
+			return `<td class="data-table__td${alignCls(c.align, 'data-table__td')}">${body}</td>`
+		})
+		.join('')
+	return `<tr class="data-table__row ${esc(cls || 'data-table__row--total')}" data-total-row>${cells}</tr>`
 }
 
 // build the full inner table (controls + table + footer) from a config blob.
@@ -74,9 +99,9 @@ function buildTable(root, config, empty) {
 		})
 		.join('')
 
-	const tbody = tbodyHTML(cols, rows)
+	const tbody = tbodyHTML(cols, rows, config.rowKey)
 
-	const sortOpts = ['<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>']
+	const sortOpts =['<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>']
 	cols
 		.filter((c) => c.sort)
 		.forEach((c) => {
@@ -174,8 +199,16 @@ export default async (root) => {
 	// "Нет данных" when the dataset is empty, "Ничего не найдено" when a filter cleared it
 	const emptyMsg = () => (state.query || state.filters.length ? 'Ничего не найдено' : 'Нет данных')
 	const headers = [...table.querySelectorAll('th[data-sort-key]')]
-	const allRows = [...tbody.querySelectorAll('tr')]
+	const allRows = [...tbody.querySelectorAll('tr:not([data-total-row])')]
 	const baseOrder = allRows.slice()
+	const rowKey = config?.rowKey
+	// the pinned "Итого" row lives outside baseOrder so filters/sort/pages skip it
+	let totalRowEl = tbody.querySelector('[data-total-row]')
+	if (dataMode && config.totalRow && !totalRowEl) {
+		const tmp = document.createElement('tbody')
+		tmp.innerHTML = totalRowHTML(cols, config.totalRow, config.totalRowClass)
+		totalRowEl = tmp.firstElementChild
+	}
 	const disposers = []
 	const totalEl = root.querySelector('[data-total]')
 
@@ -346,6 +379,7 @@ export default async (root) => {
 			const pageRows = matched.slice(start, start + size)
 			pageRows.forEach((row) => row.classList.remove('is-hidden'))
 			tbody.replaceChildren(...pageRows)
+			if (totalRowEl) tbody.appendChild(totalRowEl)
 			dataPag?.render(totalPages, currentPage)
 			if (totalEl) totalEl.textContent = String(matched.length)
 		} else {
@@ -365,6 +399,8 @@ export default async (root) => {
 
 		showEmpty(matched.length === 0, emptyMsg())
 		syncUrl()
+		// rows are recreated on every render — let page scripts re-decorate them
+		root.dispatchEvent(new CustomEvent('datatable:render', { bubbles: true, detail: { root } }))
 	}
 
 	// colIndex is resolved per sortable header when clicked
@@ -570,7 +606,7 @@ export default async (root) => {
 		setRows(rows) {
 			if (!dataMode || serverMode) return
 			const tmp = document.createElement('tbody')
-			tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [])
+			tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [], rowKey)
 			baseOrder.length = 0
 			baseOrder.push(...tmp.querySelectorAll('tr'))
 			currentPage = 1
