@@ -183,10 +183,15 @@
             }
         }
         // the shared visits component (.visit-hist partial) — fixed 350 column on
-        // the right of the top row (its height is independent of the left column)
+        // the right of the top row
         .visit-hist {
             flex-shrink: 0;
             @include prop-vw(width, 350, xl);
+            // fill the row height so the white panel reaches the bottom whichever
+            // column is taller — the «История» tab is shorter than the card + KPI
+            @include up(tablet) {
+                align-self: stretch;
+            }
 
             @include only(desktop) {
                 @include prop-vw(width, 350, lg);
