@@ -79,12 +79,15 @@
         }
         &__img + &__body {
             @include prop-vw(margin-left, 20, xl);
-            @include prop-vw(max-width, 620, xl);
             width: 100%;
-            
+
+            // desktop: fill the rest of the card next to the photo (no 620 cap)
+            @include up(tablet) {
+                max-width: none;
+                min-width: 0;
+            }
             @include only(desktop) {
                 @include prop-vw(margin-left, 20, lg);
-                @include prop-vw(max-width, 620, lg);
             }
             @include only(mobile) {
                 @include prop-vw(margin-left, 10, sm);
