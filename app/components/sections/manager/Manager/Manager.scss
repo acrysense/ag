@@ -610,10 +610,10 @@
         @include prop-vw(margin-top, 10, xl);
         display: flex;
         align-items: flex-start;
-        @include prop-vw(gap, 20, xl);
+        @include prop-vw(gap, 10, xl);
 
         @include only(desktop) {
-            @include prop-vw(gap, 20, lg);
+            @include prop-vw(gap, 10, lg);
         }
         @include only(mobile) {
             flex-direction: column;
@@ -625,10 +625,10 @@
             min-width: 0;
             display: flex;
             flex-direction: column;
-            @include prop-vw(gap, 20, xl);
+            @include prop-vw(gap, 10, xl);
 
             @include only(desktop) {
-                @include prop-vw(gap, 20, lg);
+                @include prop-vw(gap, 10, lg);
             }
             @include only(mobile) {
                 width: 100%;
