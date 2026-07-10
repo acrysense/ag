@@ -245,11 +245,12 @@
             @include prop-vw(gap, 12, xl);
             @include prop-vw(margin-bottom, 20, xl);
             .data-panel__title {
-                color: $color-dark-grey;
+                color: $color-black;
             }
         }
+        // the selected pharmacy after the colon — muted, not a link
         &__staff-pharmacy {
-            color: $color-blue;
+            color: $color-dark-grey;
         }
         &__staff-nav {
             display: flex;
