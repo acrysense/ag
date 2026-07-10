@@ -564,6 +564,18 @@ export default async (root) => {
 			currentPage = 1
 			recompute()
 		},
+		// Swap the whole dataset (client data mode only) — used by a dependent table
+		// whose rows change when the user picks a row in a master table. Filters and
+		// sort survive the swap; the view jumps back to page 1.
+		setRows(rows) {
+			if (!dataMode || serverMode) return
+			const tmp = document.createElement('tbody')
+			tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [])
+			baseOrder.length = 0
+			baseOrder.push(...tmp.querySelectorAll('tr'))
+			currentPage = 1
+			recompute()
+		},
 	}
 
 	// --- Local controls: [data-dt-search] input + [data-dt-cat] category tabs ---

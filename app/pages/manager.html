@@ -168,6 +168,7 @@
 												<th class="data-table__th data-table__th--center">Категория аптеки</th>
 												<th class="data-table__th data-table__th--center">Торговая категория</th>
 												<th class="data-table__th data-table__th--num" data-sort-key="staff" data-sort-type="number">Кол-во сотрудников</th>
+												<th class="data-table__th data-table__th--num" data-sort-key="checks" data-sort-type="number">Кол-во чеков</th>
 												<th class="data-table__th data-table__th--num" data-sort-key="avg" data-sort-type="number">Средний чек</th>
 												<th class="data-table__th data-table__th--num">Доля товаров 4-6 ранга %</th>
 												<th class="data-table__th data-table__th--num">Доля A/B %</th>
@@ -178,21 +179,22 @@
 										</thead>
 										<tbody>
 											{{#each (arr
-												(obj name="ADEL №14" idx="10" cat="b" num="5")
-												(obj name="Эконом №8" idx="1" cat="b" num="12")
-												(obj name="Эконом №9" idx="10" cat="a" num="9")
-												(obj name="Аптека ADEL №14, Кобирин" idx="100" cat="d" num="24")
-												(obj name="ADEL №123" idx="20" cat="b" num="15")
-												(obj name="ADEL №14" idx="1" cat="b" num="1")
-												(obj name="Эконом №13" idx="5" cat="b" num="1")
-												(obj name="Эконом №9" idx="10" cat="a" num="4")
+												(obj key="p1" name="ADEL №14" idx="10" cat="b" num="5" checks="1 200")
+												(obj key="p2" name="Эконом №8" idx="1" cat="b" num="12" checks="3 480")
+												(obj key="p3" name="Эконом №9" idx="10" cat="a" num="9" checks="2 640")
+												(obj key="p4" name="Аптека ADEL №14, Кобирин" idx="100" cat="d" num="24" checks="7 015")
+												(obj key="p5" name="ADEL №123" idx="20" cat="b" num="15" checks="4 320")
+												(obj key="p6" name="ADEL №14" idx="1" cat="b" num="1" checks="310")
+												(obj key="p7" name="Эконом №13" idx="5" cat="b" num="1" checks="285")
+												(obj key="p8" name="Эконом №9" idx="10" cat="a" num="4" checks="1 040")
 											)}}
-											<tr class="data-table__row">
-												<td class="data-table__td" data-filter-key="pharmacy"><a href="/" class="data-table__link">{{this.name}}</a></td>
+											<tr class="data-table__row manager__pharmacy-row" data-pharmacy="{{this.key}}">
+												<td class="data-table__td" data-filter-key="pharmacy"><button type="button" class="data-table__link manager__pharmacy-btn" data-pharmacy-select>{{this.name}}</button></td>
 												<td class="data-table__td data-table__td--num">{{this.idx}}</td>
 												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
 												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
 												<td class="data-table__td data-table__td--num">{{this.num}}</td>
+												<td class="data-table__td data-table__td--num">{{this.checks}}</td>
 												<td class="data-table__td data-table__td--num">{{this.num}}</td>
 												<td class="data-table__td data-table__td--num">{{this.num}}</td>
 												<td class="data-table__td data-table__td--num">{{this.num}}</td>
@@ -206,6 +208,7 @@
 												<td class="data-table__td data-table__td--num">1.03</td>
 												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--a">a</span></td>
 												<td class="data-table__td data-table__td--center"><span class="data-table__cat data-table__cat--a">a</span></td>
+												<td class="data-table__td data-table__td--num">15 100</td>
 												<td class="data-table__td data-table__td--num">15 100</td>
 												<td class="data-table__td data-table__td--num">15 100</td>
 												<td class="data-table__td data-table__td--num">15 100</td>
@@ -245,96 +248,31 @@
 								</div>
 							</section>
 
-							<!-- employee info for a selected pharmacy -->
+							<!-- employee info for the selected pharmacy (rows swapped by StaffSwitcher) -->
 							<section class="data-panel manager__staff" data-data-table data-module="DataTable" data-path="components">
-								<div class="manager__staff-head">
-									<h2 class="data-panel__title">Информация по сотрудникам: <span class="manager__staff-pharmacy">Эконом №8</span></h2>
+								<div class="manager__staff-head" data-module="StaffSwitcher" data-path="sections/manager">
+									<h2 class="data-panel__title">Информация по сотрудникам: <span class="manager__staff-pharmacy" data-staff-title>Эконом №8</span></h2>
 									<div class="manager__staff-nav">
-										<button type="button" class="manager__staff-arrow" aria-label="Предыдущая аптека"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg></button>
-										<button type="button" class="manager__staff-arrow manager__staff-arrow--next" aria-label="Следующая аптека"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg></button>
+										<button type="button" class="manager__staff-arrow" data-staff-prev aria-label="Предыдущая аптека"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg></button>
+										<button type="button" class="manager__staff-arrow manager__staff-arrow--next" data-staff-next aria-label="Следующая аптека"><svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg></button>
 									</div>
 								</div>
-								<div class="data-table__controls">
+								<div class="data-table__controls manager__staff-controls">
 									<div class="field manager__staff-search">
 										<div class="field__control">
-											<input class="field__input" type="text" placeholder="Найти" autocomplete="off">
+											<input class="field__input" type="text" placeholder="Найти" autocomplete="off" data-dt-search>
+											<svg class="manager__staff-search-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-search"></use></svg>
 										</div>
 									</div>
 									<div class="manager__staff-cats">
-										<button type="button" class="manager__staff-cat is-active">A</button>
-										<button type="button" class="manager__staff-cat">B</button>
-										<button type="button" class="manager__staff-cat">C</button>
-										<button type="button" class="manager__staff-cat">D</button>
+										<button type="button" class="manager__staff-cat" data-dt-cat="a">A</button>
+										<button type="button" class="manager__staff-cat" data-dt-cat="b">B</button>
+										<button type="button" class="manager__staff-cat" data-dt-cat="c">C</button>
+										<button type="button" class="manager__staff-cat" data-dt-cat="d">D</button>
 									</div>
 								</div>
-								<div class="data-table__scroll">
-									<table class="data-table manager-table">
-										<thead>
-											<tr>
-												<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
-												<th class="data-table__th data-table__th--center">Категория</th>
-												<th class="data-table__th data-table__th--num" data-sort-key="index" data-sort-type="number">Индекс</th>
-												<th class="data-table__th data-table__th--center">Тренд</th>
-												<th class="data-table__th data-table__th--num">Товарооборот РОЗН, руб.</th>
-												<th class="data-table__th data-table__th--num">Количество чеков</th>
-												<th class="data-table__th data-table__th--num">Средний чек</th>
-												<th class="data-table__th data-table__th--num">Наполняемость чека</th>
-												<th class="data-table__th data-table__th--num">Доля СТМ</th>
-												<th class="data-table__th data-table__th--num">Доля товаров 4-6 ранга %</th>
-												<th class="data-table__th data-table__th--num">Пенетрация карт лояльности</th>
-											</tr>
-										</thead>
-										<tbody>
-											{{#each (arr
-												(obj name="Василевская М.В." cat="b" idx="1,31" trend="up" val="12")
-												(obj name="Ковш Т.А." cat="b" idx="2,01" trend="down" val="56.22")
-												(obj name="Зайцева Д.М." cat="a" idx="2,01" trend="up" val="192.13")
-												(obj name="Волкова Ю.Г." cat="d" idx="2,01" trend="up" val="40.00")
-												(obj name="Северная Т.В." cat="b" idx="2,01" trend="down" val="12.3")
-											)}}
-											<tr class="data-table__row">
-												<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
-												<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
-												<td class="data-table__td data-table__td--num"><span class="manager__index manager__index--{{this.trend}}">{{this.idx}}</span></td>
-												<td class="data-table__td data-table__td--center"><span class="manager__trend manager__trend--{{this.trend}}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span></td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-												<td class="data-table__td data-table__td--num">{{this.val}}</td>
-											</tr>
-											{{/each}}
-										</tbody>
-									</table>
-									<div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div>
-								</div>
-								<div class="data-table__footer">
-									<nav class="ui-pagination" aria-label="Страницы">
-										<button type="button" class="ui-pagination__item">1</button>
-										<button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
-										<button type="button" class="ui-pagination__item">3</button>
-										<button type="button" class="ui-pagination__item">4</button>
-										<span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
-										<button type="button" class="ui-pagination__item">25</button>
-										<button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
-									</nav>
-									<div class="data-table__total">
-										<span class="data-table__total-text">Всего: <span>835</span></span>
-										<div class="page-size" data-page-size>
-											<button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
-												<span data-page-size-value>20</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
-												<button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
-												<button type="button" class="page-size__option" role="option" data-value="50">50</button>
-												<button type="button" class="page-size__option" role="option" data-value="100">100</button>
-											</div>
-										</div>
-									</div>
-								</div>
+								<script type="application/json" data-table-data>{"table":"manager-table","controls":false,"cardsView":false,"pageSize":20,"pageSizes":[20,50,100],"columns":[{"key":"employee","label":"Сотрудник","type":"link","hrefKey":"href","sort":"text","filterKey":"employee"},{"key":"category","label":"Категория","type":"cat","align":"center","filterKey":"category"},{"key":"index","label":"Индекс","type":"index","trendKey":"trend","align":"num","sort":"number"},{"key":"trend","label":"Тренд","type":"trend","align":"center"},{"key":"turnover","label":"Товарооборот РОЗН, руб.","align":"num","sort":"number"},{"key":"checks","label":"Количество чеков","align":"num","sort":"number"},{"key":"avgcheck","label":"Средний чек","align":"num","sort":"number"},{"key":"fill","label":"Наполняемость чека","align":"num","sort":"number"},{"key":"stm","label":"Доля СТМ","align":"num","sort":"number"},{"key":"rank","label":"Доля товаров 4-6 ранга %","align":"num","sort":"number"},{"key":"loyalty","label":"Пенетрация карт лояльности","align":"num","sort":"number"}],"rows":[]}</script>
+								<script type="application/json" data-staff-source>{"default":"p2","pharmacies":{"p1":{"name":"ADEL №14","rows":[{"employee":"Василевская М.В.","href":"/employee","category":"a","index":"1,00","trend":"up","turnover":50,"checks":10,"avgcheck":5,"fill":1,"stm":0,"rank":0,"loyalty":0},{"employee":"Ковш Т.А.","href":"/employee","category":"b","index":"1,37","trend":"down","turnover":187,"checks":63,"avgcheck":34,"fill":18,"stm":7,"rank":13,"loyalty":19},{"employee":"Зайцева Д.М.","href":"/employee","category":"c","index":"1,74","trend":"up","turnover":324,"checks":116,"avgcheck":63,"fill":35,"stm":14,"rank":26,"loyalty":38},{"employee":"Волкова Ю.Г.","href":"/employee","category":"d","index":"2,11","trend":"down","turnover":461,"checks":169,"avgcheck":92,"fill":52,"stm":21,"rank":39,"loyalty":57},{"employee":"Северная Т.В.","href":"/employee","category":"a","index":"2,48","trend":"up","turnover":598,"checks":222,"avgcheck":121,"fill":69,"stm":28,"rank":52,"loyalty":76}]},"p2":{"name":"Эконом №8","rows":[{"employee":"Морозов Д.С.","href":"/employee","category":"b","index":"1,59","trend":"up","turnover":59,"checks":381,"avgcheck":13,"fill":120,"stm":49,"rank":91,"loyalty":33},{"employee":"Кузнецова Л.П.","href":"/employee","category":"c","index":"1,96","trend":"down","turnover":196,"checks":434,"avgcheck":42,"fill":137,"stm":56,"rank":4,"loyalty":52},{"employee":"Новиков Р.А.","href":"/employee","category":"d","index":"2,33","trend":"up","turnover":333,"checks":487,"avgcheck":71,"fill":4,"stm":63,"rank":17,"loyalty":71},{"employee":"Орлова М.В.","href":"/employee","category":"a","index":"2,70","trend":"down","turnover":470,"checks":50,"avgcheck":100,"fill":21,"stm":70,"rank":30,"loyalty":90},{"employee":"Фомин И.Н.","href":"/employee","category":"b","index":"1,07","trend":"up","turnover":607,"checks":103,"avgcheck":129,"fill":38,"stm":77,"rank":43,"loyalty":9},{"employee":"Белова А.А.","href":"/employee","category":"c","index":"1,44","trend":"down","turnover":744,"checks":156,"avgcheck":158,"fill":55,"stm":84,"rank":56,"loyalty":28},{"employee":"Громов С.С.","href":"/employee","category":"d","index":"1,81","trend":"up","turnover":881,"checks":209,"avgcheck":187,"fill":72,"stm":91,"rank":69,"loyalty":47},{"employee":"Ершова Т.Т.","href":"/employee","category":"a","index":"2,18","trend":"down","turnover":68,"checks":262,"avgcheck":21,"fill":89,"stm":98,"rank":82,"loyalty":66},{"employee":"Лебедев В.В.","href":"/employee","category":"b","index":"2,55","trend":"up","turnover":205,"checks":315,"avgcheck":50,"fill":106,"stm":5,"rank":95,"loyalty":85},{"employee":"Соколова Н.Н.","href":"/employee","category":"c","index":"2,92","trend":"down","turnover":342,"checks":368,"avgcheck":79,"fill":123,"stm":12,"rank":8,"loyalty":4},{"employee":"Титов К.К.","href":"/employee","category":"d","index":"1,29","trend":"up","turnover":479,"checks":421,"avgcheck":108,"fill":140,"stm":19,"rank":21,"loyalty":23},{"employee":"Жукова О.О.","href":"/employee","category":"a","index":"1,66","trend":"down","turnover":616,"checks":474,"avgcheck":137,"fill":7,"stm":26,"rank":34,"loyalty":42}]},"p3":{"name":"Эконом №9","rows":[{"employee":"Ершова Т.Т.","href":"/employee","category":"c","index":"2,18","trend":"up","turnover":68,"checks":262,"avgcheck":21,"fill":89,"stm":98,"rank":82,"loyalty":66},{"employee":"Лебедев В.В.","href":"/employee","category":"d","index":"2,55","trend":"down","turnover":205,"checks":315,"avgcheck":50,"fill":106,"stm":5,"rank":95,"loyalty":85},{"employee":"Соколова Н.Н.","href":"/employee","category":"a","index":"2,92","trend":"up","turnover":342,"checks":368,"avgcheck":79,"fill":123,"stm":12,"rank":8,"loyalty":4},{"employee":"Титов К.К.","href":"/employee","category":"b","index":"1,29","trend":"down","turnover":479,"checks":421,"avgcheck":108,"fill":140,"stm":19,"rank":21,"loyalty":23},{"employee":"Жукова О.О.","href":"/employee","category":"c","index":"1,66","trend":"up","turnover":616,"checks":474,"avgcheck":137,"fill":7,"stm":26,"rank":34,"loyalty":42},{"employee":"Панов Е.Е.","href":"/employee","category":"d","index":"2,03","trend":"down","turnover":753,"checks":37,"avgcheck":166,"fill":24,"stm":33,"rank":47,"loyalty":61},{"employee":"Рыбак А.С.","href":"/employee","category":"a","index":"2,40","trend":"up","turnover":890,"checks":90,"avgcheck":195,"fill":41,"stm":40,"rank":60,"loyalty":80},{"employee":"Чайка Д.Д.","href":"/employee","category":"b","index":"2,77","trend":"down","turnover":77,"checks":143,"avgcheck":29,"fill":58,"stm":47,"rank":73,"loyalty":99},{"employee":"Юдина В.И.","href":"/employee","category":"c","index":"1,14","trend":"up","turnover":214,"checks":196,"avgcheck":58,"fill":75,"stm":54,"rank":86,"loyalty":18}]},"p4":{"name":"Аптека ADEL №14, Кобирин","rows":[{"employee":"Чайка Д.Д.","href":"/employee","category":"d","index":"2,77","trend":"up","turnover":77,"checks":143,"avgcheck":29,"fill":58,"stm":47,"rank":73,"loyalty":99},{"employee":"Юдина В.И.","href":"/employee","category":"a","index":"1,14","trend":"down","turnover":214,"checks":196,"avgcheck":58,"fill":75,"stm":54,"rank":86,"loyalty":18},{"employee":"Козлов П.П.","href":"/employee","category":"b","index":"1,51","trend":"up","turnover":351,"checks":249,"avgcheck":87,"fill":92,"stm":61,"rank":99,"loyalty":37},{"employee":"Василевская М.В.","href":"/employee","category":"c","index":"1,88","trend":"down","turnover":488,"checks":302,"avgcheck":116,"fill":109,"stm":68,"rank":12,"loyalty":56},{"employee":"Ковш Т.А.","href":"/employee","category":"d","index":"2,25","trend":"up","turnover":625,"checks":355,"avgcheck":145,"fill":126,"stm":75,"rank":25,"loyalty":75},{"employee":"Зайцева Д.М.","href":"/employee","category":"a","index":"2,62","trend":"down","turnover":762,"checks":408,"avgcheck":174,"fill":143,"stm":82,"rank":38,"loyalty":94},{"employee":"Волкова Ю.Г.","href":"/employee","category":"b","index":"2,99","trend":"up","turnover":899,"checks":461,"avgcheck":8,"fill":10,"stm":89,"rank":51,"loyalty":13},{"employee":"Северная Т.В.","href":"/employee","category":"c","index":"1,36","trend":"down","turnover":86,"checks":24,"avgcheck":37,"fill":27,"stm":96,"rank":64,"loyalty":32},{"employee":"Петров А.И.","href":"/employee","category":"d","index":"1,73","trend":"up","turnover":223,"checks":77,"avgcheck":66,"fill":44,"stm":3,"rank":77,"loyalty":51},{"employee":"Сидорова Е.К.","href":"/employee","category":"a","index":"2,10","trend":"down","turnover":360,"checks":130,"avgcheck":95,"fill":61,"stm":10,"rank":90,"loyalty":70},{"employee":"Морозов Д.С.","href":"/employee","category":"b","index":"2,47","trend":"up","turnover":497,"checks":183,"avgcheck":124,"fill":78,"stm":17,"rank":3,"loyalty":89},{"employee":"Кузнецова Л.П.","href":"/employee","category":"c","index":"2,84","trend":"down","turnover":634,"checks":236,"avgcheck":153,"fill":95,"stm":24,"rank":16,"loyalty":8},{"employee":"Новиков Р.А.","href":"/employee","category":"d","index":"1,21","trend":"up","turnover":771,"checks":289,"avgcheck":182,"fill":112,"stm":31,"rank":29,"loyalty":27},{"employee":"Орлова М.В.","href":"/employee","category":"a","index":"1,58","trend":"down","turnover":908,"checks":342,"avgcheck":16,"fill":129,"stm":38,"rank":42,"loyalty":46},{"employee":"Фомин И.Н.","href":"/employee","category":"b","index":"1,95","trend":"up","turnover":95,"checks":395,"avgcheck":45,"fill":146,"stm":45,"rank":55,"loyalty":65},{"employee":"Белова А.А.","href":"/employee","category":"c","index":"2,32","trend":"down","turnover":232,"checks":448,"avgcheck":74,"fill":13,"stm":52,"rank":68,"loyalty":84},{"employee":"Громов С.С.","href":"/employee","category":"d","index":"2,69","trend":"up","turnover":369,"checks":11,"avgcheck":103,"fill":30,"stm":59,"rank":81,"loyalty":3},{"employee":"Ершова Т.Т.","href":"/employee","category":"a","index":"1,06","trend":"down","turnover":506,"checks":64,"avgcheck":132,"fill":47,"stm":66,"rank":94,"loyalty":22},{"employee":"Лебедев В.В.","href":"/employee","category":"b","index":"1,43","trend":"up","turnover":643,"checks":117,"avgcheck":161,"fill":64,"stm":73,"rank":7,"loyalty":41},{"employee":"Соколова Н.Н.","href":"/employee","category":"c","index":"1,80","trend":"down","turnover":780,"checks":170,"avgcheck":190,"fill":81,"stm":80,"rank":20,"loyalty":60},{"employee":"Титов К.К.","href":"/employee","category":"d","index":"2,17","trend":"up","turnover":917,"checks":223,"avgcheck":24,"fill":98,"stm":87,"rank":33,"loyalty":79},{"employee":"Жукова О.О.","href":"/employee","category":"a","index":"2,54","trend":"down","turnover":104,"checks":276,"avgcheck":53,"fill":115,"stm":94,"rank":46,"loyalty":98},{"employee":"Панов Е.Е.","href":"/employee","category":"b","index":"2,91","trend":"up","turnover":241,"checks":329,"avgcheck":82,"fill":132,"stm":1,"rank":59,"loyalty":17},{"employee":"Рыбак А.С.","href":"/employee","category":"c","index":"1,28","trend":"down","turnover":378,"checks":382,"avgcheck":111,"fill":149,"stm":8,"rank":72,"loyalty":36}]},"p5":{"name":"ADEL №123","rows":[{"employee":"Северная Т.В.","href":"/employee","category":"a","index":"1,36","trend":"up","turnover":86,"checks":24,"avgcheck":37,"fill":27,"stm":96,"rank":64,"loyalty":32},{"employee":"Петров А.И.","href":"/employee","category":"b","index":"1,73","trend":"down","turnover":223,"checks":77,"avgcheck":66,"fill":44,"stm":3,"rank":77,"loyalty":51},{"employee":"Сидорова Е.К.","href":"/employee","category":"c","index":"2,10","trend":"up","turnover":360,"checks":130,"avgcheck":95,"fill":61,"stm":10,"rank":90,"loyalty":70},{"employee":"Морозов Д.С.","href":"/employee","category":"d","index":"2,47","trend":"down","turnover":497,"checks":183,"avgcheck":124,"fill":78,"stm":17,"rank":3,"loyalty":89},{"employee":"Кузнецова Л.П.","href":"/employee","category":"a","index":"2,84","trend":"up","turnover":634,"checks":236,"avgcheck":153,"fill":95,"stm":24,"rank":16,"loyalty":8},{"employee":"Новиков Р.А.","href":"/employee","category":"b","index":"1,21","trend":"down","turnover":771,"checks":289,"avgcheck":182,"fill":112,"stm":31,"rank":29,"loyalty":27},{"employee":"Орлова М.В.","href":"/employee","category":"c","index":"1,58","trend":"up","turnover":908,"checks":342,"avgcheck":16,"fill":129,"stm":38,"rank":42,"loyalty":46},{"employee":"Фомин И.Н.","href":"/employee","category":"d","index":"1,95","trend":"down","turnover":95,"checks":395,"avgcheck":45,"fill":146,"stm":45,"rank":55,"loyalty":65},{"employee":"Белова А.А.","href":"/employee","category":"a","index":"2,32","trend":"up","turnover":232,"checks":448,"avgcheck":74,"fill":13,"stm":52,"rank":68,"loyalty":84},{"employee":"Громов С.С.","href":"/employee","category":"b","index":"2,69","trend":"down","turnover":369,"checks":11,"avgcheck":103,"fill":30,"stm":59,"rank":81,"loyalty":3},{"employee":"Ершова Т.Т.","href":"/employee","category":"c","index":"1,06","trend":"up","turnover":506,"checks":64,"avgcheck":132,"fill":47,"stm":66,"rank":94,"loyalty":22},{"employee":"Лебедев В.В.","href":"/employee","category":"d","index":"1,43","trend":"down","turnover":643,"checks":117,"avgcheck":161,"fill":64,"stm":73,"rank":7,"loyalty":41},{"employee":"Соколова Н.Н.","href":"/employee","category":"a","index":"1,80","trend":"up","turnover":780,"checks":170,"avgcheck":190,"fill":81,"stm":80,"rank":20,"loyalty":60},{"employee":"Титов К.К.","href":"/employee","category":"b","index":"2,17","trend":"down","turnover":917,"checks":223,"avgcheck":24,"fill":98,"stm":87,"rank":33,"loyalty":79},{"employee":"Жукова О.О.","href":"/employee","category":"c","index":"2,54","trend":"up","turnover":104,"checks":276,"avgcheck":53,"fill":115,"stm":94,"rank":46,"loyalty":98}]},"p6":{"name":"ADEL №14","rows":[{"employee":"Фомин И.Н.","href":"/employee","category":"b","index":"1,95","trend":"up","turnover":95,"checks":395,"avgcheck":45,"fill":146,"stm":45,"rank":55,"loyalty":65}]},"p7":{"name":"Эконом №13","rows":[{"employee":"Жукова О.О.","href":"/employee","category":"c","index":"2,54","trend":"up","turnover":104,"checks":276,"avgcheck":53,"fill":115,"stm":94,"rank":46,"loyalty":98}]},"p8":{"name":"Эконом №9","rows":[{"employee":"Ковш Т.А.","href":"/employee","category":"d","index":"1,13","trend":"up","turnover":113,"checks":157,"avgcheck":61,"fill":84,"stm":43,"rank":37,"loyalty":31},{"employee":"Зайцева Д.М.","href":"/employee","category":"a","index":"1,50","trend":"down","turnover":250,"checks":210,"avgcheck":90,"fill":101,"stm":50,"rank":50,"loyalty":50},{"employee":"Волкова Ю.Г.","href":"/employee","category":"b","index":"1,87","trend":"up","turnover":387,"checks":263,"avgcheck":119,"fill":118,"stm":57,"rank":63,"loyalty":69},{"employee":"Северная Т.В.","href":"/employee","category":"c","index":"2,24","trend":"down","turnover":524,"checks":316,"avgcheck":148,"fill":135,"stm":64,"rank":76,"loyalty":88}]}}}</script>
 							</section>
 
 							<!-- category breakdown -->
