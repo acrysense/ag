@@ -241,31 +241,6 @@
 								</section>
 
 								<!-- upcoming visits (mobile only) — «История» layout, each row is a link -->
-								<section class="data-panel pharmacy__upcoming">
-									<h2 class="data-panel__title">Предстоящие визиты</h2>
-									<ul class="employee-history__list">
-										{{#each (arr
-											(obj c="b" name="Дрозд В.В." d="10.03.2026")
-											(obj c="a" name="Орлова Т.Д." d="10.02.2026")
-											(obj c="a" name="Синица С.С." d="10.03.2026")
-											(obj c="b" name="Воробей М.В." d="10.01.2026")
-											(obj c="c" name="Сорока С.В." d="10.03.2026")
-											(obj c="b" name="Дрозд В.В." d="10.03.2026")
-											(obj c="b" name="Воробей М.В." d="10.03.2026")
-											(obj c="c" name="Сорока С.В." d="10.03.2026")
-											(obj c="c" name="Воробей М.В." d="10.03.2026")
-											(obj c="d" name="Сорока С.В." d="10.03.2026")
-										)}}
-										<li class="employee-history__item">
-											<a href="/visit" class="employee-history__link">
-												<span class="employee-history__badge employee-history__badge--{{this.c}}">{{this.c}}</span>
-												<span class="employee-history__text"><b>{{this.name}}</b> {{this.d}}</span>
-											</a>
-										</li>
-										{{/each}}
-									</ul>
-								</section>
-
 								<!-- visits -->
 								{{> components/VisitsHist/VisitsHist }}
 							</aside>

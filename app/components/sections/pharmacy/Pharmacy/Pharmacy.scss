@@ -181,23 +181,6 @@
 			}
 		}
 
-		// --- upcoming visits — mobile only, reuses the employee-history layout,
-		// each row is a link (kept neutral — no blue link colour) ---
-		&__upcoming {
-			display: none;
-
-			@include only(mobile) {
-				display: block;
-
-				.employee-history__list {
-					@include prop-vw(margin-top, 40, sm);
-				}
-				.employee-history__badge {
-					text-transform: uppercase;
-				}
-			}
-		}
-
 		// --- donut (aside) ---
 		&__donut {
 			position: relative;

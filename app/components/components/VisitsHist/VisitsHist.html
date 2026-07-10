@@ -6,23 +6,25 @@
             <button type="button" class="visit-hist__tab" role="tab" data-visits-tab>История</button>
         </div>
     </div>
-    <ul class="visit-hist__list" data-visits-panel>
+    <!-- «Новые» = ещё не проведённые визиты: оценки нет, только сотрудник и дата -->
+    <ul class="employee-history__list visit-hist__upcoming" data-visits-panel>
         {{#each (arr
-            (obj tone="yellow" score="78/100" d="10.02.2026" type="Коучинг")
-            (obj tone="green" score="100/100" d="10.02.2026" type="Коучинг")
-            (obj tone="red" score="2/100" d="10.02.2026" type="Диагностика")
-            (obj tone="red" score="29/100" d="09.02.2026" type="Контроль")
-            (obj tone="yellow" score="78/100" d="08.02.2026" type="Контроль")
-            (obj tone="yellow" score="78/100" d="07.02.2026" type="Диагностика")
-            (obj tone="green" score="100/100" d="06.02.2026" type="Коучинг")
-            (obj tone="yellow" score="78/100" d="05.02.2026" type="Коучинг")
-            (obj tone="red" score="29/100" d="04.02.2026" type="Контроль")
-            (obj tone="yellow" score="78/100" d="03.02.2026" type="Контроль")
-            (obj tone="green" score="100/100" d="02.02.2026" type="Коучинг")
+            (obj c="b" name="Дрозд В.В." d="10.03.2026")
+            (obj c="a" name="Орлова Т.Д." d="10.02.2026")
+            (obj c="a" name="Синица С.С." d="10.03.2026")
+            (obj c="b" name="Воробей М.В." d="10.01.2026")
+            (obj c="c" name="Сорока С.В." d="10.03.2026")
+            (obj c="b" name="Дрозд В.В." d="10.03.2026")
+            (obj c="b" name="Воробей М.В." d="10.03.2026")
+            (obj c="c" name="Сорока С.В." d="10.03.2026")
+            (obj c="c" name="Воробей М.В." d="10.03.2026")
+            (obj c="d" name="Сорока С.В." d="10.03.2026")
         )}}
-        <li class="visit-hist__item">
-            <span class="visit-hist__score visit-hist__score--{{this.tone}}">{{this.score}}</span>
-            <span class="visit-hist__text">{{this.d}}, <span class="visit-hist__type">{{this.type}}</span></span>
+        <li class="employee-history__item">
+            <a href="/visit" class="employee-history__link">
+                <span class="employee-history__badge employee-history__badge--{{this.c}}">{{this.c}}</span>
+                <span class="employee-history__text"><b>{{this.name}}</b> {{this.d}}</span>
+            </a>
         </li>
         {{/each}}
     </ul>

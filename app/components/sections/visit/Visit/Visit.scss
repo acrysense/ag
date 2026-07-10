@@ -1254,6 +1254,17 @@
 				@include prop-vw(margin-top, 16, sm);
 			}
 		}
+		// «Новые» reuses the .employee-history list (badge + name + date); only the
+		// top gap and the uppercase badge letter are specific to this panel
+		&__upcoming {
+			@include prop-vw(margin-top, 16, xl);
+			@include only(mobile) {
+				@include prop-vw(margin-top, 16, sm);
+			}
+			.employee-history__badge {
+				text-transform: uppercase;
+			}
+		}
 		&__item {
 			position: relative;
 			display: flex;
