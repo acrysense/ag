@@ -108,7 +108,22 @@
             // indicator name (~195px)
             .employee-kpi__head,
             .employee-kpi__row {
-                grid-template-columns: #{vw-range(250, xl)} #{vw-range(90, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(110, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(100, xl)};
+                @include up(tablet) {
+                    grid-template-columns: #{vw-range(250, xl)} #{vw-range(90, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(110, xl)} #{vw-range(90, xl)} #{vw-range(120, xl)} #{vw-range(100, xl)};
+                }
+                // the xl range floors below 1024, so those widths collapse and the
+                // cells (white-space: nowrap) spill over each other — size the 8
+                // columns in the sm range, each wide enough for its longest value
+                @include only(mobile) {
+                    grid-template-columns: #{vw-range(240, sm)} #{vw-range(90, sm)} #{vw-range(90, sm)} #{vw-range(120, sm)} #{vw-range(120, sm)} #{vw-range(100, sm)} #{vw-range(120, sm)} #{vw-range(100, sm)};
+                }
+            }
+            // ...and let the grid grow to fit them (the shared 760 floor is sized for
+            // the 5-column employee table): 980 columns + 7 × 10 gap = 1050
+            @include only(mobile) {
+                .employee-kpi.is-table-view .employee-kpi__grid {
+                    @include prop-vw(min-width, 1050, sm);
+                }
             }
         }
         &__rating {
