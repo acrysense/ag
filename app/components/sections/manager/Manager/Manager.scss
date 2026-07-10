@@ -649,21 +649,23 @@
         }
         &__subtitle {
             display: block;
+            font-family: $font-secondary;
             @include prop-vw(margin-top, 40, xl);
-            @include prop-vw(margin-bottom, 20, xl);
-            @include prop-vw(font-size, 13, xl);
+            @include prop-vw(margin-bottom, 10, xl);
+            @include prop-vw(font-size, 18, xl);
+            line-height: 1.33333333333;
             font-weight: 600;
             color: $color-black;
 
             @include only(desktop) {
                 @include prop-vw(margin-top, 40, lg);
-                @include prop-vw(margin-bottom, 20, lg);
-                @include prop-vw(font-size, 13, lg);
+                @include prop-vw(margin-bottom, 10, lg);
+                @include prop-vw(font-size, 18, lg);
             }
             @include only(mobile) {
                 @include prop-vw(margin-top, 20, sm);
-                @include prop-vw(margin-bottom, 20, sm);
-                @include prop-vw(font-size, 13, sm);
+                @include prop-vw(margin-bottom, 10, sm);
+                @include prop-vw(font-size, 18, sm);
             }
         }
         &__targets {
@@ -680,15 +682,42 @@
             align-items: center;
             @include prop-vw(gap, 10, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 10, lg);
+            }
             @include only(mobile) {
                 @include prop-vw(gap, 10, sm);
             }
+
+            // the category badge is a large square here, not the 24px table chip
+            .data-table__cat {
+                flex-shrink: 0;
+                line-height: 1;
+                font-weight: 700;
+                @include prop-vw(width, 47, xl);
+                @include prop-vw(height, 47, xl);
+                @include prop-vw(font-size, 16, xl);
+                @include prop-vw(border-radius, 7, xl);
+
+                @include only(desktop) {
+                    @include prop-vw(width, 47, lg);
+                    @include prop-vw(height, 47, lg);
+                    @include prop-vw(font-size, 16, lg);
+                    @include prop-vw(border-radius, 7, lg);
+                }
+                @include only(mobile) {
+                    @include prop-vw(width, 47, sm);
+                    @include prop-vw(height, 47, sm);
+                    @include prop-vw(font-size, 16, sm);
+                    @include prop-vw(border-radius, 7, sm);
+                }
+            }
         }
         &__field {
-            @include prop-vw(width, 250, xl);
+            @include prop-vw(width, 150, xl);
 
             @include only(desktop) {
-                @include prop-vw(width, 250, lg);
+                @include prop-vw(width, 150, lg);
             }
             @include only(mobile) {
                 flex: 1 1 auto;
