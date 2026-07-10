@@ -54,6 +54,27 @@
                 align-items: flex-start;
                 @include prop-vw(gap, 20, xl);
             }
+            @include only(mobile) {
+                // let the rating column wrap onto its own row below the profile
+                .employee__profile {
+                    flex-wrap: wrap;
+                    @include prop-vw(gap, 10, sm);
+                }
+                // ...while the info stays beside the avatar: a 0 basis lets it take
+                // the leftover width instead of pushing itself onto its own row
+                .employee__info {
+                    flex: 1 1 0;
+                    min-width: 0;
+                }
+            }
+            // always the page's first panel, so no separator strip above it — the
+            // shared `.wrapper__back + &` rule misses it (the card is nested). The
+            // `.data-panel` compound outweighs `.data-panel::before` on order.
+            &.data-panel::before {
+                @include only(mobile) {
+                    content: none;
+                }
+            }
         }
         &__kpi {
             min-width: 0; // let the wide KPI grid scroll inside the column
@@ -84,6 +105,12 @@
             flex-direction: column;
             justify-content: space-between;
             @include prop-vw(gap, 10, xl);
+
+            // full-width row under the profile (the profile wraps)
+            @include only(mobile) {
+                width: 100%;
+                @include prop-vw(gap, 10, sm);
+            }
         }
         // «Настройки» — pinned to the bottom of the rating column (space-between
         // above). Compound with .btn to override the base button radius/size.
