@@ -35,6 +35,9 @@ export default (root) => {
 		let open = false
 		const setOpen = (state) => {
 			open = state
+			// hand focus back before hiding: aria-hidden must never contain the focused
+			// element (clicking an option focuses it, so this fires on every pick)
+			if (!open && panel.contains(document.activeElement)) trigger.focus({ preventScroll: true })
 			select.classList.toggle('is-open', open)
 			trigger.setAttribute('aria-expanded', open ? 'true' : 'false')
 			panel.setAttribute('aria-hidden', open ? 'false' : 'true')
@@ -64,8 +67,7 @@ export default (root) => {
 		const onKey = (e) => {
 			if (open && e.key === 'Escape') {
 				e.preventDefault()
-				setOpen(false)
-				trigger.focus({ preventScroll: true })
+				setOpen(false) // already returns focus to the trigger
 			}
 		}
 

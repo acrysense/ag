@@ -29,6 +29,13 @@ const esc = (s) =>
 const alignCls = (align, base) =>
 	align === 'center' ? ` ${base}--center` : align === 'num' ? ` ${base}--num` : ''
 
+// Clicking an option focuses it, so hiding its panel would leave focus inside an
+// aria-hidden subtree — invalid ARIA (Chrome logs a warning). Hand focus back to
+// the trigger first; `preventScroll` keeps the click from jumping the page.
+const releaseFocus = (panel, trigger) => {
+	if (panel.contains(document.activeElement)) trigger.focus({ preventScroll: true })
+}
+
 // render a single cell by the column's declared type
 function cellHTML(col, row) {
 	const v = row[col.key]
@@ -445,6 +452,7 @@ export default async (root) => {
 		let open = false
 		const setOpen = (s) => {
 			open = s
+			if (!s) releaseFocus(panel, trigger)
 			select.classList.toggle('is-open', s)
 			trigger.setAttribute('aria-expanded', s ? 'true' : 'false')
 			panel.setAttribute('aria-hidden', s ? 'false' : 'true')
@@ -526,6 +534,7 @@ export default async (root) => {
 		let open = false
 		const setOpen = (s) => {
 			open = s
+			if (!s) releaseFocus(panel, trigger)
 			el.classList.toggle('is-open', s)
 			trigger.setAttribute('aria-expanded', s ? 'true' : 'false')
 			panel.setAttribute('aria-hidden', s ? 'false' : 'true')
