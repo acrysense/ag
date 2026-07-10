@@ -2,8 +2,9 @@
     <div class="profile__wrap">
         <div class="profile__top">
             <div class="profile__img">
-                <span class="profile__placeholder">ВМ</span>
-                <img src="/assets/images/ava.jpg" alt="Image">
+                <!-- no <img> → the initials placeholder underneath shows through -->
+                <span class="profile__placeholder">{{#if initials}}{{initials}}{{else}}ВМ{{/if}}</span>
+                {{#unless noPhoto}}<img src="/assets/images/ava.jpg" alt="Image">{{/unless}}
             </div>
             <div class="profile__body">
                 <div class="profile__main">

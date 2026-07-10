@@ -63,7 +63,8 @@
             transform: translate(-50%, -50%);
             display: block;
             overflow: hidden;
-            @include prop-vw(font-size, 30, xl);
+            // a touch larger than the ЛК uploader's 30 — the avatar box here is 180
+            @include prop-vw(font-size, 40, xl);
             font-weight: normal;
             text-align: center;
             text-overflow: ellipsis;
@@ -71,10 +72,10 @@
             color: $color-white;
 
             @include only(desktop) {
-                @include prop-vw(font-size, 30, lg);
+                @include prop-vw(font-size, 40, lg);
             }
             @include only(mobile) {
-                @include prop-vw(font-size, 20, sm);
+                @include prop-vw(font-size, 24, sm);
             }
         }
         &__img + &__body {

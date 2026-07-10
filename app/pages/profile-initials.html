@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__container">
+						<!-- Demo page for the backend: the same profile card without a photo
+						     (initials placeholder) and with one. Omit the <img> inside
+						     .profile__img and the .profile__placeholder underneath shows through. -->
+						{{> sections/home/Profile/Profile noPhoto=true initials="ВМ" }}
+						{{> sections/home/Profile/Profile }}
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>
