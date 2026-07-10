@@ -597,8 +597,10 @@
         @include only(desktop) {
             @include prop-vw(min-width, 1100, lg);
         }
+        // 900 squeezed the 11–12 columns hard: headers broke into 4–5 lines and the
+        // long pharmacy names wrapped mid-name. 1200 keeps both at 2 lines max.
         @include only(mobile) {
-            @include prop-vw(min-width, 900, sm);
+            @include prop-vw(min-width, 1200, sm);
         }
         th,
         td {

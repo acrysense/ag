@@ -58,13 +58,13 @@
                 animation: news-fade .25s ease-out both;
             }
 
+            // desktop: 4 per row, 13.33 between columns; vertical rhythm stays 40
             @include up(tablet) {
-                @include width-cols(3, 20, xl);
-                &:nth-child(3n),
-                &:nth-child(3n - 1) {
-                    @include prop-vw(margin-left, 20, xl);
+                @include width-cols(4, 13.33, xl);
+                &:not(:nth-child(4n + 1)) {
+                    @include prop-vw(margin-left, 13.33, xl);
                 }
-                &:nth-child(n + 4) {
+                &:nth-child(n + 5) {
                     @include prop-vw(margin-top, 40, xl);
                 }
             }

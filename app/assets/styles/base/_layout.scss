@@ -38,14 +38,17 @@
 				background: $color-white;
 			}
 		}
+		// content is 1080 wide; the 125px side gutters stay, so the border-box
+		// max-width is 1080 + 2×125 = 1330
 		&__container {
 			width: 100%;
 
 			@include up(desktop) {
 				@include prop-vw(margin-left, 50, xl);
 				@include prop-vw(padding-inline, 125, xl);
-				@include prop-vw(max-width, 1120, xl);
+				@include prop-vw(max-width, 1330, xl);
 			}
+			// narrower breakpoint: the sidebar leaves no room for 1080 — kept as is
 			@include only(desktop) {
 				@include prop-vw(margin-left, 50, lg);
 				@include prop-vw(padding-inline, 45, lg);
@@ -54,7 +57,7 @@
 			@include only(tablet) {
 				@include prop-vw(margin-left, 50, xl);
 				@include prop-vw(padding-inline, 125, xl);
-				@include prop-vw(max-width, 1120, xl);
+				@include prop-vw(max-width, 1330, xl);
 			}
 		}
 		&__double {
