@@ -413,13 +413,13 @@ $collapse: $collapse-dur $collapse-ease;
         @include only(mobile) {
             @include prop-vw(padding-inline, 10, sm);
         }
-        // narrow, left-aligned variant: inner content 1230, only a 60 left inset
-        // (box 1230 + 60 = 1290). Used by the manager settings page.
+        // narrow, left-aligned variant: inner content 1230 (box 1230 + 60 + 70).
+        // The right padding is kept: below the max-width the box shrinks to the
+        // available space, and with no padding the content hits the viewport edge.
         &--narrow {
             @include up(tablet) {
-                max-width: 1290px;
+                max-width: 1360px;
                 margin-inline: 0;
-                padding-right: 0;
             }
         }
     }
