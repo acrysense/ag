@@ -38,6 +38,10 @@
             display: flex;
             flex-direction: column;
             @include prop-vw(gap, 10, xl);
+            // stretch to the row height (the visits panel is usually the tallest) so
+            // the KPI panel below fills the leftover space instead of leaving a grey
+            // gap. Only this column stretches — the row stays align-items: flex-start.
+            align-self: stretch;
 
             @include only(desktop) {
                 @include prop-vw(gap, 10, lg);
@@ -91,6 +95,11 @@
 
         &__kpi {
             min-width: 0; // let the wide KPI grid scroll inside the column
+            // take the leftover height of the stretched left column, so the panel's
+            // white background runs to the bottom of the row (no grey gap under it)
+            @include up(tablet) {
+                flex: 1 1 auto;
+            }
             // reuses the employee-kpi component; the data-panel is already the card,
             // so strip the inner employee-kpi chrome
             .employee-kpi {
