@@ -727,21 +727,32 @@
         &__divider {
             height: 1px;
             background: $color-border;
-            @include prop-vw(margin-block, 20, xl);
+            @include prop-vw(margin-top, 40, xl);
+            @include prop-vw(margin-bottom, 20, xl);
 
             @include only(desktop) {
-                @include prop-vw(margin-block, 20, lg);
+                @include prop-vw(margin-top, 40, lg);
+                @include prop-vw(margin-bottom, 20, lg);
             }
             @include only(mobile) {
-                @include prop-vw(margin-block, 20, sm);
+                @include prop-vw(margin-top, 40, sm);
+                @include prop-vw(margin-bottom, 20, sm);
             }
         }
         &__actions {
             display: flex;
-            @include prop-vw(gap, 12, xl);
+            @include prop-vw(gap, 20, xl);
 
+            @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
+            }
             @include only(mobile) {
-                @include prop-vw(gap, 12, sm);
+                @include prop-vw(gap, 20, sm);
+            }
+
+            // «Отмена» — the compound beats the base .btn's own font-weight
+            .btn--secondary.btn {
+                font-weight: normal;
             }
         }
         // «Таргет посещений» reuses the visits-plan__target block (styled in
