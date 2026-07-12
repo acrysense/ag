@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__mid">
+						<!-- Demo for the backend: employee__avatar without a photo (initials
+						     placeholder) and with one. Omit the <img> inside .employee__avatar
+						     and the .employee__placeholder underneath shows through. -->
+						{{#each (arr
+							(obj noPhoto=true initials="МС" name="Иванов Марьян Сергеевич" note="без фото — инициалы")
+							(obj noPhoto=false initials="МС" name="Иванов Марьян Сергеевич" note="с фото")
+						)}}
+						<section class="data-panel" style="margin-bottom: 20px;">
+							<div class="employee__profile">
+								<div class="employee__left">
+									<div class="employee__avatar">
+										<span class="employee__placeholder">{{this.initials}}</span>
+										{{#unless this.noPhoto}}<img src="/assets/images/ava.jpg" alt="{{this.name}}">{{/unless}}
+									</div>
+								</div>
+								<div class="employee__info">
+									<h1 class="employee__name">{{this.name}}</h1>
+									<div class="employee__rows">
+										<div class="employee__row"><span class="employee__label">Должность:</span><span class="employee__value">Фармацевт</span></div>
+										<div class="employee__row"><span class="employee__label">Вариант:</span><span class="employee__value">{{this.note}}</span></div>
+									</div>
+								</div>
+							</div>
+						</section>
+						{{/each}}
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>

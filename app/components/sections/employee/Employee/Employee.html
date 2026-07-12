@@ -3,7 +3,9 @@
         <div class="employee__profile">
             <div class="employee__left">
                 <div class="employee__avatar">
-                    <img src="/assets/images/ava.jpg" alt="Иванов Марьян Сергеевич">
+                    <!-- no <img> → the initials placeholder underneath shows through -->
+                    <span class="employee__placeholder">{{#if initials}}{{initials}}{{else}}МС{{/if}}</span>
+                    {{#unless noPhoto}}<img src="/assets/images/ava.jpg" alt="Иванов Марьян Сергеевич">{{/unless}}
                 </div>
                 <span class="employee__mobile-rating"><b>B</b>, 0.83</span>
             </div>

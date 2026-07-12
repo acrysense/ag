@@ -49,6 +49,7 @@
             }
         }
         &__avatar {
+            position: relative; // anchor the initials placeholder
             display: block;
             overflow: hidden;
             @include prop-vw(min-width, 120, xl);
@@ -57,6 +58,8 @@
             background: $color-light-grey;
             @include prop-vw(border-radius, 10, xl);
             & > img {
+                position: relative; // above the initials placeholder
+                z-index: 1;
                 display: block;
                 width: 100%;
                 height: 100%;
@@ -74,6 +77,31 @@
                 @include prop-vw(width, 90, sm);
                 @include prop-vw(height, 90, sm);
                 @include prop-vw(border-radius, 10, sm);
+            }
+        }
+        // initials shown when there's no photo — paints above the grey box background
+        // but below the <img> (which is z-index: 1), so a photo covers it and its
+        // absence reveals it. Same idea as the profile / ЛК avatar placeholder.
+        &__placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: block;
+            overflow: hidden;
+            max-width: 100%;
+            font-weight: normal;
+            line-height: 1;
+            text-align: center;
+            white-space: nowrap;
+            color: $color-white;
+            @include prop-vw(font-size, 30, xl);
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 30, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 22, sm);
             }
         }
         &__info {
