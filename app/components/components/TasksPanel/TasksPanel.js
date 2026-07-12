@@ -24,7 +24,13 @@ function taskRowHTML(t) {
 		body += `<p class="task-row__subline">${sub}</p>`
 	}
 
-	let meta = `<span class="task-row__assignee">${escTask(t.assignee)}</span><span class="task-row__date">${escTask(t.due)}</span>`
+	// Show the human name (assignee_name); keep the raw 1C code on the row via
+	// data-assignee so edits can re-send it without it being lost. Backward-compatible:
+	// old data with only `assignee` still renders that value as before.
+	const assigneeCode = t.assignee ?? ''
+	const assigneeName = t.assignee_name ?? t.assigneeName ?? assigneeCode
+	const codeAttr = assigneeCode !== '' ? ` data-assignee="${escTask(assigneeCode)}"` : ''
+	let meta = `<span class="task-row__assignee"${codeAttr}>${escTask(assigneeName)}</span><span class="task-row__date">${escTask(t.due)}</span>`
 	if (t.hidden)
 		meta += '<span class="task-row__hidden" title="Скрыта для сотрудника"><svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg></span>'
 
@@ -141,13 +147,21 @@ export default async (root) => {
 		// backend may drop the picker and post a bare hidden input (e.g. a 1C code).
 		// The select's own hidden input carries the same name, so both markups work.
 		const assigneeValue = () => form.querySelector('[name="assignee"]')?.value.trim() || ''
-		// what the task row shows — the picker's visible label, else the raw value
-		// (isConnected: the picker may have been torn out of the form after mount)
+		// The row shows a human name; the assignee value posted to the backend is the
+		// 1C code. Name source, in order: the picker's visible label, an explicit
+		// hidden [name="assignee_name"] the backend may add, else the code itself.
 		const assigneeLabel = () => {
-			const label = assigneeSelect?.isConnected
+			const picker = assigneeSelect?.isConnected
 				? assigneeSelect.querySelector('[data-select-value]')?.textContent.trim()
 				: ''
-			return label || assigneeValue()
+			return picker || form.querySelector('[name="assignee_name"]')?.value.trim() || assigneeValue()
+		}
+		// push a code back into whatever assignee control the form has (picker or a
+		// bare hidden input) — used when opening the edit form for an existing task
+		const setAssignee = (code) => {
+			if (assigneeSelect?.isConnected) return // handled by setSelect below
+			const inp = form.querySelector('[name="assignee"]')
+			if (inp) inp.value = code || ''
 		}
 		const formValues = () => ({
 			title: titleInput?.value.trim() || '',
@@ -214,7 +228,12 @@ export default async (root) => {
 			closeForm() // leave any previous create/edit cleanly
 			if (titleInput) titleInput.value = row.querySelector('.task-row__title')?.textContent.trim() || ''
 			if (dueInput) dueInput.value = row.querySelector('.task-row__date')?.textContent.trim() || ''
-			setSelect(assigneeSelect, row.querySelector('.task-row__assignee')?.textContent.trim() || '')
+			// prefill with the stored 1C code (data-assignee), falling back to the
+			// visible text for old rows that only carried a name
+			const assigneeEl = row.querySelector('.task-row__assignee')
+			const assigneeCode = assigneeEl?.dataset.assignee || assigneeEl?.textContent.trim() || ''
+			setSelect(assigneeSelect, assigneeCode)
+			setAssignee(assigneeCode)
 			setHide(!!row.querySelector('.task-row__hidden'))
 			editLi = document.createElement('li')
 			editLi.className = 'tasks-list__edit'
@@ -226,14 +245,20 @@ export default async (root) => {
 		}
 		const saveEdit = (row) => {
 			const title = titleInput?.value.trim()
-			const assignee = assigneeLabel() // display name, not the posted code
 			const due = dueInput?.value.trim()
 			const t = row.querySelector('.task-row__title')
 			const a = row.querySelector('.task-row__assignee')
 			const d = row.querySelector('.task-row__date')
 			if (t && title) t.textContent = title
-			if (a && assignee) a.textContent = assignee
 			if (d && due) d.textContent = due
+			// the assignee is only editable through the picker; when the backend has
+			// dropped it, leave the row's name and stored code as they were
+			if (a && assigneeSelect?.isConnected) {
+				const name = assigneeLabel()
+				const code = assigneeValue()
+				if (name) a.textContent = name
+				if (code) a.dataset.assignee = code
+			}
 			// hidden flag → add/remove the eye marker in the row tools
 			const on = form.querySelector('[data-task-hide-input]')?.value === '1'
 			let mark = row.querySelector('.task-row__hidden')
@@ -259,12 +284,15 @@ export default async (root) => {
 			closeForm()
 		}
 		// build + insert a new task row on the list (used after a successful create).
-		// The backend returns the new task's id at data.id (i.e. response → data → id),
-		// so read that first; fall back to a flat id for other response shapes.
+		// The backend returns the created task at response → data (id, assignee_name…),
+		// so prefer those; fall back to a flat shape / the form's own values.
 		const addRow = (vals, data) => {
-			const newId = data?.data?.id ?? data?.id
+			const created = data?.data ?? data ?? {}
+			const newId = created.id ?? data?.id
+			// display name from the created task if the backend returned it, else the label
+			const assignee_name = created.assignee_name ?? vals.assignee_name
 			const tmp = document.createElement('div')
-			tmp.innerHTML = taskRowHTML({ ...vals, id: newId })
+			tmp.innerHTML = taskRowHTML({ ...vals, assignee_name, id: newId })
 			const row = tmp.firstElementChild
 			enhanceRow(row)
 			const first = list?.querySelector('.task-row')
@@ -282,10 +310,10 @@ export default async (root) => {
 					closeForm()
 				}, { el: submitBtn, errorMsg: 'Не удалось сохранить задачу' })
 			} else {
-				// post the raw value, but render the row with the human-readable label
-				const label = assigneeLabel()
+				// post the raw code in `assignee`; render the row with the human name
+				const assigneeName = assigneeLabel()
 				runAction('create', { ...vals }, (data) => {
-					addRow({ ...vals, assignee: label }, data)
+					addRow({ ...vals, assignee_name: assigneeName }, data)
 					closeForm()
 				}, { el: submitBtn, errorMsg: 'Не удалось создать задачу' })
 			}
