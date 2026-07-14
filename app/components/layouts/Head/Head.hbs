@@ -12,6 +12,19 @@
     .app-loader__spinner{width:44px;height:44px;border-radius:50%;border:3px solid #dfe7f1;border-top-color:#0081ff;animation:app-loader-spin .7s linear infinite}
     @keyframes app-loader-spin{to{transform:rotate(360deg)}}
     @media (prefers-reduced-motion:reduce){.app-loader__spinner{animation-duration:1.6s}}
+
+    /* Critical header layout: without this the header renders as plain blocks before
+       app.css applies, so the search field stretches full-width and then snaps to its
+       real size (a visible jump on load, esp. under the CMS where app.css isn't always
+       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
+       the search width changes. */
+    .header__wrapper{display:flex;justify-content:space-between;width:100%}
+    .header__inner{display:flex;align-items:center}
+    .filter-search{display:none}
+    body[data-header-search] .filter-search{flex:0 0 auto;align-self:center;width:max(266.6666666667px,26.0416666667vw);margin-left:max(32px,3.125vw);margin-right:auto}
+    @media (min-width:744px){body[data-header-search] .filter-search{display:block}}
+    @media (min-width:1024px) and (max-width:1439.98px){body[data-header-search] .filter-search{width:max(355.5555555556px,34.7222222222vw);margin-left:max(42.6666666667px,4.1666666667vw)}}
+    @media (max-width:743.98px){body[data-header-search] .filter-search{display:block;order:10;flex:0 0 100%;width:100%;margin-inline:0}body[data-header-search] .header__wrapper{flex-wrap:wrap}}
 </style>
 <script>window.addEventListener("load",function(){var l=document.querySelector("[data-app-loader]");if(l){l.classList.add("is-hidden");setTimeout(function(){l.parentNode&&l.remove()},500)}})</script>
 

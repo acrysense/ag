@@ -1080,4 +1080,52 @@
 			}
 		}
 	}
+
+	// ---- drag & drop -----------------------------------------------------
+	// draggable visit tiles get the grab affordance; on touch devices they opt out
+	// of the browser's own touch gestures so a drag never triggers a page scroll
+	.vcal__tevent,
+	.vcal__event {
+		cursor: grab;
+	}
+	@media (pointer: coarse) {
+		.vcal__tevent,
+		.vcal__event {
+			touch-action: none;
+		}
+	}
+	// the source tile fades while its floating clone follows the pointer
+	.vcal__tevent.is-dragging,
+	.vcal__event.is-dragging {
+		opacity: 0.3;
+	}
+	.vcal.is-dragging-active {
+		.vcal__tevent,
+		.vcal__event {
+			cursor: grabbing;
+		}
+	}
+	// the cell currently under the pointer — the visit lands here on release
+	.vcal__tcell.is-drop-target,
+	.vcal__cell.is-drop-target {
+		background: rgba($color-blue, 0.08);
+		box-shadow: inset 0 0 0 2px $color-blue;
+	}
+	// floating clone that tracks the pointer during a drag
+	.vcal__drag-ghost {
+		position: fixed;
+		z-index: 1000;
+		margin: 0;
+		pointer-events: none;
+		opacity: 0.95;
+		background: $color-white;
+		border-radius: 8px;
+		padding: 8px 10px;
+		box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+		cursor: grabbing;
+	}
+	body.vcal-dragging {
+		cursor: grabbing;
+		user-select: none;
+	}
 }

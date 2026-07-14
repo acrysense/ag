@@ -149,6 +149,12 @@
 			display: block;
 			overflow: hidden;
 			width: 100%;
+			// an empty banner slot still reserves its aspect-ratio height (::before) and
+			// draws a shadow → a phantom empty box. Hide it until it actually holds a
+			// banner; a filled slot (`<div class="wrapper__banr"><img…></div>`) shows.
+			&:empty {
+				display: none;
+			}
 			@include prop-vw(border-radius, 20, xl);
 			box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
 			&::before {

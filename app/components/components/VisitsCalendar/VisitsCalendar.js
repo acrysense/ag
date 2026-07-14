@@ -92,12 +92,54 @@ export default async function VisitsCalendar(root) {
 
 	const disposers = []
 
-	// JSON-driven events (data-visits-src / inline data-visits-data). Falls back to
-	// the built-in demo generator when neither is set, so the static page still works.
-	let eventIndex = null // Map<'dd.mm.yyyy', event[]>
-	const dayEvents = (date) => {
-		if (!eventIndex) return eventsForDay(date) // demo fallback
-		return (eventIndex.get(dmy(date)) || []).slice().sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))
+	// One authoritative, MUTABLE store keyed by 'dd.mm.yyyy'. JSON mode fills it from
+	// the backend; demo mode materialises each visible day from the generator once and
+	// caches it. Drag-and-drop mutates this store in place, so a moved visit survives
+	// re-renders and navigation in both modes.
+	const store = new Map() // Map<'dd.mm.yyyy', event[]>
+	let jsonMode = false
+	const bucket = (date) => {
+		const key = dmy(date)
+		if (!store.has(key)) store.set(key, jsonMode || isWeekend(date) ? [] : eventsForDay(date).map((e) => ({ ...e })))
+		return store.get(key)
+	}
+	const dayEvents = (date) => bucket(date).slice().sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))
+
+	// move a visit to another day (and hour, in the time grid). Returns true if something
+	// actually changed. Both source and target days are on screen during a drop, so their
+	// buckets already exist in the store.
+	function moveEvent(ev, toDate, toHour) {
+		if (!ev || !toDate) return false
+		const fromKey = ev.date
+		if (fromKey === toDate && (!toHour || ev.time === toHour)) return false // dropped on itself
+		const fromArr = store.get(fromKey)
+		if (fromArr) {
+			const i = fromArr.indexOf(ev)
+			if (i >= 0) fromArr.splice(i, 1)
+		}
+		ev.date = toDate
+		if (toHour) ev.time = toHour
+		if (!store.has(toDate)) store.set(toDate, [])
+		store.get(toDate).push(ev)
+		return true
+	}
+
+	// persist a move: always emit a DOM event (so integrators can react without an
+	// endpoint), and POST to data-visits-action-url / window.AG_VISITS_ACTION_URL if set.
+	function saveMove(ev, prev) {
+		const detail = { action: 'move', id: ev.id ?? null, employee: ev.name, date: ev.date, time: ev.time, from: prev }
+		root.dispatchEvent(new CustomEvent('visit:move', { detail, bubbles: true }))
+		const url = root.dataset.visitsActionUrl || (typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL)
+		if (!url) return
+		try {
+			fetch(url, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+				body: JSON.stringify(detail),
+			}).catch((err) => console.warn('[VisitsCalendar] move save failed', err))
+		} catch (err) {
+			console.warn('[VisitsCalendar] move save failed', err)
+		}
 	}
 
 	// ---- view bodies ------------------------------------------------------
@@ -126,7 +168,7 @@ export default async function VisitsCalendar(root) {
 						.map((cell) => {
 							const out = cell.getMonth() !== cursor.getMonth()
 							const evs = dayEvents(cell)
-							return `<div class="vcal__cell${out ? ' is-out' : ''}">
+							return `<div class="vcal__cell${out ? ' is-out' : ''}"${out ? '' : ` data-date="${dmy(cell)}"`}>
 								<span class="vcal__daynum">${cell.getDate()}</span>
 								<div class="vcal__events">${evs.map(eventHTML).join('')}${out ? '' : '<button type="button" class="vcal__add" data-visit-create>+ Создать визит</button>'}</div>
 							</div>`
@@ -169,7 +211,7 @@ export default async function VisitsCalendar(root) {
 							</button>`
 						)
 						.join('')
-					return `<div class="vcal__tcell">${inner || '<button type="button" class="vcal__add" data-visit-create><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>'}</div>`
+					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || '<button type="button" class="vcal__add" data-visit-create><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>'}</div>`
 				})
 				.join('')
 		}
@@ -289,8 +331,105 @@ export default async function VisitsCalendar(root) {
 		}
 	}
 
+	// ---- drag & drop (mouse + touch + pen via Pointer Events) -------------
+	// A visit tile is both clickable (opens the popup) and draggable. We tell them
+	// apart with a small movement threshold: below it → a tap/click; above it → a
+	// drag. On touch, the tiles carry `touch-action:none` (see SCSS) so dragging one
+	// never fights the calendar's own scroll.
+	const DRAG_THRESHOLD = 6
+	let drag = null
+	let suppressClick = false
+
+	const positionGhost = (d, x, y) => {
+		d.ghost.style.left = `${x - d.offX}px`
+		d.ghost.style.top = `${y - d.offY}px`
+	}
+	const dropCellAt = (x, y) => {
+		const el = document.elementFromPoint(x, y) // ghost is pointer-events:none → sees the cell beneath
+		return el ? el.closest('.vcal__tcell[data-date], .vcal__cell[data-date]') : null
+	}
+	const beginDrag = (d) => {
+		d.armed = true
+		try {
+			root.setPointerCapture(d.pointerId)
+		} catch {}
+		const r = d.el.getBoundingClientRect()
+		const ghost = d.el.cloneNode(true)
+		ghost.classList.add('vcal__drag-ghost')
+		ghost.style.width = `${r.width}px`
+		ghost.removeAttribute('data-event-id')
+		document.body.appendChild(ghost)
+		d.ghost = ghost
+		d.offX = d.startX - r.left
+		d.offY = d.startY - r.top
+		d.el.classList.add('is-dragging')
+		root.classList.add('is-dragging-active')
+		document.body.classList.add('vcal-dragging')
+		positionGhost(d, d.startX, d.startY)
+	}
+	const endDrag = () => {
+		if (!drag) return
+		const d = drag
+		drag = null
+		d.ghost?.remove()
+		d.el?.classList.remove('is-dragging')
+		d.dropCell?.classList.remove('is-drop-target')
+		root.classList.remove('is-dragging-active')
+		document.body.classList.remove('vcal-dragging')
+		try {
+			root.releasePointerCapture(d.pointerId)
+		} catch {}
+	}
+
+	const onPointerDown = (e) => {
+		if (drag) return
+		if (e.pointerType === 'mouse' && e.button !== 0) return
+		const el = e.target.closest('[data-event-id]')
+		if (!el || !root.contains(el)) return
+		drag = { id: el.dataset.eventId, el, pointerId: e.pointerId, type: e.pointerType, startX: e.clientX, startY: e.clientY, armed: false }
+	}
+	const onPointerMove = (e) => {
+		if (!drag || drag.pointerId !== e.pointerId) return
+		if (!drag.armed) {
+			if (Math.hypot(e.clientX - drag.startX, e.clientY - drag.startY) < DRAG_THRESHOLD) return
+			beginDrag(drag)
+		}
+		e.preventDefault()
+		positionGhost(drag, e.clientX, e.clientY)
+		const cell = dropCellAt(e.clientX, e.clientY)
+		if (cell !== drag.dropCell) {
+			drag.dropCell?.classList.remove('is-drop-target')
+			drag.dropCell = cell
+			cell?.classList.add('is-drop-target')
+		}
+	}
+	const onPointerUp = (e) => {
+		if (!drag || drag.pointerId !== e.pointerId) return
+		if (!drag.armed) return endDrag() // never moved → let the click open the popup
+		const cell = drag.dropCell
+		const ev = eventStore.get(drag.id) // resolve BEFORE render() clears the registry
+		endDrag()
+		// swallow the click that fires right after a drag so it doesn't open the popup
+		suppressClick = true
+		setTimeout(() => (suppressClick = false), 400)
+		if (!cell || !ev) return
+		const prev = { date: ev.date, time: ev.time }
+		if (moveEvent(ev, cell.dataset.date, cell.dataset.hour)) {
+			render()
+			saveMove(ev, prev)
+		}
+	}
+	const onPointerCancel = () => endDrag()
+	const onKeydown = (e) => {
+		if (e.key === 'Escape' && drag) endDrag() // abort: no data mutated until drop
+	}
+
 	// ---- one delegated handler --------------------------------------------
 	const onRootClick = (e) => {
+		if (suppressClick) {
+			suppressClick = false
+			return
+		}
 		const vbtn = e.target.closest('[data-view]')
 		if (vbtn) {
 			view = vbtn.dataset.view
@@ -338,8 +477,20 @@ export default async function VisitsCalendar(root) {
 
 	root.addEventListener('click', onRootClick)
 	document.addEventListener('click', onDocClick)
+	// pointer listeners drive drag-and-drop; move needs {passive:false} to preventDefault
+	root.addEventListener('pointerdown', onPointerDown)
+	root.addEventListener('pointermove', onPointerMove, { passive: false })
+	root.addEventListener('pointerup', onPointerUp)
+	root.addEventListener('pointercancel', onPointerCancel)
+	document.addEventListener('keydown', onKeydown)
 	disposers.push(() => root.removeEventListener('click', onRootClick))
 	disposers.push(() => document.removeEventListener('click', onDocClick))
+	disposers.push(() => root.removeEventListener('pointerdown', onPointerDown))
+	disposers.push(() => root.removeEventListener('pointermove', onPointerMove))
+	disposers.push(() => root.removeEventListener('pointerup', onPointerUp))
+	disposers.push(() => root.removeEventListener('pointercancel', onPointerCancel))
+	disposers.push(() => document.removeEventListener('keydown', onKeydown))
+	disposers.push(endDrag)
 	disposers.push(closePopup)
 
 	// JSON mode: fetch the visits before the first render (loader meanwhile)
@@ -354,11 +505,11 @@ export default async function VisitsCalendar(root) {
 			console.warn('[VisitsCalendar] failed to load visits', err)
 		}
 		const list = Array.isArray(data) ? data : data && Array.isArray(data.visits) ? data.visits : []
-		eventIndex = new Map()
+		jsonMode = true
 		list.forEach((ev) => {
 			if (!ev || !ev.date) return
-			if (!eventIndex.has(ev.date)) eventIndex.set(ev.date, [])
-			eventIndex.get(ev.date).push(ev)
+			if (!store.has(ev.date)) store.set(ev.date, [])
+			store.get(ev.date).push(ev)
 		})
 	}
 

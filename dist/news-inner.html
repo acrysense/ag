@@ -1,0 +1,3340 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>AG</title>
+
+		<!-- initial-load overlay: critical inline styles so it shows before the bundle
+		     loads and hides the FOUC (sprite injection / style application) -->
+		<style>
+			.app-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				-moz-box-pack: center;
+				justify-content: center;
+				background: #f5f8fa;
+				-webkit-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				-moz-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+			}
+			.app-loader.is-hidden {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.app-loader__spinner {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				border: 3px solid #dfe7f1;
+				border-top-color: #0081ff;
+				-webkit-animation: app-loader-spin 0.7s linear infinite;
+				-moz-animation: app-loader-spin 0.7s linear infinite;
+				animation: app-loader-spin 0.7s linear infinite;
+			}
+			@-webkit-keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@-moz-keyframes app-loader-spin {
+				to {
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.app-loader__spinner {
+					-webkit-animation-duration: 1.6s;
+					-moz-animation-duration: 1.6s;
+					animation-duration: 1.6s;
+				}
+			}
+
+			/* Critical header layout: without this the header renders as plain blocks before
+		       app.css applies, so the search field stretches full-width and then snaps to its
+		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
+		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
+		       the search width changes. */
+			.header__wrapper {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-pack: justify;
+				-webkit-justify-content: space-between;
+				-moz-box-pack: justify;
+				justify-content: space-between;
+				width: 100%;
+			}
+			.header__inner {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+			}
+			.filter-search {
+				display: none;
+			}
+			body[data-header-search] .filter-search {
+				-webkit-box-flex: 0;
+				-webkit-flex: 0 0 auto;
+				-moz-box-flex: 0;
+				flex: 0 0 auto;
+				-webkit-align-self: center;
+				align-self: center;
+				width: max(266.6666666667px, 26.0416666667vw);
+				margin-left: max(32px, 3.125vw);
+				margin-right: auto;
+			}
+			@media (min-width: 744px) {
+				body[data-header-search] .filter-search {
+					display: block;
+				}
+			}
+			@media (min-width: 1024px) and (max-width: 1439.98px) {
+				body[data-header-search] .filter-search {
+					width: max(355.5555555556px, 34.7222222222vw);
+					margin-left: max(42.6666666667px, 4.1666666667vw);
+				}
+			}
+			@media (max-width: 743.98px) {
+				body[data-header-search] .filter-search {
+					display: block;
+					-webkit-box-ordinal-group: 11;
+					-webkit-order: 10;
+					-moz-box-ordinal-group: 11;
+					order: 10;
+					-webkit-box-flex: 0;
+					-webkit-flex: 0 0 100%;
+					-moz-box-flex: 0;
+					flex: 0 0 100%;
+					width: 100%;
+					margin-inline: 0;
+				}
+				body[data-header-search] .header__wrapper {
+					-webkit-flex-wrap: wrap;
+					flex-wrap: wrap;
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener("load", function () {
+				var l = document.querySelector("[data-app-loader]");
+				if (l) {
+					l.classList.add("is-hidden");
+					setTimeout(function () {
+						l.parentNode && l.remove();
+					}, 500);
+				}
+			});
+		</script>
+
+		<meta name="description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<link
+			rel="preload"
+			href="/bitrix/templates/auth/fonts/Inter/Inter-Var.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="/bitrix/templates/auth/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/bitrix/templates/auth/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/bitrix/templates/auth/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/bitrix/templates/auth/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/bitrix/templates/auth/favicon/site.webmanifest" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="AG" />
+		<meta property="og:title" content="AG" />
+		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-BbwLSmLd.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-6bidQN7V.css" />
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			<header class="header" data-module="Header" data-path="layouts">
+				<div class="container">
+					<div class="header__wrapper">
+						<picture class="header__logotype">
+							<source srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg" media="(min-width: 744px)" />
+							<img src="/bitrix/templates/auth/assets/images/logotype-mobile-BWefyXL2.svg" width="390" height="40" alt="AG" />
+						</picture>
+						<div class="filter-search" data-module="HeaderSearch" data-path="components">
+							<div class="filter-search__control">
+								<input
+									class="filter-search__input"
+									name="header-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+									data-filter-input
+									aria-label="Поиск"
+								/>
+								<svg
+									class="filter-search__icon"
+									aria-hidden="true"
+									focusable="false"
+									viewBox="0 0 20 20"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
+									<path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+								</svg>
+							</div>
+
+							<div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
+								<div class="filter-panel__head">
+									<h2 class="filter-panel__title">Фильтр</h2>
+									<button type="button" class="filter-panel__close" data-filter-close aria-label="Закрыть">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg>
+									</button>
+								</div>
+								<div data-page-fields="employees">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="employee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Василевская М.В."
+															data-label="Василевская М.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Василевская М.В.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Волкова Ю.Г."
+															data-label="Волкова Ю.Г."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Волкова Ю.Г.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Зайцева Д.М."
+															data-label="Зайцева Д.М."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Зайцева Д.М.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Ковш Т.А."
+															data-label="Ковш Т.А."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Ковш Т.А.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Северная Т.В."
+															data-label="Северная Т.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Северная Т.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="filter-panel__grid">
+										<div class="filter-field" data-filter-key="region">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Область">Область</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Минск" data-label="Минск">Минская обл.</button>
+												<button type="button" class="filter-option" data-value="Витебск" data-label="Витебск">
+													Витебская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Брест" data-label="Брест">Брестская обл.</button>
+												<button type="button" class="filter-option" data-value="Гродно" data-label="Гродно">
+													Гродненская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Могилев" data-label="Могилев">
+													Могилевска обл.
+												</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="region" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Регион">Регион</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Минск"
+														data-label="Минск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Минск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Витебск"
+														data-label="Витебск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Витебск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Брест"
+														data-label="Брест"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Брест</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Гродно"
+														data-label="Гродно"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Гродно</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Могилев"
+														data-label="Могилев"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Могилев</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="brand" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Бренд">Бренд</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="ADEL" data-label="ADEL" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>ADEL</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Добрыя лекі"
+														data-label="Добрыя лекі"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Добрыя лекі</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Эконом"
+														data-label="Эконом"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Эконом</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="category" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Категория">Категория</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="A" data-label="A" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>A</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="B" data-label="B" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>B</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="C" data-label="C" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>C</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="D" data-label="D" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>D</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="company">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Розничная компания">Розничная компания</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Аптека групп" data-label="Аптека групп">
+													ООО “Аптека групп”
+												</button>
+												<button type="button" class="filter-option" data-value="Фарм" data-label="Фарм">ООО “Фарм”</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="pharmacy" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №112"
+															data-label="ADEL №112"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №112</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №42"
+															data-label="Аптека ADEL №42, Минск"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №42, Минск</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №4"
+															data-label="ADEL №4"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №4</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №2"
+															data-label="ADEL №2"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №2</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №24"
+															data-label="Аптека ADEL №24"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №24</span>
+													</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="manager">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">
+													Петров А.И.
+												</button>
+												<button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">
+													Полководец Т.С.
+												</button>
+											</div>
+										</div>
+
+										<!-- free-text input (list of values), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
+											<input
+												type="text"
+												class="filter-field__input"
+												name="filter-value"
+												data-filter-text
+												placeholder="Кол-во чеков"
+												autocomplete="off"
+											/>
+										</div>
+
+										<!-- numeric range (From – To), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="index" data-range>
+											<div class="filter-range">
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-from
+													placeholder="Индекс от"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+												<span class="filter-range__dash">–</span>
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-to
+													placeholder="до"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+											</div>
+										</div>
+
+										<!-- date range (From – To) -->
+										<div class="filter-field" data-filter-key="period" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Период">Период</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+
+										<!-- single date -->
+										<div class="filter-field" data-filter-key="date" data-date>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div data-page-fields="tasks">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="assignee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Иванов М.С."
+															data-label="Иванов М.С."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Иванов М.С.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Петров А.И."
+															data-label="Петров А.И."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Петров А.И.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Панковец В.В."
+															data-label="Панковец В.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Панковец В.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="filter-panel__grid">
+										<div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="filter-panel__actions">
+									<button type="button" class="btn btn--sm" data-filter-apply>Применить</button>
+									<button type="button" class="btn btn--sm btn--secondary" data-filter-reset>Сбросить</button>
+								</div>
+							</div>
+						</div>
+						<div class="header__inner">
+							<div class="profile-dropdown header__profile" data-module="ProfileDropdown" data-path="components">
+								<button class="profile-dropdown__trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+									<span class="profile-dropdown__placeholder">ВМ</span>
+									<span>Владислава Митрофановна</span>
+									<svg aria-hidden="true" width="16" height="16">
+										<use href="#icon-caret"></use>
+									</svg>
+								</button>
+								<div class="profile-dropdown__panel" role="menu">
+									<div class="profile-dropdown__wrap">
+										<a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="/" data-action="">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-settings"></use>
+											</svg>
+											<span class="profile-dropdown__text">Настройки</span>
+										</a>
+										<div class="profile-dropdown__sep" role="none"></div>
+										<button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="logout">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-exit"></use>
+											</svg>
+											<span class="profile-dropdown__text">Выход</span>
+										</button>
+										<button class="profile-dropdown__close" aria-label="Закрыть">
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-close"></use>
+											</svg>
+										</button>
+									</div>
+								</div>
+							</div>
+							<button class="header__hamburger" aria-label="Меню">
+								<svg aria-hidden="true" focusable="false" width="30" height="21">
+									<use href="#icon-hamburger"></use>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+			<main class="wrapper__content">
+				<div class="sidebar" data-module="Sidebar" data-path="layouts">
+					<button
+						type="button"
+						class="sidebar__collapse"
+						data-sidebar-collapse
+						aria-label="Свернуть меню"
+						aria-expanded="true"
+					>
+						<svg aria-hidden="true" focusable="false" width="20" height="20">
+							<use href="#icon-sidebar-toggle"></use>
+						</svg>
+					</button>
+					<div class="sidebar__wrap">
+						<div class="sidebar__section">
+							<span class="sidebar__label">ERP</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-dashboard"></use>
+										</svg>
+										<span>Дашборд</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/pharmacies" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-pharmacies"></use>
+										</svg>
+										<span>Аптеки</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/managers" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-managers"></use>
+										</svg>
+										<span>Менеджеры</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/employees" class="sidebar__link is--active">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-employees"></use>
+										</svg>
+										<span>Сотрудники</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/visits" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-visits"></use>
+										</svg>
+										<span>Визиты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/tasks" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-tasks"></use>
+										</svg>
+										<span>Задачи</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ЛИЧНЫЙ КАБИНЕТ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="/" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-user"></use>
+										</svg>
+										<span>Моя страница</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-education-portal"></use>
+										</svg>
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/coefficient" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-coefficient"></use>
+										</svg>
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/package" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-package"></use>
+										</svg>
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/motivation" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-motivation"></use>
+										</svg>
+										<span>Мотивация</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПОРТАЛ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-home"></use>
+										</svg>
+										<span>Главная</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-news"></use>
+										</svg>
+										<span>Новости</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-gallery"></use>
+										</svg>
+										<span>Галерея</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-data"></use>
+										</svg>
+										<span>База знаний</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ХОЛДИНГ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-directory"></use>
+										</svg>
+										<span>Справочник</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-vacancy"></use>
+										</svg>
+										<span>Вакансии</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПРИСОЕДИНЯЙТЕСЬ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg" width="20" height="20" alt="Аптечка+" />
+										<span>Гипермаркет Аптечка+</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="ADEL"
+										/>
+										<span>Аптеки ADEL</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="Добрыя лекi+"
+										/>
+										<span>Аптек Добрыя лекi</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+											width="20"
+											height="20"
+											alt="FeelinGood"
+										/>
+										<span>Клуб FeelinGood</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__banr"></div>
+						<div class="sidebar__banr"></div>
+						<button class="sidebar__close" aria-label="Закрыть">
+							<svg aria-hidden="true" focusable="false" width="16" height="16">
+								<use href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="wrapper__main">
+					<div class="wrapper__container">
+						<a href="/" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" width="16" height="16">
+								<use href="#icon-arrow-back-thin"></use>
+							</svg>
+							<span>Назад</span>
+						</a>
+						<section class="news-inner" data-module="NewsInner" data-path="sections/news">
+							<div class="news-inner__wrap">
+								<div class="news-inner__content">
+									<h1>Каким был весенний корпоратив</h1>
+									<figure>
+										<img src="/bitrix/templates/auth/assets/images/news-inner-01-Duh-Nwlq.jpg" alt="Изображение" />
+										<figcaption>Шатер со всеми сотрудниками и главная сцена.</figcaption>
+									</figure>
+									<p>
+										Вас позвали на новогодний корпоратив,
+										<a href="#">корпаратив или карпаратив</a>
+										? Куда отправиться, чтобы не выглядеть невеждой? Верный ответ подскажут правило и советы опытных
+										преподавателей. Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не
+										выглядеть невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+									</p>
+									<blockquote>
+										Вас позвали на новогодний корпоратив,
+										<a href="#">корпаратив или карпаратив</a>
+										? Куда отправиться, чтобы не выглядеть невеждой? Верный ответ подскажут правило и советы опытных
+										преподавателей. Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не
+										выглядеть невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+									</blockquote>
+									<h2>Куда отправиться?</h2>
+									<div class="accordion" data-module="Accordion" data-path="components" data-acc-single="0" data-acc-speed="250">
+										<div class="accordion__item">
+											<button class="accordion__toggle" type="button">
+												<span>Раскрывающийся список</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16">
+													<use href="#icon-caret"></use>
+												</svg>
+											</button>
+											<div class="accordion__panel" hidden>
+												<p>
+													Куда отправиться, чтобы не выглядеть невеждой? Верный ответ подскажут правило и советы опытных
+													преподавателей. Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не
+													выглядеть невеждой? Верный ответ подскажут правило и советы опытных преподавателей. Вас позвали на
+													новогодний корпоратив, корпаратив или карпаратив?
+												</p>
+												<p>
+													Куда отправиться, чтобы не выглядеть невеждой? Верный ответ подскажут правило и советы опытных
+													преподавателей.
+												</p>
+												<ul>
+													<li>Вас позвали на новогодний корпоратив</li>
+													<li>Позвали на новогодний корпоратив</li>
+													<li>Корпоратив новогодний</li>
+													<li>Позвали на корпоратив</li>
+												</ul>
+											</div>
+										</div>
+										<div class="accordion__item">
+											<button class="accordion__toggle" type="button">
+												<span>Раскрывающийся список</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16">
+													<use href="#icon-caret"></use>
+												</svg>
+											</button>
+											<div class="accordion__panel" hidden>
+												<p>
+													Куда отправиться, чтобы не выглядеть невеждой? Верный ответ подскажут правило и советы опытных
+													преподавателей. Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не
+													выглядеть невеждой? Верный ответ подскажут правило и советы опытных преподавателей. Вас позвали на
+													новогодний корпоратив, корпаратив или карпаратив?
+												</p>
+												<p>
+													Куда отправиться, чтобы не выглядеть невеждой? Верный ответ подскажут правило и советы опытных
+													преподавателей.
+												</p>
+												<ul>
+													<li>Вас позвали на новогодний корпоратив</li>
+													<li>Позвали на новогодний корпоратив</li>
+													<li>Корпоратив новогодний</li>
+													<li>Позвали на корпоратив</li>
+												</ul>
+											</div>
+										</div>
+									</div>
+									<div class="table-scroll">
+										<table cellpadding="0" cellspacing="0" align="center">
+											<colgroup>
+												<col />
+												<col />
+												<col />
+												<col />
+											</colgroup>
+											<thead>
+												<tr>
+													<th style="text-align: center">01.12.</th>
+													<th style="text-align: center">Порохня Сергей Иванович</th>
+													<th style="text-align: center">Главный инженер</th>
+													<th style="text-align: center">Администрация</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td style="text-align: center">01.12.</td>
+													<td style="text-align: center">Порохня Сергей Иванович</td>
+													<td style="text-align: center">Главный инженер</td>
+													<td style="text-align: center">Администрация</td>
+												</tr>
+												<tr>
+													<td style="text-align: center">10.12.</td>
+													<td style="text-align: center">Новикова Вера Сергеевна</td>
+													<td style="text-align: center">Бизнес-аналитик</td>
+													<td style="text-align: center">Аналитический центр</td>
+												</tr>
+												<tr>
+													<td style="text-align: center">14.12.</td>
+													<td style="text-align: center">Кардаш Татьяна Витальевна</td>
+													<td style="text-align: center">Руководитель проектного офиса</td>
+													<td style="text-align: center">Администрация</td>
+												</tr>
+												<tr>
+													<td style="text-align: center">14.12.</td>
+													<td style="text-align: center">Сак Надежда Николаевна</td>
+													<td style="text-align: center">Заместитель главного бухгалтера</td>
+													<td style="text-align: center">Отдел учёта</td>
+												</tr>
+												<tr>
+													<td style="text-align: center">15.12.</td>
+													<td style="text-align: center">Машинская Юлия Геннадьевна</td>
+													<td style="text-align: center">Директор</td>
+													<td style="text-align: center">Администрация</td>
+												</tr>
+												<tr>
+													<td style="text-align: center">19.12.</td>
+													<td style="text-align: center">Заяц Галина Владимировна</td>
+													<td style="text-align: center">Специалист по аналитике</td>
+													<td style="text-align: center">Аналитический центр</td>
+												</tr>
+												<tr>
+													<td style="text-align: center">28.12.</td>
+													<td style="text-align: center">Яриго Екатерина Викторовна</td>
+													<td style="text-align: center">Специалист по ценообразованию</td>
+													<td style="text-align: center">Аналитический центр</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<ul>
+										<li>Вас позвали на новогодний корпоратив</li>
+										<li>Позвали на новогодний корпоратив</li>
+										<li>Корпоратив новогодний</li>
+										<li>Позвали на корпоратив</li>
+									</ul>
+									<h3>Почему стоит пойти на корпоратив</h3>
+									<ol>
+										<li>Вас позвали на новогодний корпоратив</li>
+										<li>Позвали на новогодний корпоратив</li>
+										<li>Корпоратив новогодний</li>
+										<li>Позвали на корпоратив</li>
+									</ol>
+								</div>
+								<div class="gallery news-inner__gallery">
+									<div class="gallery__main swiper">
+										<div class="swiper-wrapper">
+											<div class="swiper-slide">
+												<picture class="gallery__img">
+													<img src="/bitrix/templates/auth/assets/images/news-inner-02-T8RsHj4P.jpg" alt="Image" loading="lazy" />
+												</picture>
+											</div>
+											<div class="swiper-slide">
+												<picture class="gallery__img">
+													<img src="/bitrix/templates/auth/assets/images/news-inner-02-T8RsHj4P.jpg" alt="Image" loading="lazy" />
+												</picture>
+											</div>
+											<div class="swiper-slide">
+												<picture class="gallery__img">
+													<img src="/bitrix/templates/auth/assets/images/news-inner-02-T8RsHj4P.jpg" alt="Image" loading="lazy" />
+												</picture>
+											</div>
+										</div>
+										<button class="gallery__nav gallery__nav--prev" aria-label="Назад">
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-arrow-prev"></use>
+											</svg>
+										</button>
+										<button class="gallery__nav gallery__nav--next" aria-label="Вперёд">
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-arrow-next"></use>
+											</svg>
+										</button>
+										<div class="gallery__pagination"></div>
+									</div>
+									<div class="gallery__thumbs swiper" aria-label="Миниатюры">
+										<div class="swiper-wrapper">
+											<div class="swiper-slide">
+												<picture class="gallery__thumb-img">
+													<img src="/bitrix/templates/auth/assets/images/news-inner-02-T8RsHj4P.jpg" alt="Image" />
+												</picture>
+											</div>
+											<div class="swiper-slide">
+												<picture class="gallery__thumb-img">
+													<img src="/bitrix/templates/auth/assets/images/news-inner-02-T8RsHj4P.jpg" alt="Image" />
+												</picture>
+											</div>
+											<div class="swiper-slide">
+												<picture class="gallery__thumb-img">
+													<img src="/bitrix/templates/auth/assets/images/news-inner-02-T8RsHj4P.jpg" alt="Image" />
+												</picture>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="news-inner__files">
+									<a href="#" class="news-inner__file" target="_blank">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-doc"></use>
+										</svg>
+										<span>important_file.pdf</span>
+									</a>
+									<a href="#" class="news-inner__file" target="_blank">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-doc"></use>
+										</svg>
+										<span>importantInfo.docx</span>
+									</a>
+								</div>
+								<div class="news-inner__bottom">
+									<div class="news-inner__controls">
+										<button class="news-inner__control" aria-label="Скопировать ссылку">
+											<div class="news-inner__control-group">
+												<svg aria-hidden="true" focusable="false" width="16" height="16">
+													<use href="#icon-link"></use>
+												</svg>
+											</div>
+										</button>
+										<a href="#comments" class="news-inner__control" aria-label="Комментарии">
+											<div class="news-inner__control-group">
+												<svg aria-hidden="true" focusable="false" width="16" height="16">
+													<use href="#icon-comment"></use>
+												</svg>
+											</div>
+											<span>12</span>
+										</a>
+										<button class="news-inner__control" aria-label="Скопировать ссылку">
+											<div class="news-inner__control-group">
+												<svg
+													class="news-inner__control-icon news-inner__control-icon--default"
+													aria-hidden="true"
+													focusable="false"
+													width="16"
+													height="16"
+												>
+													<use href="#icon-like"></use>
+												</svg>
+												<svg
+													class="news-inner__control-icon news-inner__control-icon--active"
+													aria-hidden="true"
+													focusable="false"
+													width="16"
+													height="16"
+												>
+													<use href="#icon-like-filled"></use>
+												</svg>
+											</div>
+										</button>
+									</div>
+									<span class="news-inner__date">12.03.2025</span>
+								</div>
+							</div>
+							<div class="comments news-inner__comments" id="comments">
+								<div class="comments__wrap">
+									<span class="comments__heading">Комментарии</span>
+									<!-- <span class="comments__description">Комментарии к этой записи отключены.</span> -->
+									<div style="position: relative; display: block; width: 100%" bis_skin_checked="1">
+										<div class="reviews-reply-header" bis_skin_checked="1">
+											<a
+												href="javascript:void(0)"
+												class="postFormAutosave bx-core-autosave bx-core-autosave-ready"
+												title="Автосохранение"
+											></a>
+											<a
+												href="javascript:void(0)"
+												class="postFormAutosave bx-core-autosave bx-core-autosave-ready"
+												title="Автосохранение"
+											></a>
+											<span>Комментарий</span>
+											<span class="reviews-required-field">*</span>
+										</div>
+										<div class="reviews-reply-field reviews-reply-field-text" bis_skin_checked="1">
+											<div
+												class="feed-add-post"
+												id="divREVIEW_TEXT"
+												data-bx-html-editable="Y"
+												dropzone="copy f:*/*"
+												style="display: block"
+												bis_skin_checked="1"
+											>
+												<div class="feed-add-post-dnd-notice" bis_skin_checked="1">
+													<div class="feed-add-post-dnd-inner" bis_skin_checked="1">
+														<span class="feed-add-post-dnd-icon"></span>
+														<span class="feed-add-post-dnd-text">Перетащите файлы</span>
+													</div>
+												</div>
+												<div class="feed-add-post-form feed-add-post-edit-form" bis_skin_checked="1">
+													<div class="feed-add-post-text" bis_skin_checked="1">
+														<div
+															class="bx-html-editor"
+															id="bx-html-editor-REVIEW_TEXT"
+															style="width: 100%; height: 200px; min-width: 350px; min-height: 100px"
+															bis_skin_checked="1"
+														>
+															<div
+																class="bxhtmled-toolbar-cnt"
+																id="bx-html-editor-tlbr-cnt-REVIEW_TEXT"
+																style="width: 100%; opacity: inherit"
+																bis_skin_checked="1"
+															>
+																<div class="bxhtmled-toolbar" id="bx-html-editor-tlbr-REVIEW_TEXT" bis_skin_checked="1">
+																	<span class="bxhtmled-top-bar-left-wrap" style="display: none"></span>
+																	<span class="bxhtmled-top-bar-wrap" style="">
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-bold"
+																			title="Полужирный"
+																			data-bx-type="action"
+																			data-bx-action="bold"
+																		>
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-italic"
+																			title="Курсив"
+																			data-bx-type="action"
+																			data-bx-action="italic"
+																		>
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-underline"
+																			title="Подчеркнутый"
+																			data-bx-type="action"
+																			data-bx-action="underline"
+																		>
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-strike"
+																			title="Зачеркнутый"
+																			data-bx-type="action"
+																			data-bx-action="strikeout"
+																		>
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-remove-format"
+																			title="Удалить форматирование"
+																			data-bx-type="action"
+																			data-bx-action="removeFormat"
+																		>
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-top-bar-color" title="Цвет текста">
+																			<span class="bxhtmled-top-bar-btn-text">A</span>
+																			<span class="bxhtmled-top-bar-color-strip"></span>
+																		</span>
+																		<span
+																			unselectable="on"
+																			class="bxhtmled-top-bar-select"
+																			title="Шрифт: не указывать"
+																			style="width: 45px"
+																		>
+																			Шрифт
+																		</span>
+																		<span class="bxhtmled-button-fontsize-wrap" title="Размер шрифта">
+																			<span class="bxhtmled-top-bar-btn bxhtmled-button-fontsize">
+																				<i></i>
+																			</span>
+																			<span
+																				unselectable="on"
+																				class="bxhtmled-top-bar-select"
+																				title="Размер шрифта"
+																				style="display: none"
+																			></span>
+																		</span>
+																		<span class="bxhtmled-top-bar-separator"></span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-ordered-list"
+																			title="Нумерованный список"
+																			data-bx-type="action"
+																			data-bx-action="insertOrderedList"
+																		>
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-unordered-list"
+																			title="Список с маркерами"
+																			data-bx-type="action"
+																			data-bx-action="insertUnorderedList"
+																		>
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-align-left" title="Выровнять...">
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-separator"></span>
+																		<span class="bxhtmled-top-bar-btn spoiler" title="Вставить спойлер">
+																			<i
+																				style="
+																					background: url(&quot;/bitrix/templates/auth/bitrix/components/bitrix/main.post.form/templates/.default/images/lhespoiler.svg&quot;)
+																						0px 0px no-repeat scroll;
+																				"
+																			></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-link" title="Ссылка">
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-image" title="Изображение">
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-video" title="Вставить видео">
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-table" title="Таблица">
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-code"
+																			title="Оформление текста в виде кода"
+																			data-bx-type="action"
+																			data-bx-action="code"
+																		>
+																			<i></i>
+																		</span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-quote"
+																			title="Оформление текста в виде цитаты"
+																			data-bx-type="action"
+																			data-bx-action="quote"
+																		>
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-smile" title="Смайлы">
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-separator"></span>
+																		<span
+																			class="bxhtmled-top-bar-btn bxhtmled-button-fullscreen"
+																			title="Развернуть на весь экран"
+																			data-bx-type="action"
+																			data-bx-action="fullscreen"
+																		>
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-bbcode" title="Режим BB-Code">
+																			<i></i>
+																		</span>
+																		<span class="bxhtmled-top-bar-btn bxhtmled-button-more" title="Еще..." style="display: none">
+																			<i></i>
+																		</span>
+																	</span>
+																	<span class="bxhtmled-top-bar-right-wrap" style="display: none"></span>
+																	<span class="bxhtmled-top-bar-hidden-wrap"></span>
+																</div>
+															</div>
+															<div
+																class="bxhtmled-search-cnt"
+																id="bx-html-editor-search-cnt-REVIEW_TEXT"
+																style="display: none"
+																bis_skin_checked="1"
+															></div>
+															<div
+																class="bxhtmled-area-cnt"
+																id="bx-html-editor-area-cnt-REVIEW_TEXT"
+																style="top: 43px; width: 1455px; height: 157px"
+																bis_skin_checked="1"
+															>
+																<div
+																	class="bxhtmled-iframe-cnt"
+																	id="bx-html-editor-iframe-cnt-REVIEW_TEXT"
+																	style="width: 1452px; height: 157px; top: 0px; left: 0px; opacity: 1"
+																	bis_skin_checked="1"
+																>
+																	<iframe
+																		class="bx-editor-iframe"
+																		width="0"
+																		height="0"
+																		style="width: 100%; height: 100%"
+																		src="./news_files/saved_resource.html"
+																	></iframe>
+																	<iframe class="bx-editor-iframe" width="0" height="0" style="width: 100%; height: 100%"></iframe>
+																</div>
+																<div
+																	class="bxhtmled-textarea-cnt"
+																	id="bx-html-editor-ta-cnt-REVIEW_TEXT"
+																	style="width: 1452px; height: 157px; top: 0px; left: 0px; opacity: 1; display: none"
+																	bis_skin_checked="1"
+																>
+																	<textarea class="bxhtmled-textarea"></textarea>
+																	<textarea class="bxhtmled-textarea"></textarea>
+																</div>
+																<div
+																	class="bxhtmled-resizer-overlay"
+																	id="bx-html-editor-res-over-REVIEW_TEXT"
+																	bis_skin_checked="1"
+																></div>
+																<div
+																	id="bx-html-editor-split-resizer-REVIEW_TEXT"
+																	class="bxhtmled-split-resizer-hor"
+																	style="display: none"
+																	bis_skin_checked="1"
+																></div>
+															</div>
+															<div
+																class="bxhtmled-nav-cnt"
+																id="bx-html-editor-nav-cnt-REVIEW_TEXT"
+																style="display: none"
+																bis_skin_checked="1"
+															></div>
+															<div
+																class="bxhtmled-taskbar-cnt bxhtmled-taskbar-hidden"
+																id="bx-html-editor-tskbr-cnt-REVIEW_TEXT"
+																style="display: none; height: 157px; width: 0px"
+																bis_skin_checked="1"
+															>
+																<div
+																	class="bxhtmled-taskbar-top-cnt"
+																	id="bx-html-editor-tskbr-top-REVIEW_TEXT"
+																	bis_skin_checked="1"
+																></div>
+																<div class="bxhtmled-taskbar-resizer" id="bx-html-editor-tskbr-res-REVIEW_TEXT" bis_skin_checked="1">
+																	<div class="bxhtmled-right-side-split-border" bis_skin_checked="1">
+																		<div data-bx-tsk-split-but="Y" class="bxhtmled-right-side-split-btn" bis_skin_checked="1"></div>
+																	</div>
+																</div>
+																<div
+																	class="bxhtmled-taskbar-search-nothing"
+																	id="bxhed-tskbr-search-nothing-REVIEW_TEXT"
+																	bis_skin_checked="1"
+																>
+																	Ничего не найдено
+																</div>
+																<div
+																	class="bxhtmled-taskbar-search-cont"
+																	id="bxhed-tskbr-search-cnt-REVIEW_TEXT"
+																	data-bx-type="taskbar_search"
+																	bis_skin_checked="1"
+																>
+																	<div class="bxhtmled-search-alignment" id="bxhed-tskbr-search-ali-REVIEW_TEXT" bis_skin_checked="1">
+																		<input
+																			type="text"
+																			class="bxhtmled-search-inp"
+																			id="bxhed-tskbr-search-inp-REVIEW_TEXT"
+																			placeholder="Поиск..."
+																		/>
+																	</div>
+																	<div
+																		class="bxhtmled-search-cancel"
+																		data-bx-type="taskbar_search_cancel"
+																		title="Отменить фильтрацию"
+																		bis_skin_checked="1"
+																	></div>
+																</div>
+															</div>
+															<div id="bx-html-editor-file-dialogs-REVIEW_TEXT" style="display: none" bis_skin_checked="1"></div>
+															<input type="hidden" id="bxed_REVIEW_TEXT" name="REVIEW_TEXT" value="" />
+														</div>
+														<div style="display: none" bis_skin_checked="1">
+															<input
+																type="text"
+																tabindex="10"
+																onfocus="LHEPostForm.getEditor('REVIEW_TEXT').Focus()"
+																name="hidden_focus"
+															/>
+														</div>
+													</div>
+													<div class="main-post-form-toolbar" bis_skin_checked="1">
+														<div class="main-post-form-toolbar-buttons" bis_skin_checked="1">
+															<div class="main-post-form-toolbar-buttons-container" data-bx-role="toolbar" bis_skin_checked="1"></div>
+															<div
+																class="main-post-form-toolbar-button main-post-form-toolbar-button-more"
+																data-bx-role="toolbar-item-more"
+																style="display: none"
+																bis_skin_checked="1"
+															></div>
+														</div>
+														<div class="feed-add-post-form-but-more-open" bis_skin_checked="1">
+															<span
+																class="feed-add-post-form-editor-btn feed-add-post-form-btn-active"
+																data-bx-role="button-show-panel-editor"
+																title="Визуальный редактор"
+															></span>
+														</div>
+													</div>
+												</div>
+												<div class="feed-add-post-buttons --no-wrap" id="lhe_buttons_REPLIERZZtH" bis_skin_checked="1">
+													<button class="ui-btn ui-btn-sm ui-btn-primary" id="lhe_button_submit_REPLIERZZtH">Отправить</button>
+													<button class="ui-btn ui-btn-sm ui-btn-link" id="lhe_button_cancel_REPLIERZZtH">Отменить</button>
+												</div>
+											</div>
+										</div>
+										<div class="reviews-reply-field reviews-reply-field-upload" bis_skin_checked="1">
+											<div class="reviews-upload-info" style="display: none" id="upload_files_info_ZZtH" bis_skin_checked="1">
+												<span>Размер файла не должен превышать 5 МБ.</span>
+											</div>
+											<div class="reviews-upload-file" style="display: none" id="upload_files_0_ZZtH" bis_skin_checked="1">
+												<input name="FILE_NEW_0" type="file" value="" size="30" />
+											</div>
+											<a
+												class="forum-upload-file-attach"
+												href="javascript:void(0);"
+												onclick="
+													AttachFile('0', '1', 'ZZtH', this);
+													return false;
+												"
+											>
+												<span>Загрузить файл</span>
+											</a>
+										</div>
+										<div class="reviews-reply-field reviews-reply-field-settings" bis_skin_checked="1">
+											<div class="reviews-reply-field-setting" bis_skin_checked="1">
+												<input
+													type="checkbox"
+													name="REVIEW_USE_SMILES"
+													id="REVIEW_USE_SMILESZZtH"
+													value="Y"
+													checked="checked"
+													tabindex="1"
+												/>
+												&nbsp;
+												<label for="REVIEW_USE_SMILESZZtH">Разрешить смайлики в этом сообщении</label>
+											</div>
+											<div class="reviews-reply-field-setting" bis_skin_checked="1">
+												<input type="checkbox" name="TOPIC_SUBSCRIBE" id="TOPIC_SUBSCRIBEZZtH" value="Y" tabindex="2" />
+												&nbsp;
+												<label for="TOPIC_SUBSCRIBEZZtH">Подписаться на новые сообщения этой темы</label>
+											</div>
+										</div>
+										<div class="reviews-reply-buttons" bis_skin_checked="1">
+											<input
+												name="send_button"
+												type="submit"
+												value="Отправить"
+												tabindex="3"
+												onclick="this.form.preview_comment.value = 'N'"
+											/>
+											<input
+												name="view_button"
+												type="submit"
+												value="Просмотреть"
+												tabindex="4"
+												onclick="this.form.preview_comment.value = 'VIEW'"
+											/>
+										</div>
+									</div>
+									<div
+										class="reviews-block-container reviews-reviews-block-container"
+										id="REPLIERZZtHcontainer"
+										bis_skin_checked="1"
+									>
+										<div class="reviews-block-outer" bis_skin_checked="1">
+											<div class="reviews-block-inner" bis_skin_checked="1">
+												<table
+													cellspacing="0"
+													border="0"
+													class="reviews-post-table reviews-post-first reviews-post-odd"
+													bx-author-id="296786"
+													bx-author-name="Александр Смирнов"
+													id="message4836"
+												>
+													<thead>
+														<tr>
+															<td>
+																<div class="review-rating rating_vote_graphic" bis_skin_checked="1">
+																	<span class="ilike">
+																		<span
+																			class="bx-ilike-button&gt;"
+																			id="bx-ilike-button-FORUM_POST-4836-1763565976"
+																			data-vote-key-signed="FORUM_POST-4836.1763651531.b902aaa8e5703c1d28a1c099b7ff6b755acda19a926440d58bc52e9974f46a8c"
+																			data-rating-vote-id="FORUM_POST-4836-1763565976"
+																		>
+																			<span class="bx-ilike-left-wrap bx-you-like">
+																				<span class="bx-ilike-left"></span>
+																				<span class="bx-ilike-text">Не нравится</span>
+																			</span>
+																			<span class="bx-ilike-right-wrap"><span class="bx-ilike-right">1</span></span>
+																		</span>
+																		<span
+																			class="bx-ilike-wrap-block"
+																			id="bx-ilike-popup-cont-FORUM_POST-4836-1763565976"
+																			style="display: none"
+																		>
+																			<span class="bx-ilike-popup"><span class="bx-ilike-wait"></span></span>
+																		</span>
+																	</span>
+																</div>
+																<div bis_skin_checked="1">
+																	<b>Александр Смирнов</b>
+																	<span class="message-post-date">13.11.2025</span>
+																</div>
+															</td>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+																<div class="reviews-text" id="message_text_4836" bis_skin_checked="1">тест 123</div>
+																<style>
+																	.quo {
+																		padding: 10px;
+																		border: 1px solid #dddddd;
+																	}
+																</style>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<div class="feed-wrap" bis_skin_checked="1">
+													<div class="feed-comments-block" bis_skin_checked="1">
+														<a name="comments"></a>
+														<div id="4836-1684_eJghOG_main" dropzone="copy f:*/*" bis_skin_checked="1">
+															<div class="feed-com-corner" bis_skin_checked="1"></div>
+															<!--RCRDLIST_4836-->
+															<div
+																id="record-4836-4841-cover"
+																bx-mpl-xml-id="4836"
+																bx-mpl-entity-id="4841"
+																bx-mpl-read-status="old"
+																bx-mpl-blank-status="full"
+																bx-mpl-block="main"
+																class="feed-com-block-cover"
+																bis_skin_checked="1"
+															>
+																<!--RCRD_4836-4841-->
+																<a id="com4841" name="com4841" bx-mpl-full-id="4836-4841"></a>
+																<div id="record-4836-4841" class="feed-com-block-outer" bis_skin_checked="1">
+																	<div
+																		class="feed-com-block blog-comment-user-1684 sonet-log-comment-createdby-1684 feed-com-block-approved"
+																		bis_skin_checked="1"
+																	>
+																		<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																			<i></i>
+																			<img
+																				src="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+																				width="100"
+																				height="100"
+																				alt=""
+																			/>
+																		</div>
+																		<!--/noindex-->
+																		<div class="feed-com-main-content feed-com-block-old" bis_skin_checked="1">
+																			<span class="feed-com-name feed-author-name feed-author-name-1684">Наталья</span>
+																			<div class="feed-com-user-box" bis_skin_checked="1">
+																				<a
+																					target="_top"
+																					class="feed-com-name feed-author-name feed-author-name-1684"
+																					id="bpc_4836-4841"
+																					bx-tooltip-user-id="1684"
+																					bx-tooltip-params="[]"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/PAGE_NAME=profile_view&amp;amp;UID=1684"
+																				>
+																					Наталья
+																				</a>
+																				<a
+																					class="feed-time feed-com-time"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4841&amp;lk=Y#com4841"
+																					rel="nofollow"
+																					target="_top"
+																				>
+																					13 ноября 19:50
+																				</a>
+																			</div>
+																			<div class="feed-com-text" bis_skin_checked="1">
+																				<div
+																					class="feed-com-text-inner"
+																					bx-content-view-xml-id=""
+																					bx-content-view-save="N"
+																					id="feed-com-text-inner-"
+																					bx-mpl-block="body"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="feed-com-text-inner-inner"
+																						id="record-4836-4841-text"
+																						bx-mpl-block="text"
+																						bis_skin_checked="1"
+																					>
+																						<div bis_skin_checked="1">Это ответ на комментарий тест 123</div>
+																					</div>
+																				</div>
+																				<div
+																					class="feed-post-text-more"
+																					bx-mpl-block="more-button"
+																					onclick="
+																						BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onExpandComment', [this]);
+																						return BX.PreventDefault(this);
+																					"
+																					id="record-4836-4841-more"
+																					style="display: none"
+																					bis_skin_checked="1"
+																				>
+																					<div class="feed-post-text-more-but" bis_skin_checked="1">
+																						<div class="feed-post-text-more-left" bis_skin_checked="1"></div>
+																						<div class="feed-post-text-more-right" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<!--/noindex-->
+																	</div>
+																	<div class="feed-com-informers-bottom" bis_skin_checked="1">
+																		<a
+																			href="javascript:void(0);"
+																			class="feed-com-reply feed-com-reply-Y"
+																			id="record-4836-4841-actions-reply"
+																			onclick="BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onReply', [this, 'reply_button'])"
+																			bx-mpl-author-id="1684"
+																			bx-mpl-author-gender=""
+																			bx-mpl-author-name="Наталья"
+																			data-slider-ignore-autobinding="true"
+																		>
+																			Ответить
+																		</a>
+																		<a
+																			href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y#"
+																			id="record-4836-4841-actions"
+																			bx-mpl-view-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4841&amp;lk=Y"
+																			bx-mpl-view-show="Y"
+																			bx-mpl-edit-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID2=4841&amp;lk=Y&amp;REVIEW_ACTION=GET"
+																			bx-mpl-edit-show="Y"
+																			bx-mpl-moderate-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4841&amp;lk=Y&amp;REVIEW_ACTION=#ACTION#"
+																			bx-mpl-moderate-show="N"
+																			bx-mpl-moderate-approved="approved"
+																			bx-mpl-delete-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4841&amp;lk=Y&amp;REVIEW_ACTION=DEL#4841"
+																			bx-mpl-delete-show="Y"
+																			bx-mpl-createtask-show="N"
+																			bx-mpl-createsubtask-show="N"
+																			bx-mpl-post-entity-type=""
+																			bx-mpl-post-entity-xml-id="4836"
+																			bx-mpl-comment-entity-type=""
+																			onclick="
+																				BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onShowActions', [this, '4841']);
+																				return BX.PreventDefault(this);
+																			"
+																			class="feed-post-more-link feed-post-more-link-Y-Y-N-Y"
+																		>
+																			<span class="feed-post-more-text">Ещё</span>
+																		</a>
+																	</div>
+																</div>
+																<div
+																	id="record-4836-4841-placeholder"
+																	bx-mpl-block="edit-placeholder"
+																	class="blog-comment-edit feed-com-add-block blog-post-edit feed-com-add-box"
+																	style="display: none"
+																	bis_skin_checked="1"
+																></div>
+																<!--RCRD_END_4836-4841-->
+															</div>
+															<div
+																id="record-4836-4842-cover"
+																bx-mpl-xml-id="4836"
+																bx-mpl-entity-id="4842"
+																bx-mpl-read-status="old"
+																bx-mpl-blank-status="full"
+																bx-mpl-block="main"
+																class="feed-com-block-cover"
+																bis_skin_checked="1"
+															>
+																<!--RCRD_4836-4842-->
+																<a id="com4842" name="com4842" bx-mpl-full-id="4836-4842"></a>
+																<div id="record-4836-4842" class="feed-com-block-outer" bis_skin_checked="1">
+																	<div
+																		class="feed-com-block blog-comment-user-1684 sonet-log-comment-createdby-1684 feed-com-block-approved"
+																		bis_skin_checked="1"
+																	>
+																		<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																			<i></i>
+																			<img
+																				src="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+																				width="100"
+																				height="100"
+																				alt=""
+																			/>
+																		</div>
+																		<!--/noindex-->
+																		<div class="feed-com-main-content feed-com-block-old" bis_skin_checked="1">
+																			<span class="feed-com-name feed-author-name feed-author-name-1684">Наталья</span>
+																			<div class="feed-com-user-box" bis_skin_checked="1">
+																				<a
+																					target="_top"
+																					class="feed-com-name feed-author-name feed-author-name-1684"
+																					id="bpc_4836-4842"
+																					bx-tooltip-user-id="1684"
+																					bx-tooltip-params="[]"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/PAGE_NAME=profile_view&amp;amp;UID=1684"
+																				>
+																					Наталья
+																				</a>
+																				<a
+																					class="feed-time feed-com-time"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4842&amp;lk=Y#com4842"
+																					rel="nofollow"
+																					target="_top"
+																				>
+																					13 ноября 19:50
+																				</a>
+																			</div>
+																			<div class="feed-com-text" bis_skin_checked="1">
+																				<div
+																					class="feed-com-text-inner"
+																					bx-content-view-xml-id=""
+																					bx-content-view-save="N"
+																					id="feed-com-text-inner-"
+																					bx-mpl-block="body"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="feed-com-text-inner-inner"
+																						id="record-4836-4842-text"
+																						bx-mpl-block="text"
+																						bis_skin_checked="1"
+																					>
+																						<div bis_skin_checked="1">А это еще один ответ</div>
+																					</div>
+																				</div>
+																				<div
+																					class="feed-post-text-more"
+																					bx-mpl-block="more-button"
+																					onclick="
+																						BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onExpandComment', [this]);
+																						return BX.PreventDefault(this);
+																					"
+																					id="record-4836-4842-more"
+																					style="display: none"
+																					bis_skin_checked="1"
+																				>
+																					<div class="feed-post-text-more-but" bis_skin_checked="1">
+																						<div class="feed-post-text-more-left" bis_skin_checked="1"></div>
+																						<div class="feed-post-text-more-right" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<!--/noindex-->
+																	</div>
+																	<div class="feed-com-informers-bottom" bis_skin_checked="1">
+																		<a
+																			href="javascript:void(0);"
+																			class="feed-com-reply feed-com-reply-Y"
+																			id="record-4836-4842-actions-reply"
+																			onclick="BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onReply', [this, 'reply_button'])"
+																			bx-mpl-author-id="1684"
+																			bx-mpl-author-gender=""
+																			bx-mpl-author-name="Наталья"
+																			data-slider-ignore-autobinding="true"
+																		>
+																			Ответить
+																		</a>
+																		<a
+																			href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y#"
+																			id="record-4836-4842-actions"
+																			bx-mpl-view-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4842&amp;lk=Y"
+																			bx-mpl-view-show="Y"
+																			bx-mpl-edit-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID2=4842&amp;lk=Y&amp;REVIEW_ACTION=GET"
+																			bx-mpl-edit-show="Y"
+																			bx-mpl-moderate-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4842&amp;lk=Y&amp;REVIEW_ACTION=#ACTION#"
+																			bx-mpl-moderate-show="N"
+																			bx-mpl-moderate-approved="approved"
+																			bx-mpl-delete-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4842&amp;lk=Y&amp;REVIEW_ACTION=DEL#4842"
+																			bx-mpl-delete-show="Y"
+																			bx-mpl-createtask-show="N"
+																			bx-mpl-createsubtask-show="N"
+																			bx-mpl-post-entity-type=""
+																			bx-mpl-post-entity-xml-id="4836"
+																			bx-mpl-comment-entity-type=""
+																			onclick="
+																				BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onShowActions', [this, '4842']);
+																				return BX.PreventDefault(this);
+																			"
+																			class="feed-post-more-link feed-post-more-link-Y-Y-N-Y"
+																		>
+																			<span class="feed-post-more-text">Ещё</span>
+																		</a>
+																	</div>
+																</div>
+																<div
+																	id="record-4836-4842-placeholder"
+																	bx-mpl-block="edit-placeholder"
+																	class="blog-comment-edit feed-com-add-block blog-post-edit feed-com-add-box"
+																	style="display: none"
+																	bis_skin_checked="1"
+																></div>
+																<!--RCRD_END_4836-4842-->
+															</div>
+															<div
+																id="record-4836-4843-cover"
+																bx-mpl-xml-id="4836"
+																bx-mpl-entity-id="4843"
+																bx-mpl-read-status="old"
+																bx-mpl-blank-status="full"
+																bx-mpl-block="main"
+																class="feed-com-block-cover"
+																bis_skin_checked="1"
+															>
+																<!--RCRD_4836-4843-->
+																<a id="com4843" name="com4843" bx-mpl-full-id="4836-4843"></a>
+																<div id="record-4836-4843" class="feed-com-block-outer" bis_skin_checked="1">
+																	<div
+																		class="feed-com-block blog-comment-user-1684 sonet-log-comment-createdby-1684 feed-com-block-approved"
+																		bis_skin_checked="1"
+																	>
+																		<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																			<i></i>
+																			<img
+																				src="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+																				width="100"
+																				height="100"
+																				alt=""
+																			/>
+																		</div>
+																		<!--/noindex-->
+																		<div class="feed-com-main-content feed-com-block-old" bis_skin_checked="1">
+																			<span class="feed-com-name feed-author-name feed-author-name-1684">Наталья</span>
+																			<div class="feed-com-user-box" bis_skin_checked="1">
+																				<a
+																					target="_top"
+																					class="feed-com-name feed-author-name feed-author-name-1684"
+																					id="bpc_4836-4843"
+																					bx-tooltip-user-id="1684"
+																					bx-tooltip-params="[]"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/PAGE_NAME=profile_view&amp;amp;UID=1684"
+																				>
+																					Наталья
+																				</a>
+																				<a
+																					class="feed-time feed-com-time"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4843&amp;lk=Y#com4843"
+																					rel="nofollow"
+																					target="_top"
+																				>
+																					13 ноября 19:54
+																				</a>
+																			</div>
+																			<div class="feed-com-text" bis_skin_checked="1">
+																				<div
+																					class="feed-com-text-inner"
+																					bx-content-view-xml-id=""
+																					bx-content-view-save="N"
+																					id="feed-com-text-inner-"
+																					bx-mpl-block="body"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="feed-com-text-inner-inner"
+																						id="record-4836-4843-text"
+																						bx-mpl-block="text"
+																						bis_skin_checked="1"
+																					>
+																						<div bis_skin_checked="1">Ответ на коммент</div>
+																					</div>
+																				</div>
+																				<div
+																					class="feed-post-text-more"
+																					bx-mpl-block="more-button"
+																					onclick="
+																						BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onExpandComment', [this]);
+																						return BX.PreventDefault(this);
+																					"
+																					id="record-4836-4843-more"
+																					style="display: none"
+																					bis_skin_checked="1"
+																				>
+																					<div class="feed-post-text-more-but" bis_skin_checked="1">
+																						<div class="feed-post-text-more-left" bis_skin_checked="1"></div>
+																						<div class="feed-post-text-more-right" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<!--/noindex-->
+																	</div>
+																	<div class="feed-com-informers-bottom" bis_skin_checked="1">
+																		<a
+																			href="javascript:void(0);"
+																			class="feed-com-reply feed-com-reply-Y"
+																			id="record-4836-4843-actions-reply"
+																			onclick="BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onReply', [this, 'reply_button'])"
+																			bx-mpl-author-id="1684"
+																			bx-mpl-author-gender=""
+																			bx-mpl-author-name="Наталья"
+																			data-slider-ignore-autobinding="true"
+																		>
+																			Ответить
+																		</a>
+																		<a
+																			href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y#"
+																			id="record-4836-4843-actions"
+																			bx-mpl-view-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4843&amp;lk=Y"
+																			bx-mpl-view-show="Y"
+																			bx-mpl-edit-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID2=4843&amp;lk=Y&amp;REVIEW_ACTION=GET"
+																			bx-mpl-edit-show="Y"
+																			bx-mpl-moderate-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4843&amp;lk=Y&amp;REVIEW_ACTION=#ACTION#"
+																			bx-mpl-moderate-show="N"
+																			bx-mpl-moderate-approved="approved"
+																			bx-mpl-delete-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4843&amp;lk=Y&amp;REVIEW_ACTION=DEL#4843"
+																			bx-mpl-delete-show="Y"
+																			bx-mpl-createtask-show="N"
+																			bx-mpl-createsubtask-show="N"
+																			bx-mpl-post-entity-type=""
+																			bx-mpl-post-entity-xml-id="4836"
+																			bx-mpl-comment-entity-type=""
+																			onclick="
+																				BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onShowActions', [this, '4843']);
+																				return BX.PreventDefault(this);
+																			"
+																			class="feed-post-more-link feed-post-more-link-Y-Y-N-Y"
+																		>
+																			<span class="feed-post-more-text">Ещё</span>
+																		</a>
+																	</div>
+																</div>
+																<div
+																	id="record-4836-4843-placeholder"
+																	bx-mpl-block="edit-placeholder"
+																	class="blog-comment-edit feed-com-add-block blog-post-edit feed-com-add-box"
+																	style="display: none"
+																	bis_skin_checked="1"
+																></div>
+																<!--RCRD_END_4836-4843-->
+															</div>
+															<!--RCRDLIST_END_4836-->
+															<div id="record-4836-1684_eJghOG-new" bis_skin_checked="1"></div>
+															<div class="feed-com-add-box-outer" id="record-4836-1684_eJghOG-form-holder" bis_skin_checked="1">
+																<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																	<i></i>
+																	<img width="37" height="37" src="./news_files/1.gif" alt="" />
+																</div>
+																<div class="feed-com-add-box" bis_skin_checked="1">
+																	<div
+																		id="record-4836-0-placeholder"
+																		class="blog-comment-edit feed-com-add-block blog-post-edit"
+																		style="display: none"
+																		bis_skin_checked="1"
+																	></div>
+																	<div
+																		class="feed-com-footer"
+																		onclick="BX.onCustomEvent(BX('4836-1684_eJghOG_main'), 'onReply', [this])"
+																		bis_skin_checked="1"
+																	>
+																		<div class="feed-com-add" bis_skin_checked="1">
+																			<a class="feed-com-add-link" href="javascript:void(0);" style="outline: none" hidefocus="true">
+																				Добавить комментарий
+																			</a>
+																		</div>
+																	</div>
+																	<div
+																		id="record-4836-writers-block"
+																		class="feed-com-writers"
+																		style="display: none"
+																		bis_skin_checked="1"
+																	>
+																		<div id="record-4836-writers" class="feed-com-writers-wrap" bis_skin_checked="1"></div>
+																		<div class="feed-com-writers-pen" bis_skin_checked="1"></div>
+																	</div>
+																</div>
+																<div class="feed-com-add-box-dnd-notice" bis_skin_checked="1">
+																	<div class="feed-com-add-box-dnd-notice-inner" bis_skin_checked="1"></div>
+																</div>
+															</div>
+														</div>
+														<a name="review_anchor"></a>
+														<form
+															name="COMMENTS_hMvsxz"
+															id="COMMENTS_hMvsxz"
+															action="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+															method="POST"
+															enctype="multipart/form-data"
+															class="comments-form"
+															dropzone="copy f:*/*"
+														>
+															<input type="hidden" name="back_page" value="" />
+															<input type="hidden" name="ENTITY_XML_ID" value="4836" />
+															<input type="hidden" name="ENTITY_TYPE" value="s1" />
+															<input type="hidden" name="ENTITY_ID" value="4836" />
+															<input type="hidden" name="REVIEW_USE_SMILES" value="Y" />
+															<input type="hidden" name="comment_review" value="Y" />
+															<input type="hidden" name="sessid" id="sessid_1" value="8417a749da822634ae44ed927a14aa1e" />
+															<div
+																class="feed-add-post"
+																id="divoLHE_FChMvsxz"
+																style="display: none"
+																data-bx-html-editable="Y"
+																bis_skin_checked="1"
+															>
+																<div class="feed-add-post-dnd-notice" bis_skin_checked="1">
+																	<div class="feed-add-post-dnd-inner" bis_skin_checked="1">
+																		<span class="feed-add-post-dnd-icon"></span>
+																		<span class="feed-add-post-dnd-text">Перетащите файлы</span>
+																	</div>
+																</div>
+																<div class="feed-add-post-form feed-add-post-edit-form" bis_skin_checked="1">
+																	<div class="feed-add-post-text" bis_skin_checked="1">
+																		<div
+																			class="bx-html-editor"
+																			id="bx-html-editor-idLHE_FChMvsxz"
+																			style="width: 100%; height: 80px"
+																			bis_skin_checked="1"
+																		>
+																			<div class="bxhtmled-toolbar-cnt" id="bx-html-editor-tlbr-cnt-idLHE_FChMvsxz" bis_skin_checked="1">
+																				<div class="bxhtmled-toolbar" id="bx-html-editor-tlbr-idLHE_FChMvsxz" bis_skin_checked="1"></div>
+																			</div>
+																			<div
+																				class="bxhtmled-search-cnt"
+																				id="bx-html-editor-search-cnt-idLHE_FChMvsxz"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																			<div class="bxhtmled-area-cnt" id="bx-html-editor-area-cnt-idLHE_FChMvsxz" bis_skin_checked="1">
+																				<div
+																					class="bxhtmled-iframe-cnt"
+																					id="bx-html-editor-iframe-cnt-idLHE_FChMvsxz"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-textarea-cnt"
+																					id="bx-html-editor-ta-cnt-idLHE_FChMvsxz"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-resizer-overlay"
+																					id="bx-html-editor-res-over-idLHE_FChMvsxz"
+																					bis_skin_checked="1"
+																				></div>
+																				<div id="bx-html-editor-split-resizer-idLHE_FChMvsxz" bis_skin_checked="1"></div>
+																			</div>
+																			<div
+																				class="bxhtmled-nav-cnt"
+																				id="bx-html-editor-nav-cnt-idLHE_FChMvsxz"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																			<div
+																				class="bxhtmled-taskbar-cnt bxhtmled-taskbar-hidden"
+																				id="bx-html-editor-tskbr-cnt-idLHE_FChMvsxz"
+																				bis_skin_checked="1"
+																			>
+																				<div
+																					class="bxhtmled-taskbar-top-cnt"
+																					id="bx-html-editor-tskbr-top-idLHE_FChMvsxz"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-taskbar-resizer"
+																					id="bx-html-editor-tskbr-res-idLHE_FChMvsxz"
+																					bis_skin_checked="1"
+																				>
+																					<div class="bxhtmled-right-side-split-border" bis_skin_checked="1">
+																						<div data-bx-tsk-split-but="Y" class="bxhtmled-right-side-split-btn" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																				<div
+																					class="bxhtmled-taskbar-search-nothing"
+																					id="bxhed-tskbr-search-nothing-idLHE_FChMvsxz"
+																					bis_skin_checked="1"
+																				>
+																					Ничего не найдено
+																				</div>
+																				<div
+																					class="bxhtmled-taskbar-search-cont"
+																					id="bxhed-tskbr-search-cnt-idLHE_FChMvsxz"
+																					data-bx-type="taskbar_search"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="bxhtmled-search-alignment"
+																						id="bxhed-tskbr-search-ali-idLHE_FChMvsxz"
+																						bis_skin_checked="1"
+																					>
+																						<input
+																							type="text"
+																							class="bxhtmled-search-inp"
+																							id="bxhed-tskbr-search-inp-idLHE_FChMvsxz"
+																							placeholder="Поиск..."
+																						/>
+																					</div>
+																					<div
+																						class="bxhtmled-search-cancel"
+																						data-bx-type="taskbar_search_cancel"
+																						title="Отменить фильтрацию"
+																						bis_skin_checked="1"
+																					></div>
+																				</div>
+																			</div>
+																			<div
+																				id="bx-html-editor-file-dialogs-idLHE_FChMvsxz"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																		</div>
+																		<div style="display: none" bis_skin_checked="1">
+																			<input
+																				type="text"
+																				tabindex="10"
+																				onfocus="LHEPostForm.getEditor('idLHE_FChMvsxz').Focus()"
+																				name="hidden_focus"
+																			/>
+																		</div>
+																	</div>
+																	<div class="main-post-form-toolbar" bis_skin_checked="1">
+																		<div class="main-post-form-toolbar-buttons" bis_skin_checked="1">
+																			<div class="main-post-form-toolbar-buttons-container" data-bx-role="toolbar" bis_skin_checked="1">
+																				<div
+																					class="main-post-form-toolbar-button"
+																					data-bx-role="toolbar-item"
+																					id="mpf-file-COMMENTS_hMvsxz"
+																					data-id="file"
+																					bis_skin_checked="1"
+																				>
+																					<i id="bx-b-uploadfile-COMMENTS_hMvsxz"></i>
+																					<span class="main-post-form-toolbar-button-file">Файл</span>
+																				</div>
+																			</div>
+																			<div
+																				class="main-post-form-toolbar-button main-post-form-toolbar-button-more"
+																				data-bx-role="toolbar-item-more"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																		</div>
+																		<div class="feed-add-post-form-but-more-open" bis_skin_checked="1">
+																			<span
+																				class="feed-add-post-form-editor-btn"
+																				data-bx-role="button-show-panel-editor"
+																				title="Визуальный редактор"
+																			></span>
+																		</div>
+																	</div>
+																</div>
+																<a
+																	href="javascript:void(0);"
+																	id="file-selectdialogswitcher-mfiFILE_NEW"
+																	class="file-selectdialog-switcher"
+																	onclick="
+																		BX.onCustomEvent(this.parentNode, 'BFileDLoadFormController');
+																		return false;
+																	"
+																>
+																	<span>Загрузить файлы</span>
+																</a>
+																<div
+																	id="file-selectdialog-mfiFILE_NEW"
+																	class="file-selectdialog"
+																	style="display: none"
+																	bis_skin_checked="1"
+																>
+																	<table id="file-file-template" style="display: none">
+																		<tbody>
+																			<tr class="file-inline-file" id="file-doc">
+																				<td class="files-name">
+																					<span class="files-text">
+																						<span class="f-wrap" data-role="name">#name#</span>
+																					</span>
+																				</td>
+																				<td class="files-size" data-role="size">#size#</td>
+																				<td class="files-storage">
+																					<div class="files-storage-block" bis_skin_checked="1">
+																						<span class="files-placement">&nbsp;</span>
+																					</div>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																	<div id="file-image-template" style="display: none" bis_skin_checked="1">
+																		<span class="feed-add-photo-block">
+																			<span class="feed-add-img-wrap">
+																				<img width="90" height="90" border="0" data-role="image" />
+																			</span>
+																			<span class="feed-add-img-title" data-role="name">#name#</span>
+																			<span class="feed-add-post-del-but"></span>
+																		</span>
+																	</div>
+																	<div class="file-extended" bis_skin_checked="1">
+																		<span class="file-label">Файлы:</span>
+																		<div class="file-placeholder" bis_skin_checked="1">
+																			<table class="files-list" cellspacing="0">
+																				<tbody class="file-placeholder-tbody"></tbody>
+																			</table>
+																		</div>
+																		<div class="file-selector" bis_skin_checked="1">
+																			Перетащите один или несколько файлов в эту область
+																			<br />
+																			<span class="file-uploader">
+																				<span class="file-but-text">или выберите файл на компьютере</span>
+																				<input
+																					class="file-fileUploader file-filemacos"
+																					id="file-fileUploader-mfiFILE_NEW"
+																					type="file"
+																					multiple="multiple"
+																					size="1"
+																				/>
+																			</span>
+																			<div class="file-load-img" bis_skin_checked="1"></div>
+																		</div>
+																	</div>
+																	<div class="file-simple" style="padding: 0; margin: 0" bis_skin_checked="1">
+																		<span class="file-label">Файлы:</span>
+																		<div class="file-placeholder" bis_skin_checked="1">
+																			<table class="files-list" cellspacing="0">
+																				<tbody class="file-placeholder-tbody">
+																					<tr style="display: none">
+																						<td colspan="3"></td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+																		<div class="file-selector" bis_skin_checked="1">
+																			<span class="file-uploader">
+																				<span class="file-uploader-left"></span>
+																				<span class="file-but-text">Загрузить файлы</span>
+																				<span class="file-uploader-right"></span>
+																				<input
+																					class="file-fileUploader file-filemacos"
+																					id="file-fileUploader-mfiFILE_NEW"
+																					type="file"
+																					multiple="multiple"
+																					size="1"
+																				/>
+																			</span>
+																		</div>
+																	</div>
+																</div>
+																<div class="feed-add-post-buttons --no-wrap" id="lhe_buttons_COMMENTS_hMvsxz" bis_skin_checked="1">
+																	<button class="ui-btn ui-btn-sm ui-btn-primary" id="lhe_button_submit_COMMENTS_hMvsxz">
+																		Отправить
+																	</button>
+																	<button class="ui-btn ui-btn-sm ui-btn-link" id="lhe_button_cancel_COMMENTS_hMvsxz">Отменить</button>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+												<table
+													cellspacing="0"
+													border="0"
+													class="reviews-post-table reviews-post-even"
+													bx-author-id="296786"
+													bx-author-name="Александр Смирнов"
+													id="message4837"
+												>
+													<thead>
+														<tr>
+															<td>
+																<div class="review-rating rating_vote_graphic" bis_skin_checked="1">
+																	<span class="ilike">
+																		<span
+																			class="bx-ilike-button&gt;"
+																			id="bx-ilike-button-FORUM_POST-4837-1763565954"
+																			data-vote-key-signed="FORUM_POST-4837.1763651531.0176c2e60ca7394ecf992b91a7b6d6cf5fc79f577d6f58d79973765c81d93e99"
+																			data-rating-vote-id="FORUM_POST-4837-1763565954"
+																		>
+																			<span class="bx-ilike-left-wrap bx-you-like">
+																				<span class="bx-ilike-left"></span>
+																				<span class="bx-ilike-text">Не нравится</span>
+																			</span>
+																			<span class="bx-ilike-right-wrap"><span class="bx-ilike-right">1</span></span>
+																		</span>
+																		<span
+																			class="bx-ilike-wrap-block"
+																			id="bx-ilike-popup-cont-FORUM_POST-4837-1763565954"
+																			style="display: none"
+																		>
+																			<span class="bx-ilike-popup"><span class="bx-ilike-wait"></span></span>
+																		</span>
+																	</span>
+																</div>
+																<div bis_skin_checked="1">
+																	<b>Александр Смирнов</b>
+																	<span class="message-post-date">13.11.2025</span>
+																</div>
+															</td>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+																<div class="reviews-text" id="message_text_4837" bis_skin_checked="1">тест 2</div>
+																<style>
+																	.quo {
+																		padding: 10px;
+																		border: 1px solid #dddddd;
+																	}
+																</style>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<div class="feed-wrap" bis_skin_checked="1">
+													<div class="feed-comments-block" bis_skin_checked="1">
+														<a name="comments"></a>
+														<div id="4837-1684_ZYuWFK_main" dropzone="copy f:*/*" bis_skin_checked="1">
+															<div class="feed-com-corner" bis_skin_checked="1"></div>
+															<!--RCRDLIST_4837-->
+															<div
+																id="record-4837-4839-cover"
+																bx-mpl-xml-id="4837"
+																bx-mpl-entity-id="4839"
+																bx-mpl-read-status="old"
+																bx-mpl-blank-status="full"
+																bx-mpl-block="main"
+																class="feed-com-block-cover"
+																bis_skin_checked="1"
+															>
+																<!--RCRD_4837-4839-->
+																<a id="com4839" name="com4839" bx-mpl-full-id="4837-4839"></a>
+																<div id="record-4837-4839" class="feed-com-block-outer" bis_skin_checked="1">
+																	<div
+																		class="feed-com-block blog-comment-user-1684 sonet-log-comment-createdby-1684 feed-com-block-approved"
+																		bis_skin_checked="1"
+																	>
+																		<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																			<i></i>
+																			<img
+																				src="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+																				width="100"
+																				height="100"
+																				alt=""
+																			/>
+																		</div>
+																		<!--/noindex-->
+																		<div class="feed-com-main-content feed-com-block-old" bis_skin_checked="1">
+																			<span class="feed-com-name feed-author-name feed-author-name-1684">Наталья</span>
+																			<div class="feed-com-user-box" bis_skin_checked="1">
+																				<a
+																					target="_top"
+																					class="feed-com-name feed-author-name feed-author-name-1684"
+																					id="bpc_4837-4839"
+																					bx-tooltip-user-id="1684"
+																					bx-tooltip-params="[]"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/PAGE_NAME=profile_view&amp;amp;UID=1684"
+																				>
+																					Наталья
+																				</a>
+																				<a
+																					class="feed-time feed-com-time"
+																					href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4839&amp;lk=Y#com4839"
+																					rel="nofollow"
+																					target="_top"
+																				>
+																					13 ноября 16:51
+																				</a>
+																			</div>
+																			<div class="feed-com-text" bis_skin_checked="1">
+																				<div
+																					class="feed-com-text-inner"
+																					bx-content-view-xml-id=""
+																					bx-content-view-save="N"
+																					id="feed-com-text-inner-"
+																					bx-mpl-block="body"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="feed-com-text-inner-inner"
+																						id="record-4837-4839-text"
+																						bx-mpl-block="text"
+																						bis_skin_checked="1"
+																					>
+																						<div bis_skin_checked="1">
+																							ававпаввы
+																							<br />
+																							ввы
+																							<br />
+																							ы
+																							<br />
+																							ы
+																							<br />
+																							авы
+																							<br />
+																							авы
+																							<br />
+																							в
+																						</div>
+																					</div>
+																				</div>
+																				<div
+																					class="feed-post-text-more"
+																					bx-mpl-block="more-button"
+																					onclick="
+																						BX.onCustomEvent(BX('4837-1684_ZYuWFK_main'), 'onExpandComment', [this]);
+																						return BX.PreventDefault(this);
+																					"
+																					id="record-4837-4839-more"
+																					style="display: none"
+																					bis_skin_checked="1"
+																				>
+																					<div class="feed-post-text-more-but" bis_skin_checked="1">
+																						<div class="feed-post-text-more-left" bis_skin_checked="1"></div>
+																						<div class="feed-post-text-more-right" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																			</div>
+																		</div>
+																		<!--/noindex-->
+																	</div>
+																	<div class="feed-com-informers-bottom" bis_skin_checked="1">
+																		<a
+																			href="javascript:void(0);"
+																			class="feed-com-reply feed-com-reply-Y"
+																			id="record-4837-4839-actions-reply"
+																			onclick="BX.onCustomEvent(BX('4837-1684_ZYuWFK_main'), 'onReply', [this, 'reply_button'])"
+																			bx-mpl-author-id="1684"
+																			bx-mpl-author-gender=""
+																			bx-mpl-author-name="Наталья"
+																			data-slider-ignore-autobinding="true"
+																		>
+																			Ответить
+																		</a>
+																		<a
+																			href="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y#"
+																			id="record-4837-4839-actions"
+																			bx-mpl-view-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4839&amp;lk=Y"
+																			bx-mpl-view-show="Y"
+																			bx-mpl-edit-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID2=4839&amp;lk=Y&amp;REVIEW_ACTION=GET"
+																			bx-mpl-edit-show="Y"
+																			bx-mpl-moderate-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4839&amp;lk=Y&amp;REVIEW_ACTION=#ACTION#"
+																			bx-mpl-moderate-show="N"
+																			bx-mpl-moderate-approved="approved"
+																			bx-mpl-delete-url="/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?MID=4839&amp;lk=Y&amp;REVIEW_ACTION=DEL#4839"
+																			bx-mpl-delete-show="Y"
+																			bx-mpl-createtask-show="N"
+																			bx-mpl-createsubtask-show="N"
+																			bx-mpl-post-entity-type=""
+																			bx-mpl-post-entity-xml-id="4837"
+																			bx-mpl-comment-entity-type=""
+																			onclick="
+																				BX.onCustomEvent(BX('4837-1684_ZYuWFK_main'), 'onShowActions', [this, '4839']);
+																				return BX.PreventDefault(this);
+																			"
+																			class="feed-post-more-link feed-post-more-link-Y-Y-N-Y"
+																		>
+																			<span class="feed-post-more-text">Ещё</span>
+																		</a>
+																	</div>
+																</div>
+																<div
+																	id="record-4837-4839-placeholder"
+																	bx-mpl-block="edit-placeholder"
+																	class="blog-comment-edit feed-com-add-block blog-post-edit feed-com-add-box"
+																	style="display: none"
+																	bis_skin_checked="1"
+																></div>
+																<!--RCRD_END_4837-4839-->
+															</div>
+															<!--RCRDLIST_END_4837-->
+															<div id="record-4837-1684_ZYuWFK-new" bis_skin_checked="1"></div>
+															<div class="feed-com-add-box-outer" id="record-4837-1684_ZYuWFK-form-holder" bis_skin_checked="1">
+																<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																	<i></i>
+																	<img width="37" height="37" src="./news_files/1.gif" alt="" />
+																</div>
+																<div class="feed-com-add-box" bis_skin_checked="1">
+																	<div
+																		id="record-4837-0-placeholder"
+																		class="blog-comment-edit feed-com-add-block blog-post-edit"
+																		style="display: none"
+																		bis_skin_checked="1"
+																	></div>
+																	<div
+																		class="feed-com-footer"
+																		onclick="BX.onCustomEvent(BX('4837-1684_ZYuWFK_main'), 'onReply', [this])"
+																		bis_skin_checked="1"
+																	>
+																		<div class="feed-com-add" bis_skin_checked="1">
+																			<a class="feed-com-add-link" href="javascript:void(0);" style="outline: none" hidefocus="true">
+																				Добавить комментарий
+																			</a>
+																		</div>
+																	</div>
+																	<div
+																		id="record-4837-writers-block"
+																		class="feed-com-writers"
+																		style="display: none"
+																		bis_skin_checked="1"
+																	>
+																		<div id="record-4837-writers" class="feed-com-writers-wrap" bis_skin_checked="1"></div>
+																		<div class="feed-com-writers-pen" bis_skin_checked="1"></div>
+																	</div>
+																</div>
+																<div class="feed-com-add-box-dnd-notice" bis_skin_checked="1">
+																	<div class="feed-com-add-box-dnd-notice-inner" bis_skin_checked="1"></div>
+																</div>
+															</div>
+														</div>
+														<a name="review_anchor"></a>
+														<form
+															name="COMMENTS_ylN7Tq"
+															id="COMMENTS_ylN7Tq"
+															action="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+															method="POST"
+															enctype="multipart/form-data"
+															class="comments-form"
+														>
+															<input type="hidden" name="back_page" value="" />
+															<input type="hidden" name="ENTITY_XML_ID" value="4837" />
+															<input type="hidden" name="ENTITY_TYPE" value="s1" />
+															<input type="hidden" name="ENTITY_ID" value="4837" />
+															<input type="hidden" name="REVIEW_USE_SMILES" value="Y" />
+															<input type="hidden" name="comment_review" value="Y" />
+															<input type="hidden" name="sessid" id="sessid_2" value="8417a749da822634ae44ed927a14aa1e" />
+															<div
+																class="feed-add-post"
+																id="divoLHE_FCylN7Tq"
+																style="display: none"
+																data-bx-html-editable="Y"
+																bis_skin_checked="1"
+															>
+																<div class="feed-add-post-dnd-notice" bis_skin_checked="1">
+																	<div class="feed-add-post-dnd-inner" bis_skin_checked="1">
+																		<span class="feed-add-post-dnd-icon"></span>
+																		<span class="feed-add-post-dnd-text">Перетащите файлы</span>
+																	</div>
+																</div>
+																<div class="feed-add-post-form feed-add-post-edit-form" bis_skin_checked="1">
+																	<div class="feed-add-post-text" bis_skin_checked="1">
+																		<div
+																			class="bx-html-editor"
+																			id="bx-html-editor-idLHE_FCylN7Tq"
+																			style="width: 100%; height: 80px"
+																			bis_skin_checked="1"
+																		>
+																			<div class="bxhtmled-toolbar-cnt" id="bx-html-editor-tlbr-cnt-idLHE_FCylN7Tq" bis_skin_checked="1">
+																				<div class="bxhtmled-toolbar" id="bx-html-editor-tlbr-idLHE_FCylN7Tq" bis_skin_checked="1"></div>
+																			</div>
+																			<div
+																				class="bxhtmled-search-cnt"
+																				id="bx-html-editor-search-cnt-idLHE_FCylN7Tq"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																			<div class="bxhtmled-area-cnt" id="bx-html-editor-area-cnt-idLHE_FCylN7Tq" bis_skin_checked="1">
+																				<div
+																					class="bxhtmled-iframe-cnt"
+																					id="bx-html-editor-iframe-cnt-idLHE_FCylN7Tq"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-textarea-cnt"
+																					id="bx-html-editor-ta-cnt-idLHE_FCylN7Tq"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-resizer-overlay"
+																					id="bx-html-editor-res-over-idLHE_FCylN7Tq"
+																					bis_skin_checked="1"
+																				></div>
+																				<div id="bx-html-editor-split-resizer-idLHE_FCylN7Tq" bis_skin_checked="1"></div>
+																			</div>
+																			<div
+																				class="bxhtmled-nav-cnt"
+																				id="bx-html-editor-nav-cnt-idLHE_FCylN7Tq"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																			<div
+																				class="bxhtmled-taskbar-cnt bxhtmled-taskbar-hidden"
+																				id="bx-html-editor-tskbr-cnt-idLHE_FCylN7Tq"
+																				bis_skin_checked="1"
+																			>
+																				<div
+																					class="bxhtmled-taskbar-top-cnt"
+																					id="bx-html-editor-tskbr-top-idLHE_FCylN7Tq"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-taskbar-resizer"
+																					id="bx-html-editor-tskbr-res-idLHE_FCylN7Tq"
+																					bis_skin_checked="1"
+																				>
+																					<div class="bxhtmled-right-side-split-border" bis_skin_checked="1">
+																						<div data-bx-tsk-split-but="Y" class="bxhtmled-right-side-split-btn" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																				<div
+																					class="bxhtmled-taskbar-search-nothing"
+																					id="bxhed-tskbr-search-nothing-idLHE_FCylN7Tq"
+																					bis_skin_checked="1"
+																				>
+																					Ничего не найдено
+																				</div>
+																				<div
+																					class="bxhtmled-taskbar-search-cont"
+																					id="bxhed-tskbr-search-cnt-idLHE_FCylN7Tq"
+																					data-bx-type="taskbar_search"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="bxhtmled-search-alignment"
+																						id="bxhed-tskbr-search-ali-idLHE_FCylN7Tq"
+																						bis_skin_checked="1"
+																					>
+																						<input
+																							type="text"
+																							class="bxhtmled-search-inp"
+																							id="bxhed-tskbr-search-inp-idLHE_FCylN7Tq"
+																							placeholder="Поиск..."
+																						/>
+																					</div>
+																					<div
+																						class="bxhtmled-search-cancel"
+																						data-bx-type="taskbar_search_cancel"
+																						title="Отменить фильтрацию"
+																						bis_skin_checked="1"
+																					></div>
+																				</div>
+																			</div>
+																			<div
+																				id="bx-html-editor-file-dialogs-idLHE_FCylN7Tq"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																		</div>
+																		<div style="display: none" bis_skin_checked="1">
+																			<input
+																				type="text"
+																				tabindex="10"
+																				onfocus="LHEPostForm.getEditor('idLHE_FCylN7Tq').Focus()"
+																				name="hidden_focus"
+																			/>
+																		</div>
+																	</div>
+																	<div class="main-post-form-toolbar" bis_skin_checked="1">
+																		<div class="main-post-form-toolbar-buttons" bis_skin_checked="1">
+																			<div class="main-post-form-toolbar-buttons-container" data-bx-role="toolbar" bis_skin_checked="1">
+																				<div
+																					class="main-post-form-toolbar-button"
+																					data-bx-role="toolbar-item"
+																					id="mpf-file-COMMENTS_ylN7Tq"
+																					data-id="file"
+																					bis_skin_checked="1"
+																				>
+																					<i id="bx-b-uploadfile-COMMENTS_ylN7Tq"></i>
+																					<span class="main-post-form-toolbar-button-file">Файл</span>
+																				</div>
+																			</div>
+																			<div
+																				class="main-post-form-toolbar-button main-post-form-toolbar-button-more"
+																				data-bx-role="toolbar-item-more"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																		</div>
+																		<div class="feed-add-post-form-but-more-open" bis_skin_checked="1">
+																			<span
+																				class="feed-add-post-form-editor-btn"
+																				data-bx-role="button-show-panel-editor"
+																				title="Визуальный редактор"
+																			></span>
+																		</div>
+																	</div>
+																</div>
+																<a
+																	href="javascript:void(0);"
+																	id="file-selectdialogswitcher-mfiFILE_NEW"
+																	class="file-selectdialog-switcher"
+																	onclick="
+																		BX.onCustomEvent(this.parentNode, 'BFileDLoadFormController');
+																		return false;
+																	"
+																>
+																	<span>Загрузить файлы</span>
+																</a>
+																<div
+																	id="file-selectdialog-mfiFILE_NEW"
+																	class="file-selectdialog"
+																	style="display: none"
+																	bis_skin_checked="1"
+																>
+																	<table id="file-file-template" style="display: none">
+																		<tbody>
+																			<tr class="file-inline-file" id="file-doc">
+																				<td class="files-name">
+																					<span class="files-text">
+																						<span class="f-wrap" data-role="name">#name#</span>
+																					</span>
+																				</td>
+																				<td class="files-size" data-role="size">#size#</td>
+																				<td class="files-storage">
+																					<div class="files-storage-block" bis_skin_checked="1">
+																						<span class="files-placement">&nbsp;</span>
+																					</div>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																	<div id="file-image-template" style="display: none" bis_skin_checked="1">
+																		<span class="feed-add-photo-block">
+																			<span class="feed-add-img-wrap">
+																				<img width="90" height="90" border="0" data-role="image" />
+																			</span>
+																			<span class="feed-add-img-title" data-role="name">#name#</span>
+																			<span class="feed-add-post-del-but"></span>
+																		</span>
+																	</div>
+																	<div class="file-extended" bis_skin_checked="1">
+																		<span class="file-label">Файлы:</span>
+																		<div class="file-placeholder" bis_skin_checked="1">
+																			<table class="files-list" cellspacing="0">
+																				<tbody class="file-placeholder-tbody"></tbody>
+																			</table>
+																		</div>
+																		<div class="file-selector" bis_skin_checked="1">
+																			Перетащите один или несколько файлов в эту область
+																			<br />
+																			<span class="file-uploader">
+																				<span class="file-but-text">или выберите файл на компьютере</span>
+																				<input
+																					class="file-fileUploader file-filemacos"
+																					id="file-fileUploader-mfiFILE_NEW"
+																					type="file"
+																					multiple="multiple"
+																					size="1"
+																				/>
+																			</span>
+																			<div class="file-load-img" bis_skin_checked="1"></div>
+																		</div>
+																	</div>
+																	<div class="file-simple" style="padding: 0; margin: 0" bis_skin_checked="1">
+																		<span class="file-label">Файлы:</span>
+																		<div class="file-placeholder" bis_skin_checked="1">
+																			<table class="files-list" cellspacing="0">
+																				<tbody class="file-placeholder-tbody">
+																					<tr style="display: none">
+																						<td colspan="3"></td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+																		<div class="file-selector" bis_skin_checked="1">
+																			<span class="file-uploader">
+																				<span class="file-uploader-left"></span>
+																				<span class="file-but-text">Загрузить файлы</span>
+																				<span class="file-uploader-right"></span>
+																				<input
+																					class="file-fileUploader file-filemacos"
+																					id="file-fileUploader-mfiFILE_NEW"
+																					type="file"
+																					multiple="multiple"
+																					size="1"
+																				/>
+																			</span>
+																		</div>
+																	</div>
+																</div>
+																<div class="feed-add-post-buttons --no-wrap" id="lhe_buttons_COMMENTS_ylN7Tq" bis_skin_checked="1">
+																	<button class="ui-btn ui-btn-sm ui-btn-primary" id="lhe_button_submit_COMMENTS_ylN7Tq">
+																		Отправить
+																	</button>
+																	<button class="ui-btn ui-btn-sm ui-btn-link" id="lhe_button_cancel_COMMENTS_ylN7Tq">Отменить</button>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+												<table
+													cellspacing="0"
+													border="0"
+													class="reviews-post-table reviews-post-last reviews-post-odd"
+													bx-author-id="1684"
+													bx-author-name="Наталья Горбачёва"
+													id="message4844"
+												>
+													<thead>
+														<tr>
+															<td>
+																<div class="review-rating rating_vote_graphic" bis_skin_checked="1">
+																	<span class="ilike">
+																		<span
+																			class="bx-ilike-button&gt;"
+																			id="bx-ilike-button-FORUM_POST-4844-1763565188"
+																			data-vote-key-signed="FORUM_POST-4844.1763651531.09207ed860ae04198e1e26adaa95a14704b2880d304e3c0ae555d748dcdf64c9"
+																			data-rating-vote-id="FORUM_POST-4844-1763565188"
+																		>
+																			<span class="bx-ilike-left-wrap">
+																				<span class="bx-ilike-left"></span>
+																				<span class="bx-ilike-text">Нравится</span>
+																			</span>
+																			<span class="bx-ilike-right-wrap"><span class="bx-ilike-right">0</span></span>
+																		</span>
+																		<span
+																			class="bx-ilike-wrap-block"
+																			id="bx-ilike-popup-cont-FORUM_POST-4844-1763565188"
+																			style="display: none"
+																		>
+																			<span class="bx-ilike-popup"><span class="bx-ilike-wait"></span></span>
+																		</span>
+																	</span>
+																</div>
+																<div bis_skin_checked="1">
+																	<b>Наталья Горбачёва</b>
+																	<span class="message-post-date">15.11.2025</span>
+																</div>
+															</td>
+														</tr>
+													</thead>
+													<tbody>
+														<tr>
+															<td>
+																<div class="reviews-text" id="message_text_4844" bis_skin_checked="1">hello</div>
+																<style>
+																	.quo {
+																		padding: 10px;
+																		border: 1px solid #dddddd;
+																	}
+																</style>
+															</td>
+														</tr>
+													</tbody>
+												</table>
+												<div class="feed-wrap" bis_skin_checked="1">
+													<div class="feed-comments-block" bis_skin_checked="1">
+														<a name="comments"></a>
+														<div id="4844-1684_1mP9S4_main" dropzone="copy f:*/*" bis_skin_checked="1">
+															<div id="record-4844-corner" class="feed-com-corner" bis_skin_checked="1"></div>
+															<div id="record-4844-1684_1mP9S4-new" bis_skin_checked="1"></div>
+															<div class="feed-com-add-box-outer" id="record-4844-1684_1mP9S4-form-holder" bis_skin_checked="1">
+																<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-N" bis_skin_checked="1">
+																	<i></i>
+																	<img width="37" height="37" src="./news_files/1.gif" alt="" />
+																</div>
+																<div class="feed-com-add-box" bis_skin_checked="1">
+																	<div
+																		id="record-4844-0-placeholder"
+																		class="blog-comment-edit feed-com-add-block blog-post-edit"
+																		style="display: none"
+																		bis_skin_checked="1"
+																	></div>
+																	<div
+																		class="feed-com-footer"
+																		onclick="BX.onCustomEvent(BX('4844-1684_1mP9S4_main'), 'onReply', [this])"
+																		bis_skin_checked="1"
+																	>
+																		<div class="feed-com-add" bis_skin_checked="1">
+																			<a class="feed-com-add-link" href="javascript:void(0);" style="outline: none" hidefocus="true">
+																				Добавить комментарий
+																			</a>
+																		</div>
+																	</div>
+																	<div
+																		id="record-4844-writers-block"
+																		class="feed-com-writers"
+																		style="display: none"
+																		bis_skin_checked="1"
+																	>
+																		<div id="record-4844-writers" class="feed-com-writers-wrap" bis_skin_checked="1"></div>
+																		<div class="feed-com-writers-pen" bis_skin_checked="1"></div>
+																	</div>
+																</div>
+																<div class="feed-com-add-box-dnd-notice" bis_skin_checked="1">
+																	<div class="feed-com-add-box-dnd-notice-inner" bis_skin_checked="1"></div>
+																</div>
+															</div>
+														</div>
+														<a name="review_anchor"></a>
+														<form
+															name="COMMENTS_Zhvqbw"
+															id="COMMENTS_Zhvqbw"
+															action="https://my.apteka-group.by/nashi-novosti/novosti/s-dnem-rozhdeniya-aleksandra-georgievna-06.11.2025/?lk=Y"
+															method="POST"
+															enctype="multipart/form-data"
+															class="comments-form"
+														>
+															<input type="hidden" name="back_page" value="" />
+															<input type="hidden" name="ENTITY_XML_ID" value="4844" />
+															<input type="hidden" name="ENTITY_TYPE" value="s1" />
+															<input type="hidden" name="ENTITY_ID" value="4844" />
+															<input type="hidden" name="REVIEW_USE_SMILES" value="Y" />
+															<input type="hidden" name="comment_review" value="Y" />
+															<input type="hidden" name="sessid" id="sessid_3" value="8417a749da822634ae44ed927a14aa1e" />
+															<div
+																class="feed-add-post"
+																id="divoLHE_FCZhvqbw"
+																style="display: none"
+																data-bx-html-editable="Y"
+																bis_skin_checked="1"
+															>
+																<div class="feed-add-post-dnd-notice" bis_skin_checked="1">
+																	<div class="feed-add-post-dnd-inner" bis_skin_checked="1">
+																		<span class="feed-add-post-dnd-icon"></span>
+																		<span class="feed-add-post-dnd-text">Перетащите файлы</span>
+																	</div>
+																</div>
+																<div class="feed-add-post-form feed-add-post-edit-form" bis_skin_checked="1">
+																	<div class="feed-add-post-text" bis_skin_checked="1">
+																		<div
+																			class="bx-html-editor"
+																			id="bx-html-editor-idLHE_FCZhvqbw"
+																			style="width: 100%; height: 80px"
+																			bis_skin_checked="1"
+																		>
+																			<div class="bxhtmled-toolbar-cnt" id="bx-html-editor-tlbr-cnt-idLHE_FCZhvqbw" bis_skin_checked="1">
+																				<div class="bxhtmled-toolbar" id="bx-html-editor-tlbr-idLHE_FCZhvqbw" bis_skin_checked="1"></div>
+																			</div>
+																			<div
+																				class="bxhtmled-search-cnt"
+																				id="bx-html-editor-search-cnt-idLHE_FCZhvqbw"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																			<div class="bxhtmled-area-cnt" id="bx-html-editor-area-cnt-idLHE_FCZhvqbw" bis_skin_checked="1">
+																				<div
+																					class="bxhtmled-iframe-cnt"
+																					id="bx-html-editor-iframe-cnt-idLHE_FCZhvqbw"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-textarea-cnt"
+																					id="bx-html-editor-ta-cnt-idLHE_FCZhvqbw"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-resizer-overlay"
+																					id="bx-html-editor-res-over-idLHE_FCZhvqbw"
+																					bis_skin_checked="1"
+																				></div>
+																				<div id="bx-html-editor-split-resizer-idLHE_FCZhvqbw" bis_skin_checked="1"></div>
+																			</div>
+																			<div
+																				class="bxhtmled-nav-cnt"
+																				id="bx-html-editor-nav-cnt-idLHE_FCZhvqbw"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																			<div
+																				class="bxhtmled-taskbar-cnt bxhtmled-taskbar-hidden"
+																				id="bx-html-editor-tskbr-cnt-idLHE_FCZhvqbw"
+																				bis_skin_checked="1"
+																			>
+																				<div
+																					class="bxhtmled-taskbar-top-cnt"
+																					id="bx-html-editor-tskbr-top-idLHE_FCZhvqbw"
+																					bis_skin_checked="1"
+																				></div>
+																				<div
+																					class="bxhtmled-taskbar-resizer"
+																					id="bx-html-editor-tskbr-res-idLHE_FCZhvqbw"
+																					bis_skin_checked="1"
+																				>
+																					<div class="bxhtmled-right-side-split-border" bis_skin_checked="1">
+																						<div data-bx-tsk-split-but="Y" class="bxhtmled-right-side-split-btn" bis_skin_checked="1"></div>
+																					</div>
+																				</div>
+																				<div
+																					class="bxhtmled-taskbar-search-nothing"
+																					id="bxhed-tskbr-search-nothing-idLHE_FCZhvqbw"
+																					bis_skin_checked="1"
+																				>
+																					Ничего не найдено
+																				</div>
+																				<div
+																					class="bxhtmled-taskbar-search-cont"
+																					id="bxhed-tskbr-search-cnt-idLHE_FCZhvqbw"
+																					data-bx-type="taskbar_search"
+																					bis_skin_checked="1"
+																				>
+																					<div
+																						class="bxhtmled-search-alignment"
+																						id="bxhed-tskbr-search-ali-idLHE_FCZhvqbw"
+																						bis_skin_checked="1"
+																					>
+																						<input
+																							type="text"
+																							class="bxhtmled-search-inp"
+																							id="bxhed-tskbr-search-inp-idLHE_FCZhvqbw"
+																							placeholder="Поиск..."
+																						/>
+																					</div>
+																					<div
+																						class="bxhtmled-search-cancel"
+																						data-bx-type="taskbar_search_cancel"
+																						title="Отменить фильтрацию"
+																						bis_skin_checked="1"
+																					></div>
+																				</div>
+																			</div>
+																			<div
+																				id="bx-html-editor-file-dialogs-idLHE_FCZhvqbw"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																		</div>
+																		<div style="display: none" bis_skin_checked="1">
+																			<input
+																				type="text"
+																				tabindex="10"
+																				onfocus="LHEPostForm.getEditor('idLHE_FCZhvqbw').Focus()"
+																				name="hidden_focus"
+																			/>
+																		</div>
+																	</div>
+																	<div class="main-post-form-toolbar" bis_skin_checked="1">
+																		<div class="main-post-form-toolbar-buttons" bis_skin_checked="1">
+																			<div class="main-post-form-toolbar-buttons-container" data-bx-role="toolbar" bis_skin_checked="1">
+																				<div
+																					class="main-post-form-toolbar-button"
+																					data-bx-role="toolbar-item"
+																					id="mpf-file-COMMENTS_Zhvqbw"
+																					data-id="file"
+																					bis_skin_checked="1"
+																				>
+																					<i id="bx-b-uploadfile-COMMENTS_Zhvqbw"></i>
+																					<span class="main-post-form-toolbar-button-file">Файл</span>
+																				</div>
+																			</div>
+																			<div
+																				class="main-post-form-toolbar-button main-post-form-toolbar-button-more"
+																				data-bx-role="toolbar-item-more"
+																				style="display: none"
+																				bis_skin_checked="1"
+																			></div>
+																		</div>
+																		<div class="feed-add-post-form-but-more-open" bis_skin_checked="1">
+																			<span
+																				class="feed-add-post-form-editor-btn"
+																				data-bx-role="button-show-panel-editor"
+																				title="Визуальный редактор"
+																			></span>
+																		</div>
+																	</div>
+																</div>
+																<a
+																	href="javascript:void(0);"
+																	id="file-selectdialogswitcher-mfiFILE_NEW"
+																	class="file-selectdialog-switcher"
+																	onclick="
+																		BX.onCustomEvent(this.parentNode, 'BFileDLoadFormController');
+																		return false;
+																	"
+																>
+																	<span>Загрузить файлы</span>
+																</a>
+																<div
+																	id="file-selectdialog-mfiFILE_NEW"
+																	class="file-selectdialog"
+																	style="display: none"
+																	bis_skin_checked="1"
+																>
+																	<table id="file-file-template" style="display: none">
+																		<tbody>
+																			<tr class="file-inline-file" id="file-doc">
+																				<td class="files-name">
+																					<span class="files-text">
+																						<span class="f-wrap" data-role="name">#name#</span>
+																					</span>
+																				</td>
+																				<td class="files-size" data-role="size">#size#</td>
+																				<td class="files-storage">
+																					<div class="files-storage-block" bis_skin_checked="1">
+																						<span class="files-placement">&nbsp;</span>
+																					</div>
+																				</td>
+																			</tr>
+																		</tbody>
+																	</table>
+																	<div id="file-image-template" style="display: none" bis_skin_checked="1">
+																		<span class="feed-add-photo-block">
+																			<span class="feed-add-img-wrap">
+																				<img width="90" height="90" border="0" data-role="image" />
+																			</span>
+																			<span class="feed-add-img-title" data-role="name">#name#</span>
+																			<span class="feed-add-post-del-but"></span>
+																		</span>
+																	</div>
+																	<div class="file-extended" bis_skin_checked="1">
+																		<span class="file-label">Файлы:</span>
+																		<div class="file-placeholder" bis_skin_checked="1">
+																			<table class="files-list" cellspacing="0">
+																				<tbody class="file-placeholder-tbody"></tbody>
+																			</table>
+																		</div>
+																		<div class="file-selector" bis_skin_checked="1">
+																			Перетащите один или несколько файлов в эту область
+																			<br />
+																			<span class="file-uploader">
+																				<span class="file-but-text">или выберите файл на компьютере</span>
+																				<input
+																					class="file-fileUploader file-filemacos"
+																					id="file-fileUploader-mfiFILE_NEW"
+																					type="file"
+																					multiple="multiple"
+																					size="1"
+																				/>
+																			</span>
+																			<div class="file-load-img" bis_skin_checked="1"></div>
+																		</div>
+																	</div>
+																	<div class="file-simple" style="padding: 0; margin: 0" bis_skin_checked="1">
+																		<span class="file-label">Файлы:</span>
+																		<div class="file-placeholder" bis_skin_checked="1">
+																			<table class="files-list" cellspacing="0">
+																				<tbody class="file-placeholder-tbody">
+																					<tr style="display: none">
+																						<td colspan="3"></td>
+																					</tr>
+																				</tbody>
+																			</table>
+																		</div>
+																		<div class="file-selector" bis_skin_checked="1">
+																			<span class="file-uploader">
+																				<span class="file-uploader-left"></span>
+																				<span class="file-but-text">Загрузить файлы</span>
+																				<span class="file-uploader-right"></span>
+																				<input
+																					class="file-fileUploader file-filemacos"
+																					id="file-fileUploader-mfiFILE_NEW"
+																					type="file"
+																					multiple="multiple"
+																					size="1"
+																				/>
+																			</span>
+																		</div>
+																	</div>
+																</div>
+																<div class="feed-add-post-buttons --no-wrap" id="lhe_buttons_COMMENTS_Zhvqbw" bis_skin_checked="1">
+																	<button class="ui-btn ui-btn-sm ui-btn-primary" id="lhe_button_submit_COMMENTS_Zhvqbw">
+																		Отправить
+																	</button>
+																	<button class="ui-btn ui-btn-sm ui-btn-link" id="lhe_button_cancel_COMMENTS_Zhvqbw">Отменить</button>
+																</div>
+															</div>
+														</form>
+													</div>
+												</div>
+												<style>
+													.comments-reply-field-author {
+														margin-left: 10px;
+														margin-top: 10px;
+													}
+												</style>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+			</main>
+			<footer class="footer" data-path="layouts">
+				<div class="container">
+					<div class="footer__wrapper">
+						<p class="footer__copyright">2025 © Фармацевтический холдинг «Аптека&nbsp;групп»</p>
+						<p class="footer__copyright">
+							Разработано в
+							<a href="#" target="_blank">Silentcode</a>
+						</p>
+					</div>
+				</div>
+			</footer>
+
+			<div class="toasts" data-module="Toasts" data-path="components" aria-live="polite" aria-atomic="false"></div>
+		</div>
+		<div class="pv" id="photo-viewer" role="dialog" aria-modal="true" hidden>
+			<div class="pv__overlay" data-pv-close></div>
+			<div class="pv__window" role="document">
+				<button class="pv__close" type="button" aria-label="Закрыть" data-pv-close>
+					<svg width="20" height="20" aria-hidden="true">
+						<use href="#icon-close"></use>
+					</svg>
+				</button>
+				<div class="pv__stage">
+					<div class="pv__thumbs swiper" aria-label="Миниатюры">
+						<div class="swiper-wrapper"></div>
+					</div>
+					<div class="pv__main swiper">
+						<div class="swiper-wrapper"></div>
+						<button class="pv__nav pv__nav--prev" type="button" aria-label="Назад">
+							<svg width="20" height="20" aria-hidden="true">
+								<use href="#icon-arrow-prev"></use>
+							</svg>
+						</button>
+						<button class="pv__nav pv__nav--next" type="button" aria-label="Вперёд">
+							<svg width="20" height="20" aria-hidden="true">
+								<use href="#icon-arrow-next"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

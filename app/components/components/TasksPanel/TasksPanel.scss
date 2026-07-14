@@ -194,6 +194,15 @@
                 width: 100%;
             }
         }
+        // when the backend drops the "Ответственный" column, let the title field
+        // fill the freed space instead of leaving a gap (tablet & up; on mobile the
+        // grid already stacks each field full-width)
+        &__grid:not(:has(&__assignee)) &__task {
+            @include up(tablet) {
+                flex: 1 1 auto;
+                width: auto;
+            }
+        }
         &__assignee {
             flex-shrink: 0;
             @include prop-vw(width, 250, xl);
@@ -496,8 +505,16 @@
                 @include prop-vw(font-size, 15, sm);
             }
         }
+
+        // Hide the "Нет задач" placeholder the moment the list has a real task. Covers
+        // both the server-rendered list that ships the empty node next to rows (visible
+        // after a refresh) and the instant after the first task is added client-side.
+        // The only non-row / non-edit child of a populated list is the empty-state node.
+        &:has(> .task-row) > :not(.task-row):not(.tasks-list__edit) {
+            display: none;
+        }
     }
-    
+
     .task-row {
         position: relative;
         display: flex;

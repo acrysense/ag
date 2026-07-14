@@ -1,0 +1,2154 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>AG</title>
+
+		<!-- initial-load overlay: critical inline styles so it shows before the bundle
+		     loads and hides the FOUC (sprite injection / style application) -->
+		<style>
+			.app-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				-moz-box-pack: center;
+				justify-content: center;
+				background: #f5f8fa;
+				-webkit-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				-moz-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+			}
+			.app-loader.is-hidden {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.app-loader__spinner {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				border: 3px solid #dfe7f1;
+				border-top-color: #0081ff;
+				-webkit-animation: app-loader-spin 0.7s linear infinite;
+				-moz-animation: app-loader-spin 0.7s linear infinite;
+				animation: app-loader-spin 0.7s linear infinite;
+			}
+			@-webkit-keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@-moz-keyframes app-loader-spin {
+				to {
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.app-loader__spinner {
+					-webkit-animation-duration: 1.6s;
+					-moz-animation-duration: 1.6s;
+					animation-duration: 1.6s;
+				}
+			}
+
+			/* Critical header layout: without this the header renders as plain blocks before
+		       app.css applies, so the search field stretches full-width and then snaps to its
+		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
+		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
+		       the search width changes. */
+			.header__wrapper {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-pack: justify;
+				-webkit-justify-content: space-between;
+				-moz-box-pack: justify;
+				justify-content: space-between;
+				width: 100%;
+			}
+			.header__inner {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+			}
+			.filter-search {
+				display: none;
+			}
+			body[data-header-search] .filter-search {
+				-webkit-box-flex: 0;
+				-webkit-flex: 0 0 auto;
+				-moz-box-flex: 0;
+				flex: 0 0 auto;
+				-webkit-align-self: center;
+				align-self: center;
+				width: max(266.6666666667px, 26.0416666667vw);
+				margin-left: max(32px, 3.125vw);
+				margin-right: auto;
+			}
+			@media (min-width: 744px) {
+				body[data-header-search] .filter-search {
+					display: block;
+				}
+			}
+			@media (min-width: 1024px) and (max-width: 1439.98px) {
+				body[data-header-search] .filter-search {
+					width: max(355.5555555556px, 34.7222222222vw);
+					margin-left: max(42.6666666667px, 4.1666666667vw);
+				}
+			}
+			@media (max-width: 743.98px) {
+				body[data-header-search] .filter-search {
+					display: block;
+					-webkit-box-ordinal-group: 11;
+					-webkit-order: 10;
+					-moz-box-ordinal-group: 11;
+					order: 10;
+					-webkit-box-flex: 0;
+					-webkit-flex: 0 0 100%;
+					-moz-box-flex: 0;
+					flex: 0 0 100%;
+					width: 100%;
+					margin-inline: 0;
+				}
+				body[data-header-search] .header__wrapper {
+					-webkit-flex-wrap: wrap;
+					flex-wrap: wrap;
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener("load", function () {
+				var l = document.querySelector("[data-app-loader]");
+				if (l) {
+					l.classList.add("is-hidden");
+					setTimeout(function () {
+						l.parentNode && l.remove();
+					}, 500);
+				}
+			});
+		</script>
+
+		<meta name="description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<link
+			rel="preload"
+			href="/bitrix/templates/auth/fonts/Inter/Inter-Var.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="/bitrix/templates/auth/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/bitrix/templates/auth/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/bitrix/templates/auth/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/bitrix/templates/auth/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/bitrix/templates/auth/favicon/site.webmanifest" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="AG" />
+		<meta property="og:title" content="AG" />
+		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-BbwLSmLd.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-6bidQN7V.css" />
+	</head>
+	<body class="bg-light employee-page">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			<header class="header" data-module="Header" data-path="layouts">
+				<div class="container">
+					<div class="header__wrapper">
+						<picture class="header__logotype">
+							<source srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg" media="(min-width: 744px)" />
+							<img src="/bitrix/templates/auth/assets/images/logotype-mobile-BWefyXL2.svg" width="390" height="40" alt="AG" />
+						</picture>
+						<div class="filter-search" data-module="HeaderSearch" data-path="components">
+							<div class="filter-search__control">
+								<input
+									class="filter-search__input"
+									name="header-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+									data-filter-input
+									aria-label="Поиск"
+								/>
+								<svg
+									class="filter-search__icon"
+									aria-hidden="true"
+									focusable="false"
+									viewBox="0 0 20 20"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
+									<path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+								</svg>
+							</div>
+
+							<div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
+								<div class="filter-panel__head">
+									<h2 class="filter-panel__title">Фильтр</h2>
+									<button type="button" class="filter-panel__close" data-filter-close aria-label="Закрыть">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg>
+									</button>
+								</div>
+								<div data-page-fields="employees">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="employee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Василевская М.В."
+															data-label="Василевская М.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Василевская М.В.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Волкова Ю.Г."
+															data-label="Волкова Ю.Г."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Волкова Ю.Г.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Зайцева Д.М."
+															data-label="Зайцева Д.М."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Зайцева Д.М.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Ковш Т.А."
+															data-label="Ковш Т.А."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Ковш Т.А.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Северная Т.В."
+															data-label="Северная Т.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Северная Т.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="filter-panel__grid">
+										<div class="filter-field" data-filter-key="region">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Область">Область</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Минск" data-label="Минск">Минская обл.</button>
+												<button type="button" class="filter-option" data-value="Витебск" data-label="Витебск">
+													Витебская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Брест" data-label="Брест">Брестская обл.</button>
+												<button type="button" class="filter-option" data-value="Гродно" data-label="Гродно">
+													Гродненская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Могилев" data-label="Могилев">
+													Могилевска обл.
+												</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="region" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Регион">Регион</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Минск"
+														data-label="Минск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Минск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Витебск"
+														data-label="Витебск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Витебск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Брест"
+														data-label="Брест"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Брест</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Гродно"
+														data-label="Гродно"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Гродно</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Могилев"
+														data-label="Могилев"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Могилев</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="brand" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Бренд">Бренд</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="ADEL" data-label="ADEL" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>ADEL</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Добрыя лекі"
+														data-label="Добрыя лекі"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Добрыя лекі</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Эконом"
+														data-label="Эконом"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Эконом</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="category" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Категория">Категория</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="A" data-label="A" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>A</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="B" data-label="B" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>B</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="C" data-label="C" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>C</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="D" data-label="D" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>D</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="company">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Розничная компания">Розничная компания</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Аптека групп" data-label="Аптека групп">
+													ООО “Аптека групп”
+												</button>
+												<button type="button" class="filter-option" data-value="Фарм" data-label="Фарм">ООО “Фарм”</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="pharmacy" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №112"
+															data-label="ADEL №112"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №112</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №42"
+															data-label="Аптека ADEL №42, Минск"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №42, Минск</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №4"
+															data-label="ADEL №4"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №4</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №2"
+															data-label="ADEL №2"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №2</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №24"
+															data-label="Аптека ADEL №24"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №24</span>
+													</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="manager">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">
+													Петров А.И.
+												</button>
+												<button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">
+													Полководец Т.С.
+												</button>
+											</div>
+										</div>
+
+										<!-- free-text input (list of values), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
+											<input
+												type="text"
+												class="filter-field__input"
+												name="filter-value"
+												data-filter-text
+												placeholder="Кол-во чеков"
+												autocomplete="off"
+											/>
+										</div>
+
+										<!-- numeric range (From – To), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="index" data-range>
+											<div class="filter-range">
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-from
+													placeholder="Индекс от"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+												<span class="filter-range__dash">–</span>
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-to
+													placeholder="до"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+											</div>
+										</div>
+
+										<!-- date range (From – To) -->
+										<div class="filter-field" data-filter-key="period" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Период">Период</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+
+										<!-- single date -->
+										<div class="filter-field" data-filter-key="date" data-date>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div data-page-fields="tasks">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="assignee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Иванов М.С."
+															data-label="Иванов М.С."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Иванов М.С.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Петров А.И."
+															data-label="Петров А.И."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Петров А.И.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Панковец В.В."
+															data-label="Панковец В.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Панковец В.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="filter-panel__grid">
+										<div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="filter-panel__actions">
+									<button type="button" class="btn btn--sm" data-filter-apply>Применить</button>
+									<button type="button" class="btn btn--sm btn--secondary" data-filter-reset>Сбросить</button>
+								</div>
+							</div>
+						</div>
+						<div class="header__inner">
+							<div class="profile-dropdown header__profile" data-module="ProfileDropdown" data-path="components">
+								<button class="profile-dropdown__trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+									<span class="profile-dropdown__placeholder">ВМ</span>
+									<span>Владислава Митрофановна</span>
+									<svg aria-hidden="true" width="16" height="16">
+										<use href="#icon-caret"></use>
+									</svg>
+								</button>
+								<div class="profile-dropdown__panel" role="menu">
+									<div class="profile-dropdown__wrap">
+										<a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="/" data-action="">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-settings"></use>
+											</svg>
+											<span class="profile-dropdown__text">Настройки</span>
+										</a>
+										<div class="profile-dropdown__sep" role="none"></div>
+										<button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="logout">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-exit"></use>
+											</svg>
+											<span class="profile-dropdown__text">Выход</span>
+										</button>
+										<button class="profile-dropdown__close" aria-label="Закрыть">
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-close"></use>
+											</svg>
+										</button>
+									</div>
+								</div>
+							</div>
+							<button class="header__hamburger" aria-label="Меню">
+								<svg aria-hidden="true" focusable="false" width="30" height="21">
+									<use href="#icon-hamburger"></use>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+			<main class="wrapper__content">
+				<div class="sidebar" data-module="Sidebar" data-path="layouts">
+					<button
+						type="button"
+						class="sidebar__collapse"
+						data-sidebar-collapse
+						aria-label="Свернуть меню"
+						aria-expanded="true"
+					>
+						<svg aria-hidden="true" focusable="false" width="20" height="20">
+							<use href="#icon-sidebar-toggle"></use>
+						</svg>
+					</button>
+					<div class="sidebar__wrap">
+						<div class="sidebar__section">
+							<span class="sidebar__label">ERP</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-dashboard"></use>
+										</svg>
+										<span>Дашборд</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/pharmacies" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-pharmacies"></use>
+										</svg>
+										<span>Аптеки</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/managers" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-managers"></use>
+										</svg>
+										<span>Менеджеры</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/employees" class="sidebar__link is--active">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-employees"></use>
+										</svg>
+										<span>Сотрудники</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/visits" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-visits"></use>
+										</svg>
+										<span>Визиты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/tasks" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-tasks"></use>
+										</svg>
+										<span>Задачи</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ЛИЧНЫЙ КАБИНЕТ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="/" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-user"></use>
+										</svg>
+										<span>Моя страница</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-education-portal"></use>
+										</svg>
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/coefficient" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-coefficient"></use>
+										</svg>
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/package" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-package"></use>
+										</svg>
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/motivation" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-motivation"></use>
+										</svg>
+										<span>Мотивация</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПОРТАЛ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-home"></use>
+										</svg>
+										<span>Главная</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-news"></use>
+										</svg>
+										<span>Новости</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-gallery"></use>
+										</svg>
+										<span>Галерея</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-data"></use>
+										</svg>
+										<span>База знаний</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ХОЛДИНГ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-directory"></use>
+										</svg>
+										<span>Справочник</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-vacancy"></use>
+										</svg>
+										<span>Вакансии</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПРИСОЕДИНЯЙТЕСЬ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg" width="20" height="20" alt="Аптечка+" />
+										<span>Гипермаркет Аптечка+</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="ADEL"
+										/>
+										<span>Аптеки ADEL</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="Добрыя лекi+"
+										/>
+										<span>Аптек Добрыя лекi</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+											width="20"
+											height="20"
+											alt="FeelinGood"
+										/>
+										<span>Клуб FeelinGood</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__banr"></div>
+						<div class="sidebar__banr"></div>
+						<button class="sidebar__close" aria-label="Закрыть">
+							<svg aria-hidden="true" focusable="false" width="16" height="16">
+								<use href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="wrapper__main">
+					<div class="wrapper__double">
+						<div class="wrapper__left">
+							<a href="/" class="wrapper__back">
+								<svg aria-hidden="true" focusable="false" width="16" height="16">
+									<use href="#icon-arrow-back-thin"></use>
+								</svg>
+								<span>Назад</span>
+							</a>
+
+							<section class="employee" data-module="Employee" data-path="sections/employee">
+								<div class="employee__card">
+									<div class="employee__profile">
+										<div class="employee__left">
+											<div class="employee__avatar">
+												<!-- no <img> → the initials placeholder underneath shows through -->
+												<span class="employee__placeholder">МС</span>
+												<img src="/bitrix/templates/auth/assets/images/ava-_NxuE3ev.jpg" alt="Иванов Марьян Сергеевич" />
+											</div>
+											<span class="employee__mobile-rating">
+												<b>B</b>
+												, 0.83
+											</span>
+										</div>
+										<div class="employee__info">
+											<h1 class="employee__name">Иванов Марьян Сергеевич</h1>
+											<div class="employee__rows">
+												<div class="employee__row">
+													<span class="employee__label">Должность:</span>
+													<span class="employee__value">Фармацевт</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Место работы:</span>
+													<span class="employee__value">Склад</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Розничная компаний:</span>
+													<span class="employee__value">ООО &ldquo;Аптека групп&rdquo;</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Принят на работу:</span>
+													<span class="employee__value">12.08.2000</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Ставка:</span>
+													<span class="employee__value">1.25</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Пол:</span>
+													<span class="employee__value">Мужской</span>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Пол:</span>
+													<span class="employee__value">12.08.2000</span>
+												</div>
+											</div>
+											<div class="employee__divider"></div>
+											<div class="employee__links">
+												<div class="employee__row">
+													<span class="employee__label">Аптека:</span>
+													<a href="/" class="employee__link">Аптека ADEL №50, Минск</a>
+												</div>
+												<div class="employee__row">
+													<span class="employee__label">Менеджер:</span>
+													<a href="/" class="employee__link">Петров А.И</a>
+												</div>
+											</div>
+										</div>
+										<div class="employee__rating">
+											<div class="employee__rating-body">
+												<span class="employee__rating-value">0.83</span>
+												<span class="employee__rating-date">12.04.2026</span>
+											</div>
+											<span class="employee__rating-grade">B</span>
+										</div>
+									</div>
+								</div>
+
+								<div class="employee-kpi employee__kpi">
+									<h2 class="employee-kpi__heading">Прогресс по KPI</h2>
+									<div class="employee-kpi__controls">
+										<div class="employee-kpi__sort" data-kpi-sort>
+											<button
+												type="button"
+												class="employee-kpi__sort-trigger"
+												data-kpi-sort-trigger
+												aria-haspopup="listbox"
+												aria-expanded="false"
+											>
+												<span data-kpi-sort-value>Сортировать по</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="employee-kpi__sort-panel" data-kpi-sort-panel role="listbox" aria-hidden="true">
+												<button type="button" class="employee-kpi__sort-option is-active" role="option" data-sort="default">
+													По умолчанию
+												</button>
+												<button type="button" class="employee-kpi__sort-option" role="option" data-sort="name" data-dir="asc">
+													Название (А–Я)
+												</button>
+												<button type="button" class="employee-kpi__sort-option" role="option" data-sort="name" data-dir="desc">
+													Название (Я–А)
+												</button>
+											</div>
+										</div>
+										<button
+											type="button"
+											class="employee-kpi__ctrl is-active"
+											data-kpi-view="list"
+											aria-label="Список"
+											aria-pressed="true"
+										>
+											<svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+												<circle cx="10" cy="4" r="1.6" />
+												<circle cx="10" cy="10" r="1.6" />
+												<circle cx="10" cy="16" r="1.6" />
+											</svg>
+										</button>
+										<button
+											type="button"
+											class="employee-kpi__ctrl"
+											data-kpi-view="table"
+											aria-label="Таблица"
+											aria-pressed="false"
+										>
+											<svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+												<circle cx="4" cy="10" r="1.6" />
+												<circle cx="10" cy="10" r="1.6" />
+												<circle cx="16" cy="10" r="1.6" />
+											</svg>
+										</button>
+									</div>
+
+									<div class="employee-kpi__grid-scroll">
+										<div class="employee-kpi__grid" role="table" aria-label="Прогресс по KPI">
+											<div class="employee-kpi__head" role="row">
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="text">
+													Показатель
+												</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">
+													Факт
+												</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">
+													Медиана
+												</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">
+													Прогресс, %
+												</button>
+												<button type="button" class="employee-kpi__col" role="columnheader" data-kpi-col data-sort-type="number">
+													Вес, %
+												</button>
+											</div>
+											<div class="employee-kpi__row" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Средний чек</span>
+												<span class="employee-kpi__cell" role="cell">30.50</span>
+												<span class="employee-kpi__cell" role="cell">0%</span>
+												<span class="employee-kpi__cell" role="cell">
+													<span class="employee-kpi__progress">
+														<span class="employee-kpi__badge employee-kpi__badge--green">100</span>
+														<span class="employee-kpi__track">
+															<span class="employee-kpi__bar employee-kpi__bar--green" style="width: 100%"></span>
+														</span>
+													</span>
+												</span>
+												<span class="employee-kpi__cell" role="cell">30</span>
+											</div>
+											<div class="employee-kpi__row" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Наполняемость чека</span>
+												<span class="employee-kpi__cell" role="cell">12</span>
+												<span class="employee-kpi__cell" role="cell">12%</span>
+												<span class="employee-kpi__cell" role="cell">
+													<span class="employee-kpi__progress">
+														<span class="employee-kpi__badge employee-kpi__badge--yellow">50</span>
+														<span class="employee-kpi__track">
+															<span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+														</span>
+													</span>
+												</span>
+												<span class="employee-kpi__cell" role="cell">20</span>
+											</div>
+											<div class="employee-kpi__row" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Доля товаров 4-6 ранга ,%</span>
+												<span class="employee-kpi__cell" role="cell">4.8 SKU</span>
+												<span class="employee-kpi__cell" role="cell">0%</span>
+												<span class="employee-kpi__cell" role="cell">
+													<span class="employee-kpi__progress">
+														<span class="employee-kpi__badge employee-kpi__badge--red">20</span>
+														<span class="employee-kpi__track">
+															<span class="employee-kpi__bar employee-kpi__bar--red" style="width: 20%"></span>
+														</span>
+													</span>
+												</span>
+												<span class="employee-kpi__cell" role="cell">20</span>
+											</div>
+											<div class="employee-kpi__row" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Доля СТМ, %</span>
+												<span class="employee-kpi__cell" role="cell">16.0</span>
+												<span class="employee-kpi__cell" role="cell">0%</span>
+												<span class="employee-kpi__cell" role="cell">
+													<span class="employee-kpi__progress">
+														<span class="employee-kpi__badge employee-kpi__badge--yellow">50</span>
+														<span class="employee-kpi__track">
+															<span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+														</span>
+													</span>
+												</span>
+												<span class="employee-kpi__cell" role="cell">15</span>
+											</div>
+											<div class="employee-kpi__row" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">Пенетрация карт лояльности, %</span>
+												<span class="employee-kpi__cell" role="cell">43.0</span>
+												<span class="employee-kpi__cell" role="cell">0%</span>
+												<span class="employee-kpi__cell" role="cell">
+													<span class="employee-kpi__progress">
+														<span class="employee-kpi__badge employee-kpi__badge--blue">60</span>
+														<span class="employee-kpi__track">
+															<span class="employee-kpi__bar employee-kpi__bar--blue" style="width: 60%"></span>
+														</span>
+													</span>
+												</span>
+												<span class="employee-kpi__cell" role="cell">15</span>
+											</div>
+											<div class="employee-kpi__row employee-kpi__row--total" role="row">
+												<span class="employee-kpi__cell employee-kpi__cell--name" role="cell">ИТОГ</span>
+												<span class="employee-kpi__cell" role="cell"></span>
+												<span class="employee-kpi__cell" role="cell"></span>
+												<span class="employee-kpi__cell" role="cell">0.83</span>
+												<span class="employee-kpi__cell" role="cell">100</span>
+											</div>
+										</div>
+									</div>
+
+									<div class="employee-kpi__mlist">
+										<div class="employee-kpi__mhead">Показатель</div>
+
+										<div class="employee-kpi__mitem">
+											<h3 class="employee-kpi__mname">Средний чек</h3>
+											<div class="employee-kpi__mrows">
+												<div class="employee-kpi__mrow">
+													<span>Факт:</span>
+													<b>30.50</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Медиана:</span>
+													<b>0%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Вес:</span>
+													<b>30%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Категория:</span>
+													<b class="employee-kpi__mcat employee-kpi__mcat--green">A</b>
+												</div>
+												<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+													<span>Прогресс:</span>
+													<b>100%</b>
+													<span class="employee-kpi__track employee-kpi__track--m">
+														<span class="employee-kpi__bar employee-kpi__bar--green" style="width: 100%"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="employee-kpi__mitem">
+											<h3 class="employee-kpi__mname">Наполняемость чека</h3>
+											<div class="employee-kpi__mrows">
+												<div class="employee-kpi__mrow">
+													<span>Факт:</span>
+													<b>12</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Медиана:</span>
+													<b>12%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Вес:</span>
+													<b>20%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Категория:</span>
+													<b class="employee-kpi__mcat employee-kpi__mcat--yellow">C</b>
+												</div>
+												<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+													<span>Прогресс:</span>
+													<b>50%</b>
+													<span class="employee-kpi__track employee-kpi__track--m">
+														<span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="employee-kpi__mitem">
+											<h3 class="employee-kpi__mname">Доля товаров 4-6 ранга ,%</h3>
+											<div class="employee-kpi__mrows">
+												<div class="employee-kpi__mrow">
+													<span>Факт:</span>
+													<b>4.8 SKU</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Медиана:</span>
+													<b>0%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Вес:</span>
+													<b>20%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Категория:</span>
+													<b class="employee-kpi__mcat employee-kpi__mcat--red">D</b>
+												</div>
+												<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+													<span>Прогресс:</span>
+													<b>20%</b>
+													<span class="employee-kpi__track employee-kpi__track--m">
+														<span class="employee-kpi__bar employee-kpi__bar--red" style="width: 20%"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="employee-kpi__mitem">
+											<h3 class="employee-kpi__mname">Доля СТМ, %</h3>
+											<div class="employee-kpi__mrows">
+												<div class="employee-kpi__mrow">
+													<span>Факт:</span>
+													<b>16.0</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Медиана:</span>
+													<b>0%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Вес:</span>
+													<b>15%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Категория:</span>
+													<b class="employee-kpi__mcat employee-kpi__mcat--yellow">C</b>
+												</div>
+												<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+													<span>Прогресс:</span>
+													<b>50%</b>
+													<span class="employee-kpi__track employee-kpi__track--m">
+														<span class="employee-kpi__bar employee-kpi__bar--yellow" style="width: 50%"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="employee-kpi__mitem">
+											<h3 class="employee-kpi__mname">Пенетрация карт лояльности, %</h3>
+											<div class="employee-kpi__mrows">
+												<div class="employee-kpi__mrow">
+													<span>Факт:</span>
+													<b>43.0</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Медиана:</span>
+													<b>0%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Вес:</span>
+													<b>15%</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Категория:</span>
+													<b class="employee-kpi__mcat">B</b>
+												</div>
+												<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+													<span>Прогресс:</span>
+													<b>60%</b>
+													<span class="employee-kpi__track employee-kpi__track--m">
+														<span class="employee-kpi__bar employee-kpi__bar--blue" style="width: 60%"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+
+										<div class="employee-kpi__mtotal">
+											<h3 class="employee-kpi__mname">Итог</h3>
+											<div class="employee-kpi__mrows">
+												<div class="employee-kpi__mrow">
+													<span>Вклад:</span>
+													<b>0.83</b>
+												</div>
+												<div class="employee-kpi__mrow">
+													<span>Вес:</span>
+													<b>100%</b>
+												</div>
+												<div class="employee-kpi__mrow employee-kpi__mrow--progress">
+													<span>Прогресс:</span>
+													<b>83%</b>
+													<span class="employee-kpi__track employee-kpi__track--m">
+														<span class="employee-kpi__bar employee-kpi__bar--green" style="width: 83%"></span>
+													</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<section class="data-panel tasks-panel" data-module="TasksPanel" data-path="components">
+								<div class="data-panel__header">
+									<h2 class="data-panel__title">Задачи</h2>
+									<div class="data-panel__actions">
+										<a href="/" class="data-panel__export">
+											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-download"></use>
+											</svg>
+											<span class="data-panel__export-full">Экспорт в Excel</span>
+											<span class="data-panel__export-short">Excel</span>
+										</a>
+									</div>
+								</div>
+
+								<div class="tasks-panel__create">
+									<button type="button" class="panel-create" data-task-create>
+										<svg aria-hidden="true" focusable="false" width="28" height="28">
+											<use href="#icon-circle-plus-thin"></use>
+										</svg>
+										<span>Создать</span>
+									</button>
+								</div>
+
+								<form class="task-form" data-task-form novalidate hidden>
+									<div class="task-form__grid">
+										<div class="field task-form__task">
+											<label class="field__label" for="task-title">Задача</label>
+											<div class="field__control">
+												<input class="field__input" id="task-title" type="text" name="title" autocomplete="off" />
+											</div>
+											<span class="field__help">Укажите, что необходимо сделать по задаче.</span>
+										</div>
+										<div class="field task-form__assignee">
+											<span class="field__label">Ответственный</span>
+											<div class="field__control ui-select" data-task-assignee data-select-search>
+												<button
+													type="button"
+													class="ui-select__trigger"
+													data-select-trigger
+													aria-haspopup="listbox"
+													aria-expanded="false"
+												>
+													<span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
+													<svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16">
+														<use href="#icon-caret"></use>
+													</svg>
+												</button>
+												<div class="ui-select__panel ui-select__panel--scroll" data-select-panel role="listbox">
+													<div class="ui-select__search">
+														<input
+															type="text"
+															class="ui-select__search-input"
+															data-select-search-input
+															placeholder="Поиск"
+															autocomplete="off"
+															aria-label="Поиск ответственного"
+														/>
+													</div>
+													<button type="button" class="ui-select__option" role="option" data-value="Иванов М.С.">Иванов М.С.</button>
+													<button type="button" class="ui-select__option" role="option" data-value="Петров А.И.">Петров А.И.</button>
+													<button type="button" class="ui-select__option" role="option" data-value="Панковец В.В.">
+														Панковец В.В.
+													</button>
+													<p class="ui-select__empty" data-select-empty hidden>Ничего не найдено</p>
+												</div>
+												<input type="hidden" name="assignee" value="" data-select-input />
+											</div>
+										</div>
+										<div class="task-form__daterow">
+											<div class="field task-form__date">
+												<label class="field__label" for="task-due">Срок исполнения</label>
+												<div class="field__control ui-datepicker" data-datepicker>
+													<input
+														class="field__input ui-datepicker__input"
+														id="task-due"
+														type="text"
+														name="due"
+														placeholder="дд.мм.гггг"
+														autocomplete="off"
+														inputmode="numeric"
+														data-datepicker-input
+													/>
+													<button type="button" class="ui-datepicker__toggle" data-datepicker-toggle aria-label="Открыть календарь">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-calendar"></use>
+														</svg>
+													</button>
+												</div>
+											</div>
+											<button
+												type="button"
+												class="task-form__hide"
+												data-task-hide
+												aria-pressed="false"
+												aria-label="Скрыть от сотрудника"
+												title="Скрыть от сотрудника"
+											>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-eye"></use></svg>
+											</button>
+											<input type="hidden" name="hidden" value="0" data-task-hide-input />
+										</div>
+									</div>
+
+									<div class="task-form__actions">
+										<button type="submit" class="btn task-form__btn">Сохранить</button>
+										<button type="reset" class="btn task-form__btn btn--secondary" data-task-cancel>Отмена</button>
+									</div>
+								</form>
+
+								<ul class="tasks-list">
+									<li class="task-row">
+										<span class="task-row__status" aria-hidden="true"></span>
+										<div class="task-row__body">
+											<p class="task-row__title">Увеличить долю СТМ в чеке март</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+										</div>
+									</li>
+
+									<li class="task-row">
+										<span class="task-row__status" aria-hidden="true"></span>
+										<div class="task-row__body">
+											<p class="task-row__title">Пройти тренинг по товарам 6-го ранга</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+											<span class="task-row__hidden" title="Скрыта для сотрудника">
+												<svg aria-hidden="true" focusable="false" width="24" height="24">
+													<use href="#icon-eye-hidden"></use>
+												</svg>
+											</span>
+										</div>
+									</li>
+
+									<li class="task-row is-completed">
+										<span class="task-row__status task-row__status--done" aria-hidden="true">
+											<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+										</span>
+										<div class="task-row__body">
+											<p class="task-row__title">Улучшить качество обслуживания</p>
+											<p class="task-row__subline">
+												<span class="task-row__done">
+													<b>Петров А.И.</b>
+													Выполнена: 05.05.2026
+												</span>
+											</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+										</div>
+									</li>
+
+									<li class="task-row">
+										<span class="task-row__status" aria-hidden="true"></span>
+										<div class="task-row__body">
+											<p class="task-row__title">Увеличить количество чеков</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+											<span class="task-row__hidden" title="Скрыта для сотрудника">
+												<svg aria-hidden="true" focusable="false" width="24" height="24">
+													<use href="#icon-eye-hidden"></use>
+												</svg>
+											</span>
+										</div>
+									</li>
+
+									<li class="task-row is-completed is-muted">
+										<span class="task-row__status task-row__status--soft" aria-hidden="true">
+											<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+										</span>
+										<div class="task-row__body">
+											<p class="task-row__title">Ознакомиться с планом продаж на Q2 2026. Расписаться бланке у менеджера</p>
+											<p class="task-row__desc">
+												Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ. Улучшить мотивацию
+												сотрудника. Обсудить недостаточно высокие показатели продаж СТМ.
+											</p>
+											<p class="task-row__subline">
+												<span class="task-row__done">
+													<b>Петров А.И.</b>
+													Выполнена: 05.05.2026
+												</span>
+											</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+										</div>
+									</li>
+
+									<li class="task-row is-completed is-muted">
+										<span class="task-row__status task-row__status--soft" aria-hidden="true">
+											<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+										</span>
+										<div class="task-row__body">
+											<p class="task-row__title">Выполнить инвентаризацию</p>
+											<p class="task-row__subline">
+												<span class="task-row__done task-row__done--chip">
+													<b>Петров А.И.</b>
+													Выполнена: 05.05.2026
+												</span>
+												<button type="button" class="task-row__confirm">Подтвердить выполнение</button>
+											</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+										</div>
+									</li>
+
+									<li class="task-row is-completed is-muted">
+										<span class="task-row__status task-row__status--soft" aria-hidden="true">
+											<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+										</span>
+										<div class="task-row__body">
+											<p class="task-row__title">Продлить лицензию</p>
+											<p class="task-row__subline">
+												<span class="task-row__done">
+													<b>Петров А.И.</b>
+													Выполнена: 05.05.2026
+												</span>
+												<span class="task-row__verified">
+													<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg>
+													<b>Панковец В.В.</b>
+													Проверена: 05.05.2026
+												</span>
+											</p>
+										</div>
+										<div class="task-row__meta">
+											<span class="task-row__assignee">Иванов М.С.</span>
+											<span class="task-row__date">05.05.2026</span>
+										</div>
+									</li>
+								</ul>
+
+								<button type="button" class="tasks-panel__toggle" data-tasks-toggle aria-expanded="false">
+									<span data-tasks-toggle-text>Показать завершенные: 47</span>
+								</button>
+
+								<div class="task-modal" data-task-delete-modal hidden>
+									<div class="task-modal__overlay" data-task-delete-close></div>
+									<div
+										class="task-modal__dialog"
+										role="dialog"
+										aria-modal="true"
+										aria-labelledby="task-delete-title"
+										tabindex="-1"
+									>
+										<h3 class="task-modal__title" id="task-delete-title">Подтвердите удаление задачи</h3>
+										<div class="task-modal__divider"></div>
+										<div class="task-modal__actions">
+											<button type="button" class="btn btn--sm btn--danger" data-task-delete-confirm>Удалить</button>
+											<button type="button" class="btn btn--sm btn--secondary" data-task-delete-close>Отмена</button>
+										</div>
+									</div>
+								</div>
+							</section>
+							<section class="data-panel visits-panel" data-module="VisitsPanel" data-path="components">
+								<div class="data-panel__header">
+									<h2 class="data-panel__title">Визиты</h2>
+									<a href="/" class="data-panel__export">
+										<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16">
+											<use href="#icon-download"></use>
+										</svg>
+										<span class="data-panel__export-full">Экспорт в Excel</span>
+										<span class="data-panel__export-short">Excel</span>
+									</a>
+								</div>
+
+								<div class="tabs tabs--switch visits-panel__tabs">
+									<div class="visits-panel__bar">
+										<button type="button" class="panel-create" data-visit-create aria-expanded="false">
+											<svg aria-hidden="true" focusable="false" width="28" height="28">
+												<use href="#icon-circle-plus-thin"></use>
+											</svg>
+											<span>Создать</span>
+										</button>
+
+										<div class="tabs__list">
+											<div class="tabs__item is--active">
+												<button class="tabs__tab">История</button>
+											</div>
+											<div class="tabs__item">
+												<button class="tabs__tab">Новые</button>
+											</div>
+										</div>
+									</div>
+
+									<div class="tabs__wrapper is--active">
+										<div class="visits-table__scroll">
+											<table class="visits-table">
+												<thead>
+													<tr>
+														<th class="visits-table__th" data-sort-type="date">Дата</th>
+														<th class="visits-table__th" data-sort-type="text">Тип</th>
+														<th class="visits-table__th" data-sort-type="text">Менеджер</th>
+														<th class="visits-table__th" data-sort-type="number">Чек-лист</th>
+														<th class="visits-table__th">Гео</th>
+														<th class="visits-table__th">Комментарий</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr class="visits-table__row">
+														<td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+														<td class="visits-table__td">Коучинг</td>
+														<td class="visits-table__td">Полководец Т.С.</td>
+														<td class="visits-table__td"><a href="/" class="visits-table__score">78 / 100</a></td>
+														<td class="visits-table__td">
+															<span class="visits-table__geo">
+																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-geo"></use></svg>
+															</span>
+														</td>
+														<td class="visits-table__td">Фокус на СТМ, хорошая динамика в Q1. Перспектива роста</td>
+													</tr>
+													<tr class="visits-table__row">
+														<td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+														<td class="visits-table__td">Коучинг</td>
+														<td class="visits-table__td">Петров А.И.</td>
+														<td class="visits-table__td"><a href="/" class="visits-table__score">41 / 100</a></td>
+														<td class="visits-table__td">
+															<span class="visits-table__geo">
+																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-geo"></use></svg>
+															</span>
+														</td>
+														<td class="visits-table__td">Задачи не выполняются</td>
+													</tr>
+													<tr class="visits-table__row">
+														<td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+														<td class="visits-table__td">Диагностика</td>
+														<td class="visits-table__td">Петров А.И.</td>
+														<td class="visits-table__td">
+															<span class="visits-table__score visits-table__score--bad">12 / 100</span>
+														</td>
+														<td class="visits-table__td">
+															<span class="visits-table__geo">
+																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-geo"></use></svg>
+															</span>
+														</td>
+														<td class="visits-table__td">Мотивация повышена</td>
+													</tr>
+													<tr class="visits-table__row">
+														<td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+														<td class="visits-table__td">Контроль</td>
+														<td class="visits-table__td">Полководец Т.С.</td>
+														<td class="visits-table__td">
+															<span class="visits-table__score visits-table__score--good">100 / 100</span>
+														</td>
+														<td class="visits-table__td"></td>
+														<td class="visits-table__td">Отличный результат</td>
+													</tr>
+													<tr class="visits-table__row">
+														<td class="visits-table__td"><a href="/" class="visits-table__link">12.02.2026</a></td>
+														<td class="visits-table__td">Коучинг</td>
+														<td class="visits-table__td">Петров А.И.</td>
+														<td class="visits-table__td"><a href="/" class="visits-table__score">66 / 100</a></td>
+														<td class="visits-table__td">
+															<span class="visits-table__geo">
+																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-geo"></use></svg>
+															</span>
+														</td>
+														<td class="visits-table__td">Работа над СЧ</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+									<div class="tabs__wrapper">
+										<div class="visits-panel__empty">Новых визитов нет</div>
+									</div>
+								</div>
+
+								<div class="visits-panel__footer">
+									<nav class="ui-pagination" aria-label="Страницы">
+										<button type="button" class="ui-pagination__item">1</button>
+										<button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
+										<button type="button" class="ui-pagination__item">3</button>
+										<button type="button" class="ui-pagination__item">4</button>
+										<span class="ui-pagination__dots">
+											<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg>
+										</span>
+										<button type="button" class="ui-pagination__item">22</button>
+										<button type="button" class="ui-pagination__item">23</button>
+										<button type="button" class="ui-pagination__item">24</button>
+										<button type="button" class="ui-pagination__item">25</button>
+										<button type="button" class="ui-pagination__item ui-pagination__item--next">Вперед</button>
+									</nav>
+
+									<div class="visits-panel__total">
+										<span class="visits-panel__total-text">
+											Всего:
+											<span>835</span>
+										</span>
+										<div class="page-size" data-page-size>
+											<button
+												type="button"
+												class="page-size__trigger"
+												data-page-size-trigger
+												aria-haspopup="listbox"
+												aria-expanded="false"
+											>
+												<span data-page-size-value>20</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16">
+													<use href="#icon-caret"></use>
+												</svg>
+											</button>
+											<div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">
+												<button type="button" class="page-size__option is-active" role="option" data-value="20">20</button>
+												<button type="button" class="page-size__option" role="option" data-value="50">50</button>
+												<button type="button" class="page-size__option" role="option" data-value="100">100</button>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="visit-modal" data-visit-modal data-module="VisitModal" data-path="components" hidden>
+									<div class="visit-modal__overlay" data-visit-close></div>
+									<div class="visit-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="visit-modal-title">
+										<div class="visit-modal__head">
+											<h3 class="visit-modal__title" id="visit-modal-title">Визит</h3>
+											<button type="button" class="visit-modal__close" data-visit-close aria-label="Закрыть">
+												<svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+													<path d="M4 4L12 12M12 4L4 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+												</svg>
+											</button>
+										</div>
+
+										<form class="visit-form" data-visit-form novalidate>
+											<div class="field visit-form__field">
+												<span class="field__label">Сотрудник</span>
+												<div class="field__control ui-select" data-select data-select-search>
+													<button
+														type="button"
+														class="ui-select__trigger"
+														data-select-trigger
+														aria-haspopup="listbox"
+														aria-expanded="false"
+													>
+														<span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
+														<svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16">
+															<use href="#icon-caret"></use>
+														</svg>
+													</button>
+													<div class="ui-select__panel ui-select__panel--scroll" data-select-panel role="listbox">
+														<div class="ui-select__search">
+															<input
+																type="text"
+																class="ui-select__search-input"
+																data-select-search-input
+																placeholder="Поиск сотрудника"
+																autocomplete="off"
+																aria-label="Поиск сотрудника"
+															/>
+														</div>
+														<button type="button" class="ui-select__option" role="option" data-value="Иванов М.С.">
+															Иванов М.С.
+														</button>
+														<button type="button" class="ui-select__option" role="option" data-value="Василевская М.В.">
+															Василевская М.В.
+														</button>
+														<button type="button" class="ui-select__option" role="option" data-value="Ковш Т.А.">Ковш Т.А.</button>
+														<button type="button" class="ui-select__option" role="option" data-value="Зайцева Д.М.">
+															Зайцева Д.М.
+														</button>
+														<p class="ui-select__empty" data-select-empty hidden>Ничего не найдено</p>
+													</div>
+													<input type="hidden" name="employee" value="" data-select-input data-required />
+												</div>
+												<span class="field__error">Выберите сотрудника</span>
+											</div>
+
+											<div class="visit-form__row">
+												<div class="field visit-form__field">
+													<label class="field__label" for="visit-date">Дата</label>
+													<div class="field__control ui-datepicker" data-datepicker>
+														<input
+															class="field__input ui-datepicker__input"
+															id="visit-date"
+															type="text"
+															name="date"
+															placeholder="дд.мм.гггг"
+															autocomplete="off"
+															inputmode="numeric"
+															data-datepicker-input
+															data-required
+														/>
+														<button type="button" class="ui-datepicker__toggle" data-datepicker-toggle aria-label="Открыть календарь">
+															<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-calendar"></use></svg>
+														</button>
+													</div>
+													<span class="field__error">Укажите дату</span>
+												</div>
+												<div class="field visit-form__field">
+													<span class="field__label">Время</span>
+													<div class="field__control ui-select" data-select>
+														<button
+															type="button"
+															class="ui-select__trigger"
+															data-select-trigger
+															aria-haspopup="listbox"
+															aria-expanded="false"
+														>
+															<span class="ui-select__value" data-select-value data-placeholder="чч:мм">чч:мм</span>
+															<svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16">
+																<use href="#icon-caret"></use>
+															</svg>
+														</button>
+														<div class="ui-select__panel ui-select__panel--scroll" data-select-panel role="listbox">
+															<button type="button" class="ui-select__option" role="option" data-value="09:00">09:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="09:30">09:30</button>
+															<button type="button" class="ui-select__option" role="option" data-value="10:00">10:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="10:30">10:30</button>
+															<button type="button" class="ui-select__option" role="option" data-value="11:00">11:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="11:30">11:30</button>
+															<button type="button" class="ui-select__option" role="option" data-value="12:00">12:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="13:00">13:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="14:00">14:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="15:00">15:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="16:00">16:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="17:00">17:00</button>
+															<button type="button" class="ui-select__option" role="option" data-value="18:00">18:00</button>
+														</div>
+														<input type="hidden" name="time" value="" data-select-input data-required />
+													</div>
+													<span class="field__error">Выберите время</span>
+												</div>
+											</div>
+
+											<div class="field visit-form__field">
+												<span class="field__label">Менеджер</span>
+												<div class="field__control ui-select" data-select data-select-search>
+													<button
+														type="button"
+														class="ui-select__trigger"
+														data-select-trigger
+														aria-haspopup="listbox"
+														aria-expanded="false"
+													>
+														<span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
+														<svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16">
+															<use href="#icon-caret"></use>
+														</svg>
+													</button>
+													<div class="ui-select__panel ui-select__panel--scroll" data-select-panel role="listbox">
+														<div class="ui-select__search">
+															<input
+																type="text"
+																class="ui-select__search-input"
+																data-select-search-input
+																placeholder="Поиск менеджера"
+																autocomplete="off"
+																aria-label="Поиск менеджера"
+															/>
+														</div>
+														<button type="button" class="ui-select__option" role="option" data-value="Петров А.И.">
+															Петров А.И.
+														</button>
+														<button type="button" class="ui-select__option" role="option" data-value="Полководец Т.С.">
+															Полководец Т.С.
+														</button>
+														<p class="ui-select__empty" data-select-empty hidden>Ничего не найдено</p>
+													</div>
+													<input type="hidden" name="manager" value="" data-select-input data-required />
+												</div>
+												<span class="field__error">Выберите менеджера</span>
+											</div>
+
+											<div class="field visit-form__field">
+												<span class="field__label">Тип визита</span>
+												<div class="field__control ui-select" data-select>
+													<button
+														type="button"
+														class="ui-select__trigger"
+														data-select-trigger
+														aria-haspopup="listbox"
+														aria-expanded="false"
+													>
+														<span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
+														<svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16">
+															<use href="#icon-caret"></use>
+														</svg>
+													</button>
+													<div class="ui-select__panel" data-select-panel role="listbox">
+														<button type="button" class="ui-select__option" role="option" data-value="Коучинг">Коучинг</button>
+														<button type="button" class="ui-select__option" role="option" data-value="Диагностика">
+															Диагностика
+														</button>
+														<button type="button" class="ui-select__option" role="option" data-value="Контроль">Контроль</button>
+													</div>
+													<input type="hidden" name="type" value="" data-select-input data-required />
+												</div>
+												<span class="field__error">Выберите тип визита</span>
+											</div>
+
+											<div class="field visit-form__field">
+												<label class="field__label" for="visit-comment">Комментарий</label>
+												<div class="field__control">
+													<textarea
+														class="field__input field__textarea visit-form__comment"
+														id="visit-comment"
+														name="comment"
+														rows="2"
+														autocomplete="off"
+														data-autosize
+														data-autosize-min="2"
+														data-autosize-max="12"
+													></textarea>
+												</div>
+												<span class="field__help">Дополнительная информация по теме визита</span>
+											</div>
+
+											<div class="visit-form__divider"></div>
+
+											<div class="visit-form__actions">
+												<button type="submit" class="btn btn--sm">Сохранить</button>
+												<button type="button" class="btn btn--sm btn--secondary" data-visit-close>Отмена</button>
+											</div>
+										</form>
+									</div>
+								</div>
+							</section>
+						</div>
+						<div class="wrapper__right">
+							<div class="employee-side" data-path="sections/employee">
+								<section class="employee-side__card employee-visit">
+									<h2 class="employee-side__title">Визит</h2>
+									<div class="employee-visit__score">
+										<div class="employee-visit__score-body">
+											<span class="employee-visit__score-value">42</span>
+											<span class="employee-visit__score-date">12.04.2026</span>
+										</div>
+										<a href="/" class="employee-visit__score-action" aria-label="Перейти к визиту">
+											<svg aria-hidden="true" focusable="false" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path
+													d="M4 12L12 4M12 4H5M12 4V11"
+													stroke="currentColor"
+													stroke-width="1.6"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+												/>
+											</svg>
+										</a>
+									</div>
+									<div class="employee-visit__scale">
+										<div class="employee-visit__scale-item">
+											<span class="employee-visit__scale-name">Плохо</span>
+											<span class="employee-visit__scale-range">0 – 40</span>
+										</div>
+										<div class="employee-visit__scale-item">
+											<span class="employee-visit__scale-name">Норма</span>
+											<span class="employee-visit__scale-range">41 – 60</span>
+										</div>
+										<div class="employee-visit__scale-item">
+											<span class="employee-visit__scale-name">Хорошо</span>
+											<span class="employee-visit__scale-range">61 – 80</span>
+										</div>
+										<div class="employee-visit__scale-item">
+											<span class="employee-visit__scale-name">Отлично</span>
+											<span class="employee-visit__scale-range">81 – 100</span>
+										</div>
+									</div>
+									<div class="employee-visit__field">
+										<span class="employee-side__label">Менеджер</span>
+										<span class="employee-side__value">Петров Алексей Иванович</span>
+									</div>
+									<div class="employee-visit__field">
+										<span class="employee-side__label">Комментарий</span>
+										<span class="employee-side__value">
+											Сотрудник демонстрирует хороший уровень обслуживания. Рекомендуется усилить работу с СТМ и допродажами.
+										</span>
+									</div>
+								</section>
+
+								<section class="employee-side__card employee-history">
+									<h2 class="employee-side__title">История категорий</h2>
+									<ul class="employee-history__list">
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--b">B</span>
+											<span class="employee-history__text">
+												<b>0.83</b>
+												10.03.2026
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--a">A</span>
+											<span class="employee-history__text">
+												<b>1.22</b>
+												10.02.2026
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--a">A</span>
+											<span class="employee-history__text">
+												<b>1.67</b>
+												10.03.2026
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--b">B</span>
+											<span class="employee-history__text">
+												<b>0.91</b>
+												10.01.2026
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--a">A</span>
+											<span class="employee-history__text">
+												<b>1.01</b>
+												10.12.2025
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--c">C</span>
+											<span class="employee-history__text">
+												<b>0.14</b>
+												10.11.2025
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--d">D</span>
+											<span class="employee-history__text">
+												<b>0.27</b>
+												10.10.2025
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--a">A</span>
+											<span class="employee-history__text">
+												<b>1.99</b>
+												10.09.2025
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--a">A</span>
+											<span class="employee-history__text">
+												<b>1.34</b>
+												10.08.2025
+											</span>
+										</li>
+										<li class="employee-history__item">
+											<span class="employee-history__badge employee-history__badge--b">B</span>
+											<span class="employee-history__text">
+												<b>0.78</b>
+												10.07.2025
+											</span>
+										</li>
+									</ul>
+								</section>
+
+								<section class="employee-side__card employee-params">
+									<h2 class="employee-side__title">Параметры</h2>
+									<div class="employee-params__list">
+										<div class="employee-params__item">
+											<span class="employee-side__label">Категория сотрудника</span>
+											<span class="employee-side__value">B, 12.04.2026</span>
+										</div>
+										<div class="employee-params__item">
+											<span class="employee-side__label">Медиана</span>
+											<span class="employee-side__value">Q1 2026, до 31 марта</span>
+										</div>
+										<div class="employee-params__item">
+											<span class="employee-side__label">Группа сравнения</span>
+											<span class="employee-side__value">ADEL / Минск / Кластер A</span>
+										</div>
+										<div class="employee-params__item">
+											<span class="employee-side__label">Количество чеков</span>
+											<span class="employee-side__value">142 из 80</span>
+										</div>
+										<div class="employee-params__item">
+											<span class="employee-side__label">Размер группы</span>
+											<a href="/" class="employee-side__link">28 сотрудников</a>
+										</div>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer" data-path="layouts">
+				<div class="container">
+					<div class="footer__wrapper">
+						<p class="footer__copyright">2025 © Фармацевтический холдинг «Аптека&nbsp;групп»</p>
+						<p class="footer__copyright">
+							Разработано в
+							<a href="#" target="_blank">Silentcode</a>
+						</p>
+					</div>
+				</div>
+			</footer>
+
+			<div class="toasts" data-module="Toasts" data-path="components" aria-live="polite" aria-atomic="false"></div>
+		</div>
+	</body>
+</html>

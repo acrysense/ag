@@ -1,0 +1,1822 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>AG</title>
+
+		<!-- initial-load overlay: critical inline styles so it shows before the bundle
+		     loads and hides the FOUC (sprite injection / style application) -->
+		<style>
+			.app-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				-moz-box-pack: center;
+				justify-content: center;
+				background: #f5f8fa;
+				-webkit-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				-moz-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+			}
+			.app-loader.is-hidden {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.app-loader__spinner {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				border: 3px solid #dfe7f1;
+				border-top-color: #0081ff;
+				-webkit-animation: app-loader-spin 0.7s linear infinite;
+				-moz-animation: app-loader-spin 0.7s linear infinite;
+				animation: app-loader-spin 0.7s linear infinite;
+			}
+			@-webkit-keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@-moz-keyframes app-loader-spin {
+				to {
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.app-loader__spinner {
+					-webkit-animation-duration: 1.6s;
+					-moz-animation-duration: 1.6s;
+					animation-duration: 1.6s;
+				}
+			}
+
+			/* Critical header layout: without this the header renders as plain blocks before
+		       app.css applies, so the search field stretches full-width and then snaps to its
+		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
+		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
+		       the search width changes. */
+			.header__wrapper {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-pack: justify;
+				-webkit-justify-content: space-between;
+				-moz-box-pack: justify;
+				justify-content: space-between;
+				width: 100%;
+			}
+			.header__inner {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+			}
+			.filter-search {
+				display: none;
+			}
+			body[data-header-search] .filter-search {
+				-webkit-box-flex: 0;
+				-webkit-flex: 0 0 auto;
+				-moz-box-flex: 0;
+				flex: 0 0 auto;
+				-webkit-align-self: center;
+				align-self: center;
+				width: max(266.6666666667px, 26.0416666667vw);
+				margin-left: max(32px, 3.125vw);
+				margin-right: auto;
+			}
+			@media (min-width: 744px) {
+				body[data-header-search] .filter-search {
+					display: block;
+				}
+			}
+			@media (min-width: 1024px) and (max-width: 1439.98px) {
+				body[data-header-search] .filter-search {
+					width: max(355.5555555556px, 34.7222222222vw);
+					margin-left: max(42.6666666667px, 4.1666666667vw);
+				}
+			}
+			@media (max-width: 743.98px) {
+				body[data-header-search] .filter-search {
+					display: block;
+					-webkit-box-ordinal-group: 11;
+					-webkit-order: 10;
+					-moz-box-ordinal-group: 11;
+					order: 10;
+					-webkit-box-flex: 0;
+					-webkit-flex: 0 0 100%;
+					-moz-box-flex: 0;
+					flex: 0 0 100%;
+					width: 100%;
+					margin-inline: 0;
+				}
+				body[data-header-search] .header__wrapper {
+					-webkit-flex-wrap: wrap;
+					flex-wrap: wrap;
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener("load", function () {
+				var l = document.querySelector("[data-app-loader]");
+				if (l) {
+					l.classList.add("is-hidden");
+					setTimeout(function () {
+						l.parentNode && l.remove();
+					}, 500);
+				}
+			});
+		</script>
+
+		<meta name="description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<link
+			rel="preload"
+			href="/bitrix/templates/auth/fonts/Inter/Inter-Var.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="/bitrix/templates/auth/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/bitrix/templates/auth/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/bitrix/templates/auth/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/bitrix/templates/auth/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/bitrix/templates/auth/favicon/site.webmanifest" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="AG" />
+		<meta property="og:title" content="AG" />
+		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-BbwLSmLd.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-6bidQN7V.css" />
+	</head>
+	<body class="bg-light visit-page">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			<header class="header" data-module="Header" data-path="layouts">
+				<div class="container">
+					<div class="header__wrapper">
+						<picture class="header__logotype">
+							<source srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg" media="(min-width: 744px)" />
+							<img src="/bitrix/templates/auth/assets/images/logotype-mobile-BWefyXL2.svg" width="390" height="40" alt="AG" />
+						</picture>
+						<div class="filter-search" data-module="HeaderSearch" data-path="components">
+							<div class="filter-search__control">
+								<input
+									class="filter-search__input"
+									name="header-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+									data-filter-input
+									aria-label="Поиск"
+								/>
+								<svg
+									class="filter-search__icon"
+									aria-hidden="true"
+									focusable="false"
+									viewBox="0 0 20 20"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
+									<path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+								</svg>
+							</div>
+
+							<div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
+								<div class="filter-panel__head">
+									<h2 class="filter-panel__title">Фильтр</h2>
+									<button type="button" class="filter-panel__close" data-filter-close aria-label="Закрыть">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg>
+									</button>
+								</div>
+								<div data-page-fields="employees">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="employee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Василевская М.В."
+															data-label="Василевская М.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Василевская М.В.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Волкова Ю.Г."
+															data-label="Волкова Ю.Г."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Волкова Ю.Г.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Зайцева Д.М."
+															data-label="Зайцева Д.М."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Зайцева Д.М.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Ковш Т.А."
+															data-label="Ковш Т.А."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Ковш Т.А.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Северная Т.В."
+															data-label="Северная Т.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Северная Т.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="filter-panel__grid">
+										<div class="filter-field" data-filter-key="region">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Область">Область</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Минск" data-label="Минск">Минская обл.</button>
+												<button type="button" class="filter-option" data-value="Витебск" data-label="Витебск">
+													Витебская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Брест" data-label="Брест">Брестская обл.</button>
+												<button type="button" class="filter-option" data-value="Гродно" data-label="Гродно">
+													Гродненская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Могилев" data-label="Могилев">
+													Могилевска обл.
+												</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="region" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Регион">Регион</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Минск"
+														data-label="Минск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Минск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Витебск"
+														data-label="Витебск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Витебск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Брест"
+														data-label="Брест"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Брест</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Гродно"
+														data-label="Гродно"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Гродно</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Могилев"
+														data-label="Могилев"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Могилев</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="brand" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Бренд">Бренд</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="ADEL" data-label="ADEL" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>ADEL</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Добрыя лекі"
+														data-label="Добрыя лекі"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Добрыя лекі</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Эконом"
+														data-label="Эконом"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Эконом</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="category" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Категория">Категория</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="A" data-label="A" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>A</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="B" data-label="B" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>B</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="C" data-label="C" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>C</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="D" data-label="D" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>D</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="company">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Розничная компания">Розничная компания</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Аптека групп" data-label="Аптека групп">
+													ООО “Аптека групп”
+												</button>
+												<button type="button" class="filter-option" data-value="Фарм" data-label="Фарм">ООО “Фарм”</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="pharmacy" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №112"
+															data-label="ADEL №112"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №112</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №42"
+															data-label="Аптека ADEL №42, Минск"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №42, Минск</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №4"
+															data-label="ADEL №4"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №4</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №2"
+															data-label="ADEL №2"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №2</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №24"
+															data-label="Аптека ADEL №24"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №24</span>
+													</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="manager">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">
+													Петров А.И.
+												</button>
+												<button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">
+													Полководец Т.С.
+												</button>
+											</div>
+										</div>
+
+										<!-- free-text input (list of values), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
+											<input
+												type="text"
+												class="filter-field__input"
+												name="filter-value"
+												data-filter-text
+												placeholder="Кол-во чеков"
+												autocomplete="off"
+											/>
+										</div>
+
+										<!-- numeric range (From – To), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="index" data-range>
+											<div class="filter-range">
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-from
+													placeholder="Индекс от"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+												<span class="filter-range__dash">–</span>
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-to
+													placeholder="до"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+											</div>
+										</div>
+
+										<!-- date range (From – To) -->
+										<div class="filter-field" data-filter-key="period" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Период">Период</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+
+										<!-- single date -->
+										<div class="filter-field" data-filter-key="date" data-date>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div data-page-fields="tasks">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="assignee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Иванов М.С."
+															data-label="Иванов М.С."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Иванов М.С.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Петров А.И."
+															data-label="Петров А.И."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Петров А.И.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Панковец В.В."
+															data-label="Панковец В.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Панковец В.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="filter-panel__grid">
+										<div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="filter-panel__actions">
+									<button type="button" class="btn btn--sm" data-filter-apply>Применить</button>
+									<button type="button" class="btn btn--sm btn--secondary" data-filter-reset>Сбросить</button>
+								</div>
+							</div>
+						</div>
+						<div class="header__inner">
+							<div class="profile-dropdown header__profile" data-module="ProfileDropdown" data-path="components">
+								<button class="profile-dropdown__trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+									<span class="profile-dropdown__placeholder">ВМ</span>
+									<span>Владислава Митрофановна</span>
+									<svg aria-hidden="true" width="16" height="16">
+										<use href="#icon-caret"></use>
+									</svg>
+								</button>
+								<div class="profile-dropdown__panel" role="menu">
+									<div class="profile-dropdown__wrap">
+										<a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="/" data-action="">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-settings"></use>
+											</svg>
+											<span class="profile-dropdown__text">Настройки</span>
+										</a>
+										<div class="profile-dropdown__sep" role="none"></div>
+										<button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="logout">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-exit"></use>
+											</svg>
+											<span class="profile-dropdown__text">Выход</span>
+										</button>
+										<button class="profile-dropdown__close" aria-label="Закрыть">
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-close"></use>
+											</svg>
+										</button>
+									</div>
+								</div>
+							</div>
+							<button class="header__hamburger" aria-label="Меню">
+								<svg aria-hidden="true" focusable="false" width="30" height="21">
+									<use href="#icon-hamburger"></use>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+			<main class="wrapper__content">
+				<div class="sidebar" data-module="Sidebar" data-path="layouts">
+					<button
+						type="button"
+						class="sidebar__collapse"
+						data-sidebar-collapse
+						aria-label="Свернуть меню"
+						aria-expanded="true"
+					>
+						<svg aria-hidden="true" focusable="false" width="20" height="20">
+							<use href="#icon-sidebar-toggle"></use>
+						</svg>
+					</button>
+					<div class="sidebar__wrap">
+						<div class="sidebar__section">
+							<span class="sidebar__label">ERP</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-dashboard"></use>
+										</svg>
+										<span>Дашборд</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/pharmacies" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-pharmacies"></use>
+										</svg>
+										<span>Аптеки</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/managers" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-managers"></use>
+										</svg>
+										<span>Менеджеры</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/employees" class="sidebar__link is--active">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-employees"></use>
+										</svg>
+										<span>Сотрудники</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/visits" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-visits"></use>
+										</svg>
+										<span>Визиты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/tasks" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-tasks"></use>
+										</svg>
+										<span>Задачи</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ЛИЧНЫЙ КАБИНЕТ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="/" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-user"></use>
+										</svg>
+										<span>Моя страница</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-education-portal"></use>
+										</svg>
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/coefficient" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-coefficient"></use>
+										</svg>
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/package" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-package"></use>
+										</svg>
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/motivation" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-motivation"></use>
+										</svg>
+										<span>Мотивация</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПОРТАЛ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-home"></use>
+										</svg>
+										<span>Главная</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-news"></use>
+										</svg>
+										<span>Новости</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-gallery"></use>
+										</svg>
+										<span>Галерея</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-data"></use>
+										</svg>
+										<span>База знаний</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ХОЛДИНГ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-directory"></use>
+										</svg>
+										<span>Справочник</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-vacancy"></use>
+										</svg>
+										<span>Вакансии</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПРИСОЕДИНЯЙТЕСЬ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg" width="20" height="20" alt="Аптечка+" />
+										<span>Гипермаркет Аптечка+</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="ADEL"
+										/>
+										<span>Аптеки ADEL</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="Добрыя лекi+"
+										/>
+										<span>Аптек Добрыя лекi</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+											width="20"
+											height="20"
+											alt="FeelinGood"
+										/>
+										<span>Клуб FeelinGood</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__banr"></div>
+						<div class="sidebar__banr"></div>
+						<button class="sidebar__close" aria-label="Закрыть">
+							<svg aria-hidden="true" focusable="false" width="16" height="16">
+								<use href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="wrapper__main">
+					<div class="wrapper__double" data-module="Visit" data-path="sections/visit">
+						<div class="wrapper__left">
+							<a href="/visits" class="wrapper__back">
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+								<span>Назад</span>
+							</a>
+
+							<!-- checklist -->
+							<section class="data-panel visit">
+								<div class="visit__head">
+									<h1 class="visit__title">Чек-лист визита</h1>
+									<span class="visit__date">09.05.2026, 11:26</span>
+								</div>
+
+								<!-- qualitative -->
+								<div class="visit-sec" data-collapsible>
+									<div class="visit-sec__head">
+										<h2 class="visit-sec__title">Качественные показатели</h2>
+										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть">
+											<svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-up-thin"></use></svg>
+										</button>
+									</div>
+									<div class="visit-sec__body">
+										<div class="visit-sec__body-inner">
+											<ul class="visit-q">
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes is-active" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Увеличить долю СТМ в чеке март</div>
+														<div class="visit-q__desc">
+															Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ. Улучшить мотивацию
+															сотрудника. Обсудить недостаточно высокие показатели продаж СТМ.
+														</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Пройти тренинг по товарам 6-го ранга</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no is-active" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Улучшить качество обслуживания</div>
+														<div class="visit-q__desc">Обсудить недостаточно высокие показатели продаж СТМ.</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Увеличить количество чеков</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Ознакомиться с планом продаж на Q2 2026. Расписаться бланке у менеджера</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no is-active" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Выполнить инвентаризацию</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes is-active" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Продлить лицензию</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+												<li class="visit-q__item">
+													<div class="visit-q__toggle">
+														<button type="button" class="visit-q__yn visit-q__yn--yes is-active" data-yn="yes">Да</button>
+														<button type="button" class="visit-q__yn visit-q__yn--no" data-yn="no">Нет</button>
+													</div>
+													<div class="visit-q__body">
+														<div class="visit-q__name">Увеличить долю СТМ в чеке март</div>
+													</div>
+													<div class="actions-menu visit-q__menu" data-actions>
+														<button
+															type="button"
+															class="actions-menu__trigger"
+															data-actions-trigger
+															aria-haspopup="menu"
+															aria-expanded="false"
+															aria-label="Действия"
+														>
+															<svg aria-hidden="true" focusable="false" width="24" height="24">
+																<use href="#icon-three-dots"></use>
+															</svg>
+														</button>
+														<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-comment>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg>
+																<span>Комментировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-edit>
+																<svg aria-hidden="true" focusable="false" width="20" height="20">
+																	<use href="#icon-edit-square"></use>
+																</svg>
+																<span>Редактировать</span>
+															</button>
+															<button type="button" class="actions-menu__item" role="menuitem" data-q-delete>
+																<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																<span>Удалить</span>
+															</button>
+														</div>
+													</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+
+								<!-- quantitative -->
+								<div class="visit-sec" data-collapsible>
+									<div class="visit-sec__head">
+										<h2 class="visit-sec__title">Количественные показатели</h2>
+										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть">
+											<svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-up-thin"></use></svg>
+										</button>
+									</div>
+									<div class="visit-sec__body">
+										<div class="visit-sec__body-inner">
+											<div class="visit-quant__scroll">
+												<div class="visit-quant">
+													<div class="visit-quant__head">
+														<div class="visit-quant__th visit-quant__th--idx"></div>
+														<div class="visit-quant__th visit-quant__th--crit">Критерий</div>
+														<div class="visit-quant__th visit-quant__th--num">
+															<span class="visit-quant__th-title">Качество</span>
+															<span class="visit-quant__th-note">Балы, 1-5</span>
+														</div>
+														<div class="visit-quant__th visit-quant__th--group">Оценка количества</div>
+														<div class="visit-quant__th visit-quant__th--sub visit-quant__th--sub-a">Покупателей</div>
+														<div class="visit-quant__th visit-quant__th--sub visit-quant__th--sub-b">Рекомендации</div>
+														<div class="visit-quant__th visit-quant__th--pct">%</div>
+														<div class="visit-quant__th visit-quant__th--menu"></div>
+													</div>
+													<div class="visit-quant__row">
+														<div class="visit-quant__td visit-quant__td--idx">1.</div>
+														<div class="visit-quant__td visit-quant__td--crit">
+															<span class="visit-quant__crit">Предложил акционный товар</span>
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)">
+															<input class="visit-quant__input" name="quant-1-quality" type="text" value="12" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей">
+															<input class="visit-quant__input" name="quant-1-buyers" type="text" value="4" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации">
+															<input class="visit-quant__input" name="quant-1-recs" type="text" value="5" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--pct" data-label="%">78%</div>
+														<div class="visit-quant__td visit-quant__td--menu">
+															<div class="actions-menu visit-quant__menu" data-actions>
+																<button
+																	type="button"
+																	class="actions-menu__trigger"
+																	data-actions-trigger
+																	aria-haspopup="menu"
+																	aria-expanded="false"
+																	aria-label="Действия"
+																>
+																	<svg aria-hidden="true" focusable="false" width="24" height="24">
+																		<use href="#icon-three-dots"></use>
+																	</svg>
+																</button>
+																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-comments"></use>
+																		</svg>
+																		<span>Добавить комментарий</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-edit-square"></use>
+																		</svg>
+																		<span>Редактировать</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																		<span>Удалить</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="visit-quant__row">
+														<div class="visit-quant__td visit-quant__td--idx">2.</div>
+														<div class="visit-quant__td visit-quant__td--crit">
+															<span class="visit-quant__crit">Распродал все запасы парацетамола</span>
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)">
+															<input class="visit-quant__input" name="quant-2-quality" type="text" value="12" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей">
+															<input class="visit-quant__input" name="quant-2-buyers" type="text" value="4" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации">
+															<input class="visit-quant__input" name="quant-2-recs" type="text" value="5" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--pct" data-label="%">23%</div>
+														<div class="visit-quant__td visit-quant__td--menu">
+															<div class="actions-menu visit-quant__menu" data-actions>
+																<button
+																	type="button"
+																	class="actions-menu__trigger"
+																	data-actions-trigger
+																	aria-haspopup="menu"
+																	aria-expanded="false"
+																	aria-label="Действия"
+																>
+																	<svg aria-hidden="true" focusable="false" width="24" height="24">
+																		<use href="#icon-three-dots"></use>
+																	</svg>
+																</button>
+																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-comments"></use>
+																		</svg>
+																		<span>Добавить комментарий</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-edit-square"></use>
+																		</svg>
+																		<span>Редактировать</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																		<span>Удалить</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="visit-quant__row">
+														<div class="visit-quant__td visit-quant__td--idx">3.</div>
+														<div class="visit-quant__td visit-quant__td--crit">
+															<span class="visit-quant__crit">
+																Выполнил все задачи из поставленных менеджером в ходе планового совещания
+															</span>
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)">
+															<input class="visit-quant__input" name="quant-3-quality" type="text" value="12" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей">
+															<input class="visit-quant__input" name="quant-3-buyers" type="text" value="" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации">
+															<input class="visit-quant__input" name="quant-3-recs" type="text" value="" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--pct" data-label="%"></div>
+														<div class="visit-quant__td visit-quant__td--menu">
+															<div class="actions-menu visit-quant__menu" data-actions>
+																<button
+																	type="button"
+																	class="actions-menu__trigger"
+																	data-actions-trigger
+																	aria-haspopup="menu"
+																	aria-expanded="false"
+																	aria-label="Действия"
+																>
+																	<svg aria-hidden="true" focusable="false" width="24" height="24">
+																		<use href="#icon-three-dots"></use>
+																	</svg>
+																</button>
+																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-comments"></use>
+																		</svg>
+																		<span>Добавить комментарий</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-edit-square"></use>
+																		</svg>
+																		<span>Редактировать</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																		<span>Удалить</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="visit-quant__row">
+														<div class="visit-quant__td visit-quant__td--idx">4.</div>
+														<div class="visit-quant__td visit-quant__td--crit">
+															<span class="visit-quant__crit">Выполняет план по СТМ</span>
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)">
+															<input class="visit-quant__input" name="quant-4-quality" type="text" value="12" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей">
+															<input class="visit-quant__input" name="quant-4-buyers" type="text" value="4" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации">
+															<input class="visit-quant__input" name="quant-4-recs" type="text" value="5" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--pct" data-label="%">67%</div>
+														<div class="visit-quant__td visit-quant__td--menu">
+															<div class="actions-menu visit-quant__menu" data-actions>
+																<button
+																	type="button"
+																	class="actions-menu__trigger"
+																	data-actions-trigger
+																	aria-haspopup="menu"
+																	aria-expanded="false"
+																	aria-label="Действия"
+																>
+																	<svg aria-hidden="true" focusable="false" width="24" height="24">
+																		<use href="#icon-three-dots"></use>
+																	</svg>
+																</button>
+																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-comments"></use>
+																		</svg>
+																		<span>Добавить комментарий</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-edit-square"></use>
+																		</svg>
+																		<span>Редактировать</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																		<span>Удалить</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+													<div class="visit-quant__row">
+														<div class="visit-quant__td visit-quant__td--idx">5.</div>
+														<div class="visit-quant__td visit-quant__td--crit">
+															<span class="visit-quant__crit">Скорость обслуживания</span>
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Качество (Балы, 1-5)">
+															<input class="visit-quant__input" name="quant-5-quality" type="text" value="12" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Покупателей">
+															<input class="visit-quant__input" name="quant-5-buyers" type="text" value="4" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--num" data-label="Рекомендации">
+															<input class="visit-quant__input" name="quant-5-recs" type="text" value="5" inputmode="numeric" />
+														</div>
+														<div class="visit-quant__td visit-quant__td--pct" data-label="%">90%</div>
+														<div class="visit-quant__td visit-quant__td--menu">
+															<div class="actions-menu visit-quant__menu" data-actions>
+																<button
+																	type="button"
+																	class="actions-menu__trigger"
+																	data-actions-trigger
+																	aria-haspopup="menu"
+																	aria-expanded="false"
+																	aria-label="Действия"
+																>
+																	<svg aria-hidden="true" focusable="false" width="24" height="24">
+																		<use href="#icon-three-dots"></use>
+																	</svg>
+																</button>
+																<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-comments"></use>
+																		</svg>
+																		<span>Добавить комментарий</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20">
+																			<use href="#icon-edit-square"></use>
+																		</svg>
+																		<span>Редактировать</span>
+																	</button>
+																	<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete>
+																		<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg>
+																		<span>Удалить</span>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</section>
+
+							<!-- score + comment + geo -->
+							<section class="data-panel visit-result">
+								<div class="visit-result__grid">
+									<div class="visit-score">
+										<span class="visit-score__label">Баллов по чек-листу</span>
+										<div class="visit-score__box visit-score__box--bad">
+											<span class="visit-score__value">42</span>
+											<span class="visit-score__date">12.04.2026</span>
+										</div>
+										<div class="visit-score__scale">
+											<div class="visit-score__range">
+												<b>Плохо</b>
+												<span>0 – 40</span>
+											</div>
+											<div class="visit-score__range">
+												<b>Норма</b>
+												<span>41 – 60</span>
+											</div>
+											<div class="visit-score__range">
+												<b>Хорошо</b>
+												<span>61 – 80</span>
+											</div>
+											<div class="visit-score__range">
+												<b>Отлично</b>
+												<span>81 – 100</span>
+											</div>
+										</div>
+									</div>
+									<div class="visit-comment">
+										<span class="visit-comment__label">Комментарий</span>
+										<textarea class="visit-comment__field" name="visit-comment" rows="5" data-autosize>
+Сотрудник демонстрирует хороший уровень обслуживания. Рекомендуется усилить работу с СТМ и допродажами.</textarea
+										>
+									</div>
+								</div>
+
+								<div class="visit-geo">
+									<h3 class="visit-geo__title">Геолокация менеджера</h3>
+									<div class="visit-geo__rows">
+										<div class="visit-geo__row">
+											<span class="visit-geo__label">Аптека №50:</span>
+											<a href="/" class="visit-geo__link">Минск, ул Широкая, 1к2</a>
+										</div>
+										<div class="visit-geo__row">
+											<span class="visit-geo__label">Время передачи данных:</span>
+											<span>09.03.2026 12:24</span>
+										</div>
+										<div class="visit-geo__row">
+											<span class="visit-geo__label">Локация:</span>
+											<a href="/" class="visit-geo__link">5534444.442442 , 455543.222345</a>
+										</div>
+									</div>
+									<button type="button" class="btn visit-geo__btn" data-geo-btn>Передать геолокацию</button>
+									<p class="visit-geo__error" data-geo-error hidden>Не удалось установить геолокацию, доступ заблокирован</p>
+								</div>
+							</section>
+
+							<!-- footer actions -->
+							<div class="visit__footer">
+								<div class="visit__footer-main">
+									<button type="button" class="btn">Сохранить</button>
+									<button type="button" class="btn btn--secondary">Сохранить черновик</button>
+									<button type="button" class="btn btn--ghost">Отмена</button>
+								</div>
+								<button type="button" class="visit__delete">Удалить визит</button>
+							</div>
+						</div>
+
+						<aside class="wrapper__right">
+							<!-- employee card -->
+							<section class="data-panel visit-emp">
+								<div class="visit-emp__top">
+									<div class="visit-emp__avatar">
+										<img src="/bitrix/templates/auth/assets/images/ava-_NxuE3ev.jpg" alt="Водолеев Марьян Сергеевич" />
+									</div>
+									<div class="visit-emp__info">
+										<h2 class="visit-emp__name">Водолеев Марьян Сергеевич</h2>
+										<div class="visit-emp__rating">
+											<span class="data-table__cat data-table__cat--b">b</span>
+											<span class="visit-emp__rating-vals">
+												0.83,
+												<span class="visit-emp__rating-date">10.03.2026</span>
+											</span>
+										</div>
+									</div>
+								</div>
+								<div class="visit-emp__rows">
+									<div class="visit-emp__row">
+										<span class="visit-emp__label">Должность:</span>
+										<span>Фармацевт</span>
+									</div>
+									<div class="visit-emp__row">
+										<span class="visit-emp__label">Аптека:</span>
+										<a href="/pharmacy" class="visit-emp__link">Аптека ADEL №50, Минск</a>
+									</div>
+									<div class="visit-emp__row">
+										<span class="visit-emp__label">Менеджер:</span>
+										<a href="/manager" class="visit-emp__link">Петров А.И</a>
+									</div>
+								</div>
+							</section>
+
+							<!-- visit meta -->
+							<section class="data-panel visit-meta">
+								<div class="visit-meta__block">
+									<span class="visit-meta__label">Тип визита</span>
+									<span class="visit-meta__value">Кучинг</span>
+								</div>
+								<div class="visit-meta__block">
+									<span class="visit-meta__label">Комментарий</span>
+									<p class="visit-meta__text">
+										Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ.
+										<br />
+										Средний чек.
+									</p>
+								</div>
+							</section>
+
+							<!-- visits history -->
+							<section class="data-panel visit-hist">
+								<h2 class="data-panel__title">История визитов</h2>
+								<ul class="visit-hist__list">
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--blue">78/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Коучинг</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--green">100/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Коучинг</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--red">2/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Диагностика</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--red">29/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Контроль</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--blue">78/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Контроль</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--blue">78/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Диагностика</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--green">100/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Коучинг</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--blue">78/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Коучинг</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--red">29/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Контроль</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--blue">78/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Контроль</span>
+										</span>
+									</li>
+									<li class="visit-hist__item">
+										<span class="visit-hist__score visit-hist__score--green">100/100</span>
+										<span class="visit-hist__text">
+											10.02.2026,
+											<span class="visit-hist__type">Коучинг</span>
+										</span>
+									</li>
+								</ul>
+							</section>
+						</aside>
+
+						<div class="task-modal" data-q-delete-modal hidden>
+							<div class="task-modal__overlay" data-q-delete-close></div>
+							<div
+								class="task-modal__dialog"
+								role="dialog"
+								aria-modal="true"
+								aria-labelledby="visit-q-delete-title"
+								tabindex="-1"
+							>
+								<h3 class="task-modal__title" id="visit-q-delete-title">Подтвердите удаление пункта</h3>
+								<div class="task-modal__divider"></div>
+								<div class="task-modal__actions">
+									<button type="button" class="btn btn--sm btn--danger" data-q-delete-confirm>Удалить</button>
+									<button type="button" class="btn btn--sm btn--secondary" data-q-delete-close>Отмена</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer" data-path="layouts">
+				<div class="container">
+					<div class="footer__wrapper">
+						<p class="footer__copyright">2025 © Фармацевтический холдинг «Аптека&nbsp;групп»</p>
+						<p class="footer__copyright">
+							Разработано в
+							<a href="#" target="_blank">Silentcode</a>
+						</p>
+					</div>
+				</div>
+			</footer>
+
+			<div class="toasts" data-module="Toasts" data-path="components" aria-live="polite" aria-atomic="false"></div>
+		</div>
+	</body>
+</html>

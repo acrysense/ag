@@ -210,18 +210,26 @@ export default async (root) => {
 			restoreHome()
 			setOpen(false)
 		}
-		// A fresh task can pre-select an assignee by default — e.g. the person
-		// whose page we're on. Backend opts in either with data-default-assignee
-		// on the panel, or data-default on that person's <button> option. Value
-		// must match an option's data-value. Edit mode still prefills from the row.
-		const defaultAssignee = () =>
-			root.dataset.defaultAssignee ||
-			assigneeSelect?.querySelector('.ui-select__option[data-default]')?.dataset.value ||
-			''
+		// A fresh task can pre-select an assignee by default — e.g. the person whose
+		// page we're on. Two independent values: the code (posted) and the name
+		// (shown). The backend supplies them in one of these ways:
+		//   • picker option `<button data-value="CODE" data-default>NAME</button>` —
+		//     data-value is the code, the button text is the name;
+		//   • no picker: a hidden [name="assignee"] (code) + optional hidden
+		//     [name="assignee_name"] (name) rendered pre-filled server-side.
+		const defaultOption = () =>
+			assigneeSelect?.isConnected ? assigneeSelect.querySelector('.ui-select__option[data-default]') : null
 		const openCreate = () => {
 			closeForm()
-			const preset = defaultAssignee()
-			if (preset) setSelect(assigneeSelect, preset)
+			const opt = defaultOption()
+			if (opt) {
+				// select it like a real click: name → visible label, code → input value
+				opt.click()
+			} else if (root.dataset.defaultAssignee) {
+				// raw code on the panel; the name (if any) comes from [name=assignee_name]
+				setSelect(assigneeSelect, root.dataset.defaultAssignee)
+				setAssignee(root.dataset.defaultAssignee)
+			}
 			setOpen(true)
 		}
 		const openEdit = (row) => {
@@ -250,11 +258,16 @@ export default async (root) => {
 			const a = row.querySelector('.task-row__assignee')
 			const d = row.querySelector('.task-row__date')
 			if (t && title) t.textContent = title
-			if (d && due) d.textContent = due
-			// the assignee is only editable through the picker; when the backend has
-			// dropped it, leave the row's name and stored code as they were
-			if (a && assigneeSelect?.isConnected) {
-				const name = assigneeLabel()
+			// due is optional: always write it, so clearing the field clears the row's date
+			if (d) d.textContent = due || ''
+			// update the assignee display from a REAL name source only — the picker's label
+			// or a hidden [name="assignee_name"] the backend renders. Never fall back to the
+			// bare code here: that's what showed the 1C code instead of the ФИО after an edit.
+			if (a) {
+				const pickerName = assigneeSelect?.isConnected
+					? assigneeSelect.querySelector('[data-select-value]')?.textContent.trim() || ''
+					: ''
+				const name = pickerName || form.querySelector('[name="assignee_name"]')?.value.trim() || ''
 				const code = assigneeValue()
 				if (name) a.textContent = name
 				if (code) a.dataset.assignee = code
@@ -295,10 +308,27 @@ export default async (root) => {
 			tmp.innerHTML = taskRowHTML({ ...vals, assignee_name, id: newId })
 			const row = tmp.firstElementChild
 			enhanceRow(row)
+			// drop the "Нет задач" empty-state now that a real task exists — it lives
+			// either as a non-row child of the list (JSON `.tasks-list__empty`, or the
+			// backend's own markup) or as a node marked [data-tasks-empty] in the panel
+			list?.querySelectorAll(':scope > :not(.task-row):not(.tasks-list__edit)').forEach((n) => n.remove())
+			root.querySelector('[data-tasks-empty]')?.remove()
 			const first = list?.querySelector('.task-row')
 			if (first) list.insertBefore(row, first)
 			else list?.appendChild(row)
 			updateCompleted()
+		}
+		// let another panel (a different tab) drop a row into THIS panel's list
+		root.__tasksAddRow = addRow
+
+		// switch the enclosing .tabs to the tab that hosts `el` (used when a new task
+		// belongs to a tab other than the active one)
+		const activateTabOf = (el) => {
+			const wrapper = el.closest('.tabs__wrapper')
+			const host = wrapper?.closest('.tabs')
+			if (!wrapper || !host) return
+			const idx = [...host.querySelectorAll('.tabs__wrapper')].indexOf(wrapper)
+			host.querySelectorAll('.tabs__tab')[idx]?.click()
 		}
 		const onSubmit = (e) => {
 			e.preventDefault()
@@ -313,7 +343,16 @@ export default async (root) => {
 				// post the raw code in `assignee`; render the row with the human name
 				const assigneeName = assigneeLabel()
 				runAction('create', { ...vals }, (data) => {
-					addRow({ ...vals, assignee_name: assigneeName }, data)
+					// the backend may route the new task to a specific tab by returning
+					// `tab` (response → data → tab); insert it into that panel and show it
+					const tab = data?.data?.tab ?? data?.tab
+					const target = tab ? document.querySelector(`[data-tasks-tab="${CSS.escape(String(tab))}"]`) : null
+					if (target && target !== root && typeof target.__tasksAddRow === 'function') {
+						target.__tasksAddRow({ ...vals, assignee_name: assigneeName }, data)
+						activateTabOf(target)
+					} else {
+						addRow({ ...vals, assignee_name: assigneeName }, data)
+					}
 					closeForm()
 				}, { el: submitBtn, errorMsg: 'Не удалось создать задачу' })
 			}
@@ -336,6 +375,7 @@ export default async (root) => {
 			form.removeEventListener('submit', onSubmit)
 			root.removeEventListener('click', onEditOpen)
 			restoreHome()
+			delete root.__tasksAddRow
 		})
 	}
 
@@ -565,6 +605,27 @@ export default async (root) => {
 		}
 		list.addEventListener('click', onStatusClick)
 		disposers.push(() => list.removeEventListener('click', onStatusClick))
+
+		// "Подтвердить выполнение" — the manager confirms a completed task. Sends the
+		// `confirm` action; on success the task stops being pending: the button goes
+		// away and the row is re-classified as fully closed (muted, moved down).
+		const onConfirmClick = (e) => {
+			const btn = e.target.closest('.task-row__confirm')
+			if (!btn || !list.contains(btn)) return
+			const row = btn.closest('.task-row')
+			if (!row || row.classList.contains('is-saving')) return
+			runAction(
+				'confirm',
+				{ id: taskId(row), done: true },
+				() => {
+					btn.remove() // no longer awaiting confirmation
+					updateCompleted()
+				},
+				{ el: row, errorMsg: 'Не удалось подтвердить выполнение' }
+			)
+		}
+		list.addEventListener('click', onConfirmClick)
+		disposers.push(() => list.removeEventListener('click', onConfirmClick))
 	}
 
 	updateCompleted()

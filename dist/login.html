@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>AG</title>
+
+		<!-- initial-load overlay: critical inline styles so it shows before the bundle
+		     loads and hides the FOUC (sprite injection / style application) -->
+		<style>
+			.app-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				-moz-box-pack: center;
+				justify-content: center;
+				background: #f5f8fa;
+				-webkit-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				-moz-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+			}
+			.app-loader.is-hidden {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.app-loader__spinner {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				border: 3px solid #dfe7f1;
+				border-top-color: #0081ff;
+				-webkit-animation: app-loader-spin 0.7s linear infinite;
+				-moz-animation: app-loader-spin 0.7s linear infinite;
+				animation: app-loader-spin 0.7s linear infinite;
+			}
+			@-webkit-keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@-moz-keyframes app-loader-spin {
+				to {
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.app-loader__spinner {
+					-webkit-animation-duration: 1.6s;
+					-moz-animation-duration: 1.6s;
+					animation-duration: 1.6s;
+				}
+			}
+
+			/* Critical header layout: without this the header renders as plain blocks before
+		       app.css applies, so the search field stretches full-width and then snaps to its
+		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
+		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
+		       the search width changes. */
+			.header__wrapper {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-pack: justify;
+				-webkit-justify-content: space-between;
+				-moz-box-pack: justify;
+				justify-content: space-between;
+				width: 100%;
+			}
+			.header__inner {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+			}
+			.filter-search {
+				display: none;
+			}
+			body[data-header-search] .filter-search {
+				-webkit-box-flex: 0;
+				-webkit-flex: 0 0 auto;
+				-moz-box-flex: 0;
+				flex: 0 0 auto;
+				-webkit-align-self: center;
+				align-self: center;
+				width: max(266.6666666667px, 26.0416666667vw);
+				margin-left: max(32px, 3.125vw);
+				margin-right: auto;
+			}
+			@media (min-width: 744px) {
+				body[data-header-search] .filter-search {
+					display: block;
+				}
+			}
+			@media (min-width: 1024px) and (max-width: 1439.98px) {
+				body[data-header-search] .filter-search {
+					width: max(355.5555555556px, 34.7222222222vw);
+					margin-left: max(42.6666666667px, 4.1666666667vw);
+				}
+			}
+			@media (max-width: 743.98px) {
+				body[data-header-search] .filter-search {
+					display: block;
+					-webkit-box-ordinal-group: 11;
+					-webkit-order: 10;
+					-moz-box-ordinal-group: 11;
+					order: 10;
+					-webkit-box-flex: 0;
+					-webkit-flex: 0 0 100%;
+					-moz-box-flex: 0;
+					flex: 0 0 100%;
+					width: 100%;
+					margin-inline: 0;
+				}
+				body[data-header-search] .header__wrapper {
+					-webkit-flex-wrap: wrap;
+					flex-wrap: wrap;
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener("load", function () {
+				var l = document.querySelector("[data-app-loader]");
+				if (l) {
+					l.classList.add("is-hidden");
+					setTimeout(function () {
+						l.parentNode && l.remove();
+					}, 500);
+				}
+			});
+		</script>
+
+		<meta name="description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<link
+			rel="preload"
+			href="/bitrix/templates/auth/fonts/Inter/Inter-Var.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="/bitrix/templates/auth/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/bitrix/templates/auth/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/bitrix/templates/auth/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/bitrix/templates/auth/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/bitrix/templates/auth/favicon/site.webmanifest" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="AG" />
+		<meta property="og:title" content="AG" />
+		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-BbwLSmLd.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-6bidQN7V.css" />
+	</head>
+	<body>
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<section class="auth" data-module="Auth" data-path="sections/shared">
+			<div class="auth__wrap">
+				<a href="/" class="auth__back">
+					<svg aria-hidden="true" focusable="false" width="12" height="16">
+						<use href="#icon-arrow-back"></use>
+					</svg>
+					<span>К порталу</span>
+				</a>
+				<div class="auth__main">
+					<picture class="auth__logotype">
+						<img src="/bitrix/templates/auth/assets/images/logotype-BSAnmV5C.svg" width="118" height="120" alt="AG" />
+					</picture>
+					<div class="auth__wrapper">
+						<div class="auth__top">
+							<span class="auth__title">Вход сотрудника</span>
+							<span class="auth__description">
+								Корпоративный портал холдинга
+								<br />
+								“Аптека групп”
+							</span>
+						</div>
+						<form
+							action="#"
+							class="auth-form auth__form"
+							novalidate
+						 data-success-href="/bitrix/templates/auth/"
+							data-demo="1"
+							data-fake-delay="1200"
+						>
+							<div class="field auth-form__input" data-path="components" data-module="Field">
+								<div class="field__control">
+									<input class="field__input" type="text" id="login-name" name="login" placeholder="Логин" required />
+								</div>
+								<span class="field__error" aria-hidden="true">Ошибка ввода</span>
+							</div>
+							<div class="field field--toggle auth-form__input" data-path="components" data-module="Field">
+								<div class="field__control">
+									<input
+										class="field__input"
+										type="password"
+										id="login-password"
+										name="password"
+										placeholder="Пароль"
+										required
+									/>
+									<button class="field__visibility" type="button" aria-label="Показать пароль" aria-pressed="false">
+										<svg class="field__visibility-icon field__visibility-icon--hide" aria-hidden="true" width="16" height="16">
+											<use href="#icon-eye-slash"></use>
+										</svg>
+										<svg class="field__visibility-icon field__visibility-icon--show" aria-hidden="true" width="16" height="16">
+											<use href="#icon-eye"></use>
+										</svg>
+									</button>
+								</div>
+								<span class="field__error" aria-hidden="true">Ошибка ввода</span>
+							</div>
+							<a href="/recovery" class="auth-form__link">Восстановление пароля</a>
+							<span class="auth-form__error" data-form-error hidden></span>
+							<button class="btn auth-form__btn" type="submit">Войти</button>
+						</form>
+					</div>
+				</div>
+				<span class="auth__slogan">Вместе – мы команда!</span>
+			</div>
+		</section>
+	</body>
+</html>

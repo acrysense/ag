@@ -1,0 +1,1864 @@
+<!doctype html>
+<html lang="ru">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>AG</title>
+
+		<!-- initial-load overlay: critical inline styles so it shows before the bundle
+		     loads and hides the FOUC (sprite injection / style application) -->
+		<style>
+			.app-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				-webkit-justify-content: center;
+				-moz-box-pack: center;
+				justify-content: center;
+				background: #f5f8fa;
+				-webkit-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				-moz-transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+				transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+			}
+			.app-loader.is-hidden {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.app-loader__spinner {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				border: 3px solid #dfe7f1;
+				border-top-color: #0081ff;
+				-webkit-animation: app-loader-spin 0.7s linear infinite;
+				-moz-animation: app-loader-spin 0.7s linear infinite;
+				animation: app-loader-spin 0.7s linear infinite;
+			}
+			@-webkit-keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@-moz-keyframes app-loader-spin {
+				to {
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@keyframes app-loader-spin {
+				to {
+					-webkit-transform: rotate(360deg);
+					-moz-transform: rotate(360deg);
+					transform: rotate(360deg);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.app-loader__spinner {
+					-webkit-animation-duration: 1.6s;
+					-moz-animation-duration: 1.6s;
+					animation-duration: 1.6s;
+				}
+			}
+
+			/* Critical header layout: without this the header renders as plain blocks before
+		       app.css applies, so the search field stretches full-width and then snaps to its
+		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
+		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
+		       the search width changes. */
+			.header__wrapper {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-pack: justify;
+				-webkit-justify-content: space-between;
+				-moz-box-pack: justify;
+				justify-content: space-between;
+				width: 100%;
+			}
+			.header__inner {
+				display: -webkit-box;
+				display: -webkit-flex;
+				display: -moz-box;
+				display: flex;
+				-webkit-box-align: center;
+				-webkit-align-items: center;
+				-moz-box-align: center;
+				align-items: center;
+			}
+			.filter-search {
+				display: none;
+			}
+			body[data-header-search] .filter-search {
+				-webkit-box-flex: 0;
+				-webkit-flex: 0 0 auto;
+				-moz-box-flex: 0;
+				flex: 0 0 auto;
+				-webkit-align-self: center;
+				align-self: center;
+				width: max(266.6666666667px, 26.0416666667vw);
+				margin-left: max(32px, 3.125vw);
+				margin-right: auto;
+			}
+			@media (min-width: 744px) {
+				body[data-header-search] .filter-search {
+					display: block;
+				}
+			}
+			@media (min-width: 1024px) and (max-width: 1439.98px) {
+				body[data-header-search] .filter-search {
+					width: max(355.5555555556px, 34.7222222222vw);
+					margin-left: max(42.6666666667px, 4.1666666667vw);
+				}
+			}
+			@media (max-width: 743.98px) {
+				body[data-header-search] .filter-search {
+					display: block;
+					-webkit-box-ordinal-group: 11;
+					-webkit-order: 10;
+					-moz-box-ordinal-group: 11;
+					order: 10;
+					-webkit-box-flex: 0;
+					-webkit-flex: 0 0 100%;
+					-moz-box-flex: 0;
+					flex: 0 0 100%;
+					width: 100%;
+					margin-inline: 0;
+				}
+				body[data-header-search] .header__wrapper {
+					-webkit-flex-wrap: wrap;
+					flex-wrap: wrap;
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener("load", function () {
+				var l = document.querySelector("[data-app-loader]");
+				if (l) {
+					l.classList.add("is-hidden");
+					setTimeout(function () {
+						l.parentNode && l.remove();
+					}, 500);
+				}
+			});
+		</script>
+
+		<meta name="description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<link
+			rel="preload"
+			href="/bitrix/templates/auth/fonts/Inter/Inter-Var.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="/bitrix/templates/auth/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/bitrix/templates/auth/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/bitrix/templates/auth/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/bitrix/templates/auth/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/bitrix/templates/auth/favicon/site.webmanifest" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="AG" />
+		<meta property="og:title" content="AG" />
+		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-BbwLSmLd.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-6bidQN7V.css" />
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div
+			class="top-notice"
+			data-module="TopNotice"
+			data-path="components"
+			data-key="2025-11-19"
+			role="region"
+			aria-label="Объявление"
+		>
+			<div class="top-notice__container">
+				<p class="top-notice__text">
+					Сообщение-растяжка для всех сотрудников компании. У нас важные
+					<a href="#">новости</a>
+					.
+				</p>
+				<button class="top-notice__close" type="button" aria-label="Закрыть">
+					<svg aria-hidden="true" focusable="false" width="16" height="16">
+						<use href="#icon-close"></use>
+					</svg>
+				</button>
+			</div>
+		</div>
+		<div class="wrapper">
+			<header class="header" data-module="Header" data-path="layouts">
+				<div class="container">
+					<div class="header__wrapper">
+						<picture class="header__logotype">
+							<source srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg" media="(min-width: 744px)" />
+							<img src="/bitrix/templates/auth/assets/images/logotype-mobile-BWefyXL2.svg" width="390" height="40" alt="AG" />
+						</picture>
+						<div class="filter-search" data-module="HeaderSearch" data-path="components">
+							<div class="filter-search__control">
+								<input
+									class="filter-search__input"
+									name="header-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+									data-filter-input
+									aria-label="Поиск"
+								/>
+								<svg
+									class="filter-search__icon"
+									aria-hidden="true"
+									focusable="false"
+									viewBox="0 0 20 20"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+								>
+									<circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
+									<path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+								</svg>
+							</div>
+
+							<div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
+								<div class="filter-panel__head">
+									<h2 class="filter-panel__title">Фильтр</h2>
+									<button type="button" class="filter-panel__close" data-filter-close aria-label="Закрыть">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg>
+									</button>
+								</div>
+								<div data-page-fields="employees">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="employee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Василевская М.В."
+															data-label="Василевская М.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Василевская М.В.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Волкова Ю.Г."
+															data-label="Волкова Ю.Г."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Волкова Ю.Г.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Зайцева Д.М."
+															data-label="Зайцева Д.М."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Зайцева Д.М.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Ковш Т.А."
+															data-label="Ковш Т.А."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Ковш Т.А.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Северная Т.В."
+															data-label="Северная Т.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Северная Т.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="filter-panel__grid">
+										<div class="filter-field" data-filter-key="region">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Область">Область</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Минск" data-label="Минск">Минская обл.</button>
+												<button type="button" class="filter-option" data-value="Витебск" data-label="Витебск">
+													Витебская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Брест" data-label="Брест">Брестская обл.</button>
+												<button type="button" class="filter-option" data-value="Гродно" data-label="Гродно">
+													Гродненская обл.
+												</button>
+												<button type="button" class="filter-option" data-value="Могилев" data-label="Могилев">
+													Могилевска обл.
+												</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="region" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Регион">Регион</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Минск"
+														data-label="Минск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Минск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Витебск"
+														data-label="Витебск"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Витебск</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Брест"
+														data-label="Брест"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Брест</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Гродно"
+														data-label="Гродно"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Гродно</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Могилев"
+														data-label="Могилев"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Могилев</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="brand" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Бренд">Бренд</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="ADEL" data-label="ADEL" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>ADEL</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Добрыя лекі"
+														data-label="Добрыя лекі"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Добрыя лекі</span>
+												</label>
+												<label class="filter-option">
+													<input
+														class="filter-option__input"
+														name="filter-option"
+														type="checkbox"
+														value="Эконом"
+														data-label="Эконом"
+													/>
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>Эконом</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="category" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Категория">Категория</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="A" data-label="A" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>A</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="B" data-label="B" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>B</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="C" data-label="C" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>C</span>
+												</label>
+												<label class="filter-option">
+													<input class="filter-option__input" name="filter-option" type="checkbox" value="D" data-label="D" />
+													<span class="filter-option__box" aria-hidden="true"></span>
+													<span>D</span>
+												</label>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="company">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Розничная компания">Розничная компания</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Аптека групп" data-label="Аптека групп">
+													ООО “Аптека групп”
+												</button>
+												<button type="button" class="filter-option" data-value="Фарм" data-label="Фарм">ООО “Фарм”</button>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="pharmacy" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №112"
+															data-label="ADEL №112"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №112</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №42"
+															data-label="Аптека ADEL №42, Минск"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №42, Минск</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №4"
+															data-label="ADEL №4"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №4</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №2"
+															data-label="ADEL №2"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>ADEL №2</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="ADEL №24"
+															data-label="Аптека ADEL №24"
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Аптека ADEL №24</span>
+													</label>
+												</div>
+											</div>
+										</div>
+
+										<div class="filter-field" data-filter-key="manager">
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel">
+												<button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">
+													Петров А.И.
+												</button>
+												<button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">
+													Полководец Т.С.
+												</button>
+											</div>
+										</div>
+
+										<!-- free-text input (list of values), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
+											<input
+												type="text"
+												class="filter-field__input"
+												name="filter-value"
+												data-filter-text
+												placeholder="Кол-во чеков"
+												autocomplete="off"
+											/>
+										</div>
+
+										<!-- numeric range (From – To), inline — no dropdown -->
+										<div class="filter-field filter-field--inline" data-filter-key="index" data-range>
+											<div class="filter-range">
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-from
+													placeholder="Индекс от"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+												<span class="filter-range__dash">–</span>
+												<input
+													type="text"
+													class="filter-field__input"
+													name="filter-value"
+													data-range-to
+													placeholder="до"
+													autocomplete="off"
+													inputmode="decimal"
+												/>
+											</div>
+										</div>
+
+										<!-- date range (From – To) -->
+										<div class="filter-field" data-filter-key="period" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Период">Период</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+
+										<!-- single date -->
+										<div class="filter-field" data-filter-key="date" data-date>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div data-page-fields="tasks">
+									<div class="filter-panel__top">
+										<div class="filter-field" data-filter-key="assignee" data-multi>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--list">
+												<input
+													class="filter-field__search"
+													name="filter-field-search"
+													type="text"
+													placeholder="Найти"
+													autocomplete="off"
+												/>
+												<div class="filter-field__options">
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Иванов М.С."
+															data-label="Иванов М.С."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Иванов М.С.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Петров А.И."
+															data-label="Петров А.И."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Петров А.И.</span>
+													</label>
+													<label class="filter-option">
+														<input
+															class="filter-option__input"
+															name="filter-option"
+															type="checkbox"
+															value="Панковец В.В."
+															data-label="Панковец В.В."
+														/>
+														<span class="filter-option__box" aria-hidden="true"></span>
+														<span>Панковец В.В.</span>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="filter-panel__grid">
+										<div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
+											<button type="button" class="filter-field__trigger">
+												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
+											</button>
+											<div class="filter-field__panel filter-field__panel--calendar"></div>
+										</div>
+									</div>
+								</div>
+
+								<div class="filter-panel__actions">
+									<button type="button" class="btn btn--sm" data-filter-apply>Применить</button>
+									<button type="button" class="btn btn--sm btn--secondary" data-filter-reset>Сбросить</button>
+								</div>
+							</div>
+						</div>
+						<div class="header__inner">
+							<div class="profile-dropdown header__profile" data-module="ProfileDropdown" data-path="components">
+								<button class="profile-dropdown__trigger" type="button" aria-haspopup="menu" aria-expanded="false">
+									<span class="profile-dropdown__placeholder">ВМ</span>
+									<span>Владислава Митрофановна</span>
+									<svg aria-hidden="true" width="16" height="16">
+										<use href="#icon-caret"></use>
+									</svg>
+								</button>
+								<div class="profile-dropdown__panel" role="menu">
+									<div class="profile-dropdown__wrap">
+										<a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="/" data-action="">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-settings"></use>
+											</svg>
+											<span class="profile-dropdown__text">Настройки</span>
+										</a>
+										<div class="profile-dropdown__sep" role="none"></div>
+										<button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="logout">
+											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
+												<use href="#icon-exit"></use>
+											</svg>
+											<span class="profile-dropdown__text">Выход</span>
+										</button>
+										<button class="profile-dropdown__close" aria-label="Закрыть">
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-close"></use>
+											</svg>
+										</button>
+									</div>
+								</div>
+							</div>
+							<button class="header__hamburger" aria-label="Меню">
+								<svg aria-hidden="true" focusable="false" width="30" height="21">
+									<use href="#icon-hamburger"></use>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</div>
+			</header>
+			<main class="wrapper__content">
+				<div class="sidebar" data-module="Sidebar" data-path="layouts">
+					<button
+						type="button"
+						class="sidebar__collapse"
+						data-sidebar-collapse
+						aria-label="Свернуть меню"
+						aria-expanded="true"
+					>
+						<svg aria-hidden="true" focusable="false" width="20" height="20">
+							<use href="#icon-sidebar-toggle"></use>
+						</svg>
+					</button>
+					<div class="sidebar__wrap">
+						<div class="sidebar__section">
+							<span class="sidebar__label">ERP</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-dashboard"></use>
+										</svg>
+										<span>Дашборд</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/pharmacies" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-pharmacies"></use>
+										</svg>
+										<span>Аптеки</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/managers" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-managers"></use>
+										</svg>
+										<span>Менеджеры</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/employees" class="sidebar__link is--active">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-employees"></use>
+										</svg>
+										<span>Сотрудники</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/visits" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-visits"></use>
+										</svg>
+										<span>Визиты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/tasks" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-erp-tasks"></use>
+										</svg>
+										<span>Задачи</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ЛИЧНЫЙ КАБИНЕТ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="/" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-user"></use>
+										</svg>
+										<span>Моя страница</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-education-portal"></use>
+										</svg>
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/coefficient" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-coefficient"></use>
+										</svg>
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/package" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-package"></use>
+										</svg>
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/motivation" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-motivation"></use>
+										</svg>
+										<span>Мотивация</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПОРТАЛ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-home"></use>
+										</svg>
+										<span>Главная</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-news"></use>
+										</svg>
+										<span>Новости</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-gallery"></use>
+										</svg>
+										<span>Галерея</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-data"></use>
+										</svg>
+										<span>База знаний</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ХОЛДИНГ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-directory"></use>
+										</svg>
+										<span>Справочник</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="#icon-vacancy"></use>
+										</svg>
+										<span>Вакансии</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПРИСОЕДИНЯЙТЕСЬ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg" width="20" height="20" alt="Аптечка+" />
+										<span>Гипермаркет Аптечка+</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="ADEL"
+										/>
+										<span>Аптеки ADEL</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="Добрыя лекi+"
+										/>
+										<span>Аптек Добрыя лекi</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+											width="20"
+											height="20"
+											alt="FeelinGood"
+										/>
+										<span>Клуб FeelinGood</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__banr"></div>
+						<div class="sidebar__banr"></div>
+						<button class="sidebar__close" aria-label="Закрыть">
+							<svg aria-hidden="true" focusable="false" width="16" height="16">
+								<use href="#icon-close"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="wrapper__main">
+					<div class="wrapper__container">
+						<div class="wrapper__banr"></div>
+						<section class="profile" data-module="Profile" data-path="sections/home">
+							<div class="profile__wrap">
+								<div class="profile__top">
+									<div class="profile__img">
+										<!-- no <img> → the initials placeholder underneath shows through -->
+										<span class="profile__placeholder">ВМ</span>
+										<img src="/bitrix/templates/auth/assets/images/ava-_NxuE3ev.jpg" alt="Image" />
+									</div>
+									<div class="profile__body">
+										<div class="profile__main">
+											<div class="profile__topping">
+												<span class="profile__title">Новая Владислава Митрофановна</span>
+												<a href="/edit" class="profile__edit">
+													<svg aria-hidden="true" focusable="false" width="20" height="20">
+														<use href="#icon-edit"></use>
+													</svg>
+												</a>
+											</div>
+											<div class="profile__info">
+												<span class="profile__info-item">
+													<svg aria-hidden="true" focusable="false" width="16" height="16">
+														<use href="#icon-user"></use>
+													</svg>
+													<span>Заведующая аптекой</span>
+												</span>
+												<span class="profile__info-item">
+													<svg aria-hidden="true" focusable="false" width="16" height="16">
+														<use href="#icon-badge"></use>
+													</svg>
+													<span>Аптека №50 пятой категории</span>
+												</span>
+												<span class="profile__info-item">
+													<svg aria-hidden="true" focusable="false" width="16" height="16">
+														<use href="#icon-phone"></use>
+													</svg>
+													<span>+37529 800-00-01</span>
+												</span>
+											</div>
+										</div>
+										<button class="profile__trigger">
+											<span>Подробная информация</span>
+											<svg aria-hidden="true" focusable="false" width="16" height="16">
+												<use href="#icon-caret"></use>
+											</svg>
+										</button>
+									</div>
+								</div>
+								<div class="profile__dropdown">
+									<div class="profile__dropdown-inner">
+										<div class="profile__section">
+											<span class="profile__subtitle">Личная информация</span>
+											<div class="profile__details">
+												<div class="profile__details-item">
+													<span class="profile__details-label">Дата рождения:</span>
+													<span class="profile__details-value">02.08.1998</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Телефон:</span>
+													<span class="profile__details-value">+37529 800-00-01</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">E-mail:</span>
+													<span class="profile__details-value">vlada.jein@apteka-group.by</span>
+												</div>
+											</div>
+										</div>
+										<div class="profile__section">
+											<span class="profile__subtitle">Работа</span>
+											<div class="profile__details">
+												<div class="profile__details-item">
+													<span class="profile__details-label">Юр.лицо:</span>
+													<span class="profile__details-value">Аптека групп Центр</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Департамент:</span>
+													<span class="profile__details-value">Аптека №50 пятой категории</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Должность:</span>
+													<span class="profile__details-value">Заведующая аптекой</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Рабочий телефон:</span>
+													<span class="profile__details-value">+37517 900-01-01</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Аптека:</span>
+													<span class="profile__details-value">Аптека №50</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Адрес аптеки:</span>
+													<span class="profile__details-value">Борисов, ул. Днепропетровская, 21М</span>
+												</div>
+												<div class="profile__details-item">
+													<span class="profile__details-label">Бренд:</span>
+													<span class="profile__details-value">ADEL</span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="profile__nav">
+								<ul class="profile__list">
+									<li class="profile__item">
+										<a href="#" class="profile__link">
+											<svg aria-hidden="true" focusable="false" width="20" height="20">
+												<use href="#icon-user"></use>
+											</svg>
+											<span>Моя страница</span>
+										</a>
+									</li>
+									<li class="profile__item">
+										<a href="#" class="profile__link">
+											<svg aria-hidden="true" focusable="false" width="20" height="20">
+												<use href="#icon-education-portal"></use>
+											</svg>
+											<span>Учебный портал</span>
+										</a>
+									</li>
+									<li class="profile__item">
+										<a href="#" class="profile__link">
+											<svg aria-hidden="true" focusable="false" width="20" height="20">
+												<use href="#icon-coefficient"></use>
+											</svg>
+											<span>Коэффициент</span>
+										</a>
+									</li>
+									<li class="profile__item">
+										<a href="#" class="profile__link">
+											<svg aria-hidden="true" focusable="false" width="20" height="20">
+												<use href="#icon-package"></use>
+											</svg>
+											<span>Пакеты</span>
+										</a>
+									</li>
+									<li class="profile__item">
+										<a href="#" class="profile__link">
+											<svg aria-hidden="true" focusable="false" width="20" height="20">
+												<use href="#icon-motivation"></use>
+											</svg>
+											<span>Мотивация</span>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</section>
+						<section
+							class="data-panel tasks-panel"
+							data-module="TasksPanel"
+							data-path="components"
+							data-default-assignee="Иванов М.С."
+						>
+							<div class="data-panel__header">
+								<h2 class="data-panel__title">Мои задачи</h2>
+								<div class="data-panel__actions">
+									<a href="/" class="data-panel__export">
+										<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16">
+											<use href="#icon-download"></use>
+										</svg>
+										<span class="data-panel__export-full">Экспорт в Excel</span>
+										<span class="data-panel__export-short">Excel</span>
+									</a>
+								</div>
+							</div>
+
+							<div class="tasks-panel__create">
+								<button type="button" class="panel-create" data-task-create>
+									<svg aria-hidden="true" focusable="false" width="28" height="28">
+										<use href="#icon-circle-plus-thin"></use>
+									</svg>
+									<span>Создать</span>
+								</button>
+							</div>
+
+							<form class="task-form" data-task-form novalidate hidden>
+								<div class="task-form__grid">
+									<div class="field task-form__task">
+										<label class="field__label" for="home-task-title">Задача</label>
+										<div class="field__control">
+											<input class="field__input" id="home-task-title" type="text" name="title" autocomplete="off" />
+										</div>
+										<span class="field__help">Укажите, что необходимо сделать по задаче.</span>
+									</div>
+									<div class="field task-form__assignee">
+										<span class="field__label">Ответственный</span>
+										<div class="field__control ui-select" data-task-assignee data-select-search>
+											<button
+												type="button"
+												class="ui-select__trigger"
+												data-select-trigger
+												aria-haspopup="listbox"
+												aria-expanded="false"
+											>
+												<span class="ui-select__value" data-select-value data-placeholder="Выбрать">Выбрать</span>
+												<svg class="ui-select__caret" aria-hidden="true" focusable="false" width="16" height="16">
+													<use href="#icon-caret"></use>
+												</svg>
+											</button>
+											<div class="ui-select__panel ui-select__panel--scroll" data-select-panel role="listbox">
+												<div class="ui-select__search">
+													<input
+														type="text"
+														class="ui-select__search-input"
+														data-select-search-input
+														placeholder="Поиск"
+														autocomplete="off"
+														aria-label="Поиск ответственного"
+													/>
+												</div>
+												<button type="button" class="ui-select__option" role="option" data-value="Иванов М.С.">Иванов М.С.</button>
+												<button type="button" class="ui-select__option" role="option" data-value="Петров А.И.">Петров А.И.</button>
+												<button type="button" class="ui-select__option" role="option" data-value="Панковец В.В.">
+													Панковец В.В.
+												</button>
+												<p class="ui-select__empty" data-select-empty hidden>Ничего не найдено</p>
+											</div>
+											<input type="hidden" name="assignee" value="" data-select-input />
+										</div>
+									</div>
+									<div class="task-form__daterow">
+										<div class="field task-form__date">
+											<label class="field__label" for="home-task-due">Срок исполнения</label>
+											<div class="field__control ui-datepicker" data-datepicker>
+												<input
+													class="field__input ui-datepicker__input"
+													id="home-task-due"
+													type="text"
+													name="due"
+													placeholder="дд.мм.гггг"
+													autocomplete="off"
+													inputmode="numeric"
+													data-datepicker-input
+												/>
+												<button type="button" class="ui-datepicker__toggle" data-datepicker-toggle aria-label="Открыть календарь">
+													<svg aria-hidden="true" focusable="false" width="20" height="20">
+														<use href="#icon-calendar"></use>
+													</svg>
+												</button>
+											</div>
+										</div>
+										<button
+											type="button"
+											class="task-form__hide"
+											data-task-hide
+											aria-pressed="false"
+											aria-label="Скрыть от сотрудника"
+											title="Скрыть от сотрудника"
+										>
+											<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-eye"></use></svg>
+										</button>
+										<input type="hidden" name="hidden" value="0" data-task-hide-input />
+									</div>
+								</div>
+
+								<div class="task-form__actions">
+									<button type="submit" class="btn task-form__btn">Сохранить</button>
+									<button type="reset" class="btn task-form__btn btn--secondary" data-task-cancel>Отмена</button>
+								</div>
+							</form>
+
+							<ul class="tasks-list">
+								<li class="task-row">
+									<span class="task-row__status" aria-hidden="true"></span>
+									<div class="task-row__body">
+										<p class="task-row__title">Увеличить долю СТМ в чеке март</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+									</div>
+								</li>
+
+								<li class="task-row">
+									<span class="task-row__status" aria-hidden="true"></span>
+									<div class="task-row__body">
+										<p class="task-row__title">Пройти тренинг по товарам 6-го ранга</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+										<span class="task-row__hidden" title="Скрыта для сотрудника">
+											<svg aria-hidden="true" focusable="false" width="24" height="24">
+												<use href="#icon-eye-hidden"></use>
+											</svg>
+										</span>
+									</div>
+								</li>
+
+								<li class="task-row is-completed">
+									<span class="task-row__status task-row__status--done" aria-hidden="true">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+									</span>
+									<div class="task-row__body">
+										<p class="task-row__title">Улучшить качество обслуживания</p>
+										<p class="task-row__subline">
+											<span class="task-row__done">
+												<b>Петров А.И.</b>
+												Выполнена: 05.05.2026
+											</span>
+										</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+									</div>
+								</li>
+
+								<li class="task-row">
+									<span class="task-row__status" aria-hidden="true"></span>
+									<div class="task-row__body">
+										<p class="task-row__title">Увеличить количество чеков</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+										<span class="task-row__hidden" title="Скрыта для сотрудника">
+											<svg aria-hidden="true" focusable="false" width="24" height="24">
+												<use href="#icon-eye-hidden"></use>
+											</svg>
+										</span>
+									</div>
+								</li>
+
+								<li class="task-row is-completed is-muted">
+									<span class="task-row__status task-row__status--soft" aria-hidden="true">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+									</span>
+									<div class="task-row__body">
+										<p class="task-row__title">Ознакомиться с планом продаж на Q2 2026. Расписаться бланке у менеджера</p>
+										<p class="task-row__desc">
+											Улучшить мотивацию сотрудника. Обсудить недостаточно высокие показатели продаж СТМ. Улучшить мотивацию
+											сотрудника. Обсудить недостаточно высокие показатели продаж СТМ.
+										</p>
+										<p class="task-row__subline">
+											<span class="task-row__done">
+												<b>Петров А.И.</b>
+												Выполнена: 05.05.2026
+											</span>
+										</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+									</div>
+								</li>
+
+								<li class="task-row is-completed is-muted">
+									<span class="task-row__status task-row__status--soft" aria-hidden="true">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+									</span>
+									<div class="task-row__body">
+										<p class="task-row__title">Выполнить инвентаризацию</p>
+										<p class="task-row__subline">
+											<span class="task-row__done task-row__done--chip">
+												<b>Петров А.И.</b>
+												Выполнена: 05.05.2026
+											</span>
+											<button type="button" class="task-row__confirm">Подтвердить выполнение</button>
+										</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+									</div>
+								</li>
+
+								<li class="task-row is-completed is-muted">
+									<span class="task-row__status task-row__status--soft" aria-hidden="true">
+										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>
+									</span>
+									<div class="task-row__body">
+										<p class="task-row__title">Продлить лицензию</p>
+										<p class="task-row__subline">
+											<span class="task-row__done">
+												<b>Петров А.И.</b>
+												Выполнена: 05.05.2026
+											</span>
+											<span class="task-row__verified">
+												<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg>
+												<b>Панковец В.В.</b>
+												Проверена: 05.05.2026
+											</span>
+										</p>
+									</div>
+									<div class="task-row__meta">
+										<span class="task-row__assignee">Иванов М.С.</span>
+										<span class="task-row__date">05.05.2026</span>
+									</div>
+								</li>
+							</ul>
+
+							<button type="button" class="tasks-panel__toggle" data-tasks-toggle aria-expanded="false">
+								<span data-tasks-toggle-text>Показать завершенные: 47</span>
+							</button>
+
+							<div class="task-modal" data-task-delete-modal hidden>
+								<div class="task-modal__overlay" data-task-delete-close></div>
+								<div
+									class="task-modal__dialog"
+									role="dialog"
+									aria-modal="true"
+									aria-labelledby="task-delete-title"
+									tabindex="-1"
+								>
+									<h3 class="task-modal__title" id="task-delete-title">Подтвердите удаление задачи</h3>
+									<div class="task-modal__divider"></div>
+									<div class="task-modal__actions">
+										<button type="button" class="btn btn--sm btn--danger" data-task-delete-confirm>Удалить</button>
+										<button type="button" class="btn btn--sm btn--secondary" data-task-delete-close>Отмена</button>
+									</div>
+								</div>
+							</div>
+						</section>
+						<section class="promo" data-module="Promo" data-path="sections/shared">
+							<div class="promo__slider">
+								<div class="swiper">
+									<div class="swiper-wrapper">
+										<div class="swiper-slide">
+											<a href="#" class="promo__img">
+												<img src="/bitrix/templates/auth/assets/images/banner-khRT_Y9B.jpg" width="870" height="360" alt="Image" />
+											</a>
+										</div>
+										<div class="swiper-slide">
+											<a href="#" class="promo__img">
+												<img src="/bitrix/templates/auth/assets/images/banner-khRT_Y9B.jpg" width="870" height="360" alt="Image" />
+											</a>
+										</div>
+										<div class="swiper-slide">
+											<a href="#" class="promo__img">
+												<img src="/bitrix/templates/auth/assets/images/banner-khRT_Y9B.jpg" width="870" height="360" alt="Image" />
+											</a>
+										</div>
+									</div>
+								</div>
+								<button class="swiper-button-prev" aria-label="Назад" data-swiper-prev>
+									<svg aria-hidden="true" focusable="false" width="21" height="21">
+										<use href="#icon-arrow-prev"></use>
+									</svg>
+								</button>
+								<button class="swiper-button-next" aria-label="Далее" data-swiper-next>
+									<svg aria-hidden="true" focusable="false" width="21" height="21">
+										<use href="#icon-arrow-next"></use>
+									</svg>
+								</button>
+								<div class="swiper-pagination" data-swiper-pagination></div>
+							</div>
+						</section>
+						<section
+							class="news"
+							data-module="News"
+							data-path="sections/home"
+							data-api="/local/ajax/news_list.php"
+							data-iblock="10"
+							data-batch="6"
+							data-page="1"
+						>
+							<div class="news__wrap">
+								<div class="news__top">
+									<span class="news__heading">Новости холдинга</span>
+								</div>
+								<div class="news__wrapper">
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-01-DustQUVf.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>12</span>
+												</a>
+												<a href="#" class="news-card__control is--active">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>4</span>
+												</a>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-02-gJ6jBlDg.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">Вас позвали на новогодний корпоратив, корпаратив или карпаратив?</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>12</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>4</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-03-BKsOtIBo.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>12</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>4</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-04-DZ4qklgp.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>12</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>4</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-05-DNiakKCf.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>12</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>4</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-06-CEECNkrd.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>12</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>4</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-01-DustQUVf.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>8</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>15</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+									<article class="news-card news__item">
+										<a href="/news-inner" class="news-card__main">
+											<picture class="news-card__img">
+												<img src="/bitrix/templates/auth/assets/images/news-02-gJ6jBlDg.jpg" alt="Image" />
+											</picture>
+											<div class="news-card__body">
+												<span class="news-card__title">Если бы холдинг «Аптека групп» был произведением искусства</span>
+												<span class="news-card__description">
+													Вас позвали на новогодний корпоратив, корпаратив или карпаратив? Куда отправиться, чтобы не выглядеть
+													невеждой? Верный ответ подскажут правило и советы опытных преподавателей.
+												</span>
+											</div>
+										</a>
+										<div class="news-card__bottom">
+											<div class="news-card__controls">
+												<a href="#" class="news-card__control">
+													<div class="news-card__group">
+														<svg aria-hidden="true" focusable="false" width="20" height="20">
+															<use href="#icon-comment"></use>
+														</svg>
+													</div>
+													<span>3</span>
+												</a>
+												<button class="news-card__control">
+													<div class="news-card__group">
+														<svg
+															class="news-card__icon news-card__icon--default"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like"></use>
+														</svg>
+														<svg
+															class="news-card__icon news-card__icon--active"
+															aria-hidden="true"
+															focusable="false"
+															width="16"
+															height="16"
+														>
+															<use href="#icon-like-filled"></use>
+														</svg>
+													</div>
+													<span>21</span>
+												</button>
+											</div>
+											<span class="news-card__date">12.03.2025</span>
+										</div>
+									</article>
+								</div>
+								<div class="news__loader" hidden aria-live="polite" aria-busy="false">
+									<svg class="news__spinner" aria-hidden="true" focusable="false" width="24" height="24">
+										<use href="#icon-spinner"></use>
+									</svg>
+								</div>
+								<div class="news__sentinel" aria-hidden="true"></div>
+							</div>
+						</section>
+						<div class="wrapper__banr wrapper__banr--mobile"></div>
+						<div class="wrapper__banr wrapper__banr--mobile"></div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer" data-path="layouts">
+				<div class="container">
+					<div class="footer__wrapper">
+						<p class="footer__copyright">2025 © Фармацевтический холдинг «Аптека&nbsp;групп»</p>
+						<p class="footer__copyright">
+							Разработано в
+							<a href="#" target="_blank">Silentcode</a>
+						</p>
+					</div>
+				</div>
+			</footer>
+
+			<div class="toasts" data-module="Toasts" data-path="components" aria-live="polite" aria-atomic="false"></div>
+		</div>
+	</body>
+</html>
