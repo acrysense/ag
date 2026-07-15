@@ -870,6 +870,16 @@
                 @include prop-vw(font-size, 12, sm);
             }
         }
+        // On tablet+ the meta is a right-aligned column block, so an empty date would
+        // let the assignee slide right into the date's slot and break the ФИО column
+        // alignment (issue #146). Reserve the date column (fits «дд.мм.гггг») so the
+        // assignee's right edge stays put whether or not the task has a due date. em →
+        // scales with the date's own font. Mobile stacks meta left, so it's exempt.
+        &__date {
+            @include up(tablet) {
+                min-width: 5.6em;
+            }
+        }
         &__hidden {
             display: flex;
             align-items: center;
