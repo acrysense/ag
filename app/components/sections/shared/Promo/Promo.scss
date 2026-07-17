@@ -14,6 +14,15 @@
             @include prop-vw(padding-inline, 10, sm);
             background: $color-white;
         }
+        // A .data-panel above ends flush against this white banner — no separator, so
+        // the two whites bleed together. Draw the same 10 grey strip the panels use
+        // between themselves (as a border, like .profile__nav's strips — keeps it out
+        // of the z-index dance the panel's ::before needs).
+        @include only(mobile) {
+            .data-panel + & {
+                @include border-side(top, 10, solid, $color-bg-light, sm);
+            }
+        }
 
         &__slider {
             position: relative;

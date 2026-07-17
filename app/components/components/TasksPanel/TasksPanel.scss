@@ -26,12 +26,9 @@
                 @include prop-vw(height, 40, sm);
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(padding-inline, 2, sm);
-                // 10 = exactly the panel's grey ::before separator strip below. Any more
-                // and it stacks with the panel's own 10 margin-top (adjacent margins
-                // collapse to the larger), leaving a bare white band above the strip —
-                // a ~20 gap where the design wants 10. The panel's own padding-top gives
-                // the breathing room instead.
-                @include prop-vw(margin-bottom, 10, sm);
+                // a bit more breathing room so the white panel's top edge below
+                // doesn't sit flush against the tab pill
+                @include prop-vw(margin-bottom, 20, sm);
                 @include prop-vw(margin-inline, 10, sm);
                 @include prop-vw(border-radius, 10, sm);
             }
@@ -95,6 +92,13 @@
     .data-panel.tasks-panel {
         @include only(mobile) {
             @include prop-vw(padding-top, 20, sm);
+        }
+    }
+    // …except on /tasks, where the panel hangs under the tab pill: the tabs' own
+    // margin-bottom already spaces it, so the inset would stack into an oversized gap.
+    .tabs__wrapper .data-panel.tasks-panel {
+        @include only(mobile) {
+            padding-top: 0;
         }
     }
     .tasks-panel {
