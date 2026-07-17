@@ -544,9 +544,12 @@
                     background: none;
                 }
                 // «Итого» is the card's title — same metrics as .employee-kpi__mname
-                // (and as a normal card's first cell, which gets them from its link)
+                // (and as a normal card's first cell, which gets them from its link).
+                // No margin-bottom though: mname needs one because it sits outside the
+                // gapped .employee-kpi__mrows, whereas this cell is a child of the row
+                // itself — its 5 gap already spaces the title, and a margin on top of
+                // that would double it to 10.
                 .data-table__td:first-child {
-                    @include prop-vw(margin-bottom, 5, sm);
                     @include prop-vw(padding-block, 12, sm);
                     @include prop-vw(font-size, 14, sm);
                     line-height: 1.57142857143;
