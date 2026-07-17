@@ -525,7 +525,10 @@
         // both the server-rendered list that ships the empty node next to rows (visible
         // after a refresh) and the instant after the first task is added client-side.
         // The only non-row / non-edit child of a populated list is the empty-state node.
-        &:has(> .task-row) > :not(.task-row):not(.tasks-list__edit) {
+        // Count only VISIBLE rows (matching the JS empty-state check): if the filter or
+        // the completed toggle hides every row, they stay in the DOM but the "нет задач"
+        // / "по фильтру не найдено" placeholder must still show.
+        &:has(> .task-row:not(.is-filtered-out):not(.is-hidden)) > :not(.task-row):not(.tasks-list__edit) {
             display: none;
         }
     }
