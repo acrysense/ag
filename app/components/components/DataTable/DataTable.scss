@@ -553,6 +553,11 @@
                     color: $color-black;
                 }
             }
+            // `card: false` columns are table-view only — a wide table keeps a short
+            // summary in the card instead of listing every column
+            .data-table__td[data-card-hidden] {
+                display: none;
+            }
             .data-table__td {
                 display: flex;
                 align-items: center;

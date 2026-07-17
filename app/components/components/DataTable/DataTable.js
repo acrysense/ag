@@ -58,12 +58,16 @@ function cellHTML(col, row) {
 	}
 }
 
+// a column with `card: false` stays in the table view but drops out of the mobile
+// card, so a wide table can show a short summary there instead of every column
+const cardAttr = (col) => (col.card === false ? ' data-card-hidden' : '')
+
 // one <td> (mobile card label baked in) + a full <tbody> — reused by the client
 // build and by the server render that swaps rows on each fetch
 function tdHTML(col, row) {
 	const fAttr = col.filterKey ? ` data-filter-key="${esc(col.filterKey)}"` : ''
 	const label = col.label ? ` data-label="${esc(col.label)}"` : ''
-	return `<td class="data-table__td${alignCls(col.align, 'data-table__td')}"${fAttr}${label}>${cellHTML(col, row)}</td>`
+	return `<td class="data-table__td${alignCls(col.align, 'data-table__td')}"${fAttr}${label}${cardAttr(col)}>${cellHTML(col, row)}</td>`
 }
 // config.rowKey names the row field to expose as data-row-key, so a page script
 // can tell which record a row stands for after any re-render (sort/page/filter)
@@ -89,7 +93,9 @@ function totalRowHTML(cols, total, cls) {
 			// ::before (`attr(data-label) ':'`), so without it every summary line
 			// rendered as a bare ": value"
 			const label = c.label ? ` data-label="${esc(c.label)}"` : ''
-			return `<td class="data-table__td${alignCls(c.align, 'data-table__td')}"${label}>${body}</td>`
+			// …and the same card:false opt-out, so the summary card lists exactly the
+			// fields the normal cards do
+			return `<td class="data-table__td${alignCls(c.align, 'data-table__td')}"${label}${cardAttr(c)}>${body}</td>`
 		})
 		.join('')
 	return `<tr class="data-table__row ${esc(cls || 'data-table__row--total')}" data-total-row>${cells}</tr>`
