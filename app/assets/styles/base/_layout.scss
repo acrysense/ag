@@ -195,6 +195,13 @@
 				margin-top: 0;
 			}
 		}
+		// An empty slot is display:none, so it occupies nothing — the margin above the
+		// next block was spacing it away from the banner and now just dangles as a gap
+		// at the top. The sibling rules that put a margin ON a banner need no such
+		// guard: a hidden element renders none. (Beats the rule above on specificity.)
+		&__banr:empty + * {
+			margin-top: 0;
+		}
 		&__banr + &__banr {
 			@include prop-vw(margin-top, 20, xl);
 
