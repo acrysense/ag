@@ -228,12 +228,18 @@
             border: none;
             cursor: pointer;
         }
+        // Desktop only: the highlight marks which pharmacy the staff panel below is
+        // showing. On mobile that panel is a sheet opened by the tap itself, so there
+        // is no persistent "current" row to mark — the highlight would just look like
+        // a stuck selection on a card.
         &__pharmacies .data-table__row.is-selected {
-            .data-table__td {
-                background: $color-bg;
-            }
-            .manager__pharmacy-btn {
-                font-weight: 600;
+            @include up(tablet) {
+                .data-table__td {
+                    background: $color-bg;
+                }
+                .manager__pharmacy-btn {
+                    font-weight: 600;
+                }
             }
         }
 

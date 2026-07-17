@@ -85,7 +85,11 @@ function totalRowHTML(cols, total, cls) {
 			// become interactive — "Итого" is not a link and picks nothing
 			const inert = c.type === 'select' || c.type === 'link'
 			const body = inert ? esc(total[c.key] ?? '') : cellHTML(c, total)
-			return `<td class="data-table__td${alignCls(c.align, 'data-table__td')}">${body}</td>`
+			// same data-label as a normal cell: the mobile card view prints it via
+			// ::before (`attr(data-label) ':'`), so without it every summary line
+			// rendered as a bare ": value"
+			const label = c.label ? ` data-label="${esc(c.label)}"` : ''
+			return `<td class="data-table__td${alignCls(c.align, 'data-table__td')}"${label}>${body}</td>`
 		})
 		.join('')
 	return `<tr class="data-table__row ${esc(cls || 'data-table__row--total')}" data-total-row>${cells}</tr>`
