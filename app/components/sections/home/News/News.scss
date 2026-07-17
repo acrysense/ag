@@ -204,7 +204,7 @@
             font-family: $font-secondary;
             @include prop-vw(font-size, 18, xl);
             font-weight: bold;
-            line-height: 1.2;
+            line-height: 1.22222222222;
             text-overflow: ellipsis;
             
             @include only(desktop) {

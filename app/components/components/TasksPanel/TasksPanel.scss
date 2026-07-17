@@ -26,9 +26,12 @@
                 @include prop-vw(height, 40, sm);
                 @include prop-vw(gap, 10, sm);
                 @include prop-vw(padding-inline, 2, sm);
-                // a bit more breathing room so the white panel's top edge below
-                // doesn't sit flush against the tab pill
-                @include prop-vw(margin-bottom, 20, sm);
+                // 10 = exactly the panel's grey ::before separator strip below. Any more
+                // and it stacks with the panel's own 10 margin-top (adjacent margins
+                // collapse to the larger), leaving a bare white band above the strip —
+                // a ~20 gap where the design wants 10. The panel's own padding-top gives
+                // the breathing room instead.
+                @include prop-vw(margin-bottom, 10, sm);
                 @include prop-vw(margin-inline, 10, sm);
                 @include prop-vw(border-radius, 10, sm);
             }
@@ -86,6 +89,14 @@
         }
     }
 
+    // .data-panel zeroes padding-top on mobile; the tasks panel keeps a top inset so
+    // the «Мои задачи» heading isn't flush against the grey separator strip above.
+    // Compound selector → beats the .data-panel rule regardless of source order.
+    .data-panel.tasks-panel {
+        @include only(mobile) {
+            @include prop-vw(padding-top, 20, sm);
+        }
+    }
     .tasks-panel {
         // element being saved to the backend — dim + block interaction until done
         .is-saving {
