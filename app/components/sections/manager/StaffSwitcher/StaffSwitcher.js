@@ -116,6 +116,39 @@ export default (head) => {
 	disposers.push(() => document.removeEventListener('keydown', onKeydown))
 	disposers.push(closeSheet)
 
+	// The grabber closes the sheet: a tap, or a downward pull past a threshold. Between
+	// those (a small deliberate drag that's then released) the sheet snaps back. During
+	// the pull the sheet follows the finger for feedback. One pointerup handles tap and
+	// drag alike, so there's no click/drag race. touch-action:none (CSS) keeps the pull
+	// from scrolling the backdrop.
+	const CLOSE_PULL = 60 // drag past this → close
+	const TAP_SLOP = 6 // moved less than this → it was a tap → close
+	let drag = null
+	const onGrabDown = (e) => {
+		if (!panel.classList.contains('is-open')) return
+		drag = { startY: e.clientY, dy: 0, id: e.pointerId }
+		grabber.setPointerCapture?.(e.pointerId)
+		panel.style.transition = 'none'
+	}
+	const onGrabMove = (e) => {
+		if (!drag || drag.id !== e.pointerId) return
+		drag.dy = Math.max(0, e.clientY - drag.startY) // down only
+		panel.style.transform = `translateY(${drag.dy}px)`
+	}
+	const endGrab = (e) => {
+		if (!drag || drag.id !== e.pointerId) return
+		const pulled = drag.dy
+		drag = null
+		panel.style.transition = ''
+		panel.style.transform = ''
+		grabber.releasePointerCapture?.(e.pointerId)
+		if (pulled > CLOSE_PULL || pulled < TAP_SLOP) closeSheet()
+	}
+	grabber.addEventListener('pointerdown', onGrabDown)
+	grabber.addEventListener('pointermove', onGrabMove)
+	grabber.addEventListener('pointerup', endGrab)
+	grabber.addEventListener('pointercancel', endGrab)
+
 	// delegated: the clicked button may not have existed when this module mounted
 	on(master, 'click', (e) => {
 		const btn = e.target.closest('[data-dt-select]')

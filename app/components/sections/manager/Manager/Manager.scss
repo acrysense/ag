@@ -881,12 +881,26 @@
             display: block;
             order: -1;
             flex-shrink: 0;
+            position: relative;
             @include prop-vw(width, 80, sm);
             @include prop-vw(height, 4, sm);
             @include prop-vw(margin-bottom, 15, sm);
             margin-inline: auto;
             background: $color-light-grey;
             border-radius: 4px;
+            cursor: grab;
+            touch-action: none; // the pull-to-close gesture must not scroll the backdrop
+            // the 4px bar is a tiny tap target — widen the hit area to a comfortable
+            // strip without changing how it looks
+            &::before {
+                content: '';
+                position: absolute;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 100vw;
+                @include prop-vw(height, 32, sm);
+            }
         }
         // Закрыть rides with the sheet (the whole plate travels up as one piece), so it
         // is not pinned. margin-top:auto parks it at the sheet's bottom — flush with the
