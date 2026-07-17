@@ -761,4 +761,86 @@
         // «Таргет посещений» reuses the visits-plan__target block (styled in
         // VisitsCalendar.scss) — no bespoke summary/table styles needed here
     }
+
+    // ====================================================================
+    // Mobile: «Информация по сотрудникам» is a bottom sheet, opened by picking a
+    // pharmacy in «Аптеки в курации» (StaffSwitcher injects the grabber, the
+    // Закрыть button and the backdrop). Sizes mirror the field sheets in
+    // HeaderSearch.scss so both read as the same component.
+    // ====================================================================
+    // the injected chrome only exists for the sheet — desktop keeps a plain card
+    .manager__staff-grabber,
+    .manager__staff-sheet-actions,
+    .manager__staff-backdrop {
+        display: none;
+    }
+    @include only(mobile) {
+        // the panel is reachable only through the sheet on mobile
+        .data-panel.manager__staff {
+            display: none;
+        }
+        .manager__staff-backdrop {
+            display: block;
+            position: fixed;
+            inset: 0;
+            z-index: 1110;
+            background: rgba(#212121, 0.35);
+        }
+        .data-panel.manager__staff.is-open {
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: auto;
+            z-index: 1111;
+            width: 100%;
+            max-width: none;
+            max-height: 80vh;
+            margin: 0;
+            overflow-y: auto;
+            @include prop-vw(border-radius, 16, sm);
+            border-bottom-left-radius: 0;
+            border-bottom-right-radius: 0;
+            @include prop-vw(padding-block, 12, sm);
+            @include prop-vw(padding-inline, 16, sm);
+            box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+            // .data-panel draws a grey separator strip above itself — meaningless
+            // for a sheet, and it would sit over the rounded top edge
+            &::before {
+                content: none;
+            }
+        }
+        // drag handle pinned to the top of the sheet. DataTable appends its markup
+        // after StaffSwitcher injects the chrome, so DOM order can't be relied on —
+        // `order` pins the handle first and the actions last whoever built first.
+        .manager__staff-grabber {
+            display: block;
+            order: -1;
+            position: sticky;
+            top: 0;
+            flex-shrink: 0;
+            @include prop-vw(width, 40, sm);
+            @include prop-vw(height, 4, sm);
+            @include prop-vw(margin-bottom, 12, sm);
+            margin-inline: auto;
+            background: $color-grey;
+            border-radius: 4px;
+        }
+        // Закрыть pinned to the bottom of the sheet (see the `order` note above)
+        .manager__staff-sheet-actions {
+            display: flex;
+            order: 1;
+            position: sticky;
+            bottom: 0;
+            flex-shrink: 0;
+            @include prop-vw(margin-top, 12, sm);
+            @include prop-vw(padding-top, 12, sm);
+            background: $color-white;
+            .btn {
+                flex: 1 1 0;
+            }
+        }
+    }
 }

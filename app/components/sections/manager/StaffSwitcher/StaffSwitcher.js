@@ -58,11 +58,54 @@ export default (head) => {
 		disposers.push(() => el.removeEventListener(ev, fn))
 	}
 
+	// --- Mobile: the panel is a bottom sheet, not an inline card -------------
+	// Chrome is injected once and kept hidden on desktop by CSS. The backdrop is a
+	// body-level node rather than a pseudo-element: the sheet scrolls, and an
+	// overflow ancestor would clip a pseudo-element to the sheet's own box.
+	const isMobile = () => window.matchMedia('(max-width: 743.98px)').matches
+	const grabber = document.createElement('div')
+	grabber.className = 'manager__staff-grabber'
+	panel.insertBefore(grabber, panel.firstChild)
+	const acts = document.createElement('div')
+	acts.className = 'manager__staff-sheet-actions'
+	acts.innerHTML = '<button type="button" class="btn btn--secondary" data-staff-close>Закрыть</button>'
+	panel.appendChild(acts)
+
+	let backdrop = null
+	const closeSheet = () => {
+		panel.classList.remove('is-open')
+		backdrop?.remove()
+		backdrop = null
+	}
+	const openSheet = () => {
+		if (!isMobile() || panel.classList.contains('is-open')) return
+		backdrop = document.createElement('div')
+		backdrop.className = 'manager__staff-backdrop'
+		backdrop.addEventListener('click', closeSheet)
+		document.body.appendChild(backdrop)
+		panel.classList.add('is-open')
+		panel.scrollTop = 0
+	}
+	on(panel, 'click', (e) => {
+		if (e.target.closest('[data-staff-close]')) closeSheet()
+	})
+	const onKeydown = (e) => {
+		if (e.key === 'Escape') closeSheet()
+	}
+	document.addEventListener('keydown', onKeydown)
+	disposers.push(() => document.removeEventListener('keydown', onKeydown))
+	disposers.push(closeSheet)
+
 	// delegated: the clicked button may not have existed when this module mounted
 	on(master, 'click', (e) => {
 		const btn = e.target.closest('[data-dt-select]')
 		const row = btn?.closest('[data-row-key]')
-		if (row) select(row.dataset.rowKey)
+		// open even when the pharmacy is already the current one — select() no-ops
+		// on an unchanged key, but the tap still means "show me this staff list"
+		if (row) {
+			select(row.dataset.rowKey)
+			openSheet()
+		}
 	})
 	on(master, 'datatable:render', markSelected)
 
