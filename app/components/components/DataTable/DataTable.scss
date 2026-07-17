@@ -262,6 +262,10 @@
         }
         &__link {
             color: $color-blue;
+            // `select` columns render this as a <button>, whose UA default is
+            // text-align: center — invisible until the label wraps, then it reads as a
+            // centred cell among left-aligned ones. Harmless on the <a> variant.
+            text-align: left;
             @media screen and (hover: hover) {
                 &:hover {
                     color: $color-blue-hover;
