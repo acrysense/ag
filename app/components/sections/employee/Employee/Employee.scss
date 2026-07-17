@@ -559,7 +559,9 @@
 
             @include only(desktop) {
                 @include prop-vw(padding-inline, 10, xl);
-                @include prop-vw(font-size, 15, lg);
+                // 12 (was 15) — 15@lg blew up to ~14px on 1366 while the ≥1440 value is
+                // ~12; matches the normal data-table cell instead of towering over it
+                @include prop-vw(font-size, 12, lg);
             }
             @include only(mobile) {
                 @include prop-vw(padding-inline, 10, sm);

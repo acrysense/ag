@@ -128,6 +128,12 @@
 				@include prop-vw(max-width, 1200, xl);
 				@include prop-vw(padding-inline, 60, xl);
 			}
+			// 1024–1439 (1366 laptops): the 1200 cap leaves a big empty gutter beside
+			// the sidebar, so let tasks use the whole column here. Wider screens keep
+			// the narrower reading column above.
+			@include only(desktop) {
+				max-width: none;
+			}
 		}
 		// centred single-column container (manager): 1230 content + 60px side
 		// gutters → 1350 outer

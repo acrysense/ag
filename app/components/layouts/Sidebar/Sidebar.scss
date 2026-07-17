@@ -34,7 +34,13 @@ $collapse: $collapse-dur $collapse-ease;
             @include prop-vw(padding-bottom, 40, lg);
             @include prop-vw(padding-inline, 30, lg);
             @include minvh-minus(120, lg, 100vh);
-            @include prop-vw(max-width, 350, lg);
+            // 262 (not 350) matches the ≥1440 sidebar (xl-based ≈262 at 1440), so the
+            // width is continuous across 1440 instead of jumping to 350; and flex-shrink
+            // is off so the nav is the SAME width on every page — otherwise a wide main
+            // (employees) squeezed it to ~249 while a narrow one (tasks) let it balloon
+            // to ~332. Frees ~85px for content in the 1024–1439 range (1366 laptops).
+            @include prop-vw(max-width, 262, lg);
+            flex-shrink: 0;
             width: 100%;
             @include border-side(right, 1, solid, $color-border, lg);
         }
