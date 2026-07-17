@@ -180,8 +180,13 @@ export default async (root) => {
 			createBtn?.setAttribute('aria-expanded', open ? 'true' : 'false')
 			if (open) form.querySelector('input, textarea')?.focus({ preventScroll: true })
 		}
-		// prefill the custom widgets directly (their own reset listeners cleared them)
-		const setSelect = (select, value) => {
+		// Prefill the custom widgets directly (their own reset listeners cleared them).
+		// `value` is the posted value (a 1C code); `label` is an optional human name to
+		// show. The trigger must NEVER display the raw code — it is also the name source
+		// saveEdit reads back, so a code here ends up as the row's ФИО. Name priority:
+		// the matched option's text → the explicit label → hidden [name=assignee_name] →
+		// the value itself (legacy data that stored a name in `assignee`).
+		const setSelect = (select, value, label) => {
 			if (!select) return
 			const input = select.querySelector('[data-select-input]')
 			const valueEl = select.querySelector('[data-select-value]')
@@ -189,7 +194,9 @@ export default async (root) => {
 			const match = opts.find((o) => (o.dataset.value || o.textContent.trim()) === value)
 			opts.forEach((o) => o.classList.toggle('is-active', o === match))
 			select.classList.toggle('is-filled', !!value)
-			if (valueEl) valueEl.textContent = value || valueEl.dataset.placeholder || ''
+			const shown =
+				match?.textContent.trim() || label || form.querySelector('[name="assignee_name"]')?.value.trim() || value
+			if (valueEl) valueEl.textContent = shown || valueEl.dataset.placeholder || ''
 			if (input) input.value = value || ''
 		}
 		const setHide = (on) => {
@@ -237,10 +244,13 @@ export default async (root) => {
 			if (titleInput) titleInput.value = row.querySelector('.task-row__title')?.textContent.trim() || ''
 			if (dueInput) dueInput.value = row.querySelector('.task-row__date')?.textContent.trim() || ''
 			// prefill with the stored 1C code (data-assignee), falling back to the
-			// visible text for old rows that only carried a name
+			// visible text for old rows that only carried a name. Pass the row's ФИО as
+			// the label so the picker shows this task's assignee — not the form's default
+			// [name=assignee_name] — even when the options list has no matching entry.
 			const assigneeEl = row.querySelector('.task-row__assignee')
 			const assigneeCode = assigneeEl?.dataset.assignee || assigneeEl?.textContent.trim() || ''
-			setSelect(assigneeSelect, assigneeCode)
+			const assigneeName = assigneeEl?.dataset.assignee ? assigneeEl.textContent.trim() : ''
+			setSelect(assigneeSelect, assigneeCode, assigneeName)
 			setAssignee(assigneeCode)
 			setHide(!!row.querySelector('.task-row__hidden'))
 			editLi = document.createElement('li')
