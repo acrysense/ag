@@ -340,6 +340,13 @@
                 background: $color-bg;
             }
         }
+        // «Итого» heads its summary card, so it carries the block's weight. Both
+        // summaries on this page get it; /employee's KPI keeps its lighter «Итог»,
+        // hence the page-scoped selectors rather than touching the shared blocks.
+        &__total-row .data-table__td:first-child,
+        &__kpi .employee-kpi__mtotal .employee-kpi__mname {
+            font-weight: bold;
+        }
 
         // --- category breakdown: 4 panels ---
         &__cats {

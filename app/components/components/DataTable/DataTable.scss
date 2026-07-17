@@ -533,16 +533,24 @@
                 @include prop-vw(padding-bottom, 10, sm);
                 @include border-side(bottom, 1, solid, $color-border, sm);
             }
-            // The summary reads as one tinted card. Table mode tints each <td> (so the
-            // tint spans the row); stacked into a card that would stripe every line, so
-            // the row carries the tint here and the cells stay transparent.
+            // The summary reads as one tinted card, mirroring .employee-kpi__mtotal:
+            // same tint, no radius, the row's own 10/10 padding. Table mode tints each
+            // <td> (so the tint spans the row); stacked into a card that would stripe
+            // every line, so the row carries the tint and the cells stay transparent.
             .data-table__row[data-total-row] {
                 background: $color-bg;
-                @include prop-vw(border-radius, 10, sm);
-                @include prop-vw(padding, 16, sm);
                 border-bottom: none;
                 .data-table__td {
                     background: none;
+                }
+                // «Итого» is the card's title — same metrics as .employee-kpi__mname
+                // (and as a normal card's first cell, which gets them from its link)
+                .data-table__td:first-child {
+                    @include prop-vw(margin-bottom, 5, sm);
+                    @include prop-vw(padding-block, 12, sm);
+                    @include prop-vw(font-size, 14, sm);
+                    line-height: 1.57142857143;
+                    color: $color-black;
                 }
             }
             .data-table__td {
