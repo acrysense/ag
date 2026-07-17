@@ -139,9 +139,9 @@
 				@include prop-vw(max-width, 1350, xl);
 				@include prop-vw(padding-inline, 60, xl);
 			}
-			@include only(mobile) {
-				@include prop-vw(padding-inline, 10, sm);
-			}
+			// No mobile padding — same as __container/__narrow/__wide. Everything
+			// inside brings its own 10 gutter (.data-panel's padding-inline, the back
+			// link's margin-left), so a wrapper gutter here doubled it to 20.
 		}
 		&__banr {
 			position: relative;
