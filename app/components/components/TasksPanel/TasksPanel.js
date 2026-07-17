@@ -35,7 +35,12 @@ function taskRowHTML(t) {
 		meta += '<span class="task-row__hidden" title="Скрыта для сотрудника"><svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg></span>'
 
 	const idAttr = t.id != null && t.id !== '' ? ` data-task-id="${escTask(t.id)}"` : ''
-	return `<li class="task-row${done ? ' is-completed' : ''}"${idAttr}>${status}<div class="task-row__body">${body}</div><div class="task-row__meta">${meta}</div></li>`
+	// invisible filter keys — the header-search filter reads these for «Менеджер» /
+	// «Аптека» (a task row shows neither column). Rendered only when the backend
+	// supplies them, so demo rows without them simply aren't matched by those filters.
+	const mgrAttr = t.manager ? ` data-manager="${escTask(t.manager)}"` : ''
+	const pharmAttr = t.pharmacy ? ` data-pharmacy="${escTask(t.pharmacy)}"` : ''
+	return `<li class="task-row${done ? ' is-completed' : ''}"${idAttr}${mgrAttr}${pharmAttr}>${status}<div class="task-row__body">${body}</div><div class="task-row__meta">${meta}</div></li>`
 }
 
 // POST a task mutation to the backend and resolve on success / throw on failure.

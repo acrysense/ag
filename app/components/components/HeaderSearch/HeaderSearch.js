@@ -51,19 +51,28 @@ export default (root) => {
 		if (!lists.length) return
 		const q = query.trim().toLowerCase()
 		const assignees = list.filter((f) => f.key === 'assignee').map((f) => f.value.toLowerCase())
+		// manager and pharmacy have no visible column on a task row, so they match
+		// data-manager / data-pharmacy the backend renders (see TasksPanel.taskRowHTML)
+		const managers = list.filter((f) => f.key === 'manager').map((f) => f.value.toLowerCase())
+		const pharmacies = list.filter((f) => f.key === 'pharmacy').map((f) => f.value.toLowerCase())
 		const date = list.find((f) => f.key === 'date' && f.range)
 		const from = date ? parseDmy(date.range.from) : null
 		const to = date ? parseDmy(date.range.to) : null
-		const active = !!q || assignees.length > 0 || (from != null && to != null)
+		const active =
+			!!q || assignees.length > 0 || managers.length > 0 || pharmacies.length > 0 || (from != null && to != null)
 
 		lists.forEach((ul) => {
 			const rows = [...ul.querySelectorAll('.task-row')]
 			rows.forEach((row) => {
 				const who = (row.querySelector('.task-row__assignee')?.textContent || '').toLowerCase()
+				const mgr = (row.dataset.manager || '').toLowerCase()
+				const pharm = (row.dataset.pharmacy || '').toLowerCase()
 				const when = parseDmy(row.querySelector('.task-row__date')?.textContent || '')
 				let ok = true
 				if (q && !row.textContent.toLowerCase().includes(q)) ok = false
 				if (ok && assignees.length && !assignees.some((a) => who.includes(a))) ok = false
+				if (ok && managers.length && !managers.some((m) => mgr.includes(m))) ok = false
+				if (ok && pharmacies.length && !pharmacies.some((p) => pharm.includes(p))) ok = false
 				if (ok && from != null && to != null && (when == null || when < from || when > to)) ok = false
 				row.classList.toggle('is-filtered-out', !ok)
 			})
