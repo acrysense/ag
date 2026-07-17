@@ -533,6 +533,18 @@
                 @include prop-vw(padding-bottom, 10, sm);
                 @include border-side(bottom, 1, solid, $color-border, sm);
             }
+            // The summary reads as one tinted card. Table mode tints each <td> (so the
+            // tint spans the row); stacked into a card that would stripe every line, so
+            // the row carries the tint here and the cells stay transparent.
+            .data-table__row[data-total-row] {
+                background: $color-bg;
+                @include prop-vw(border-radius, 10, sm);
+                @include prop-vw(padding, 16, sm);
+                border-bottom: none;
+                .data-table__td {
+                    background: none;
+                }
+            }
             .data-table__td {
                 display: flex;
                 align-items: center;

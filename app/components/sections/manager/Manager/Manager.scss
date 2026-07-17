@@ -332,8 +332,13 @@
             }
         }
         &__total-row .data-table__td {
-            background: $color-bg;
             font-weight: 600;
+            // Table mode tints each cell so the tint spans the row. The card view
+            // stacks those cells vertically, where a per-cell tint would stripe every
+            // line — there the whole row is tinted instead (see DataTable.scss).
+            @include up(tablet) {
+                background: $color-bg;
+            }
         }
 
         // --- category breakdown: 4 panels ---
