@@ -771,7 +771,9 @@
             position: fixed;
             inset: 0;
             z-index: 1110;
-            background: rgba(#212121, 0.35);
+            // light blurred dimmer — same overlay as the page's modals/sheets
+            background: rgba(245, 248, 250, 0.6);
+            backdrop-filter: blur(2.5px);
         }
         .filter-field.is-open .filter-field__panel,
         .filter-field.is-open .filter-field__panel.filter-field__panel--calendar {

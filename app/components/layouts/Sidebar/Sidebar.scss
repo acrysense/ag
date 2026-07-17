@@ -49,7 +49,9 @@ $collapse: $collapse-dur $collapse-ease;
             padding: 0;
             min-height: 100dvh;
             max-width: none;
-            background: rgba(#212121, 0.8);
+            // light blurred dimmer — same overlay as the page's modals/sheets
+            background: rgba(245, 248, 250, 0.6);
+            backdrop-filter: blur(2.5px);
             border: none;
             opacity: 0;
             visibility: hidden;

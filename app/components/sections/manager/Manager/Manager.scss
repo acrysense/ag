@@ -829,11 +829,13 @@
         .data-panel.manager__staff {
             display: none;
         }
-        // The backdrop is the scroller and the sheet rides inside it, so scrolling
-        // lifts the whole sheet over the dimmer and on past the top — rather than a
-        // pinned sheet scrolling its own guts. Overlay matches the page's other modals
-        // (TasksPanel / VisitsPanel).
+        // The backdrop is the dimmer AND the scroller; the panel rides inside it, so a
+        // scroll lifts the whole sheet up over the dimmer and off the top (not a pinned
+        // sheet scrolling its own guts). Moving the panel here is safe — app.js skips
+        // relocations, so DataTable / StaffSwitcher aren't re-initialised.
         .manager__staff-backdrop {
+            // a plain scroller, not a flex column — a flex column would shrink the
+            // panel to the viewport and spill its (flex-shrink:0) content past the edge
             display: block;
             position: fixed;
             inset: 0;
@@ -845,20 +847,20 @@
         .data-panel.manager__staff.is-open {
             display: flex;
             flex-direction: column;
-            position: relative; // in the backdrop's flow — it is what moves on scroll
+            position: relative; // in the backdrop's scroll flow — this is what moves
             z-index: 1;
             width: 100%;
             max-width: none;
             max-height: none;
-            // the dimmer shows through this strip until the sheet is scrolled over it
+            // dimmer shows through this strip until the sheet is scrolled up over it
             @include prop-vw(margin-top, 60, sm);
-            // …and a short list still reaches the bottom instead of floating mid-screen
+            // a short list still fills to the bottom instead of floating mid-screen
             min-height: calc(100dvh - #{vw-range(60, sm)});
             @include prop-vw(border-radius, 10, sm);
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
-            @include prop-vw(padding-top, 30, sm);
-            @include prop-vw(padding-bottom, 20, sm);
+            @include prop-vw(padding-top, 15, sm);
+            padding-bottom: 0; // Закрыть's own backing provides the bottom spacing
             @include prop-vw(padding-inline, 10, sm);
             box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
             // .data-panel draws a grey separator strip above itself — meaningless
@@ -866,9 +868,8 @@
             &::before {
                 content: none;
             }
-            // Nothing may be squeezed to fit: .data-table__scroll carries
-            // overflow-y: hidden (it only ever scrolls sideways), so shrinking it
-            // silently clipped the card list.
+            // Nothing may be squeezed: .data-table__scroll carries overflow-y: hidden
+            // (it only ever scrolls sideways), so shrinking it clipped the card list.
             > * {
                 flex-shrink: 0;
             }
@@ -887,21 +888,17 @@
             background: $color-light-grey;
             border-radius: 4px;
         }
-        // Закрыть stays reachable at the bottom while the sheet travels. It is the only
-        // pinned part, so it needs an opaque backing and a z-index above the rows —
-        // .data-table__td and the pager sit in the same stacking context and would
-        // otherwise scroll straight over it.
+        // Закрыть rides with the sheet (the whole plate travels up as one piece), so it
+        // is not pinned. margin-top:auto parks it at the sheet's bottom — flush with the
+        // viewport bottom at rest, and it rises with the sheet on scroll.
         .manager__staff-sheet-actions {
             display: flex;
             order: 1;
             flex-shrink: 0;
-            position: sticky;
-            bottom: 0;
-            z-index: 2;
-            // cancel the sheet's own side padding so the backing is full-bleed; its own
-            // 10 then lands the button on the same 10 gutter as the rest of the content
+            margin-top: auto;
+            // cancel the sheet's side padding so the white backing is full-bleed; its
+            // own 10 then lands the button on the same 10 gutter as the content
             @include prop-vw(margin-inline, -10, sm);
-            @include prop-vw(margin-top, 15, sm);
             @include prop-vw(padding-top, 10, sm);
             @include prop-vw(padding-inline, 10, sm);
             @include prop-vw(padding-bottom, 15, sm);

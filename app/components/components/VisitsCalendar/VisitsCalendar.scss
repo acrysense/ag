@@ -638,9 +638,10 @@
 			position: fixed;
 			inset: 0;
 			z-index: 1200;
-			background: rgba(#212121, 0.35);
-			backdrop-filter: blur(4px);
-			-webkit-backdrop-filter: blur(4px);
+			// light blurred dimmer — same overlay as the page's modals/sheets
+			background: rgba(245, 248, 250, 0.6);
+			backdrop-filter: blur(2.5px);
+			-webkit-backdrop-filter: blur(2.5px);
 			animation: vcal-pop-backdrop-in 0.22s ease both;
 		}
 	}

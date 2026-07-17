@@ -21,7 +21,11 @@ function init() {
 	const lifecycleObserver = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
 			mutation.removedNodes.forEach((node) => {
-				if (node instanceof Element) unmount(node)
+				// A relocated node reports a removal too, but it's still in the document
+				// under its new parent — don't dispose it (mount() then skips it as
+				// already-mounted, so a move is a no-op). Only truly detached nodes
+				// unmount. Lets a component move in the DOM without re-initialising.
+				if (node instanceof Element && !node.isConnected) unmount(node)
 			})
 			mutation.addedNodes.forEach((node) => {
 				if (node instanceof Element) mount(node)

@@ -68,11 +68,13 @@ export default (head) => {
 	}
 
 	// --- Mobile: the panel is a bottom sheet, not an inline card -------------
-	// The backdrop is both the dimmer AND the scroller, and the panel moves inside it
-	// while open. That's what makes the sheet itself travel up over the backdrop as you
-	// scroll (a fixed sheet with its own overflow would sit still and scroll its guts).
-	// A body-level node is also required for the backdrop to cover the viewport at all:
-	// the panel's own ancestors would clip a pseudo-element to the panel's box.
+	// The backdrop is the dimmer AND the scroller; the panel moves inside it while open,
+	// so scrolling lifts the whole sheet up over the dimmer and off the top — instead of
+	// a pinned sheet scrolling its own guts. Moving the panel is safe: app.js's observer
+	// skips relocations (a still-connected node isn't unmounted), so DataTable and this
+	// module aren't re-initialised. Closing returns the panel to its page slot (marked
+	// by panelHome). A body-level backdrop is also required to cover the viewport — the
+	// panel's own ancestors would clip it otherwise.
 	const isMobile = () => window.matchMedia('(max-width: 743.98px)').matches
 	const grabber = document.createElement('div')
 	grabber.className = 'manager__staff-grabber'
@@ -81,7 +83,6 @@ export default (head) => {
 	acts.className = 'manager__staff-sheet-actions'
 	acts.innerHTML = '<button type="button" class="btn" data-staff-close>Закрыть</button>'
 	panel.appendChild(acts)
-	// marker for the panel's spot in the page, so closing puts it back where it was
 	const panelHome = document.createComment('staff-panel-home')
 	panel.before(panelHome)
 
@@ -89,7 +90,7 @@ export default (head) => {
 	const closeSheet = () => {
 		if (!backdrop) return
 		panel.classList.remove('is-open')
-		panelHome.after(panel) // out of the backdrop, back into the page
+		panelHome.after(panel)
 		backdrop.remove()
 		backdrop = null
 	}
@@ -97,9 +98,8 @@ export default (head) => {
 		if (!isMobile() || panel.classList.contains('is-open')) return
 		backdrop = document.createElement('div')
 		backdrop.className = 'manager__staff-backdrop'
-		// the panel lives inside now, so only a hit on the backdrop's own strip closes
 		backdrop.addEventListener('click', (e) => {
-			if (e.target === backdrop) closeSheet()
+			if (e.target === backdrop) closeSheet() // only the exposed dimmer strip
 		})
 		document.body.appendChild(backdrop)
 		backdrop.appendChild(panel)
