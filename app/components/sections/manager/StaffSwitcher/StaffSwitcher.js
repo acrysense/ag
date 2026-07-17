@@ -14,6 +14,10 @@ export default (head) => {
 	const panel = head.closest('.manager__staff')
 	const master = document.querySelector('.manager__pharmacies')
 	if (!panel || !master) return
+	// mount guard, same as DataTable/VisitsCalendar: this module injects the sheet
+	// chrome, so a second run would stack another grabber and Закрыть into the panel
+	if (head.__staffSwitcherBound) return
+	head.__staffSwitcherBound = true
 
 	const srcEl = panel.querySelector('[data-staff-source]')
 	let source = {}
@@ -64,32 +68,43 @@ export default (head) => {
 	}
 
 	// --- Mobile: the panel is a bottom sheet, not an inline card -------------
-	// Chrome is injected once and kept hidden on desktop by CSS. The backdrop is a
-	// body-level node rather than a pseudo-element: the sheet scrolls, and an
-	// overflow ancestor would clip a pseudo-element to the sheet's own box.
+	// The backdrop is both the dimmer AND the scroller, and the panel moves inside it
+	// while open. That's what makes the sheet itself travel up over the backdrop as you
+	// scroll (a fixed sheet with its own overflow would sit still and scroll its guts).
+	// A body-level node is also required for the backdrop to cover the viewport at all:
+	// the panel's own ancestors would clip a pseudo-element to the panel's box.
 	const isMobile = () => window.matchMedia('(max-width: 743.98px)').matches
 	const grabber = document.createElement('div')
 	grabber.className = 'manager__staff-grabber'
 	panel.insertBefore(grabber, panel.firstChild)
 	const acts = document.createElement('div')
 	acts.className = 'manager__staff-sheet-actions'
-	acts.innerHTML = '<button type="button" class="btn btn--secondary" data-staff-close>Закрыть</button>'
+	acts.innerHTML = '<button type="button" class="btn" data-staff-close>Закрыть</button>'
 	panel.appendChild(acts)
+	// marker for the panel's spot in the page, so closing puts it back where it was
+	const panelHome = document.createComment('staff-panel-home')
+	panel.before(panelHome)
 
 	let backdrop = null
 	const closeSheet = () => {
+		if (!backdrop) return
 		panel.classList.remove('is-open')
-		backdrop?.remove()
+		panelHome.after(panel) // out of the backdrop, back into the page
+		backdrop.remove()
 		backdrop = null
 	}
 	const openSheet = () => {
 		if (!isMobile() || panel.classList.contains('is-open')) return
 		backdrop = document.createElement('div')
 		backdrop.className = 'manager__staff-backdrop'
-		backdrop.addEventListener('click', closeSheet)
+		// the panel lives inside now, so only a hit on the backdrop's own strip closes
+		backdrop.addEventListener('click', (e) => {
+			if (e.target === backdrop) closeSheet()
+		})
 		document.body.appendChild(backdrop)
+		backdrop.appendChild(panel)
 		panel.classList.add('is-open')
-		panel.scrollTop = 0
+		backdrop.scrollTop = 0
 	}
 	on(panel, 'click', (e) => {
 		if (e.target.closest('[data-staff-close]')) closeSheet()
@@ -148,5 +163,8 @@ export default (head) => {
 		disposers.push(() => document.removeEventListener('datatable:ready', onReady))
 	}
 
-	return () => disposers.forEach((d) => d())
+	return () => {
+		disposers.forEach((d) => d())
+		delete head.__staffSwitcherBound
+	}
 }

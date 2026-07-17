@@ -829,30 +829,31 @@
         .data-panel.manager__staff {
             display: none;
         }
-        // same overlay the page's other modals use (TasksPanel / VisitsPanel)
+        // The backdrop is the scroller and the sheet rides inside it, so scrolling
+        // lifts the whole sheet over the dimmer and on past the top — rather than a
+        // pinned sheet scrolling its own guts. Overlay matches the page's other modals
+        // (TasksPanel / VisitsPanel).
         .manager__staff-backdrop {
             display: block;
             position: fixed;
             inset: 0;
             z-index: 1110;
+            overflow-y: auto;
             background: rgba(245, 248, 250, 0.6);
             backdrop-filter: blur(2.5px);
         }
         .data-panel.manager__staff.is-open {
             display: flex;
             flex-direction: column;
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            top: auto;
-            z-index: 1111;
+            position: relative; // in the backdrop's flow — it is what moves on scroll
+            z-index: 1;
             width: 100%;
             max-width: none;
-            // stops 60 short of the viewport top; shorter content keeps a shorter sheet
-            max-height: calc(100dvh - #{vw-range(60, sm)});
-            margin: 0;
-            overflow-y: auto;
+            max-height: none;
+            // the dimmer shows through this strip until the sheet is scrolled over it
+            @include prop-vw(margin-top, 60, sm);
+            // …and a short list still reaches the bottom instead of floating mid-screen
+            min-height: calc(100dvh - #{vw-range(60, sm)});
             @include prop-vw(border-radius, 10, sm);
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
@@ -865,20 +866,16 @@
             &::before {
                 content: none;
             }
-            // The sheet is the scroller, so nothing inside may be squeezed to fit it.
-            // .data-table__scroll is the one that bites: it carries overflow-y: hidden
-            // (it only ever scrolls sideways), so shrinking it silently clipped the
-            // card list — the table view merely happened to be short enough to fit.
+            // Nothing may be squeezed to fit: .data-table__scroll carries
+            // overflow-y: hidden (it only ever scrolls sideways), so shrinking it
+            // silently clipped the card list.
             > * {
                 flex-shrink: 0;
             }
         }
-        // Neither the handle nor Закрыть is sticky: the sheet scrolls as one piece and
-        // travels off the top, rather than pinning chrome over a scrolling list (which
-        // also had Закрыть covering the last rows).
-        // DataTable appends its markup after StaffSwitcher injects the chrome, so DOM
-        // order can't be relied on — `order` puts the handle first and Закрыть last
-        // whichever built first.
+        // The handle scrolls away with the sheet. DataTable appends its markup after
+        // StaffSwitcher injects the chrome, so DOM order can't be relied on — `order`
+        // puts the handle first and Закрыть last whichever built first.
         .manager__staff-grabber {
             display: block;
             order: -1;
@@ -890,13 +887,35 @@
             background: $color-light-grey;
             border-radius: 4px;
         }
+        // Закрыть stays reachable at the bottom while the sheet travels. It is the only
+        // pinned part, so it needs an opaque backing and a z-index above the rows —
+        // .data-table__td and the pager sit in the same stacking context and would
+        // otherwise scroll straight over it.
         .manager__staff-sheet-actions {
             display: flex;
             order: 1;
             flex-shrink: 0;
+            position: sticky;
+            bottom: 0;
+            z-index: 2;
+            // cancel the sheet's own side padding so the backing is full-bleed; its own
+            // 10 then lands the button on the same 10 gutter as the rest of the content
+            @include prop-vw(margin-inline, -10, sm);
             @include prop-vw(margin-top, 15, sm);
+            @include prop-vw(padding-top, 10, sm);
+            @include prop-vw(padding-inline, 10, sm);
+            @include prop-vw(padding-bottom, 15, sm);
+            background: $color-white;
             .btn {
                 flex: 1 1 0;
+                @include prop-vw(height, 46, sm);
+                padding-block: 0;
+                @include prop-vw(font-size, 14, sm);
+                line-height: 1;
+                font-weight: normal;
+                color: $color-black;
+                background: $color-grey;
+                @include prop-vw(border-radius, 7, sm);
             }
         }
     }
