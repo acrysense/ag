@@ -3,6 +3,11 @@
 // lives in one [data-staff-source] JSON blob, so the backend only has to render
 // that blob — no extra request per pharmacy.
 //
+// Which pharmacy is shown first: optional `default` (a key of `pharmacies`) wins;
+// otherwise the first entry. Keep `pharmacies` in the same order as the table's
+// rows so that fallback is the table's first row.
+//   {"default": "p2", "pharmacies": {"p1": {...}, "p2": {...}}}
+//
 // Mounted on .manager__staff-head because the panel itself already carries
 // data-module="DataTable" (one module per element).
 export default (head) => {
