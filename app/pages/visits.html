@@ -102,7 +102,7 @@
 												<tr>
 													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
 													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
-													<th class="data-table__th data-table__th--center">Кат.</th>
+													<th class="data-table__th">Кат.</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="plan" data-sort-type="number">План</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="fact" data-sort-type="number">Факт</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="pct" data-sort-type="number">% вып.</th>
@@ -130,7 +130,7 @@
 												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
 													<td class="data-table__td" data-filter-key="pharmacy">{{this.pharmacy}}</td>
-													<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+													<td class="data-table__td" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
 													<td class="data-table__td data-table__td--num">{{this.plan}}</td>
 													<td class="data-table__td data-table__td--num">{{this.fact}}</td>
 													<td class="data-table__td data-table__td--num">{{this.pct}}</td>
@@ -175,10 +175,10 @@
 													<th class="data-table__th" data-sort-key="date" data-sort-type="date">Дата визита</th>
 													<th class="data-table__th">Тип</th>
 													<th class="data-table__th data-table__th--num">Лист</th>
-													<th class="data-table__th data-table__th--center">Гео</th>
+													<th class="data-table__th">Гео</th>
 													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
 													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
-													<th class="data-table__th data-table__th--center">Кат.</th>
+													<th class="data-table__th">Кат.</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="visits" data-sort-type="number">Визиты</th>
 													<th class="data-table__th">Комментарий</th>
 												</tr>
@@ -205,12 +205,12 @@
 													<td class="data-table__td"><a href="/visit" class="data-table__link">{{this.date}}</a></td>
 													<td class="data-table__td">{{this.type}}</td>
 													<td class="data-table__td data-table__td--num"><span class="visits-score visits-score--{{this.tone}}">{{this.score}}</span></td>
-													<td class="data-table__td data-table__td--center">
+													<td class="data-table__td">
 														{{#if this.geo}}<span class="visits-geo" title="Геолокация передана"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5L6.5 11.5L12.5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{{/if}}
 													</td>
 													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
 													<td class="data-table__td" data-filter-key="pharmacy">{{this.pharmacy}}</td>
-													<td class="data-table__td data-table__td--center" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
+													<td class="data-table__td" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
 													<td class="data-table__td data-table__td--num">{{this.visits}}</td>
 													<td class="data-table__td">{{this.comment}}</td>
 												</tr>
