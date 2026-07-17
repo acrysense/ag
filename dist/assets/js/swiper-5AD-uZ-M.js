@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/js/swiper-CS6APh0O.js","assets/js/utils-DAoBTj81.js","assets/js/index-N7uyOXXC.js"])))=>i.map(i=>d[i]);
-import{_ as t}from"./app-BKDwVGeA.js";let _;function o(){return _||(_=Promise.all([t(()=>import("./swiper-CS6APh0O.js"),__vite__mapDeps([0,1])),t(()=>import("./index-N7uyOXXC.js"),__vite__mapDeps([2,1]))]).then(([{default:e},r])=>({Swiper:e,mods:r}))),_}export{o as g};

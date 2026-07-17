@@ -114,10 +114,27 @@ export default (head) => {
 	})
 	on(master, 'datatable:render', markSelected)
 
-	const prev = head.querySelector('[data-staff-prev]')
-	const next = head.querySelector('[data-staff-next]')
+	// queried from the panel, not the head: placeNav() below moves the nav out of the
+	// head on mobile. Listeners ride along with the element, so they bind once here.
+	const prev = panel.querySelector('[data-staff-prev]')
+	const next = panel.querySelector('[data-staff-next]')
 	if (prev) on(prev, 'click', () => step(-1))
 	if (next) on(next, 'click', () => step(1))
+
+	// The arrows sit next to the title on desktop, but in the mobile sheet they belong
+	// on the category row, pinned right (CSS handles the alignment). The two rows are
+	// separate flex containers, so `order` can't do this — the node has to move.
+	const nav = panel.querySelector('.manager__staff-nav')
+	const controls = panel.querySelector('.manager__staff-controls')
+	const mq = window.matchMedia('(max-width: 743.98px)')
+	const placeNav = () => {
+		if (!nav || !controls) return
+		const host = mq.matches ? controls : head
+		if (nav.parentElement !== host) host.appendChild(nav)
+	}
+	placeNav()
+	mq.addEventListener('change', placeNav)
+	disposers.push(() => mq.removeEventListener('change', placeNav))
 
 	// DataTable builds asynchronously; if it hasn't finished yet, wait for its ready event
 	if (panel.__dataTable) render()

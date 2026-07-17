@@ -261,6 +261,12 @@
         &__staff-nav {
             display: flex;
             @include prop-vw(gap, 8, xl);
+            // mobile: StaffSwitcher moves the nav onto the category row — push it to
+            // the row's right edge, away from the tabs
+            @include only(mobile) {
+                margin-left: auto;
+                @include prop-vw(gap, 5, sm);
+            }
         }
         &__staff-arrow {
             display: flex;
@@ -268,6 +274,10 @@
             justify-content: center;
             @include prop-vw(width, 32, xl);
             @include prop-vw(height, 32, xl);
+            @include only(mobile) {
+                @include prop-vw(width, 36, sm);
+                @include prop-vw(height, 36, sm);
+            }
             color: $color-dark-grey;
             background: $color-bg;
             border: none;
@@ -459,6 +469,16 @@
         }
     }
 
+    // The staff panel stacks two control rows: ours (search + tabs + nav) and the
+    // table's own (sort + card/table). Ours already ends with a 15 bottom margin, and
+    // as flex children their margins don't collapse — so the built-in 16 top margin
+    // would stack into ~31. Zero it: one 15 gap between the rows.
+    .manager__staff .data-table__controls:not(.manager__staff-controls) {
+        @include only(mobile) {
+            margin-top: 0;
+        }
+    }
+
     // Staff controls: search (shared .field) + category tabs above a staff table.
     // Shared by /manager and /pharmacy — both add .manager__staff-controls to the
     // table's .data-table__controls. The base controls are mobile-only, so the
@@ -477,8 +497,8 @@
             @include prop-vw(margin-block, 20, lg);
         }
         @include only(mobile) {
-            @include prop-vw(gap, 20, sm);
-            @include prop-vw(margin-block, 20, sm);
+            @include prop-vw(gap, 15, sm);
+            @include prop-vw(margin-block, 15, sm);
         }
 
         // search: 320 wide, 36 tall, #F3F6FC fill, 16px loupe on the right
@@ -828,6 +848,13 @@
             // for a sheet, and it would sit over the rounded top edge
             &::before {
                 content: none;
+            }
+            // The sheet is the scroller, so nothing inside may be squeezed to fit it.
+            // .data-table__scroll is the one that bites: it carries overflow-y: hidden
+            // (it only ever scrolls sideways), so shrinking it silently clipped the
+            // card list — the table view merely happened to be short enough to fit.
+            > * {
+                flex-shrink: 0;
             }
         }
         // drag handle pinned to the top of the sheet. DataTable appends its markup
