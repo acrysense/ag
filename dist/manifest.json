@@ -17,8 +17,8 @@
       "_utils-DAoBTj81.js"
     ]
   },
-  "_app-CRLsMbN4.js": {
-    "file": "assets/js/app-CRLsMbN4.js",
+  "_app-CGuvzOKF.js": {
+    "file": "assets/js/app-CGuvzOKF.js",
     "name": "app",
     "dynamicImports": [
       "components/components/Accordion/Accordion.js",
@@ -51,15 +51,15 @@
       "components/sections/visit/Visit/Visit.js"
     ],
     "css": [
-      "assets/css/app-DRrpECT0.css"
+      "assets/css/app-DJY27QM6.css"
     ],
     "assets": [
       "assets/images/ag-m2GDsMwR.svg"
     ]
   },
-  "_app-DRrpECT0.css": {
-    "file": "assets/css/app-DRrpECT0.css",
-    "src": "_app-DRrpECT0.css"
+  "_app-DJY27QM6.css": {
+    "file": "assets/css/app-DJY27QM6.css",
+    "src": "_app-DJY27QM6.css"
   },
   "_comment-limits-DFrwny-C.js": {
     "file": "assets/js/comment-limits-DFrwny-C.js",
@@ -73,11 +73,11 @@
     "file": "assets/js/scroll-lock-CkQIV5rM.js",
     "name": "scroll-lock"
   },
-  "_swiper-CSk0uO-k.js": {
-    "file": "assets/js/swiper-CSk0uO-k.js",
+  "_swiper-BDvP93V1.js": {
+    "file": "assets/js/swiper-BDvP93V1.js",
     "name": "swiper",
     "imports": [
-      "_app-CRLsMbN4.js"
+      "_app-CGuvzOKF.js"
     ],
     "dynamicImports": [
       "../node_modules/swiper/swiper.mjs",
@@ -321,14 +321,14 @@
     ]
   },
   "components/sections/news/NewsInner/NewsInner.js": {
-    "file": "assets/js/NewsInner-CNJoHIWg.js",
+    "file": "assets/js/NewsInner-CULx_UFN.js",
     "name": "NewsInner",
     "src": "components/sections/news/NewsInner/NewsInner.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-CSk0uO-k.js",
+      "_swiper-BDvP93V1.js",
       "_scroll-lock-CkQIV5rM.js",
-      "_app-CRLsMbN4.js"
+      "_app-CGuvzOKF.js"
     ]
   },
   "components/sections/package/Package/Package.js": {
@@ -353,13 +353,13 @@
     "isDynamicEntry": true
   },
   "components/sections/shared/Promo/Promo.js": {
-    "file": "assets/js/Promo-DCeLwQLb.js",
+    "file": "assets/js/Promo-NJ2HpsGc.js",
     "name": "Promo",
     "src": "components/sections/shared/Promo/Promo.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-CSk0uO-k.js",
-      "_app-CRLsMbN4.js"
+      "_swiper-BDvP93V1.js",
+      "_app-CGuvzOKF.js"
     ]
   },
   "components/sections/visit/Visit/Visit.js": {

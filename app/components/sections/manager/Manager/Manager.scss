@@ -854,8 +854,8 @@
             max-height: none;
             // dimmer shows through this strip until the sheet is scrolled up over it
             @include prop-vw(margin-top, 60, sm);
-            // a short list still fills to the bottom instead of floating mid-screen
-            min-height: calc(100dvh - #{vw-range(60, sm)});
+            // height = content: with margin-top:15 on the actions (below) instead of
+            // auto, a min-height would leave dead white under the button on short lists
             @include prop-vw(border-radius, 10, sm);
             border-bottom-left-radius: 0;
             border-bottom-right-radius: 0;
@@ -903,13 +903,13 @@
             }
         }
         // Закрыть rides with the sheet (the whole plate travels up as one piece), so it
-        // is not pinned. margin-top:auto parks it at the sheet's bottom — flush with the
-        // viewport bottom at rest, and it rises with the sheet on scroll.
+        // is not pinned. A 15 gap sits above its backing, then the backing's own 10
+        // padding-top before the button.
         .manager__staff-sheet-actions {
             display: flex;
             order: 1;
             flex-shrink: 0;
-            margin-top: auto;
+            @include prop-vw(margin-top, 15, sm);
             // cancel the sheet's side padding so the white backing is full-bleed; its
             // own 10 then lands the button on the same 10 gutter as the content
             @include prop-vw(margin-inline, -10, sm);
