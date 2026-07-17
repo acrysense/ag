@@ -101,7 +101,10 @@
 			width: 100%;
 
 			@include only(desktop) {
-				@include prop-vw(max-width, 350, lg);
+				// 262 (was 350) — same fix as the sidebar: 350@lg towered to ~332 on
+				// 1366 (30% of the row) while the ≥1440 column is ~262. Narrowing it
+				// lets the left column (profile + KPI) grow to its cap.
+				@include prop-vw(max-width, 262, lg);
 			}
 			@include down(desktop) {
 				max-width: none;
