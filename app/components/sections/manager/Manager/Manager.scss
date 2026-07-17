@@ -253,6 +253,15 @@
             .data-panel__title {
                 color: $color-black;
             }
+            @include only(mobile) {
+                // the controls row below already carries a 15 top margin, and as flex
+                // children these don't collapse — our own margin would stack onto it
+                margin-bottom: 0;
+                .data-panel__title {
+                    @include prop-vw(font-size, 18, sm);
+                    line-height: 1.33333333333;
+                }
+            }
         }
         // the selected pharmacy after the colon — muted, not a link
         &__staff-pharmacy {
@@ -283,12 +292,15 @@
             border: none;
             @include prop-vw(border-radius, 8, xl);
             cursor: pointer;
+            // separate #icon-arrow-left / #icon-arrow-right sprites, like .vcal__navbtn
+            // — no scaleX(-1) on the next arrow (a mirrored glyph isn't the same shape)
             & > svg {
                 @include prop-vw(width, 16, xl);
                 @include prop-vw(height, 16, xl);
-            }
-            &--next > svg {
-                transform: scaleX(-1);
+                @include only(mobile) {
+                    @include prop-vw(width, 12, sm);
+                    @include prop-vw(height, 12, sm);
+                }
             }
         }
         &__staff-search {
