@@ -40,6 +40,16 @@
             .wrapper__back + &::before {
                 content: none;
             }
+            // The profile's nav is bracketed by its own 10 strips (border-top/bottom), so
+            // ours would stack under its bottom one into a ~20 band of two slightly
+            // different greys (#F3F6FC + #F5F8FA — the "двойная полоска"). Drop ours and
+            // the margin it filled; the nav's own strip is the separator.
+            .profile + & {
+                margin-top: 0;
+                &::before {
+                    content: none;
+                }
+            }
         }
 
         &__header {
