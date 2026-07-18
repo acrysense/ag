@@ -83,70 +83,138 @@
 		       app.css applies, so the search field stretches full-width and then snaps to its
 		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
 		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
-		       the search width changes. */
-			.header__wrapper {
-				display: -webkit-box;
-				display: -webkit-flex;
-				display: -moz-box;
-				display: flex;
-				-webkit-box-pack: justify;
-				-webkit-justify-content: space-between;
-				-moz-box-pack: justify;
-				justify-content: space-between;
-				width: 100%;
-			}
-			.header__inner {
-				display: -webkit-box;
-				display: -webkit-flex;
-				display: -moz-box;
-				display: flex;
-				-webkit-box-align: center;
-				-webkit-align-items: center;
-				-moz-box-align: center;
-				align-items: center;
-			}
-			.filter-search {
-				display: none;
-			}
-			body[data-header-search] .filter-search {
-				-webkit-box-flex: 0;
-				-webkit-flex: 0 0 auto;
-				-moz-box-flex: 0;
-				flex: 0 0 auto;
-				-webkit-align-self: center;
-				align-self: center;
-				width: max(266.6666666667px, 26.0416666667vw);
-				margin-left: max(32px, 3.125vw);
-				margin-right: auto;
-			}
-			@media (min-width: 744px) {
-				body[data-header-search] .filter-search {
-					display: block;
-				}
-			}
-			@media (min-width: 1024px) and (max-width: 1439.98px) {
-				body[data-header-search] .filter-search {
-					width: max(355.5555555556px, 34.7222222222vw);
-					margin-left: max(42.6666666667px, 4.1666666667vw);
-				}
-			}
-			@media (max-width: 743.98px) {
-				body[data-header-search] .filter-search {
-					display: block;
-					-webkit-box-ordinal-group: 11;
-					-webkit-order: 10;
-					-moz-box-ordinal-group: 11;
-					order: 10;
-					-webkit-box-flex: 0;
-					-webkit-flex: 0 0 100%;
-					-moz-box-flex: 0;
-					flex: 0 0 100%;
+		       the search width changes.
+		
+		       CRUCIAL: app.css puts all its rules in @layer (reset…utilities). Unlayered CSS
+		       beats ANY layered rule regardless of specificity, so if these lived unlayered
+		       they'd override app.css's "open" states (e.g. .filter-search.is-open
+		       .filter-search__dropdown{visibility:visible}) and the search filter / profile
+		       menu could never open. We declare our own `critical` layer BEFORE all of
+		       app.css's layers, so app.css always wins once loaded, while these still apply
+		       during the FOUC window before app.css exists. */
+			@layer critical, reset, vendor, base, layout, components, utilities;
+			@layer critical {
+				.header__wrapper {
+					display: -webkit-box;
+					display: -webkit-flex;
+					display: -moz-box;
+					display: flex;
+					-webkit-box-pack: justify;
+					-webkit-justify-content: space-between;
+					-moz-box-pack: justify;
+					justify-content: space-between;
 					width: 100%;
-					margin-inline: 0;
 				}
-				body[data-header-search] .header__wrapper {
-					-webkit-flex-wrap: wrap;
-					flex-wrap: wrap;
+				.header__inner {
+					display: -webkit-box;
+					display: -webkit-flex;
+					display: -moz-box;
+					display: flex;
+					-webkit-box-align: center;
+					-webkit-align-items: center;
+					-moz-box-align: center;
+					align-items: center;
+				}
+				.filter-search {
+					display: none;
+				}
+				body[data-header-search] .filter-search {
+					-webkit-box-flex: 0;
+					-webkit-flex: 0 0 auto;
+					-moz-box-flex: 0;
+					flex: 0 0 auto;
+					-webkit-align-self: center;
+					align-self: center;
+					width: max(266.6666666667px, 26.0416666667vw);
+					margin-left: max(32px, 3.125vw);
+					margin-right: auto;
+				}
+				@media (min-width: 744px) {
+					body[data-header-search] .filter-search {
+						display: block;
+					}
+				}
+				@media (min-width: 1024px) and (max-width: 1439.98px) {
+					body[data-header-search] .filter-search {
+						width: max(355.5555555556px, 34.7222222222vw);
+						margin-left: max(42.6666666667px, 4.1666666667vw);
+					}
+				}
+				@media (max-width: 743.98px) {
+					body[data-header-search] .filter-search {
+						display: block;
+						-webkit-box-ordinal-group: 11;
+						-webkit-order: 10;
+						-moz-box-ordinal-group: 11;
+						order: 10;
+						-webkit-box-flex: 0;
+						-webkit-flex: 0 0 100%;
+						-moz-box-flex: 0;
+						flex: 0 0 100%;
+						width: 100%;
+						margin-inline: 0;
+					}
+					body[data-header-search] .header__wrapper {
+						-webkit-flex-wrap: wrap;
+						flex-wrap: wrap;
+					}
+				}
+				/* The header search's filter panel is absolutely positioned by app.css/JS. Until
+		           the bundle runs — slow on 3G — it sits IN FLOW, expanded to full height, which
+		           stretches the flex header row (align-items:stretch) so logo/search/user all blow
+		           up and the search wraps to a new line, then snaps back. Pre-collapse it out of
+		           flow (mirrors HeaderSearch.scss). Same story for the ProfileDropdown menu.
+		
+		           The out-of-flow positioning is unconditional (app.css overrides it once loaded,
+		           e.g. position:fixed for the mobile full-screen panel — the `critical` layer lets
+		           it win). But the HIDE (visibility/opacity) is scoped to :not(.is-open) so the
+		           moment the app toggles `.is-open` these rules stop matching and the panel opens —
+		           it can never get stuck hidden, even in a browser that ignores @layer. */
+				.filter-search__dropdown {
+					position: absolute;
+					top: -moz-calc(100% + 10px);
+					top: calc(100% + 10px);
+					left: 0;
+					z-index: 60;
+				}
+				.filter-search:not(.is-open) .filter-search__dropdown {
+					visibility: hidden;
+					opacity: 0;
+				}
+				.filter-search__control {
+					position: relative;
+				}
+				.filter-search__icon {
+					position: absolute;
+					top: 50%;
+					right: 12px;
+					-webkit-transform: translateY(-50%);
+					-moz-transform: translateY(-50%);
+					transform: translateY(-50%);
+					width: 16px;
+					height: 16px;
+				}
+				.profile-dropdown {
+					position: relative;
+				}
+				.profile-dropdown__panel {
+					position: absolute;
+					top: -moz-calc(100% + 8px);
+					top: calc(100% + 8px);
+					right: 0;
+				}
+				.profile-dropdown:not(.is-open) .profile-dropdown__panel {
+					opacity: 0;
+					pointer-events: none;
+					visibility: hidden;
+				}
+				@media (max-width: 743.98px) {
+					.profile-dropdown__panel {
+						position: fixed;
+						inset: 0;
+						top: 0;
+						right: auto;
+					}
 				}
 			}
 		</style>
