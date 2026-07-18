@@ -148,6 +148,14 @@ export default async (root) => {
 		const dueInput = form.querySelector('[name="due"]')
 		const assigneeSelect = form.querySelector('[data-task-assignee]')
 		const submitBtn = form.querySelector('[type="submit"]')
+		// The backend may render the "Ответственный" column hidden (inline display:none)
+		// or drop it entirely. CSS :has() can't distinguish a display:none child from a
+		// visible one, so flag the grid here (element's own display is readable even while
+		// the form itself is [hidden]) — the title field then fills the freed space.
+		const assigneeField = form.querySelector('.task-form__assignee')
+		const grid = form.querySelector('.task-form__grid')
+		const assigneeShown = assigneeField && assigneeField.style.display !== 'none' && getComputedStyle(assigneeField).display !== 'none'
+		grid?.classList.toggle('task-form__grid--no-assignee', !assigneeShown)
 		// Read the assignee by its field name, not from inside the custom select: the
 		// backend may drop the picker and post a bare hidden input (e.g. a 1C code).
 		// The select's own hidden input carries the same name, so both markups work.

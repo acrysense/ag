@@ -209,10 +209,11 @@
                 width: 100%;
             }
         }
-        // when the backend drops the "Ответственный" column, let the title field
-        // fill the freed space instead of leaving a gap (tablet & up; on mobile the
-        // grid already stacks each field full-width)
-        &__grid:not(:has(&__assignee)) &__task {
+        // when the backend drops OR hides the "Ответственный" column (JS flags the grid
+        // with --no-assignee since the field may only be display:none, not removed), let
+        // the title field fill the freed space instead of leaving a gap (tablet & up; on
+        // mobile the grid already stacks each field full-width)
+        &__grid--no-assignee &__task {
             @include up(tablet) {
                 flex: 1 1 auto;
                 width: auto;
