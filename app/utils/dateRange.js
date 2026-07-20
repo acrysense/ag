@@ -11,6 +11,12 @@ const WEEKDAYS = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 const pad = (n) => String(n).padStart(2, '0')
 const fmt = (d) => `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${d.getFullYear()}`
 const ymd = (y, m, day) => new Date(y, m, day).setHours(0, 0, 0, 0)
+// the calendar opens on the current month — real data is dated around today, so a
+// fixed month would make users pick a range that matches nothing
+const firstOfCurrentMonth = () => {
+	const now = new Date()
+	return new Date(now.getFullYear(), now.getMonth(), 1)
+}
 
 export function mountDateRange(field, onChange, { single = false } = {}) {
 	if (!field || field.__dateRangeBound) return () => {}
@@ -25,7 +31,7 @@ export function mountDateRange(field, onChange, { single = false } = {}) {
 
 	let start = null // timestamp (midnight)
 	let end = null
-	let view = new Date(2026, 4, 1) // demo data lives in May 2026
+	let view = firstOfCurrentMonth()
 
 	const setLabel = () => {
 		if (!valueEl) return
@@ -116,7 +122,7 @@ export function mountDateRange(field, onChange, { single = false } = {}) {
 		clear() {
 			start = null
 			end = null
-			view = new Date(2026, 4, 1)
+			view = firstOfCurrentMonth()
 			build()
 			setLabel()
 		},
