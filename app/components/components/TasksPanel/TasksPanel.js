@@ -110,6 +110,37 @@ export default async (root) => {
 
 	const disposers = []
 
+	// --- Keep the active tab when leaving for «Архив задач» ------------------
+	// The archive link sits inside its own panel, so it already knows which tab it
+	// belongs to (data-tasks-tab) — no need to track the active tab globally. It
+	// carries that id as ?tab=…, and on load a matching ?tab= re-activates the panel.
+	// Works on this page and on the archive page alike, as long as the archive reuses
+	// this markup; if it doesn't, the extra query param is simply ignored.
+	const TAB_PARAM = 'tab'
+	const tabId = root.dataset.tasksTab
+	if (tabId) {
+		const archiveLink = root.querySelector('.data-panel__export--plain')
+		if (archiveLink) {
+			// resolve against the real href (backend-rendered) and keep its own query
+			const url = new URL(archiveLink.getAttribute('href') || '', location.href)
+			url.searchParams.set(TAB_PARAM, tabId)
+			archiveLink.setAttribute('href', url.pathname + url.search + url.hash)
+		}
+		// restore: activate this panel's tab when the URL asks for it
+		if (new URLSearchParams(location.search).get(TAB_PARAM) === tabId) {
+			const wrapper = root.closest('.tabs__wrapper')
+			const host = wrapper?.closest('.tabs')
+			const activate = () => {
+				const idx = [...host.querySelectorAll('.tabs__wrapper')].indexOf(wrapper)
+				if (idx < 0 || !host.__tabs) return false
+				host.__tabs.activate(idx)
+				return true
+			}
+			// Tabs may mount after this module — retry on the next frame if it hasn't
+			if (host && !activate()) requestAnimationFrame(activate)
+		}
+	}
+
 	// --- Backend save gate --------------------------------------------------
 	// Every mutating action (status, comment, edit, create, delete) goes through
 	// runAction: it POSTs to the endpoint and only applies the UI change on a
