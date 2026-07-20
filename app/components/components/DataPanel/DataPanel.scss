@@ -28,10 +28,15 @@
                 display: block;
                 position: absolute;
                 @include prop-vw(top, -10, sm);
-                @include prop-vw(right, -10, sm);
-                @include prop-vw(left, -10, sm);
+                // Full-bleed strip, centred on the panel (same technique as
+                // Package/Motivation). It previously set left/right:-10 *and*
+                // width:100vw — over-constrained, so `right` was ignored: the strip
+                // started 10 left of the panel and ended 10 short of the right edge,
+                // leaving a visible gap. Anchoring by the centre spans the viewport
+                // exactly, with no overflow to the right (which would add h-scroll).
+                left: 50%;
+                transform: translateX(-50%);
                 z-index: -1;
-                display: block;
                 width: 100vw;
                 @include prop-vw(height, 10, sm);
                 background: $color-bg-light;
