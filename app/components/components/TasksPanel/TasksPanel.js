@@ -96,9 +96,46 @@ async function resolveTasks(root) {
 		place(err)
 		return
 	}
+	root.__taskCounts = counts(data)
 	const wrap = document.createElement('div')
 	wrap.innerHTML = buildTaskListHTML(tasks)
 	place(wrap.firstElementChild)
+}
+
+// Optional totals for the «Открытые / Архив» switch. The backend may send neither,
+// one or both — a missing count just means that side shows no number.
+const counts = (data) => ({
+	active: Number.isFinite(+data?.active_count) ? +data.active_count : null,
+	completed: Number.isFinite(+data?.completed_count) ? +data.completed_count : null,
+})
+
+// Re-fetch the list for a given mode and swap the rows IN PLACE. The <ul> itself is
+// kept: the status / confirm handlers are bound to it (not delegated from root), so
+// replacing the element would silently kill them.
+async function loadTasksInto(root, list, src) {
+	const loader = document.createElement('div')
+	loader.className = 'tasks-panel__loader'
+	loader.innerHTML = '<span class="tasks-panel__spinner" aria-hidden="true"></span><span>Загрузка задач…</span>'
+	list.replaceChildren()
+	list.after(loader)
+
+	let data = null
+	try {
+		data = await (await fetch(src, { headers: { Accept: 'application/json' } })).json()
+	} catch (err) {
+		console.warn('[TasksPanel] failed to load tasks', err)
+	}
+	loader.remove()
+
+	const tasks = Array.isArray(data) ? data : data && Array.isArray(data.tasks) ? data.tasks : null
+	if (!tasks) {
+		list.innerHTML = '<li class="tasks-list__empty">Не удалось загрузить задачи</li>'
+		return null
+	}
+	const wrap = document.createElement('div')
+	wrap.innerHTML = buildTaskListHTML(tasks)
+	list.innerHTML = wrap.firstElementChild.innerHTML
+	return counts(data)
 }
 
 export default async (root) => {
@@ -110,24 +147,21 @@ export default async (root) => {
 
 	const disposers = []
 
-	// --- Keep the active tab when leaving for «Архив задач» ------------------
-	// The archive link sits inside its own panel, so it already knows which tab it
-	// belongs to (data-tasks-tab) — no need to track the active tab globally. It
-	// carries that id as ?tab=…, and on load a matching ?tab= re-activates the panel.
-	// Works on this page and on the archive page alike, as long as the archive reuses
-	// this markup; if it doesn't, the extra query param is simply ignored.
-	const TAB_PARAM = 'tab'
+	const archiveLink = root.querySelector('.data-panel__export--plain')
+
+	// --- Fallback for the page-reload archive (no data-tasks-src) -------------
+	// Without a JSON source the archive stays a normal link to another page, so the
+	// active tab would be lost on reload. Carry it as ?tab=… and restore it on load.
+	// With data-tasks-src this is skipped entirely — the switch below is ajax, so
+	// there is no reload and nothing to restore.
 	const tabId = root.dataset.tasksTab
-	if (tabId) {
-		const archiveLink = root.querySelector('.data-panel__export--plain')
-		if (archiveLink) {
-			// resolve against the real href (backend-rendered) and keep its own query
-			const url = new URL(archiveLink.getAttribute('href') || '', location.href)
-			url.searchParams.set(TAB_PARAM, tabId)
-			archiveLink.setAttribute('href', url.pathname + url.search + url.hash)
-		}
-		// restore: activate this panel's tab when the URL asks for it
-		if (new URLSearchParams(location.search).get(TAB_PARAM) === tabId) {
+	if (tabId && archiveLink && !root.dataset.tasksSrc) {
+		// resolve against the real href (backend-rendered) and keep its own query
+		const url = new URL(archiveLink.getAttribute('href') || '', location.href)
+		url.searchParams.set('tab', tabId)
+		archiveLink.setAttribute('href', url.pathname + url.search + url.hash)
+
+		if (new URLSearchParams(location.search).get('tab') === tabId) {
 			const wrapper = root.closest('.tabs__wrapper')
 			const host = wrapper?.closest('.tabs')
 			const activate = () => {
@@ -592,7 +626,10 @@ export default async (root) => {
 	// closed tasks under the toggle. Re-runnable after each change.
 	const refreshCompleted = () => {
 		const closed = [...root.querySelectorAll('.task-row.is-completed')].filter((r) => !isPending(r))
-		const hideable = closed.slice(0, Math.max(0, closed.length - ALWAYS_VISIBLE))
+		// The archive IS the full list of closed tasks — collapsing them there would
+		// hide the very thing the user opened it for.
+		const archiveMode = root.classList.contains('is-archive')
+		const hideable = archiveMode ? [] : closed.slice(0, Math.max(0, closed.length - ALWAYS_VISIBLE))
 		root.querySelectorAll('.task-row.is-completed').forEach((row) => row.classList.remove('is-hidden'))
 		if (!toggle) return
 		if (hideable.length) {
@@ -623,6 +660,54 @@ export default async (root) => {
 			toggle.removeEventListener('click', onToggle)
 			root.querySelectorAll('.task-row.is-completed.is-hidden').forEach((r) => r.classList.remove('is-hidden'))
 		})
+	}
+
+	// --- «Открытые» ⇄ «Архив»: swap the list over ajax, no page reload --------
+	// Only in JSON mode; the link keeps its plain-link behaviour otherwise. The label
+	// names the mode you'd switch TO, with its total in brackets when the backend
+	// sends one (active_count / completed_count) — so a single link doubles as the
+	// counter Саша asked for: «Архив (19)» ⇄ «Открытые (283)».
+	if (archiveLink && list && root.dataset.tasksSrc) {
+		const baseSrc = root.dataset.tasksSrc
+		let mode = 'active' // which list is on screen now
+		let totals = root.__taskCounts || { active: null, completed: null }
+
+		const label = () => {
+			const toArchive = mode === 'active'
+			const n = toArchive ? totals.completed : totals.active
+			archiveLink.textContent =
+				n == null ? (toArchive ? 'Архив задач' : 'Открытые задачи') : `${toArchive ? 'Архив' : 'Открытые'} (${n})`
+		}
+		const srcFor = (m) => {
+			const url = new URL(baseSrc, location.href)
+			url.searchParams.set('archive', m === 'archive' ? '1' : '0')
+			return url.pathname + url.search
+		}
+
+		let busy = false
+		const onArchive = async (e) => {
+			e.preventDefault()
+			if (busy) return
+			busy = true
+			archiveLink.setAttribute('aria-busy', 'true')
+			const next = mode === 'active' ? 'archive' : 'active'
+			const got = await loadTasksInto(root, list, srcFor(next))
+			if (got) {
+				mode = next
+				// keep whichever totals the response actually carried
+				if (got.active != null) totals.active = got.active
+				if (got.completed != null) totals.completed = got.completed
+				root.classList.toggle('is-archive', mode === 'archive')
+				shown = false
+				updateCompleted()
+				label()
+			}
+			archiveLink.removeAttribute('aria-busy')
+			busy = false
+		}
+		archiveLink.addEventListener('click', onArchive)
+		disposers.push(() => archiveLink.removeEventListener('click', onArchive))
+		label()
 	}
 
 	// Click the status circle: an active task → completed (classified below);
