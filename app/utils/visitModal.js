@@ -1,5 +1,21 @@
 import { mountDatepicker } from '@/utils/datepicker'
 
+// POST a visit mutation to the backend and resolve on success / throw on failure.
+// Endpoint: modal[data-visits-action-url] or window.AG_VISITS_ACTION_URL (same
+// convention as tasks / the calendar's drag-move). No endpoint → demo mode:
+// resolve success so the modal keeps working standalone.
+async function persistVisit(actionUrl, action, payload) {
+	if (!actionUrl) return { ok: true } // demo stub — no backend, act as success
+	const res = await fetch(actionUrl, {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+		body: JSON.stringify({ action, ...payload }),
+	})
+	const data = await res.json().catch(() => null)
+	if (!res.ok || (data && data.ok === false)) throw new Error((data && data.error) || `HTTP ${res.status}`)
+	return data || { ok: true }
+}
+
 // Mounts the "create visit" modal: custom validation, autosizing comment,
 // custom selects and a datepicker. Opens on ANY [data-visit-create] click in the
 // document, so the same modal serves the visits panel and the calendar.
@@ -12,6 +28,19 @@ export function mountVisitModal(modal) {
 	const disposers = []
 	const closeEls = [...modal.querySelectorAll('[data-visit-close]')]
 	const requiredCtrls = [...form.querySelectorAll('[data-required]')]
+	const submitBtn = form.querySelector('[type="submit"]')
+
+	// Backend endpoint (optional — without it the modal stays demo-only). The same
+	// URL serves create / update / delete via the `action` field.
+	const actionUrl = modal.dataset.visitsActionUrl || (typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL) || ''
+	// Edit state: an "Изменить" trigger opens the modal with a prefill; when that
+	// prefill carries an id we PATCH that visit, otherwise it's a create. editIntent
+	// is tracked separately so we never silently create a duplicate when the user
+	// meant to edit but the backend hasn't supplied an id yet (update without id
+	// just 400s — surfaced as an error — instead of spawning a second visit).
+	let editIntent = false
+	let editId = null
+	let saving = false
 
 	const clearErrors = () => form.querySelectorAll('.is--error').forEach((f) => f.classList.remove('is--error'))
 	const validateCtrl = (ctrl) => {
@@ -72,6 +101,8 @@ export function mountVisitModal(modal) {
 	}
 	const openModal = (prefill) => {
 		resetForm()
+		editIntent = !!prefill
+		editId = prefill && prefill.id != null ? prefill.id : null
 		applyPrefill(prefill)
 		clearErrors()
 		setOpen(true)
@@ -93,10 +124,49 @@ export function mountVisitModal(modal) {
 		}
 		autosize(ta)
 	}
-	const onSubmit = (e) => {
+	const field = (name) => form.querySelector(`[name="${name}"]`)?.value.trim() || ''
+	const onSubmit = async (e) => {
 		e.preventDefault()
-		if (!validate()) return
-		closeModal() // no backend — just reset & close on success
+		if (!validate() || saving) return
+
+		// Demo mode (no endpoint): keep the original behaviour — just reset & close.
+		if (!actionUrl) {
+			closeModal()
+			return
+		}
+
+		const action = editIntent ? 'update' : 'create'
+		const payload = {
+			employee: field('employee'),
+			manager: field('manager'),
+			type: field('type'),
+			date: field('date'),
+			time: field('time'),
+			comment: field('comment'),
+		}
+		if (editIntent && editId != null) payload.id = editId
+
+		saving = true
+		submitBtn?.setAttribute('disabled', '')
+		try {
+			const data = await persistVisit(actionUrl, action, payload)
+			closeModal()
+			// Let the page react (calendar / table) if it wants to insert the row in
+			// place; otherwise reload so the server re-renders the list with the change.
+			const evt = new CustomEvent('visit:saved', {
+				detail: { action, id: payload.id ?? data?.id ?? null, visit: data?.visit ?? data ?? null },
+				bubbles: true,
+				cancelable: true,
+			})
+			modal.dispatchEvent(evt)
+			if (!evt.defaultPrevented) location.reload()
+		} catch (err) {
+			console.warn('[VisitModal] save failed:', action, err)
+			window.toast?.error('Не удалось сохранить визит. Попробуйте ещё раз.')
+		} finally {
+			saving = false
+			submitBtn?.removeAttribute('disabled')
+		}
 	}
 	const onClose = (e) => {
 		e.preventDefault()
