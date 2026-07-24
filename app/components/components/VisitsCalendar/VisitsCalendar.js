@@ -127,19 +127,14 @@ export default async function VisitsCalendar(root) {
 	// persist a move: always emit a DOM event (so integrators can react without an
 	// endpoint), and POST to data-visits-action-url / window.AG_VISITS_ACTION_URL if set.
 	function saveMove(ev, prev) {
+		// keep the DOM event for integrators (unchanged shape)
 		const detail = { action: 'move', id: ev.id ?? null, employee: ev.name, date: ev.date, time: ev.time, from: prev }
 		root.dispatchEvent(new CustomEvent('visit:move', { detail, bubbles: true }))
-		const url = root.dataset.visitsActionUrl || (typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL)
-		if (!url) return
-		try {
-			fetch(url, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-				body: JSON.stringify(detail),
-			}).catch((err) => console.warn('[VisitsCalendar] move save failed', err))
-		} catch (err) {
+		// backend contract: a drag-move is an `update` with id + new date/time (omitted
+		// fields are left untouched). Fire-and-forget — the tile has already moved.
+		postVisit('update', { id: ev.id ?? null, date: ev.date, time: ev.time }).catch((err) =>
 			console.warn('[VisitsCalendar] move save failed', err)
-		}
+		)
 	}
 
 	// ---- view bodies ------------------------------------------------------
@@ -258,11 +253,36 @@ export default async function VisitsCalendar(root) {
 	// ---- event popup ------------------------------------------------------
 	let popup = null
 	let backdrop = null
+	let popupEv = null // the event the open popup belongs to (for delete)
 	const closePopup = () => {
 		popup?.remove()
 		backdrop?.remove()
 		popup = null
 		backdrop = null
+		popupEv = null
+	}
+
+	// POST a visit mutation to the backend (same endpoint/convention as the modal).
+	// No endpoint → demo mode: resolve success so the calendar works standalone.
+	async function postVisit(action, payload) {
+		const url = root.dataset.visitsActionUrl || (typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL)
+		if (!url) return { ok: true }
+		const res = await fetch(url, {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+			body: JSON.stringify({ action, ...payload }),
+		})
+		const data = await res.json().catch(() => null)
+		if (!res.ok || (data && data.ok === false)) throw new Error((data && data.error) || `HTTP ${res.status}`)
+		return data || { ok: true }
+	}
+
+	// Remove an event from the store (in place, so no reload after a delete).
+	const removeFromStore = (ev) => {
+		const bucket = store.get(ev.date)
+		if (!bucket) return
+		const i = bucket.indexOf(ev)
+		if (i > -1) bucket.splice(i, 1)
 	}
 	const ICON_MGR = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-manager"></use></svg>'
 	const ICON_TYPE = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-visit-type"></use></svg>'
@@ -270,6 +290,7 @@ export default async function VisitsCalendar(root) {
 	function openPopup(trigger, ev) {
 		closePopup()
 		if (!ev) return
+		popupEv = ev
 		const planned = ev.status !== 'confirmed'
 		popup = document.createElement('div')
 		popup.className = 'vcal-pop'
@@ -281,7 +302,7 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__muted">${esc(ev.phone)}</div>
 				<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
 			</div>
-			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ employee: ev.name, date: ev.date, time: ev.time, manager: ev.manager, type: ev.type, comment: ev.comment }))}">Изменить</button>` : ''}
+			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment }))}">Изменить</button>` : ''}
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
@@ -465,10 +486,35 @@ export default async function VisitsCalendar(root) {
 		render()
 	}
 
+	let deleting = false
 	const onDocClick = (e) => {
 		if (!popup) return
 		// explicit close button (mobile modal)
 		if (e.target.closest('.vcal-pop__close')) return closePopup()
+		// delete the visit: POST delete, then drop the tile in place (no reload)
+		if (e.target.closest('.vcal-pop__del')) {
+			e.preventDefault()
+			const ev = popupEv
+			if (!ev || deleting) return
+			deleting = true
+			const delBtn = e.target.closest('.vcal-pop__del')
+			delBtn.setAttribute('disabled', '')
+			postVisit('delete', { id: ev.id ?? null })
+				.then(() => {
+					removeFromStore(ev)
+					closePopup()
+					render()
+				})
+				.catch((err) => {
+					console.warn('[VisitsCalendar] delete failed', err)
+					window.toast?.error('Не удалось удалить визит. Попробуйте ещё раз.')
+					delBtn.removeAttribute('disabled')
+				})
+				.finally(() => {
+					deleting = false
+				})
+			return
+		}
 		// a create/edit trigger opens the visit modal → close the floating popup first
 		if (e.target.closest('[data-visit-create]')) return closePopup()
 		// close when clicking outside the popup (and not on another event)
