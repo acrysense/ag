@@ -70,12 +70,17 @@ function tdHTML(col, row) {
 	return `<td class="data-table__td${alignCls(col.align, 'data-table__td')}"${fAttr}${label}${cardAttr(col)}>${cellHTML(col, row)}</td>`
 }
 // config.rowKey names the row field to expose as data-row-key, so a page script
-// can tell which record a row stands for after any re-render (sort/page/filter)
-function tbodyHTML(cols, rows, rowKey) {
+// can tell which record a row stands for after any re-render (sort/page/filter).
+// config.rowHref names a field holding a URL — the whole row becomes clickable
+// (inner links/buttons still win, see the row-click handler in mountOne).
+function tbodyHTML(cols, rows, rowKey, rowHref) {
 	return rows
 		.map((row) => {
 			const keyAttr = rowKey && row[rowKey] != null ? ` data-row-key="${esc(row[rowKey])}"` : ''
-			return `<tr class="data-table__row"${keyAttr}>${cols.map((c) => tdHTML(c, row)).join('')}</tr>`
+			const href = rowHref && row[rowHref] ? String(row[rowHref]) : ''
+			const hrefAttr = href ? ` data-row-href="${esc(href)}"` : ''
+			const cls = href ? 'data-table__row data-table__row--link' : 'data-table__row'
+			return `<tr class="${cls}"${keyAttr}${hrefAttr}>${cols.map((c) => tdHTML(c, row)).join('')}</tr>`
 		})
 		.join('')
 }
@@ -116,7 +121,7 @@ function buildTable(root, config, empty) {
 		})
 		.join('')
 
-	const tbody = tbodyHTML(cols, rows, config.rowKey)
+	const tbody = tbodyHTML(cols, rows, config.rowKey || 'id', config.rowHref)
 
 	const sortOpts =['<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>']
 	cols
@@ -218,7 +223,8 @@ export default async (root) => {
 	const headers = [...table.querySelectorAll('th[data-sort-key]')]
 	const allRows = [...tbody.querySelectorAll('tr:not([data-total-row])')]
 	const baseOrder = allRows.slice()
-	const rowKey = config?.rowKey
+	const rowKey = config?.rowKey || 'id'
+	const rowHref = config?.rowHref
 	// the pinned "Итого" row lives outside baseOrder so filters/sort/pages skip it
 	let totalRowEl = tbody.querySelector('[data-total-row]')
 	if (dataMode && config.totalRow && !totalRowEl) {
@@ -228,6 +234,21 @@ export default async (root) => {
 	}
 	const disposers = []
 	const totalEl = root.querySelector('[data-total]')
+
+	// Whole-row navigation (config.rowHref): click anywhere on a row to open its
+	// URL, but let genuine interactive children (links, buttons, the category
+	// select, inputs) handle their own clicks first.
+	if (rowHref) {
+		const onRowClick = (e) => {
+			if (e.target.closest('a, button, input, select, textarea, label, [data-dt-select], [role="button"]')) return
+			const tr = e.target.closest('tr[data-row-href]')
+			if (!tr || !tbody.contains(tr)) return
+			const href = tr.getAttribute('data-row-href')
+			if (href) window.location.href = href
+		}
+		tbody.addEventListener('click', onRowClick)
+		disposers.push(() => tbody.removeEventListener('click', onRowClick))
+	}
 
 	let state = { query: '', filters: [] }
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
@@ -345,7 +366,7 @@ export default async (root) => {
 			if (id !== reqId) return // a newer request superseded this one
 			const rows = Array.isArray(data.rows) ? data.rows : []
 			const total = Number(data.total) || rows.length
-			tbody.innerHTML = tbodyHTML(cols, rows)
+			tbody.innerHTML = tbodyHTML(cols, rows, rowKey, rowHref)
 			showEmpty(rows.length === 0, emptyMsg())
 			const size = pageSize === Infinity ? total || 1 : pageSize
 			const totalPages = Math.max(1, Math.ceil(total / size))
@@ -625,7 +646,7 @@ export default async (root) => {
 		setRows(rows) {
 			if (!dataMode || serverMode) return
 			const tmp = document.createElement('tbody')
-			tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [], rowKey)
+			tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [], rowKey, rowHref)
 			baseOrder.length = 0
 			baseOrder.push(...tmp.querySelectorAll('tr'))
 			currentPage = 1

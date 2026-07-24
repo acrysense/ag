@@ -241,6 +241,11 @@
         &__row.is-hidden {
             display: none;
         }
+        // whole-row link (config.rowHref): the row is clickable, inner links/buttons
+        // still take their own clicks (see the row-click handler in DataTable.js)
+        &__row--link {
+            cursor: pointer;
+        }
         &__row + &__row .data-table__td {
             @include border-side(top, 1, solid, $color-border, xl);
 
