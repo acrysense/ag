@@ -539,6 +539,56 @@ export default async function VisitsCalendar(root) {
 	disposers.push(endDrag)
 	disposers.push(closePopup)
 
+	// The create/edit modal dispatches `visit:saved`; update our store in place and
+	// cancel the modal's fallback page-reload. If we can't apply the change (missing
+	// data / unknown id), we leave the event alone so the modal still reloads — a save
+	// is never silently dropped.
+	const findEvent = (id) => {
+		if (id == null) return null
+		for (const [key, arr] of store) {
+			const i = arr.findIndex((e) => String(e.id) === String(id))
+			if (i > -1) return { arr, i, ev: arr[i], key }
+		}
+		return null
+	}
+	const onVisitSaved = (e) => {
+		const d = e.detail || {}
+		if (d.action === 'create') {
+			const v = d.visit
+			if (!v || !v.date) return // no usable data → let the modal reload
+			if (!store.has(v.date)) store.set(v.date, [])
+			store.get(v.date).push(v)
+			e.preventDefault()
+			render()
+		} else if (d.action === 'update') {
+			const found = findEvent(d.id)
+			if (!found) return // unknown visit → reload so the server view stays correct
+			const { arr, i, ev } = found
+			const f = d.fields || {}
+			const l = d.labels || {}
+			const next = d.visit
+				? { ...ev, ...d.visit }
+				: {
+						...ev,
+						date: f.date || ev.date,
+						time: f.time || ev.time,
+						type: f.type || ev.type,
+						comment: f.comment ?? ev.comment,
+						employee: f.employee || ev.employee,
+						managerCode: f.manager || ev.managerCode,
+						name: l.employee || ev.name,
+						manager: l.manager || ev.manager,
+				  }
+			arr.splice(i, 1) // drop from the old day bucket…
+			if (!store.has(next.date)) store.set(next.date, [])
+			store.get(next.date).push(next) // …and add to the (possibly new) one
+			e.preventDefault()
+			render()
+		}
+	}
+	document.addEventListener('visit:saved', onVisitSaved)
+	disposers.push(() => document.removeEventListener('visit:saved', onVisitSaved))
+
 	// JSON mode: fetch the visits before the first render (loader meanwhile)
 	const src = root.dataset.visitsSrc
 	const inlineEl = root.querySelector('[data-visits-data]')

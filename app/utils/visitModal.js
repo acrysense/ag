@@ -159,10 +159,22 @@ export function mountVisitModal(modal) {
 		try {
 			const data = await persistVisit(actionUrl, action, payload)
 			closeModal()
-			// Let the page react (calendar / table) if it wants to insert the row in
-			// place; otherwise reload so the server re-renders the list with the change.
+			// Let the page react (the calendar listens and updates its tile in place),
+			// otherwise reload so the server re-renders the list with the change. The
+			// backend returns the full visit on create; on update it may return only
+			// {ok:true}, so we also hand over the submitted fields + the human-readable
+			// select labels, enough to refresh an existing tile without a reload.
+			const selLabel = (name) =>
+				form.querySelector(`[name="${name}"]`)?.closest('[data-select]')?.querySelector('[data-select-value]')?.textContent.trim() || ''
+			const visit = data && (data.visit || (data.date ? data : null))
 			const evt = new CustomEvent('visit:saved', {
-				detail: { action, id: payload.id ?? data?.id ?? null, visit: data?.visit ?? data ?? null },
+				detail: {
+					action,
+					id: payload.id ?? data?.id ?? visit?.id ?? null,
+					visit: visit || null,
+					fields: payload,
+					labels: { employee: selLabel('employee'), manager: selLabel('manager') },
+				},
 				bubbles: true,
 				cancelable: true,
 			})
