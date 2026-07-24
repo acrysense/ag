@@ -132,9 +132,9 @@ export default async function VisitsCalendar(root) {
 		root.dispatchEvent(new CustomEvent('visit:move', { detail, bubbles: true }))
 		// backend contract: a drag-move is an `update` with id + new date/time (omitted
 		// fields are left untouched). Fire-and-forget — the tile has already moved.
-		postVisit('update', { id: ev.id ?? null, date: ev.date, time: ev.time }).catch((err) =>
-			console.warn('[VisitsCalendar] move save failed', err)
-		)
+		postVisit('update', { id: ev.id ?? null, date: ev.date, time: ev.time })
+			.then(() => refreshVisitTables())
+			.catch((err) => console.warn('[VisitsCalendar] move save failed', err))
 	}
 
 	// ---- view bodies ------------------------------------------------------
@@ -504,6 +504,7 @@ export default async function VisitsCalendar(root) {
 					removeFromStore(ev)
 					closePopup()
 					render()
+					refreshVisitTables()
 				})
 				.catch((err) => {
 					console.warn('[VisitsCalendar] delete failed', err)
@@ -551,6 +552,12 @@ export default async function VisitsCalendar(root) {
 		}
 		return null
 	}
+	// After any visit change, re-pull the visit tables on the page (e.g. «История
+	// визитов») so they stay in sync without a full reload. No-op for tables without
+	// a data-table-src (nothing to re-fetch).
+	const refreshVisitTables = () => {
+		document.querySelectorAll('[data-data-table]').forEach((t) => t.__dataTable?.refresh?.())
+	}
 	const onVisitSaved = (e) => {
 		const d = e.detail || {}
 		if (d.action === 'create') {
@@ -560,6 +567,7 @@ export default async function VisitsCalendar(root) {
 			store.get(v.date).push(v)
 			e.preventDefault()
 			render()
+			refreshVisitTables()
 		} else if (d.action === 'update') {
 			const found = findEvent(d.id)
 			if (!found) return // unknown visit → reload so the server view stays correct
@@ -584,6 +592,7 @@ export default async function VisitsCalendar(root) {
 			store.get(next.date).push(next) // …and add to the (possibly new) one
 			e.preventDefault()
 			render()
+			refreshVisitTables()
 		}
 	}
 	document.addEventListener('visit:saved', onVisitSaved)

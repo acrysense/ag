@@ -624,6 +624,18 @@ export default async (root) => {
 	disposers.push(() => clearTimeout(filterTimer))
 
 	// --- Public API for filter UIs ---
+	// shared row-swap used by setRows()/refresh(): rebuild <tr>s from a fresh row set,
+	// keeping the current filters/sort, and re-render from page 1
+	const swapRows = (rows) => {
+		if (!dataMode || serverMode) return
+		const tmp = document.createElement('tbody')
+		tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [], rowKey, rowHref)
+		baseOrder.length = 0
+		baseOrder.push(...tmp.querySelectorAll('tr'))
+		currentPage = 1
+		recompute()
+	}
+
 	root.__dataTable = {
 		applyFilters(next = {}) {
 			const q = norm(next.query)
@@ -644,13 +656,24 @@ export default async (root) => {
 		// whose rows change when the user picks a row in a master table. Filters and
 		// sort survive the swap; the view jumps back to page 1.
 		setRows(rows) {
-			if (!dataMode || serverMode) return
-			const tmp = document.createElement('tbody')
-			tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [], rowKey, rowHref)
-			baseOrder.length = 0
-			baseOrder.push(...tmp.querySelectorAll('tr'))
-			currentPage = 1
-			recompute()
+			swapRows(rows)
+		},
+		// Re-pull fresh data without a page reload. Client mode (data-table-src returns
+		// all rows, e.g. visits.php?mode=table): re-fetch the src and swap rows + total.
+		// Server mode: re-run the current page fetch. Inline data (no src): no-op.
+		async refresh() {
+			if (serverMode) return loadServer()
+			const src = root.dataset.tableSrc
+			if (!src) return
+			try {
+				const fresh = await (await fetch(src, { headers: { Accept: 'application/json' } })).json()
+				if (fresh && Array.isArray(fresh.rows)) {
+					swapRows(fresh.rows)
+					if (totalEl && fresh.total != null) totalEl.textContent = String(fresh.total)
+				}
+			} catch (err) {
+				console.warn('[DataTable] refresh failed', err)
+			}
 		},
 	}
 
