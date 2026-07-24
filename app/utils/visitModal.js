@@ -31,8 +31,16 @@ export function mountVisitModal(modal) {
 	const submitBtn = form.querySelector('[type="submit"]')
 
 	// Backend endpoint (optional — without it the modal stays demo-only). The same
-	// URL serves create / update / delete via the `action` field.
-	const actionUrl = modal.dataset.visitsActionUrl || (typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL) || ''
+	// URL serves create / update / delete via the `action` field. It may be set on
+	// the modal itself, as a global, or on any element on the page (e.g. the calendar
+	// root already carries data-visits-action-url for its drag-move / delete) — the
+	// modal is often a sibling of that, so fall back to a page-wide lookup rather than
+	// requiring the attribute to be duplicated onto the modal.
+	const actionUrl =
+		modal.dataset.visitsActionUrl ||
+		(typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL) ||
+		document.querySelector('[data-visits-action-url]')?.dataset.visitsActionUrl ||
+		''
 	// Edit state: an "Изменить" trigger opens the modal with a prefill; when that
 	// prefill carries an id we PATCH that visit, otherwise it's a create. editIntent
 	// is tracked separately so we never silently create a duplicate when the user
