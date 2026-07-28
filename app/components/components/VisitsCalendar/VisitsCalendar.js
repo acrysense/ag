@@ -69,6 +69,20 @@ export default async function VisitsCalendar(root) {
 	if (root.__visitsCalBound) return
 	root.__visitsCalBound = true
 
+	// Link to the visit detail / checklist page. In production the backend points us
+	// at the real page via data-visit-detail-url (e.g. "/erp/visits/detail.php") or the
+	// AG_VISIT_DETAIL_URL global, and we append ?id=<visit id>. Without a configured URL
+	// (or a visit id) we fall back to the base-relative demo page so the calendar still
+	// works standalone.
+	const detailBase =
+		root.dataset.visitDetailUrl || (typeof window !== 'undefined' && window.AG_VISIT_DETAIL_URL) || ''
+	const visitDetailHref = (ev) => {
+		if (!detailBase) return VISIT_HREF
+		const id = ev && ev.id != null ? ev.id : null
+		if (id == null) return detailBase
+		return `${detailBase}${detailBase.includes('?') ? '&' : '?'}id=${encodeURIComponent(id)}`
+	}
+
 	// registry so a clicked event button can recover its full data by id
 	const eventStore = new Map()
 	let eventSeq = 0
@@ -302,7 +316,7 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__muted">${esc(ev.phone)}</div>
 				<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
 			</div>
-			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment }))}">Изменить</button>` : ''}
+			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment, status: ev.status ?? null }))}">Изменить</button>` : ''}
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
@@ -324,14 +338,14 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__coords">${esc(ev.coords)}</div>
 				<div class="vcal-pop__field-group">
 					<div class="vcal-pop__field"><span class="vcal-pop__label">Тип визита</span><div>${esc(ev.type)}</div></div>
-					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="${VISIT_HREF}" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="${esc(visitDetailHref(ev))}" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
 					<div class="vcal-pop__field"><span class="vcal-pop__label">Комментарии</span><div class="vcal-pop__comment">${esc(ev.comment)}</div></div>
 				</div>
 			</div>`
 
 		const footer = planned
-			? '<div class="vcal-pop__footer"><button type="button" class="btn">Начать визит</button><button type="button" class="vcal-pop__del">Удалить визит</button></div>'
-			: `<div class="vcal-pop__footer"><a href="${VISIT_HREF}" class="btn">Подробнее</a></div>`
+			? `<div class="vcal-pop__footer"><a href="${esc(visitDetailHref(ev))}" class="btn">Начать визит</a><button type="button" class="vcal-pop__del">Удалить визит</button></div>`
+			: `<div class="vcal-pop__footer"><a href="${esc(visitDetailHref(ev))}" class="btn">Подробнее</a></div>`
 
 		const closeBtn =
 			'<button type="button" class="vcal-pop__close" aria-label="Закрыть"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg></button>'

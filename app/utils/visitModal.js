@@ -48,6 +48,9 @@ export function mountVisitModal(modal) {
 	// just 400s — surfaced as an error — instead of spawning a second visit).
 	let editIntent = false
 	let editId = null
+	let editStatus = null // round-tripped: the form has no status field, so we carry
+	// the prefilled status through and hand it back unchanged on save (otherwise the
+	// backend can't tell planned/confirmed apart and drops it).
 	let saving = false
 
 	const clearErrors = () => form.querySelectorAll('.is--error').forEach((f) => f.classList.remove('is--error'))
@@ -111,6 +114,7 @@ export function mountVisitModal(modal) {
 		resetForm()
 		editIntent = !!prefill
 		editId = prefill && prefill.id != null ? prefill.id : null
+		editStatus = prefill && prefill.status != null ? prefill.status : null
 		applyPrefill(prefill)
 		clearErrors()
 		setOpen(true)
@@ -153,19 +157,26 @@ export function mountVisitModal(modal) {
 			comment: field('comment'),
 		}
 		if (editIntent && editId != null) payload.id = editId
+		// The form has no status control; on edit we send back the status we were
+		// prefilled with so the backend keeps planned/confirmed instead of nulling it.
+		if (editIntent && editStatus != null) payload.status = editStatus
 
 		saving = true
 		submitBtn?.setAttribute('disabled', '')
 		try {
 			const data = await persistVisit(actionUrl, action, payload)
+			// Read the select labels BEFORE closeModal() — it resets the form, which
+			// restores every select to its "Выбрать" placeholder, so reading after the
+			// reset handed the calendar "Выбрать" instead of the real ФИО.
+			const selLabel = (name) =>
+				form.querySelector(`[name="${name}"]`)?.closest('[data-select]')?.querySelector('[data-select-value]')?.textContent.trim() || ''
+			const labels = { employee: selLabel('employee'), manager: selLabel('manager') }
 			closeModal()
 			// Let the page react (the calendar listens and updates its tile in place),
 			// otherwise reload so the server re-renders the list with the change. The
 			// backend returns the full visit on create; on update it may return only
 			// {ok:true}, so we also hand over the submitted fields + the human-readable
 			// select labels, enough to refresh an existing tile without a reload.
-			const selLabel = (name) =>
-				form.querySelector(`[name="${name}"]`)?.closest('[data-select]')?.querySelector('[data-select-value]')?.textContent.trim() || ''
 			const visit = data && (data.visit || (data.date ? data : null))
 			const evt = new CustomEvent('visit:saved', {
 				detail: {
@@ -173,7 +184,7 @@ export function mountVisitModal(modal) {
 					id: payload.id ?? data?.id ?? visit?.id ?? null,
 					visit: visit || null,
 					fields: payload,
-					labels: { employee: selLabel('employee'), manager: selLabel('manager') },
+					labels,
 				},
 				bubbles: true,
 				cancelable: true,
