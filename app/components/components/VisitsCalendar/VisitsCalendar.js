@@ -148,7 +148,14 @@ export default async function VisitsCalendar(root) {
 		// fields are left untouched). Fire-and-forget — the tile has already moved.
 		postVisit('update', { id: ev.id ?? null, date: ev.date, time: ev.time })
 			.then(() => refreshVisitTables())
-			.catch((err) => console.warn('[VisitsCalendar] move save failed', err))
+			.catch((err) => {
+				console.warn('[VisitsCalendar] move save failed', err)
+				// revert the optimistic move so the grid doesn't silently diverge from the
+				// server, and tell the user (matches the delete path's feedback)
+				moveEvent(ev, prev.date, prev.time)
+				render()
+				window.toast?.error('Не удалось перенести визит. Попробуйте ещё раз.')
+			})
 	}
 
 	// ---- view bodies ------------------------------------------------------
@@ -316,7 +323,7 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__muted">${esc(ev.phone)}</div>
 				<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
 			</div>
-			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment, status: ev.status ?? null }))}">Изменить</button>` : ''}
+			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ edit: true, id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment, status: ev.status ?? null }))}">Изменить</button>` : ''}
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
@@ -568,10 +575,16 @@ export default async function VisitsCalendar(root) {
 	}
 	// After any visit change, re-pull the visit tables on the page (e.g. «История
 	// визитов») so they stay in sync without a full reload. No-op for tables without
-	// a data-table-src (nothing to re-fetch).
+	// a data-table-src (nothing to re-fetch). Debounced so a burst of edits (adding a
+	// row of visits back-to-back) collapses into one refetch instead of one per action.
+	let refreshTimer = null
 	const refreshVisitTables = () => {
-		document.querySelectorAll('[data-data-table]').forEach((t) => t.__dataTable?.refresh?.())
+		clearTimeout(refreshTimer)
+		refreshTimer = setTimeout(() => {
+			document.querySelectorAll('[data-data-table]').forEach((t) => t.__dataTable?.refresh?.())
+		}, 250)
 	}
+	disposers.push(() => clearTimeout(refreshTimer))
 	const onVisitSaved = (e) => {
 		const d = e.detail || {}
 		if (d.action === 'create') {
@@ -599,6 +612,12 @@ export default async function VisitsCalendar(root) {
 					  }
 					: null
 			if (!v || !v.date) return // nothing usable → let the modal reload
+			// de-dup: if this id is already on the board (double-dispatch), update in
+			// place instead of adding a second tile
+			const existing = v.id != null ? findEvent(v.id) : null
+			if (existing) {
+				existing.arr.splice(existing.i, 1)
+			}
 			if (!store.has(v.date)) store.set(v.date, [])
 			store.get(v.date).push(v)
 			e.preventDefault()

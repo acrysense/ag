@@ -240,6 +240,8 @@ export default async (root) => {
 	// select, inputs) handle their own clicks first.
 	if (rowHref) {
 		const onRowClick = (e) => {
+			// leave modifier / non-primary clicks to the browser (new tab, etc.)
+			if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return
 			if (e.target.closest('a, button, input, select, textarea, label, [data-dt-select], [role="button"]')) return
 			const tr = e.target.closest('tr[data-row-href]')
 			if (!tr || !tbody.contains(tr)) return
@@ -253,7 +255,11 @@ export default async (root) => {
 	let state = { query: '', filters: [] }
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
 	let pageSize = dataMode ? config.pageSize || Infinity : Infinity
-	const defaultSize = pageSize // config's page size — never written to the URL
+	// the rendered default page size — never written to the URL. Re-synced below once
+	// the page-size control reports its own initial value (which is config.pageSize ||
+	// sizes[0]); capturing it only here would miss configs that set pageSizes but no
+	// explicit pageSize, and stamp a bogus ?size on load.
+	let defaultSize = pageSize
 	let currentPage = 1
 
 	// Shareable URL state (sole client table only). One writer — syncUrl — runs at
@@ -483,6 +489,7 @@ export default async (root) => {
 
 		const initial = valueEl ? parseInt(valueEl.textContent, 10) : NaN
 		pageSize = Number.isNaN(initial) ? Infinity : initial
+		defaultSize = pageSize // the true rendered default → this exact value stays out of the URL
 
 		let open = false
 		const setOpen = (s) => {
@@ -635,7 +642,9 @@ export default async (root) => {
 		const tmp = document.createElement('tbody')
 		tmp.innerHTML = tbodyHTML(cols, Array.isArray(rows) ? rows : [], rowKey, rowHref)
 		baseOrder.length = 0
-		baseOrder.push(...tmp.querySelectorAll('tr'))
+		// forEach, not push(...spread) — a spread of tens of thousands of <tr> can blow
+		// the call stack (RangeError) in some engines
+		tmp.querySelectorAll('tr').forEach((tr) => baseOrder.push(tr))
 		currentPage = 1
 		recompute()
 	}
@@ -669,11 +678,19 @@ export default async (root) => {
 			if (serverMode) return loadServer()
 			const src = root.dataset.tableSrc
 			if (!src) return
+			// guard against out-of-order responses: a burst of refresh() calls (e.g. the
+			// calendar firing one per added visit) must apply the LAST one requested, not
+			// whichever the network answers last. Shares reqId with loadServer().
+			const id = ++reqId
 			try {
 				const fresh = await (await fetch(src, { headers: { Accept: 'application/json' } })).json()
+				if (id !== reqId) return // superseded by a newer refresh
 				if (fresh && Array.isArray(fresh.rows)) {
 					swapRows(fresh.rows)
-					if (totalEl && fresh.total != null) totalEl.textContent = String(fresh.total)
+					// swapRows→recompute sets the filtered count; only override with the
+					// backend grand-total when nothing is filtered, else the number lies
+					const filtered = state.query || (state.filters && state.filters.length)
+					if (totalEl && fresh.total != null && !filtered) totalEl.textContent = String(fresh.total)
 				}
 			} catch (err) {
 				console.warn('[DataTable] refresh failed', err)

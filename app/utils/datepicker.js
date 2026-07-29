@@ -102,6 +102,7 @@ export function mountDatepicker(el, opts = {}) {
 	const onKey = (e) => {
 		if (e.key === 'Escape') {
 			e.preventDefault()
+			e.stopPropagation() // dismiss only the popover — don't let a host modal's Esc handler also fire
 			hide()
 			input.focus({ preventScroll: true })
 		}

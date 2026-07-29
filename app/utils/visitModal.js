@@ -63,6 +63,11 @@ export function mountVisitModal(modal) {
 
 	const onKey = (e) => {
 		if (e.key === 'Escape') {
+			// defer to an open inner popover (datepicker / custom select): its own Escape
+			// handler closes just the popover. Both handlers sit on document and the modal's
+			// runs first (registered earlier), so without this Escape would tear down the
+			// whole modal instead of only the open dropdown.
+			if (modal.querySelector('[data-datepicker].is-open, [data-select].is-open')) return
 			e.preventDefault()
 			closeModal()
 		}
@@ -112,11 +117,13 @@ export function mountVisitModal(modal) {
 	}
 	const openModal = (prefill) => {
 		resetForm()
-		// Edit vs create is decided by an id in the prefill: «Изменить» carries the
-		// visit id, while a calendar cell's «Создать визит» only pre-fills date/time —
-		// that must stay a create, not become an update.
+		// Edit vs create: «Изменить» sets prefill.edit (and normally an id); a calendar
+		// cell's «Создать визит» only pre-fills date/time. Track intent explicitly rather
+		// than deriving it from the id, so an edit trigger that arrives without an id
+		// still sends action:'update' (backend 400s, surfaced) instead of silently
+		// creating a duplicate visit.
 		editId = prefill && prefill.id != null ? prefill.id : null
-		editIntent = editId != null
+		editIntent = !!(prefill && (prefill.edit || editId != null))
 		editStatus = prefill && prefill.status != null ? prefill.status : null
 		applyPrefill(prefill)
 		clearErrors()
