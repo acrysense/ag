@@ -48,8 +48,9 @@ export function mountVisitModal(modal) {
 	// just 400s — surfaced as an error — instead of spawning a second visit).
 	let editIntent = false
 	let editId = null
-	// The form has no status field and we intentionally do NOT send status on edit —
-	// the backend owns the visit status (planned/confirmed/…) and manages it itself.
+	let editStatus = null // round-tripped: the form has no status field, so we carry
+	// the prefilled status through and hand it back unchanged on save (otherwise the
+	// backend can't tell planned/confirmed apart and drops it).
 	let saving = false
 
 	const clearErrors = () => form.querySelectorAll('.is--error').forEach((f) => f.classList.remove('is--error'))
@@ -116,6 +117,7 @@ export function mountVisitModal(modal) {
 		// that must stay a create, not become an update.
 		editId = prefill && prefill.id != null ? prefill.id : null
 		editIntent = editId != null
+		editStatus = prefill && prefill.status != null ? prefill.status : null
 		applyPrefill(prefill)
 		clearErrors()
 		setOpen(true)
@@ -158,6 +160,9 @@ export function mountVisitModal(modal) {
 			comment: field('comment'),
 		}
 		if (editIntent && editId != null) payload.id = editId
+		// The form has no status control; on edit we send back the status we were
+		// prefilled with so the backend keeps planned/confirmed instead of nulling it.
+		if (editIntent && editStatus != null) payload.status = editStatus
 
 		saving = true
 		submitBtn?.setAttribute('disabled', '')

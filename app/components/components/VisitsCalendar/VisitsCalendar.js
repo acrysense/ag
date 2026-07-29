@@ -316,7 +316,7 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__muted">${esc(ev.phone)}</div>
 				<div class="vcal-pop__muted">${esc(ev.pharmacy)}</div>
 			</div>
-			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment }))}">Изменить</button>` : ''}
+			${planned ? `<button type="button" class="vcal-pop__edit" data-visit-create data-visit-prefill="${esc(JSON.stringify({ id: ev.id ?? null, employee: ev.employee ?? '', manager: ev.managerCode ?? '', type: ev.type, date: ev.date, time: ev.time, comment: ev.comment, status: ev.status ?? null }))}">Изменить</button>` : ''}
 		</div>`
 
 		const mgr = `<div class="vcal-pop__card">
