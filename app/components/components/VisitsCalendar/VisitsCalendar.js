@@ -179,7 +179,7 @@ export default async function VisitsCalendar(root) {
 							const evs = dayEvents(cell)
 							return `<div class="vcal__cell${out ? ' is-out' : ''}"${out ? '' : ` data-date="${dmy(cell)}"`}>
 								<span class="vcal__daynum">${cell.getDate()}</span>
-								<div class="vcal__events">${evs.map(eventHTML).join('')}${out ? '' : '<button type="button" class="vcal__add" data-visit-create>+ Создать визит</button>'}</div>
+								<div class="vcal__events">${evs.map(eventHTML).join('')}${out ? '' : `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmy(cell) }))}">+ Создать визит</button>`}</div>
 							</div>`
 						})
 						.join('') +
@@ -220,7 +220,7 @@ export default async function VisitsCalendar(root) {
 							</button>`
 						)
 						.join('')
-					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || '<button type="button" class="vcal__add" data-visit-create><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>'}</div>`
+					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmy(date), time: hh }))}"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>`}</div>`
 				})
 				.join('')
 		}
@@ -575,8 +575,30 @@ export default async function VisitsCalendar(root) {
 	const onVisitSaved = (e) => {
 		const d = e.detail || {}
 		if (d.action === 'create') {
-			const v = d.visit
-			if (!v || !v.date) return // no usable data → let the modal reload
+			const f = d.fields || {}
+			const l = d.labels || {}
+			// Prefer the full visit from the response; otherwise build a tile straight
+			// from the submitted form values + select labels, so we insert in place even
+			// when the backend returns just {ok:true, id} — no page reload either way.
+			const v =
+				d.visit && d.visit.date
+					? { ...d.visit, id: d.visit.id ?? d.id }
+					: f.date
+					? {
+							id: d.id,
+							date: f.date,
+							time: f.time,
+							name: l.employee || f.employee || '',
+							employee: f.employee,
+							managerCode: f.manager,
+							manager: l.manager || '',
+							type: f.type,
+							comment: f.comment,
+							status: 'planned',
+							cat: '',
+					  }
+					: null
+			if (!v || !v.date) return // nothing usable → let the modal reload
 			if (!store.has(v.date)) store.set(v.date, [])
 			store.get(v.date).push(v)
 			e.preventDefault()

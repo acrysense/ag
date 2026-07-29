@@ -112,8 +112,11 @@ export function mountVisitModal(modal) {
 	}
 	const openModal = (prefill) => {
 		resetForm()
-		editIntent = !!prefill
+		// Edit vs create is decided by an id in the prefill: «Изменить» carries the
+		// visit id, while a calendar cell's «Создать визит» only pre-fills date/time —
+		// that must stay a create, not become an update.
 		editId = prefill && prefill.id != null ? prefill.id : null
+		editIntent = editId != null
 		editStatus = prefill && prefill.status != null ? prefill.status : null
 		applyPrefill(prefill)
 		clearErrors()
