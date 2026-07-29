@@ -25,6 +25,14 @@ const EMPLOYEES = [
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
 const isWeekend = (d) => d.getDay() === 0 || d.getDay() === 6
 const dmy = (d) => `${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}.${d.getFullYear()}`
+// no visits in the past: a cell whose day is before today shouldn't pre-fill its date
+// into the create form (the datepicker blocks past dates, so a prefilled past date is
+// inconsistent). Returns the dd.mm.yyyy string only for today-or-future days.
+const dmyIfFuture = (d) => {
+	const day = new Date(d.getFullYear(), d.getMonth(), d.getDate())
+	const today = new Date()
+	return day < new Date(today.getFullYear(), today.getMonth(), today.getDate()) ? '' : dmy(d)
+}
 
 // deterministic demo events for a given date (weekdays only)
 function eventsForDay(date) {
@@ -186,7 +194,7 @@ export default async function VisitsCalendar(root) {
 							const evs = dayEvents(cell)
 							return `<div class="vcal__cell${out ? ' is-out' : ''}"${out ? '' : ` data-date="${dmy(cell)}"`}>
 								<span class="vcal__daynum">${cell.getDate()}</span>
-								<div class="vcal__events">${evs.map(eventHTML).join('')}${out ? '' : `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmy(cell) }))}">+ Создать визит</button>`}</div>
+								<div class="vcal__events">${evs.map(eventHTML).join('')}${out ? '' : `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmyIfFuture(cell) }))}">+ Создать визит</button>`}</div>
 							</div>`
 						})
 						.join('') +
@@ -227,7 +235,7 @@ export default async function VisitsCalendar(root) {
 							</button>`
 						)
 						.join('')
-					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmy(date), time: hh }))}"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>`}</div>`
+					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmyIfFuture(date), time: hh }))}"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>`}</div>`
 				})
 				.join('')
 		}

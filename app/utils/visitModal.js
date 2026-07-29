@@ -41,6 +41,11 @@ export function mountVisitModal(modal) {
 		(typeof window !== 'undefined' && window.AG_VISITS_ACTION_URL) ||
 		document.querySelector('[data-visits-action-url]')?.dataset.visitsActionUrl ||
 		''
+	// Current user's manager code (UF_KIS_ID) to pre-select when CREATING a visit.
+	// Backend supplies it via data-default-manager on the modal or window.AG_CURRENT_MANAGER.
+	// Must match a manager option's value so the name shows; empty → no default.
+	const defaultManager =
+		modal.dataset.defaultManager || (typeof window !== 'undefined' && window.AG_CURRENT_MANAGER) || ''
 	// Edit state: an "Изменить" trigger opens the modal with a prefill; when that
 	// prefill carries an id we PATCH that visit, otherwise it's a create. editIntent
 	// is tracked separately so we never silently create a duplicate when the user
@@ -126,6 +131,12 @@ export function mountVisitModal(modal) {
 		editIntent = !!(prefill && (prefill.edit || editId != null))
 		editStatus = prefill && prefill.status != null ? prefill.status : null
 		applyPrefill(prefill)
+		// On create, default the manager to the current user (unless the prefill already
+		// set one). Skipped on edit — there the visit's own manager stays.
+		if (!editIntent && defaultManager) {
+			const mgr = form.querySelector('[name="manager"]')?.closest('[data-select]')
+			if (mgr && !form.querySelector('[name="manager"]')?.value) setSelectValue(mgr, defaultManager)
+		}
 		clearErrors()
 		setOpen(true)
 		runAutosize()
