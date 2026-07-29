@@ -253,6 +253,7 @@ export default async (root) => {
 	let state = { query: '', filters: [] }
 	let sort = { key: null, dir: 0, type: 'text', th: null } // dir: 1 asc, -1 desc, 0 none
 	let pageSize = dataMode ? config.pageSize || Infinity : Infinity
+	const defaultSize = pageSize // config's page size — never written to the URL
 	let currentPage = 1
 
 	// Shareable URL state (sole client table only). One writer — syncUrl — runs at
@@ -266,7 +267,10 @@ export default async (root) => {
 			filters: state.filters,
 			sort,
 			page: dataMode ? currentPage : 1,
-			size: dataMode ? pageSize : null,
+			// only persist a non-default page size — otherwise every page with a table
+			// (even one on a hidden tab, e.g. «История визитов») would stamp ?size=20
+			// onto the URL on load for no reason
+			size: dataMode && pageSize !== defaultSize ? pageSize : null,
 		})
 	}
 
