@@ -126,6 +126,10 @@
             @include prop-vw(border-radius, 8, xl);
             cursor: pointer;
             transition: color $transition-default, background $transition-default;
+            &:disabled {
+                opacity: 0.3;
+                pointer-events: none;
+            }
             @media screen and (hover: hover) {
                 &:hover {
                     color: $color-blue;
@@ -192,6 +196,12 @@
             transition: color $transition-default, background $transition-default;
             &.is-empty {
                 pointer-events: none;
+            }
+            // out-of-range days (e.g. past dates in the visit form): muted, not pickable
+            &.is-disabled {
+                color: $color-grey;
+                pointer-events: none;
+                opacity: 0.4;
             }
             &.is-selected {
                 color: $color-white;

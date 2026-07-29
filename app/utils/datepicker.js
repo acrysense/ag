@@ -19,9 +19,16 @@ function parse(value) {
 	return d.getDate() === day && d.getMonth() === month && d.getFullYear() === year ? d : null
 }
 
-export function mountDatepicker(el) {
+const atMidnight = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate())
+
+// opts.minDate — earliest selectable date (inclusive). Days before it render
+// disabled and can't be picked; the «prev month» arrow is disabled once the whole
+// previous month is out of range. Used by the visit form (no visits in the past).
+export function mountDatepicker(el, opts = {}) {
 	if (!el || el.__datepickerBound) return null
 	el.__datepickerBound = true
+
+	const minDate = opts.minDate ? atMidnight(opts.minDate) : null
 
 	const input = el.querySelector('[data-datepicker-input]')
 	const toggle = el.querySelector('[data-datepicker-toggle]')
@@ -54,12 +61,15 @@ export function mountDatepicker(el) {
 				selected.getDate() === day &&
 				selected.getMonth() === month &&
 				selected.getFullYear() === year
-			cells += `<button type="button" class="ui-datepicker__cell${isSel ? ' is-selected' : ''}" data-day="${day}">${day}</button>`
+			const disabled = minDate && new Date(year, month, day) < minDate
+			cells += `<button type="button" class="ui-datepicker__cell${isSel ? ' is-selected' : ''}${disabled ? ' is-disabled' : ''}"${disabled ? ' disabled' : ''} data-day="${day}">${day}</button>`
 		}
+		// disable «prev» once the entire previous month is before minDate
+		const prevDisabled = minDate && new Date(year, month, 0) < minDate
 
 		pop.innerHTML = `
 			<div class="ui-datepicker__head">
-				<button type="button" class="ui-datepicker__nav" data-nav="-1" aria-label="Предыдущий месяц">‹</button>
+				<button type="button" class="ui-datepicker__nav" data-nav="-1" aria-label="Предыдущий месяц"${prevDisabled ? ' disabled' : ''}>‹</button>
 				<span class="ui-datepicker__caption">${MONTHS[month]} ${year}</span>
 				<button type="button" class="ui-datepicker__nav" data-nav="1" aria-label="Следующий месяц">›</button>
 			</div>
@@ -99,12 +109,13 @@ export function mountDatepicker(el) {
 	const onPopClick = (e) => {
 		const nav = e.target.closest('[data-nav]')
 		if (nav) {
+			if (nav.disabled) return
 			view = new Date(view.getFullYear(), view.getMonth() + Number(nav.dataset.nav), 1)
 			build()
 			return
 		}
 		const cell = e.target.closest('[data-day]')
-		if (cell) {
+		if (cell && !cell.disabled) {
 			const picked = new Date(view.getFullYear(), view.getMonth(), Number(cell.dataset.day))
 			input.value = fmt(picked)
 			input.dispatchEvent(new Event('change', { bubbles: true }))

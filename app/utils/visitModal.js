@@ -243,7 +243,8 @@ export function mountVisitModal(modal) {
 	})
 
 	form.querySelectorAll('[data-datepicker]').forEach((el) => {
-		const dispose = mountDatepicker(el)
+		// no visits in the past — only today and upcoming dates are selectable
+		const dispose = mountDatepicker(el, { minDate: new Date() })
 		if (dispose) disposers.push(dispose)
 	})
 	form.querySelectorAll('[data-select]').forEach((el) => {
