@@ -117,7 +117,11 @@ function buildTable(root, config, empty) {
 	const thead = cols
 		.map((c) => {
 			const sortAttr = c.sort ? ` data-sort-key="${esc(c.key)}" data-sort-type="${esc(c.sort)}"` : ''
-			return `<th class="data-table__th${alignCls(c.align, 'data-table__th')}"${sortAttr}>${esc(c.label || '')}</th>`
+			// per-column width from the config (e.g. "16%") — inline, so it overrides the
+			// default nth-child widths, which are calibrated for the 13-column ERP tables
+			// and wrong for a table with a different column set (e.g. «История визитов»)
+			const widthAttr = c.width ? ` style="width:${esc(c.width)}"` : ''
+			return `<th class="data-table__th${alignCls(c.align, 'data-table__th')}"${sortAttr}${widthAttr}>${esc(c.label || '')}</th>`
 		})
 		.join('')
 
