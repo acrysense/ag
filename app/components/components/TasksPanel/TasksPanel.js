@@ -618,7 +618,13 @@ export default async (root) => {
 				status.classList.toggle('task-row__status--done', pending)
 			}
 		})
-		const ordered = [...completed.filter(isPending), ...completed.filter((r) => !isPending(r))]
+		// pending (awaiting confirmation) stay on top; fully-closed follow, with the most
+		// recently confirmed first (data-confirm-order, set on confirm) so a task the user
+		// just acted on jumps to the top of the closed group instead of hiding in the middle
+		const closed = completed
+			.filter((r) => !isPending(r))
+			.sort((a, b) => (+b.dataset.confirmOrder || 0) - (+a.dataset.confirmOrder || 0))
+		const ordered = [...completed.filter(isPending), ...closed]
 		ordered.forEach((row) => list.appendChild(row))
 	}
 
@@ -748,6 +754,7 @@ export default async (root) => {
 		// "Подтвердить выполнение" — the manager confirms a completed task. Sends the
 		// `confirm` action; on success the task stops being pending: the button goes
 		// away and the row is re-classified as fully closed (muted, moved down).
+		let confirmSeq = 0
 		const onConfirmClick = (e) => {
 			const btn = e.target.closest('.task-row__confirm')
 			if (!btn || !list.contains(btn)) return
@@ -756,8 +763,18 @@ export default async (root) => {
 			runAction(
 				'confirm',
 				{ id: taskId(row), done: true },
-				() => {
+				(data) => {
 					btn.remove() // no longer awaiting confirmation
+					// show the «Проверена: <кто>» line right away (from the confirm response),
+					// so the result is visible without a page reload
+					const sub = row.querySelector('.task-row__subline')
+					if (sub && data && (data.verifiedBy || data.verifiedDate) && !sub.querySelector('.task-row__verified')) {
+						const span = document.createElement('span')
+						span.className = 'task-row__verified'
+						span.innerHTML = `<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg><b>${escTask(data.verifiedBy || '')}</b> Проверена: ${escTask(data.verifiedDate || '')}`
+						sub.appendChild(span)
+					}
+					row.dataset.confirmOrder = String(++confirmSeq) // jump to the top of the closed group
 					updateCompleted()
 				},
 				{ el: row, errorMsg: 'Не удалось подтвердить выполнение' }

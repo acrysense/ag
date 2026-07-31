@@ -152,6 +152,11 @@
 		&--green {
 			color: $color-green;
 		}
+		&--yellow {
+			// darker amber than $color-yellow (#FFCC00) — the score is plain text on
+			// white, where pure yellow is unreadable; green/red stay as their vars
+			color: #c99a00;
+		}
 		&--blue {
 			color: $color-blue;
 		}

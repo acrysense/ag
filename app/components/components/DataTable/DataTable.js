@@ -1,5 +1,6 @@
 import { mountStaticPagination, mountDataPagination } from '@/utils/pagination'
 import { tableUrlEnabled, readTableUrl, writeTableUrl } from '@/utils/tableUrl'
+import { scoreTone } from '@/utils/scoreTone'
 
 // Reusable data-table behaviour: column sorting, row filtering, empty state and
 // a simple page-size limiter. Page-agnostic — driven entirely by data-attrs:
@@ -46,11 +47,12 @@ function cellHTML(col, row) {
 			const k = String(v ?? '').toLowerCase() // class is lowercase (--a/--b/--c/--d), letter shown uppercase
 			return `<span class="data-table__cat data-table__cat--${esc(k)}">${esc(k.toUpperCase())}</span>`
 		}
-		// checklist result — coloured by tone (green/blue/red) from col.toneKey; empty
-		// value → empty cell (visit without a checklist result yet)
+		// checklist result — coloured by the completion scale (≥95 green, 80–95 yellow,
+		// <80 red), derived from the «X / Y» value. col.toneKey (an explicit tone on the
+		// row) overrides. Empty value → empty cell (no checklist result yet).
 		case 'score': {
 			if (v == null || v === '') return ''
-			const tone = row[col.toneKey]
+			const tone = row[col.toneKey] || scoreTone(v)
 			return `<span class="visits-score${tone ? ` visits-score--${esc(tone)}` : ''}">${esc(v)}</span>`
 		}
 		case 'trend':

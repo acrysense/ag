@@ -52,6 +52,9 @@
             position: relative; // anchor the initials placeholder
             display: block;
             overflow: hidden;
+            // keep it a perfect square in the flex row — never stretched or shrunk
+            flex: 0 0 auto;
+            aspect-ratio: 1 / 1;
             @include prop-vw(min-width, 120, xl);
             @include prop-vw(width, 120, xl);
             @include prop-vw(height, 120, xl);

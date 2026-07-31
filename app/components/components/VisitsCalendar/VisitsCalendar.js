@@ -5,6 +5,8 @@
 
 // base-aware link to the visit page (Vite sets BASE_URL per build:
 // "/" locally, "/ag/" on GitHub Pages, "/bitrix/templates/auth/" for cms)
+import { scoreTone } from '@/utils/scoreTone'
+
 const VISIT_HREF = import.meta.env.BASE_URL + 'visit'
 
 const WEEKDAYS = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница']
@@ -355,8 +357,8 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__coords">${esc(ev.coords)}</div>
 				<div class="vcal-pop__field-group">
 					<div class="vcal-pop__field"><span class="vcal-pop__label">Тип визита</span><div>${esc(ev.type)}</div></div>
-					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="${esc(visitDetailHref(ev))}" class="vcal-pop__link">${esc(ev.checklist)}</a></div>
-					<div class="vcal-pop__field"><span class="vcal-pop__label">Комментарии</span><div class="vcal-pop__comment">${esc(ev.comment)}</div></div>
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Чек-лист</span><a href="${esc(visitDetailHref(ev))}" class="vcal-pop__link">${ev.checklist ? `<span class="visits-score visits-score--${esc(scoreTone(ev.checklist))}">${esc(ev.checklist)}</span>` : ''}</a></div>
+					<div class="vcal-pop__field"><span class="vcal-pop__label">Комментарии</span><div class="vcal-pop__comment">${esc(ev.resultComment || ev.comment)}</div></div>
 				</div>
 			</div>`
 
