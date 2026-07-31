@@ -46,6 +46,13 @@ function cellHTML(col, row) {
 			const k = String(v ?? '').toLowerCase() // class is lowercase (--a/--b/--c/--d), letter shown uppercase
 			return `<span class="data-table__cat data-table__cat--${esc(k)}">${esc(k.toUpperCase())}</span>`
 		}
+		// checklist result — coloured by tone (green/blue/red) from col.toneKey; empty
+		// value → empty cell (visit without a checklist result yet)
+		case 'score': {
+			if (v == null || v === '') return ''
+			const tone = row[col.toneKey]
+			return `<span class="visits-score${tone ? ` visits-score--${esc(tone)}` : ''}">${esc(v)}</span>`
+		}
 		case 'trend':
 			return `<span class="manager__trend manager__trend--${esc(v)}"><svg aria-hidden="true" focusable="false" viewBox="0 0 12 12"><path d="M2 7.5L6 3.5L10 7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></span>`
 		case 'index':

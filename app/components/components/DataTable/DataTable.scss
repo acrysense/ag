@@ -114,6 +114,17 @@
         &__th:nth-child(12) { width: 9.220%; }
         &__th:nth-child(13) { width: 4.965%; }
 
+        // «История визитов» has a different column set than the 13-column ERP tables, so
+        // it must NOT inherit their fixed nth-child widths (that squeezed «Аптека» to a
+        // 2-letter column). Content sizes the columns instead. Applies when the table
+        // carries .visits-table (config.table:"visits-table" for the JSON-built one).
+        // Explicit per-column widths (col.width → inline) still win over this.
+        &.visits-table {
+            table-layout: auto;
+            min-width: 0;
+            .data-table__th { width: auto; }
+        }
+
         &__th {
             position: relative;
             @include prop-vw(height, 60, xl);
