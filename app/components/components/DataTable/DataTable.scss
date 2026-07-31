@@ -114,17 +114,26 @@
         &__th:nth-child(12) { width: 9.220%; }
         &__th:nth-child(13) { width: 4.965%; }
 
-        // «История визитов» has a different column set than the 13-column ERP tables, so
-        // it must NOT inherit their fixed nth-child widths (that squeezed «Аптека» to a
-        // 2-letter column). Content sizes the columns instead. Applies automatically to
-        // any table inside the .visits-history section (its server-rendered markup), OR
-        // when the table carries .visits-table (config.table:"visits-table"). Explicit
-        // per-column widths (col.width → inline) still win over this.
+        // «История визитов» has a different column set than the 13-column ERP tables and
+        // must NOT inherit their nth-child widths (which squeezed «Аптека»). Retune the
+        // widths for its 10-column order: Сотрудник / Аптека / Кат. / Дата / Тип /
+        // Менеджер / Статус / Гео / Комментарий / Чек-лист — «Аптека» and «Комментарий»
+        // get room, narrow columns (Кат./Гео) stay narrow, instead of auto-layout giving
+        // the long address its longest-word width and dumping the slack onto Статус/Гео.
+        // Applies to any table in the .visits-history section OR carrying .visits-table.
+        // col.width (inline) still overrides these if a column sets its own.
         &.visits-table,
         .visits-history & {
-            table-layout: auto;
-            min-width: 0;
-            .data-table__th { width: auto; }
+            .data-table__th:nth-child(1)  { width: 14%; } // Сотрудник
+            .data-table__th:nth-child(2)  { width: 16%; } // Аптека
+            .data-table__th:nth-child(3)  { width: 5%; }  // Кат.
+            .data-table__th:nth-child(4)  { width: 9%; }  // Дата
+            .data-table__th:nth-child(5)  { width: 9%; }  // Тип
+            .data-table__th:nth-child(6)  { width: 11%; } // Менеджер
+            .data-table__th:nth-child(7)  { width: 8%; }  // Статус
+            .data-table__th:nth-child(8)  { width: 5%; }  // Гео
+            .data-table__th:nth-child(9)  { width: 15%; } // Комментарий
+            .data-table__th:nth-child(10) { width: 8%; }  // Чек-лист
         }
 
         &__th {
