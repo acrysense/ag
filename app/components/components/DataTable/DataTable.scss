@@ -113,28 +113,9 @@
         &__th:nth-child(11) { width: 6.383%; }
         &__th:nth-child(12) { width: 9.220%; }
         &__th:nth-child(13) { width: 4.965%; }
-
-        // «История визитов» has a different column set than the 13-column ERP tables and
-        // must NOT inherit their nth-child widths (which squeezed «Аптека»). Retune the
-        // widths for its 10-column order: Сотрудник / Аптека / Кат. / Дата / Тип /
-        // Менеджер / Статус / Гео / Комментарий / Чек-лист — «Аптека» and «Комментарий»
-        // get room, narrow columns (Кат./Гео) stay narrow, instead of auto-layout giving
-        // the long address its longest-word width and dumping the slack onto Статус/Гео.
-        // Applies to any table in the .visits-history section OR carrying .visits-table.
-        // col.width (inline) still overrides these if a column sets its own.
-        &.visits-table,
-        .visits-history & {
-            .data-table__th:nth-child(1)  { width: 14%; } // Сотрудник
-            .data-table__th:nth-child(2)  { width: 16%; } // Аптека
-            .data-table__th:nth-child(3)  { width: 5%; }  // Кат.
-            .data-table__th:nth-child(4)  { width: 9%; }  // Дата
-            .data-table__th:nth-child(5)  { width: 9%; }  // Тип
-            .data-table__th:nth-child(6)  { width: 11%; } // Менеджер
-            .data-table__th:nth-child(7)  { width: 8%; }  // Статус
-            .data-table__th:nth-child(8)  { width: 5%; }  // Гео
-            .data-table__th:nth-child(9)  { width: 15%; } // Комментарий
-            .data-table__th:nth-child(10) { width: 8%; }  // Чек-лист
-        }
+        // NB: per-table column widths for «История визитов»/«План-факт» live in
+        // Visits.scss (.visits-history / .visits-pf .data-table.visits-table) — they
+        // have their own column sets and override these.
 
         &__th {
             position: relative;

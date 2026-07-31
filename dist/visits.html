@@ -255,8 +255,8 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="AG" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-CicmQzmM.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CQ1U-Bn_.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-C0YMs1yi.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-SbZhGblQ.css" />
 	</head>
 	<body class="bg-light visits-page" data-header-search>
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
@@ -1586,37 +1586,20 @@
 										<table class="data-table is-cards-view visits-table">
 											<thead>
 												<tr>
-													<th class="data-table__th" data-sort-key="date" data-sort-type="date">Дата визита</th>
-													<th class="data-table__th">Тип</th>
-													<th class="data-table__th data-table__th--num">Лист</th>
-													<th class="data-table__th">Гео</th>
 													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
 													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
 													<th class="data-table__th">Кат.</th>
-													<th class="data-table__th data-table__th--num" data-sort-key="visits" data-sort-type="number">Визиты</th>
+													<th class="data-table__th" data-sort-key="date" data-sort-type="date">Дата</th>
+													<th class="data-table__th">Тип</th>
+													<th class="data-table__th" data-sort-key="manager" data-sort-type="text">Менеджер</th>
+													<th class="data-table__th" data-sort-key="status" data-sort-type="text">Статус</th>
+													<th class="data-table__th">Гео</th>
 													<th class="data-table__th">Комментарий</th>
+													<th class="data-table__th data-table__th--num">Чек-лист</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
-													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--blue">78 / 100</span>
-													</td>
-													<td class="data-table__td">
-														<span class="visits-geo" title="Геолокация передана">
-															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-																<path
-																	d="M3.5 8.5L6.5 11.5L12.5 5"
-																	stroke="currentColor"
-																	stroke-width="1.7"
-																	stroke-linecap="round"
-																	stroke-linejoin="round"
-																/>
-															</svg>
-														</span>
-													</td>
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Василевская М.В.</a>
 													</td>
@@ -1624,15 +1607,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">50</td>
-													<td class="data-table__td">Перспектива роста</td>
-												</tr>
-												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">09.08.2026</a></td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
 													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--blue">78 / 100</span>
-													</td>
+													<td class="data-table__td" data-filter-key="manager">Райченок А. А.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1646,6 +1624,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Перспектива роста</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--blue">78 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Ковш Т.А.</a>
 													</td>
@@ -1653,16 +1637,29 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">100</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">09.08.2026</a></td>
+													<td class="data-table__td">Коучинг</td>
+													<td class="data-table__td" data-filter-key="manager">Сидоров И.И.</td>
+													<td class="data-table__td">Открыт</td>
+													<td class="data-table__td">
+														<span class="visits-geo" title="Геолокация передана">
+															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+																<path
+																	d="M3.5 8.5L6.5 11.5L12.5 5"
+																	stroke="currentColor"
+																	stroke-width="1.7"
+																	stroke-linecap="round"
+																	stroke-linejoin="round"
+																/>
+															</svg>
+														</span>
+													</td>
 													<td class="data-table__td">Задачи не выполняются</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--blue">78 / 100</span>
+													</td>
 												</tr>
 												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">22.06.2026</a></td>
-													<td class="data-table__td">Диагностика</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--green">100 / 100</span>
-													</td>
-													<td class="data-table__td"></td>
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Зайцева Д.М.</a>
 													</td>
@@ -1670,16 +1667,17 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--a">a</span>
 													</td>
-													<td class="data-table__td data-table__td--num">90</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">22.06.2026</a></td>
+													<td class="data-table__td">Диагностика</td>
+													<td class="data-table__td" data-filter-key="manager">Кузнецова Л.П.</td>
+													<td class="data-table__td">Выполнен</td>
+													<td class="data-table__td"></td>
 													<td class="data-table__td">Мотивация повышена</td>
-												</tr>
-												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">19.05.2026</a></td>
-													<td class="data-table__td">Контроль</td>
 													<td class="data-table__td data-table__td--num">
 														<span class="visits-score visits-score--green">100 / 100</span>
 													</td>
-													<td class="data-table__td"></td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Волкова Ю.Г.</a>
 													</td>
@@ -1687,16 +1685,17 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--d">d</span>
 													</td>
-													<td class="data-table__td data-table__td--num">24</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">19.05.2026</a></td>
+													<td class="data-table__td">Контроль</td>
+													<td class="data-table__td" data-filter-key="manager">Райченок А. А.</td>
+													<td class="data-table__td">Выполнен</td>
+													<td class="data-table__td"></td>
 													<td class="data-table__td">Фокус на СТМ, хорошая динамика в Q1.</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--green">100 / 100</span>
+													</td>
 												</tr>
 												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">02.05.2026</a></td>
-													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--blue">88 / 100</span>
-													</td>
-													<td class="data-table__td"></td>
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Северная Т.В.</a>
 													</td>
@@ -1704,28 +1703,17 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">75</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">02.05.2026</a></td>
+													<td class="data-table__td">Коучинг</td>
+													<td class="data-table__td" data-filter-key="manager">Сидоров И.И.</td>
+													<td class="data-table__td">Открыт</td>
+													<td class="data-table__td"></td>
 													<td class="data-table__td">Мотивация повышена</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--blue">88 / 100</span>
+													</td>
 												</tr>
 												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">22.05.2026</a></td>
-													<td class="data-table__td">Контроль</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--red">12 / 100</span>
-													</td>
-													<td class="data-table__td">
-														<span class="visits-geo" title="Геолокация передана">
-															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
-																<path
-																	d="M3.5 8.5L6.5 11.5L12.5 5"
-																	stroke="currentColor"
-																	stroke-width="1.7"
-																	stroke-linecap="round"
-																	stroke-linejoin="round"
-																/>
-															</svg>
-														</span>
-													</td>
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Василевская М.В.</a>
 													</td>
@@ -1733,15 +1721,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">100</td>
-													<td class="data-table__td">Мотивация повышена</td>
-												</tr>
-												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">29.05.2026</a></td>
-													<td class="data-table__td">Диагностика</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--blue">78 / 100</span>
-													</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">22.05.2026</a></td>
+													<td class="data-table__td">Контроль</td>
+													<td class="data-table__td" data-filter-key="manager">Кузнецова Л.П.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1755,6 +1738,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Мотивация повышена</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--red">12 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Ковш Т.А.</a>
 													</td>
@@ -1762,15 +1751,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">20</td>
-													<td class="data-table__td">Фокус на СТМ, хорошая динамика в Q1.</td>
-												</tr>
-												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">17.05.2026</a></td>
-													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--green">100 / 100</span>
-													</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">29.05.2026</a></td>
+													<td class="data-table__td">Диагностика</td>
+													<td class="data-table__td" data-filter-key="manager">Райченок А. А.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1784,6 +1768,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Фокус на СТМ, хорошая динамика в Q1.</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--blue">78 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Зайцева Д.М.</a>
 													</td>
@@ -1791,15 +1781,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--a">a</span>
 													</td>
-													<td class="data-table__td data-table__td--num">40</td>
-													<td class="data-table__td">Отличный результат</td>
-												</tr>
-												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">02.05.2026</a></td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">17.05.2026</a></td>
 													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--red">12 / 100</span>
-													</td>
+													<td class="data-table__td" data-filter-key="manager">Сидоров И.И.</td>
+													<td class="data-table__td">Открыт</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1813,6 +1798,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Отличный результат</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--green">100 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Волкова Ю.Г.</a>
 													</td>
@@ -1820,15 +1811,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--d">d</span>
 													</td>
-													<td class="data-table__td data-table__td--num">100</td>
-													<td class="data-table__td">Мотивация повышена</td>
-												</tr>
-												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
-													<td class="data-table__td">Контроль</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--red">12 / 100</span>
-													</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">02.05.2026</a></td>
+													<td class="data-table__td">Коучинг</td>
+													<td class="data-table__td" data-filter-key="manager">Кузнецова Л.П.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1842,6 +1828,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Мотивация повышена</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--red">12 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Северная Т.В.</a>
 													</td>
@@ -1849,15 +1841,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">100</td>
-													<td class="data-table__td">Работа над СЧ</td>
-												</tr>
-												<tr class="data-table__row">
 													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
-													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--green">100 / 100</span>
-													</td>
+													<td class="data-table__td">Контроль</td>
+													<td class="data-table__td" data-filter-key="manager">Райченок А. А.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1871,6 +1858,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Работа над СЧ</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--red">12 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Василевская М.В.</a>
 													</td>
@@ -1878,15 +1871,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">0</td>
-													<td class="data-table__td">Задачи не выполняются</td>
-												</tr>
-												<tr class="data-table__row">
 													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
-													<td class="data-table__td">Диагностика</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--green">100 / 100</span>
-													</td>
+													<td class="data-table__td">Коучинг</td>
+													<td class="data-table__td" data-filter-key="manager">Сидоров И.И.</td>
+													<td class="data-table__td">Открыт</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1900,6 +1888,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Задачи не выполняются</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--green">100 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Ковш Т.А.</a>
 													</td>
@@ -1907,15 +1901,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">2</td>
-													<td class="data-table__td">Отличный результат</td>
-												</tr>
-												<tr class="data-table__row">
 													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
-													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--blue">78 / 100</span>
-													</td>
+													<td class="data-table__td">Диагностика</td>
+													<td class="data-table__td" data-filter-key="manager">Кузнецова Л.П.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1929,6 +1918,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Отличный результат</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--green">100 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Зайцева Д.М.</a>
 													</td>
@@ -1936,15 +1931,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--a">a</span>
 													</td>
-													<td class="data-table__td data-table__td--num">100</td>
-													<td class="data-table__td">Мотивация повышена</td>
-												</tr>
-												<tr class="data-table__row">
 													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
 													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--green">100 / 100</span>
-													</td>
+													<td class="data-table__td" data-filter-key="manager">Райченок А. А.</td>
+													<td class="data-table__td">Выполнен</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1958,6 +1948,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Мотивация повышена</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--blue">78 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Волкова Ю.Г.</a>
 													</td>
@@ -1965,15 +1961,10 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--d">d</span>
 													</td>
-													<td class="data-table__td data-table__td--num">120</td>
-													<td class="data-table__td">Задачи не выполняются</td>
-												</tr>
-												<tr class="data-table__row">
 													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
 													<td class="data-table__td">Коучинг</td>
-													<td class="data-table__td data-table__td--num">
-														<span class="visits-score visits-score--green">100 / 100</span>
-													</td>
+													<td class="data-table__td" data-filter-key="manager">Сидоров И.И.</td>
+													<td class="data-table__td">Открыт</td>
 													<td class="data-table__td">
 														<span class="visits-geo" title="Геолокация передана">
 															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -1987,6 +1978,12 @@
 															</svg>
 														</span>
 													</td>
+													<td class="data-table__td">Задачи не выполняются</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--green">100 / 100</span>
+													</td>
+												</tr>
+												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee">
 														<a href="/employee" class="data-table__link">Северная Т.В.</a>
 													</td>
@@ -1994,8 +1991,27 @@
 													<td class="data-table__td" data-filter-key="category">
 														<span class="data-table__cat data-table__cat--b">b</span>
 													</td>
-													<td class="data-table__td data-table__td--num">100</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">12.05.2026</a></td>
+													<td class="data-table__td">Коучинг</td>
+													<td class="data-table__td" data-filter-key="manager">Кузнецова Л.П.</td>
+													<td class="data-table__td">Выполнен</td>
+													<td class="data-table__td">
+														<span class="visits-geo" title="Геолокация передана">
+															<svg viewBox="0 0 16 16" fill="none" aria-hidden="true">
+																<path
+																	d="M3.5 8.5L6.5 11.5L12.5 5"
+																	stroke="currentColor"
+																	stroke-width="1.7"
+																	stroke-linecap="round"
+																	stroke-linejoin="round"
+																/>
+															</svg>
+														</span>
+													</td>
 													<td class="data-table__td">Отличный результат</td>
+													<td class="data-table__td data-table__td--num">
+														<span class="visits-score visits-score--green">100 / 100</span>
+													</td>
 												</tr>
 											</tbody>
 										</table>

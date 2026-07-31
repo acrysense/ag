@@ -172,47 +172,49 @@
 										<table class="data-table is-cards-view visits-table">
 											<thead>
 												<tr>
-													<th class="data-table__th" data-sort-key="date" data-sort-type="date">Дата визита</th>
-													<th class="data-table__th">Тип</th>
-													<th class="data-table__th data-table__th--num">Лист</th>
-													<th class="data-table__th">Гео</th>
 													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
 													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
 													<th class="data-table__th">Кат.</th>
-													<th class="data-table__th data-table__th--num" data-sort-key="visits" data-sort-type="number">Визиты</th>
+													<th class="data-table__th" data-sort-key="date" data-sort-type="date">Дата</th>
+													<th class="data-table__th">Тип</th>
+													<th class="data-table__th" data-sort-key="manager" data-sort-type="text">Менеджер</th>
+													<th class="data-table__th" data-sort-key="status" data-sort-type="text">Статус</th>
+													<th class="data-table__th">Гео</th>
 													<th class="data-table__th">Комментарий</th>
+													<th class="data-table__th data-table__th--num">Чек-лист</th>
 												</tr>
 											</thead>
 											<tbody>
 												{{#each (arr
-													(obj date="12.05.2026" type="Коучинг" score="78 / 100" tone="blue" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="50" comment="Перспектива роста")
-													(obj date="09.08.2026" type="Коучинг" score="78 / 100" tone="blue" geo=true name="Ковш Т.А." pharmacy="Эконом №8" cat="b" visits="100" comment="Задачи не выполняются")
-													(obj date="22.06.2026" type="Диагностика" score="100 / 100" tone="green" name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="90" comment="Мотивация повышена")
-													(obj date="19.05.2026" type="Контроль" score="100 / 100" tone="green" name="Волкова Ю.Г." pharmacy="Аптека ADEL №14, Кобирин" cat="d" visits="24" comment="Фокус на СТМ, хорошая динамика в Q1.")
-													(obj date="02.05.2026" type="Коучинг" score="88 / 100" tone="blue" name="Северная Т.В." pharmacy="ADEL №123" cat="b" visits="75" comment="Мотивация повышена")
-													(obj date="22.05.2026" type="Контроль" score="12 / 100" tone="red" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="100" comment="Мотивация повышена")
-													(obj date="29.05.2026" type="Диагностика" score="78 / 100" tone="blue" geo=true name="Ковш Т.А." pharmacy="Эконом №13" cat="b" visits="20" comment="Фокус на СТМ, хорошая динамика в Q1.")
-													(obj date="17.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="40" comment="Отличный результат")
-													(obj date="02.05.2026" type="Коучинг" score="12 / 100" tone="red" geo=true name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" visits="100" comment="Мотивация повышена")
-													(obj date="12.05.2026" type="Контроль" score="12 / 100" tone="red" geo=true name="Северная Т.В." pharmacy="ADEL №210" cat="b" visits="100" comment="Работа над СЧ")
-													(obj date="12.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="0" comment="Задачи не выполняются")
-													(obj date="12.05.2026" type="Диагностика" score="100 / 100" tone="green" geo=true name="Ковш Т.А." pharmacy="Эконом №22" cat="b" visits="2" comment="Отличный результат")
-													(obj date="12.05.2026" type="Коучинг" score="78 / 100" tone="blue" geo=true name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="100" comment="Мотивация повышена")
-													(obj date="12.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" visits="120" comment="Задачи не выполняются")
-													(obj date="12.05.2026" type="Коучинг" score="100 / 100" tone="green" geo=true name="Северная Т.В." pharmacy="ADEL №83" cat="b" visits="100" comment="Отличный результат")
+													(obj date="12.05.2026" type="Коучинг" manager="Райченок А. А." status="Выполнен" score="78 / 100" tone="blue" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="50" comment="Перспектива роста")
+													(obj date="09.08.2026" type="Коучинг" manager="Сидоров И.И." status="Открыт" score="78 / 100" tone="blue" geo=true name="Ковш Т.А." pharmacy="Эконом №8" cat="b" visits="100" comment="Задачи не выполняются")
+													(obj date="22.06.2026" type="Диагностика" manager="Кузнецова Л.П." status="Выполнен" score="100 / 100" tone="green" name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="90" comment="Мотивация повышена")
+													(obj date="19.05.2026" type="Контроль" manager="Райченок А. А." status="Выполнен" score="100 / 100" tone="green" name="Волкова Ю.Г." pharmacy="Аптека ADEL №14, Кобирин" cat="d" visits="24" comment="Фокус на СТМ, хорошая динамика в Q1.")
+													(obj date="02.05.2026" type="Коучинг" manager="Сидоров И.И." status="Открыт" score="88 / 100" tone="blue" name="Северная Т.В." pharmacy="ADEL №123" cat="b" visits="75" comment="Мотивация повышена")
+													(obj date="22.05.2026" type="Контроль" manager="Кузнецова Л.П." status="Выполнен" score="12 / 100" tone="red" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="100" comment="Мотивация повышена")
+													(obj date="29.05.2026" type="Диагностика" manager="Райченок А. А." status="Выполнен" score="78 / 100" tone="blue" geo=true name="Ковш Т.А." pharmacy="Эконом №13" cat="b" visits="20" comment="Фокус на СТМ, хорошая динамика в Q1.")
+													(obj date="17.05.2026" type="Коучинг" manager="Сидоров И.И." status="Открыт" score="100 / 100" tone="green" geo=true name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="40" comment="Отличный результат")
+													(obj date="02.05.2026" type="Коучинг" manager="Кузнецова Л.П." status="Выполнен" score="12 / 100" tone="red" geo=true name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" visits="100" comment="Мотивация повышена")
+													(obj date="12.05.2026" type="Контроль" manager="Райченок А. А." status="Выполнен" score="12 / 100" tone="red" geo=true name="Северная Т.В." pharmacy="ADEL №210" cat="b" visits="100" comment="Работа над СЧ")
+													(obj date="12.05.2026" type="Коучинг" manager="Сидоров И.И." status="Открыт" score="100 / 100" tone="green" geo=true name="Василевская М.В." pharmacy="ADEL №14" cat="b" visits="0" comment="Задачи не выполняются")
+													(obj date="12.05.2026" type="Диагностика" manager="Кузнецова Л.П." status="Выполнен" score="100 / 100" tone="green" geo=true name="Ковш Т.А." pharmacy="Эконом №22" cat="b" visits="2" comment="Отличный результат")
+													(obj date="12.05.2026" type="Коучинг" manager="Райченок А. А." status="Выполнен" score="78 / 100" tone="blue" geo=true name="Зайцева Д.М." pharmacy="Эконом №9" cat="a" visits="100" comment="Мотивация повышена")
+													(obj date="12.05.2026" type="Коучинг" manager="Сидоров И.И." status="Открыт" score="100 / 100" tone="green" geo=true name="Волкова Ю.Г." pharmacy="ADEL №14" cat="d" visits="120" comment="Задачи не выполняются")
+													(obj date="12.05.2026" type="Коучинг" manager="Кузнецова Л.П." status="Выполнен" score="100 / 100" tone="green" geo=true name="Северная Т.В." pharmacy="ADEL №83" cat="b" visits="100" comment="Отличный результат")
 												)}}
 												<tr class="data-table__row">
-													<td class="data-table__td"><a href="/visit" class="data-table__link">{{this.date}}</a></td>
-													<td class="data-table__td">{{this.type}}</td>
-													<td class="data-table__td data-table__td--num"><span class="visits-score visits-score--{{this.tone}}">{{this.score}}</span></td>
-													<td class="data-table__td">
-														{{#if this.geo}}<span class="visits-geo" title="Геолокация передана"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5L6.5 11.5L12.5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{{/if}}
-													</td>
 													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
 													<td class="data-table__td" data-filter-key="pharmacy">{{this.pharmacy}}</td>
 													<td class="data-table__td" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
-													<td class="data-table__td data-table__td--num">{{this.visits}}</td>
+													<td class="data-table__td"><a href="/visit" class="data-table__link">{{this.date}}</a></td>
+													<td class="data-table__td">{{this.type}}</td>
+													<td class="data-table__td" data-filter-key="manager">{{this.manager}}</td>
+													<td class="data-table__td">{{this.status}}</td>
+													<td class="data-table__td">
+														{{#if this.geo}}<span class="visits-geo" title="Геолокация передана"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3.5 8.5L6.5 11.5L12.5 5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>{{/if}}
+													</td>
 													<td class="data-table__td">{{this.comment}}</td>
+													<td class="data-table__td data-table__td--num"><span class="visits-score visits-score--{{this.tone}}">{{this.score}}</span></td>
 												</tr>
 												{{/each}}
 											</tbody>

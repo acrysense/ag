@@ -123,15 +123,19 @@
 	// История визитов — колонки (px @ 1390): 120/120/80/60/360/200/70/90/290
 	.visits-history .data-table.visits-table {
 		@include prop-vw(min-width, 1390, xl);
-		.data-table__th:nth-child(1) { width: 8.633%; }
-		.data-table__th:nth-child(2) { width: 8.633%; }
-		.data-table__th:nth-child(3) { width: 5.755%; }
-		.data-table__th:nth-child(4) { width: 4.317%; }
-		.data-table__th:nth-child(5) { width: 25.899%; } // Сотрудник 380 -> 360
-		.data-table__th:nth-child(6) { width: 14.388%; }
-		.data-table__th:nth-child(7) { width: 5.036%; }
-		.data-table__th:nth-child(8) { width: 6.475%; } // Визиты 70 -> 90
-		.data-table__th:nth-child(9) { width: 20.863%; }
+		// column order: Сотрудник / Аптека / Кат. / Дата / Тип / Менеджер / Статус /
+		// Гео / Комментарий / Чек-лист — «Аптека» and «Комментарий» get room, «Статус»/
+		// «Гео» stay narrow (col.width in the config still overrides these)
+		.data-table__th:nth-child(1)  { width: 14%; } // Сотрудник
+		.data-table__th:nth-child(2)  { width: 16%; } // Аптека
+		.data-table__th:nth-child(3)  { width: 5%; }  // Кат.
+		.data-table__th:nth-child(4)  { width: 9%; }  // Дата
+		.data-table__th:nth-child(5)  { width: 9%; }  // Тип
+		.data-table__th:nth-child(6)  { width: 11%; } // Менеджер
+		.data-table__th:nth-child(7)  { width: 8%; }  // Статус
+		.data-table__th:nth-child(8)  { width: 5%; }  // Гео
+		.data-table__th:nth-child(9)  { width: 15%; } // Комментарий
+		.data-table__th:nth-child(10) { width: 8%; }  // Чек-лист
 		@include only(mobile) {
 			@include prop-vw(min-width, 1390, sm);
 			&.is-cards-view {
