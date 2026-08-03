@@ -194,6 +194,42 @@ $collapse: $collapse-dur $collapse-ease;
                 }
             }
         }
+        // Счётчик новых задач у пункта «Моя страница»: красный скруглённый бейдж
+        // с белым числом, прижат к правому краю строки. Значение подставляет бэк
+        // (текст внутри span); при 0/пустом — скрывается через JS (атрибут hidden).
+        &__badge {
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            @include prop-vw(min-width, 22, xl);
+            @include prop-vw(height, 18, xl);
+            @include prop-vw(padding-inline, 6, xl);
+            @include prop-vw(font-size, 12, xl);
+            font-weight: 600;
+            line-height: 1;
+            color: $color-white;
+            background: $color-red;
+            @include prop-vw(border-radius, 6, xl);
+            &[hidden] {
+                display: none;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(min-width, 22, lg);
+                @include prop-vw(height, 18, lg);
+                @include prop-vw(padding-inline, 6, lg);
+                @include prop-vw(font-size, 12, lg);
+                @include prop-vw(border-radius, 6, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 22, sm);
+                @include prop-vw(height, 18, sm);
+                @include prop-vw(padding-inline, 6, sm);
+                @include prop-vw(font-size, 12, sm);
+                @include prop-vw(border-radius, 6, sm);
+            }
+        }
         &__banr {
             position: relative;
             z-index: 1;
@@ -378,6 +414,9 @@ $collapse: $collapse-dur $collapse-ease;
                 .sidebar__link > span {
                     opacity: 0;
                     transition: opacity 0.1s ease; // quick fade-out on collapse
+                }
+                .sidebar__badge {
+                    display: none; // no room for the counter on the icon-only rail
                 }
                 .sidebar__banr {
                     display: none;

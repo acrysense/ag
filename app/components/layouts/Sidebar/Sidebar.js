@@ -9,6 +9,28 @@ export default (root) => {
 	const btnCollapse = root.querySelector('[data-sidebar-collapse]')
 	const docEl = document.documentElement
 
+	// --- «Моя страница» counter: new tasks since the employee last opened their
+	// personal cabinet. Backend supplies the number as the badge's text (or via
+	// data-count); here we just normalise it — hide at 0/empty, cap at «99+», and
+	// mirror it into the link's aria-label for screen readers.
+	const initBadge = () => {
+		const badge = root.querySelector('[data-sidebar-badge]')
+		if (!badge) return
+		const raw = badge.dataset.count ?? badge.textContent
+		const n = parseInt(String(raw).replace(/[^\d-]/g, ''), 10)
+		if (!Number.isFinite(n) || n <= 0) {
+			badge.hidden = true
+			badge.textContent = ''
+			return
+		}
+		badge.hidden = false
+		badge.textContent = n > 99 ? '99+' : String(n)
+		const link = badge.closest('.sidebar__link')
+		const label = link?.querySelector('span:not(.sidebar__badge)')?.textContent?.trim()
+		if (link && label) link.setAttribute('aria-label', `${label}: ${n} новых задач`)
+	}
+	initBadge()
+
 	// --- desktop collapse (icon-only rail), persisted across pages ---
 	const COLLAPSE_KEY = 'ag:sidebar-collapsed'
 	const setCollapsed = (on, persist = true) => {
