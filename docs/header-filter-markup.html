@@ -1,0 +1,591 @@
+<!-- ПОЛНАЯ разметка фильтра шапки (HeaderSearch) — вставить в шапку на странице
+     аптек (и любой странице, где нужен фильтр). Твоя текущая версия урезана: есть
+     поле поиска, но НЕТ групп полей [data-page-fields], поэтому фильтр пустой и
+     скрыт. Здесь обе группы (employees — общая, для аптек/сотрудников; tasks — для
+     задач). Плюс на <body> нужен атрибут data-header-search (у тебя уже есть).
+     Это тот же блок, что на странице задач, где фильтр работает. -->
+<div class="filter-search" data-module="HeaderSearch" data-path="components">
+			<div class="filter-search__control">
+				<input
+					class="filter-search__input"
+					name="header-search"
+					type="text"
+					placeholder="Найти"
+					autocomplete="off"
+					data-filter-input
+					aria-label="Поиск"
+				/>
+				<svg
+					class="filter-search__icon"
+					aria-hidden="true"
+					focusable="false"
+					viewBox="0 0 20 20"
+					fill="none"
+					xmlns="http://www.w3.org/2000/svg"
+				>
+					<circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
+					<path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+				</svg>
+			</div>
+
+			<div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
+				<div class="filter-panel__head">
+					<h2 class="filter-panel__title">Фильтр</h2>
+					<button type="button" class="filter-panel__close" data-filter-close aria-label="Закрыть">
+						<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg>
+					</button>
+				</div>
+				<div data-page-fields="employees">
+					<div class="filter-panel__top">
+						<div class="filter-field" data-filter-key="employee" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--list">
+								<input
+									class="filter-field__search"
+									name="filter-field-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+								/>
+								<div class="filter-field__options">
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Василевская М.В."
+											data-label="Василевская М.В."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Василевская М.В.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Волкова Ю.Г."
+											data-label="Волкова Ю.Г."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Волкова Ю.Г.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Зайцева Д.М."
+											data-label="Зайцева Д.М."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Зайцева Д.М.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Ковш Т.А."
+											data-label="Ковш Т.А."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Ковш Т.А.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Северная Т.В."
+											data-label="Северная Т.В."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Северная Т.В.</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="filter-panel__grid">
+						<div class="filter-field" data-filter-key="region">
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Область">Область</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel">
+								<button type="button" class="filter-option" data-value="Минск" data-label="Минск">Минская обл.</button>
+								<button type="button" class="filter-option" data-value="Витебск" data-label="Витебск">
+									Витебская обл.
+								</button>
+								<button type="button" class="filter-option" data-value="Брест" data-label="Брест">Брестская обл.</button>
+								<button type="button" class="filter-option" data-value="Гродно" data-label="Гродно">
+									Гродненская обл.
+								</button>
+								<button type="button" class="filter-option" data-value="Могилев" data-label="Могилев">
+									Могилевска обл.
+								</button>
+							</div>
+						</div>
+
+						<div class="filter-field" data-filter-key="region" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Регион">Регион</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel">
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Минск"
+										data-label="Минск"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Минск</span>
+								</label>
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Витебск"
+										data-label="Витебск"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Витебск</span>
+								</label>
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Брест"
+										data-label="Брест"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Брест</span>
+								</label>
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Гродно"
+										data-label="Гродно"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Гродно</span>
+								</label>
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Могилев"
+										data-label="Могилев"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Могилев</span>
+								</label>
+							</div>
+						</div>
+
+						<div class="filter-field" data-filter-key="brand" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Бренд">Бренд</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel">
+								<label class="filter-option">
+									<input class="filter-option__input" name="filter-option" type="checkbox" value="ADEL" data-label="ADEL" />
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>ADEL</span>
+								</label>
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Добрыя лекі"
+										data-label="Добрыя лекі"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Добрыя лекі</span>
+								</label>
+								<label class="filter-option">
+									<input
+										class="filter-option__input"
+										name="filter-option"
+										type="checkbox"
+										value="Эконом"
+										data-label="Эконом"
+									/>
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>Эконом</span>
+								</label>
+							</div>
+						</div>
+
+						<div class="filter-field" data-filter-key="category" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Категория">Категория</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel">
+								<label class="filter-option">
+									<input class="filter-option__input" name="filter-option" type="checkbox" value="A" data-label="A" />
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>A</span>
+								</label>
+								<label class="filter-option">
+									<input class="filter-option__input" name="filter-option" type="checkbox" value="B" data-label="B" />
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>B</span>
+								</label>
+								<label class="filter-option">
+									<input class="filter-option__input" name="filter-option" type="checkbox" value="C" data-label="C" />
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>C</span>
+								</label>
+								<label class="filter-option">
+									<input class="filter-option__input" name="filter-option" type="checkbox" value="D" data-label="D" />
+									<span class="filter-option__box" aria-hidden="true"></span>
+									<span>D</span>
+								</label>
+							</div>
+						</div>
+
+						<div class="filter-field" data-filter-key="company">
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Розничная компания">Розничная компания</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel">
+								<button type="button" class="filter-option" data-value="Аптека групп" data-label="Аптека групп">
+									ООО “Аптека групп”
+								</button>
+								<button type="button" class="filter-option" data-value="Фарм" data-label="Фарм">ООО “Фарм”</button>
+							</div>
+						</div>
+
+						<div class="filter-field" data-filter-key="pharmacy" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--list">
+								<input
+									class="filter-field__search"
+									name="filter-field-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+								/>
+								<div class="filter-field__options">
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="ADEL №112"
+											data-label="ADEL №112"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>ADEL №112</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="ADEL №42"
+											data-label="Аптека ADEL №42, Минск"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Аптека ADEL №42, Минск</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="ADEL №4"
+											data-label="ADEL №4"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>ADEL №4</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="ADEL №2"
+											data-label="ADEL №2"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>ADEL №2</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="ADEL №24"
+											data-label="Аптека ADEL №24"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Аптека ADEL №24</span>
+									</label>
+								</div>
+							</div>
+						</div>
+
+						<div class="filter-field" data-filter-key="manager">
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel">
+								<button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">
+									Петров А.И.
+								</button>
+								<button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">
+									Полководец Т.С.
+								</button>
+							</div>
+						</div>
+
+						<!-- free-text input (list of values), inline — no dropdown -->
+						<div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
+							<input
+								type="text"
+								class="filter-field__input"
+								name="filter-value"
+								data-filter-text
+								placeholder="Кол-во чеков"
+								autocomplete="off"
+							/>
+						</div>
+
+						<!-- numeric range (From – To), inline — no dropdown -->
+						<div class="filter-field filter-field--inline" data-filter-key="index" data-range>
+							<div class="filter-range">
+								<input
+									type="text"
+									class="filter-field__input"
+									name="filter-value"
+									data-range-from
+									placeholder="Индекс от"
+									autocomplete="off"
+									inputmode="decimal"
+								/>
+								<span class="filter-range__dash">–</span>
+								<input
+									type="text"
+									class="filter-field__input"
+									name="filter-value"
+									data-range-to
+									placeholder="до"
+									autocomplete="off"
+									inputmode="decimal"
+								/>
+							</div>
+						</div>
+
+						<!-- date range (From – To) -->
+						<div class="filter-field" data-filter-key="period" data-daterange>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Период">Период</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--calendar"></div>
+						</div>
+
+						<!-- single date -->
+						<div class="filter-field" data-filter-key="date" data-date>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--calendar"></div>
+						</div>
+					</div>
+				</div>
+
+				<div data-page-fields="tasks">
+					<div class="filter-panel__top">
+						<div class="filter-field" data-filter-key="assignee" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--list">
+								<input
+									class="filter-field__search"
+									name="filter-field-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+								/>
+								<div class="filter-field__options">
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Иванов М.С."
+											data-label="Иванов М.С."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Иванов М.С.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Петров А.И."
+											data-label="Петров А.И."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Петров А.И.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Панковец В.В."
+											data-label="Панковец В.В."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Панковец В.В.</span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="filter-panel__grid">
+						<div class="filter-field" data-filter-key="manager" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--list">
+								<input
+									class="filter-field__search"
+									name="filter-field-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+								/>
+								<div class="filter-field__options">
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Петров А.И."
+											data-label="Петров А.И."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Петров А.И.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Сидоров И.И."
+											data-label="Сидоров И.И."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Сидоров И.И.</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Кузнецова Л.П."
+											data-label="Кузнецова Л.П."
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Кузнецова Л.П.</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="filter-field" data-filter-key="pharmacy" data-multi>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--list">
+								<input
+									class="filter-field__search"
+									name="filter-field-search"
+									type="text"
+									placeholder="Найти"
+									autocomplete="off"
+								/>
+								<div class="filter-field__options">
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Эконом №8"
+											data-label="Эконом №8"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Эконом №8</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="Эконом №9"
+											data-label="Эконом №9"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>Эконом №9</span>
+									</label>
+									<label class="filter-option">
+										<input
+											class="filter-option__input"
+											name="filter-option"
+											type="checkbox"
+											value="ADEL №14"
+											data-label="ADEL №14"
+										/>
+										<span class="filter-option__box" aria-hidden="true"></span>
+										<span>ADEL №14</span>
+									</label>
+								</div>
+							</div>
+						</div>
+						<div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
+							<button type="button" class="filter-field__trigger">
+								<span class="filter-field__value" data-placeholder="Дата">Дата</span>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
+							</button>
+							<div class="filter-field__panel filter-field__panel--calendar"></div>
+						</div>
+					</div>
+				</div>
+
+				<div class="filter-panel__actions">
+					<button type="button" class="btn btn--sm" data-filter-apply>Применить</button>
+					<button type="button" class="btn btn--sm btn--secondary" data-filter-reset>Сбросить</button>
+				</div>
+			</div>
+		</div>
