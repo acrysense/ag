@@ -194,22 +194,26 @@ $collapse: $collapse-dur $collapse-ease;
                 }
             }
         }
-        // Счётчик новых задач у пункта «Моя страница»: красный скруглённый бейдж
-        // с белым числом, прижат к правому краю строки. Значение подставляет бэк
-        // (текст внутри span); при 0/пустом — скрывается через JS (атрибут hidden).
+        // Счётчик новых задач у пункта «Моя страница»: нейтральный серый бейдж с
+        // белым числом, прижат к правому краю строки. На активном пункте — синий,
+        // под цвет активного текста. Значение подставляет бэк (текст span или
+        // data-count); при 0/пустом — скрывается через JS (атрибут hidden).
+        // padding-block чуть больше сверху: цифры без «хвостов» оптически уезжают
+        // вверх, лишний верхний пиксель возвращает их в центр.
         &__badge {
             margin-left: auto;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             @include prop-vw(min-width, 22, xl);
-            @include prop-vw(height, 18, xl);
+            @include prop-vw(padding-block-start, 4, xl);
+            @include prop-vw(padding-block-end, 3, xl);
             @include prop-vw(padding-inline, 6, xl);
             @include prop-vw(font-size, 12, xl);
             font-weight: 600;
             line-height: 1;
             color: $color-white;
-            background: $color-red;
+            background: $color-dark-grey;
             @include prop-vw(border-radius, 6, xl);
             &[hidden] {
                 display: none;
@@ -217,18 +221,24 @@ $collapse: $collapse-dur $collapse-ease;
 
             @include only(desktop) {
                 @include prop-vw(min-width, 22, lg);
-                @include prop-vw(height, 18, lg);
+                @include prop-vw(padding-block-start, 4, lg);
+                @include prop-vw(padding-block-end, 3, lg);
                 @include prop-vw(padding-inline, 6, lg);
                 @include prop-vw(font-size, 12, lg);
                 @include prop-vw(border-radius, 6, lg);
             }
             @include only(mobile) {
                 @include prop-vw(min-width, 22, sm);
-                @include prop-vw(height, 18, sm);
+                @include prop-vw(padding-block-start, 4, sm);
+                @include prop-vw(padding-block-end, 3, sm);
                 @include prop-vw(padding-inline, 6, sm);
                 @include prop-vw(font-size, 12, sm);
                 @include prop-vw(border-radius, 6, sm);
             }
+        }
+        // активный пункт («Моя страница» открыта) — бейдж под цвет синего текста
+        &__link.is--active &__badge {
+            background: $color-blue;
         }
         &__banr {
             position: relative;
