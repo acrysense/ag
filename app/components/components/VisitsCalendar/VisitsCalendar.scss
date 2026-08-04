@@ -35,6 +35,12 @@
 	.vcal {
 		display: block;
 		width: 100%;
+		// reserve the loader's height up-front so the empty root isn't a thin
+		// collapsed strip before JS injects the loader (no empty→loader jump)
+		@include prop-vw(min-height, 320, xl);
+		@include only(mobile) {
+			@include prop-vw(min-height, 240, sm);
+		}
 
 		// --- header: title + prev/next ---
 		&__head {

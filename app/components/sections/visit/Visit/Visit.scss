@@ -1056,20 +1056,42 @@
 			}
 		}
 		&__avatar {
+			position: relative; // anchor the initials placeholder
 			flex-shrink: 0;
 			@include prop-vw(width, 85, xl);
 			@include prop-vw(height, 85, xl);
 			@include prop-vw(border-radius, 10, xl);
 			overflow: hidden;
+			background: $color-light-grey; // grey box behind the initials (self-sufficient
+			// even if the markup drops the shared .employee__avatar class)
 			@include only(mobile) {
 				@include prop-vw(width, 85, sm);
 				@include prop-vw(height, 85, sm);
 				@include prop-vw(border-radius, 10, sm);
 			}
 			img {
+				position: relative;
+				z-index: 1; // cover the initials when a photo is present
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
+			}
+			// The markup also puts .employee__avatar here (shared placeholder look).
+			// That class is profile-sized (min-width 120) and would stretch this card,
+			// so pin the compact 85px square with higher specificity.
+			&.employee__avatar {
+				@include prop-vw(min-width, 85, xl);
+				@include only(mobile) {
+					@include prop-vw(min-width, 85, sm);
+				}
+			}
+		}
+		// initials scaled for the compact 85px avatar (shared .employee__placeholder
+		// is profile-sized at 30px — too big here)
+		.employee__placeholder {
+			@include prop-vw(font-size, 26, xl);
+			@include only(mobile) {
+				@include prop-vw(font-size, 22, sm);
 			}
 		}
 		&__name {
