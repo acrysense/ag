@@ -20,110 +20,102 @@
 						</a>
 
 						<!--
-							Раздел «Конкурсы» (ЛК). Собран целиком из готовых блоков «Мотивации»
-							(motivation__wrapper / beginner-end / coefficient-stats / point-item) —
+							Страница конкурса (ЛК). 1 страница = 1 конкурс → без вложенных
+							блоков и с одним заголовком. Собрано целиком из готовых блоков
+							«Мотивации» (beginner-end / coefficient-stats / point-item) —
 							своей вёрстки/CSS нет.
-							Данные бэк отдаёт методом GetDirectionSales(Code) → JSON. Маппинг полей
-							указан в комментариях у каждого значения. Один конкурс = один
-							.motivation__wrapper; для нескольких — повторить блок.
+							Данные бэк отдаёт методом GetDirectionSales(Code) → JSON. Маппинг
+							полей указан в комментариях у каждого значения.
 						-->
 						<section class="motivation">
 							<div class="motivation__wrap">
-								<h3 class="motivation__heading">Конкурсы</h3>
+								<!-- NamePromotion (единственный заголовок) -->
+								<h3 class="motivation__heading">Конкурс «В яблочко»</h3>
 
-								<!-- ===== Конкурс «В яблочко» ===== -->
+								<!-- Период: StartPromotion – FinishPromotion -->
 								<div class="motivation__section">
-									<div class="motivation__wrapper">
-										<!-- NamePromotion -->
-										<h3 class="motivation__subtitle">Конкурс «В яблочко»</h3>
-
-										<!-- Период: StartPromotion – FinishPromotion -->
-										<div class="motivation__section">
-											<div class="beginner-end motivation__beginner-end">
-												<div class="beginner-end__wrapper">
-													<div class="beginner-end__item">
-														<span class="beginner-end__label">Начало:</span>
-														<svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
-															<use href="#icon-calendar"></use>
-														</svg>
-														<div class="beginner-end__date">10.08.2026</div>
-													</div>
-													<div class="beginner-end__item">
-														<span class="beginner-end__label">Окончание:</span>
-														<svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
-															<use href="#icon-calendar"></use>
-														</svg>
-														<div class="beginner-end__date">09.10.2026</div>
-													</div>
-												</div>
+									<div class="beginner-end motivation__beginner-end">
+										<div class="beginner-end__wrapper">
+											<div class="beginner-end__item">
+												<span class="beginner-end__label">Начало:</span>
+												<svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+													<use href="#icon-calendar"></use>
+												</svg>
+												<div class="beginner-end__date">10.08.2026</div>
 											</div>
-										</div>
-
-										<!-- Сумма премии за ЛВ по брендам: Bonus (зелёное) -->
-										<div class="motivation__section">
-											<div class="coefficient-stats is-up motivation__stats">
-												<span class="coefficient-stats__label">Сумма премии за ЛВ по брендам:</span>
-												<span class="coefficient-stats__value">260.01 BYN</span>
-											</div>
-										</div>
-
-										<!-- Карточка аптеки + строки показателей -->
-										<div class="motivation__section">
-											<div class="point-item">
-												<div class="point-item__header">
-													<svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
-														<use href="#icon-pharmacy"></use>
-													</svg>
-													<div class="point-item__info">
-														<h3 class="point-item__heading">Аптека №54, основное место работы</h3>
-														<span class="point-item__address">ул. Интернациональная, 33-60</span>
-													</div>
-												</div>
-												<div class="point-item__items">
-													<!-- BonusThreshold -->
-													<div class="point-item__row">
-														<div class="point-item__minimal">Минимальный план по брендам ЛВ с НДС</div>
-														<div class="point-item__delimeter"></div>
-														<strong class="point-item__points">3000.00 BYN</strong>
-													</div>
-													<!-- ProductTurnoverFull -->
-													<div class="point-item__row">
-														<div class="point-item__minimal">Факт по брендам ЛВ с НДС</div>
-														<div class="point-item__delimeter"></div>
-														<strong class="point-item__points">3900.22 BYN</strong>
-													</div>
-													<!-- BonusThreshold − ProductTurnoverFull (осталось до плана) -->
-													<div class="point-item__row">
-														<div class="point-item__minimal">До выполнения минимального плана по брендам ЛВ с НДС осталось</div>
-														<div class="point-item__delimeter"></div>
-														<strong class="point-item__points">- 900.22 BYN</strong>
-													</div>
-													<!-- ProductTurnover -->
-													<div class="point-item__row">
-														<div class="point-item__minimal">Факт по брендам ЛВ без НДС</div>
-														<div class="point-item__delimeter"></div>
-														<strong class="point-item__points">3250.18 BYN</strong>
-													</div>
-													<!-- BonusPercentage -->
-													<div class="point-item__row">
-														<div class="point-item__minimal">Процент премирования за ЛВ по брендам</div>
-														<div class="point-item__delimeter"></div>
-														<strong class="point-item__points">7.5 %</strong>
-													</div>
-												</div>
-											</div>
-										</div>
-
-										<!-- Прогноз премии за ЛВ по брендам: BonusPrediction (серое) -->
-										<div class="motivation__section">
-											<div class="coefficient-stats motivation__stats">
-												<span class="coefficient-stats__label">Прогноз премии за ЛВ по брендам:</span>
-												<span class="coefficient-stats__value">243.76 BYN</span>
+											<div class="beginner-end__item">
+												<span class="beginner-end__label">Окончание:</span>
+												<svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
+													<use href="#icon-calendar"></use>
+												</svg>
+												<div class="beginner-end__date">09.10.2026</div>
 											</div>
 										</div>
 									</div>
 								</div>
-								<!-- ===== /Конкурс «В яблочко» ===== -->
+
+								<!-- Сумма премии за ЛВ по брендам: Bonus (зелёное) -->
+								<div class="motivation__section">
+									<div class="coefficient-stats is-up motivation__stats">
+										<span class="coefficient-stats__label">Сумма премии за ЛВ по брендам:</span>
+										<span class="coefficient-stats__value">260.01 BYN</span>
+									</div>
+								</div>
+
+								<!-- Карточка аптеки + строки показателей -->
+								<div class="motivation__section">
+									<div class="point-item">
+										<div class="point-item__header">
+											<svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
+												<use href="#icon-pharmacy"></use>
+											</svg>
+											<div class="point-item__info">
+												<h3 class="point-item__heading">Аптека №54, основное место работы</h3>
+												<span class="point-item__address">ул. Интернациональная, 33-60</span>
+											</div>
+										</div>
+										<div class="point-item__items">
+											<!-- BonusThreshold -->
+											<div class="point-item__row">
+												<div class="point-item__minimal">Минимальный план по брендам ЛВ с НДС</div>
+												<div class="point-item__delimeter"></div>
+												<strong class="point-item__points">3000.00 BYN</strong>
+											</div>
+											<!-- ProductTurnoverFull -->
+											<div class="point-item__row">
+												<div class="point-item__minimal">Факт по брендам ЛВ с НДС</div>
+												<div class="point-item__delimeter"></div>
+												<strong class="point-item__points">3900.22 BYN</strong>
+											</div>
+											<!-- BonusThreshold − ProductTurnoverFull (осталось до плана) -->
+											<div class="point-item__row">
+												<div class="point-item__minimal">До выполнения минимального плана по брендам ЛВ с НДС осталось</div>
+												<div class="point-item__delimeter"></div>
+												<strong class="point-item__points">- 900.22 BYN</strong>
+											</div>
+											<!-- ProductTurnover -->
+											<div class="point-item__row">
+												<div class="point-item__minimal">Факт по брендам ЛВ без НДС</div>
+												<div class="point-item__delimeter"></div>
+												<strong class="point-item__points">3250.18 BYN</strong>
+											</div>
+											<!-- BonusPercentage -->
+											<div class="point-item__row">
+												<div class="point-item__minimal">Процент премирования за ЛВ по брендам</div>
+												<div class="point-item__delimeter"></div>
+												<strong class="point-item__points">7.5 %</strong>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Прогноз премии за ЛВ по брендам: BonusPrediction (серое) -->
+								<div class="motivation__section">
+									<div class="coefficient-stats motivation__stats">
+										<span class="coefficient-stats__label">Прогноз премии за ЛВ по брендам:</span>
+										<span class="coefficient-stats__value">243.76 BYN</span>
+									</div>
+								</div>
 							</div>
 						</section>
 					</div>
