@@ -29,6 +29,12 @@
             @include only(mobile) {
                 @include prop-vw(gap, 14, sm);
             }
+            // Keep the История/Новые switch right-aligned via auto-margin rather than
+            // relying on space-between — so it stays put even if the «Создать» button
+            // is absent (single child no longer slides to the left edge).
+            .tabs__list {
+                margin-left: auto;
+            }
         }
         // The tabs util uses .tabs__list (with its own margin-bottom) — the
         // switch sits inline with the create button inside __bar, so reset it.
