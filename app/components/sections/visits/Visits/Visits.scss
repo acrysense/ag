@@ -81,9 +81,13 @@
 		}
 	}
 
-	// the visits tables size columns to content (different column sets than the
-	// fixed-width list tables)
-	.data-table.visits-table {
+	// Таблицы визитов. Фикс-лейаут и ширины колонок висят на КЛАССЕ СЕКЦИИ
+	// (.visits-history / .visits-pf), а не на самой таблице: на боевом бэк рендерит
+	// только <section>, а <table> строит наш DataTable-JS (без класса visits-table).
+	// Поэтому достаточно, чтобы секция была visits-history (10 колонок) или visits-pf
+	// (7 колонок) — генерируемой таблице свой класс не нужен.
+	.visits-history .data-table,
+	.visits-pf .data-table {
 		table-layout: fixed;
 		@include prop-vw(min-width, 1400, xl);
 
@@ -102,10 +106,9 @@
 	}
 	// Fixed column widths for the TABLE view (desktop + mobile "Таблица"). In the
 	// mobile card view they're dropped so the caption is full-width and there's no
-	// horizontal scroll. The reset is scoped per section so its specificity beats
-	// the section width rules.
-	// План-факт — колонки (px @ 1400): 680 / 250 / 60 / 100 / 100 / 90 / 120
-	.visits-pf .data-table.visits-table {
+	// horizontal scroll.
+	// План-факт — 7 колонок (px @ 1400): 680 / 250 / 60 / 100 / 100 / 90 / 120
+	.visits-pf .data-table {
 		.data-table__th:nth-child(1) { width: 48.571%; }
 		.data-table__th:nth-child(2) { width: 17.857%; }
 		.data-table__th:nth-child(3) { width: 4.286%; }
@@ -120,17 +123,11 @@
 			}
 		}
 	}
-	// История визитов — колонки (px @ 1390): 120/120/80/60/360/200/70/90/290
-	// Ширины висят на самом `.data-table.visits-table` (а не на `.visits-history …`),
-	// чтобы бэку достаточно было добавить таблице ОДИН класс `visits-table` — секцию
-	// трогать не нужно. Это дефолт для 10-колоночной истории; План-факт (7 колонок)
-	// перекрывает эти ширины своим `.visits-pf .data-table.visits-table` (специфичность
-	// выше), а nth-child(8..10) у него просто не находит ячеек — так что не ломается.
-	.data-table.visits-table {
+	// История визитов — 10 колонок (px @ 1390): 120/120/80/60/360/200/70/90/290
+	// Порядок: Сотрудник / Аптека / Кат. / Дата / Тип / Менеджер / Статус / Гео /
+	// Комментарий / Чек-лист (col.width в конфиге всё ещё перекрывает эти значения)
+	.visits-history .data-table {
 		@include prop-vw(min-width, 1390, xl);
-		// column order: Сотрудник / Аптека / Кат. / Дата / Тип / Менеджер / Статус /
-		// Гео / Комментарий / Чек-лист — «Аптека» and «Комментарий» get room, «Статус»/
-		// «Гео» stay narrow (col.width in the config still overrides these)
 		.data-table__th:nth-child(1)  { width: 14%; } // Сотрудник
 		.data-table__th:nth-child(2)  { width: 16%; } // Аптека
 		.data-table__th:nth-child(3)  { width: 5%; }  // Кат.
