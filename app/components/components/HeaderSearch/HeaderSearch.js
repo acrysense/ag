@@ -26,10 +26,23 @@ export default (root) => {
 	const applyBtn = root.querySelector('[data-filter-apply]')
 	const resetBtn = root.querySelector('[data-filter-reset]')
 
-	// show only the field group for the current page; the other group stays in
-	// the DOM (hidden via CSS) but is never read
-	const page = document.body.classList.contains('tasks-page') ? 'tasks' : 'employees'
-	const fields = [...root.querySelectorAll(`[data-page-fields="${page}"] .filter-field`)]
+	// Which field group to drive. Explicit via <body data-header-search="<key>">
+	// (e.g. "pharmacies" / "managers") — not tied to a fixed list; otherwise the
+	// legacy detection (tasks-page class → tasks, else employees). If the named
+	// group isn't present in the DOM, fall back to the employees group.
+	let page =
+		(document.body.getAttribute('data-header-search') || '').trim() ||
+		(document.body.classList.contains('tasks-page') ? 'tasks' : 'employees')
+	let fields = [...root.querySelectorAll(`[data-page-fields="${page}"] .filter-field`)]
+	if (!fields.length && page !== 'employees') {
+		page = 'employees'
+		fields = [...root.querySelectorAll(`[data-page-fields="employees"] .filter-field`)]
+	}
+	// show only the active group, hide the rest — generic, any group name works
+	// (supersedes the name-specific CSS rules, since inline display wins)
+	root.querySelectorAll('[data-page-fields]').forEach((g) => {
+		g.style.display = g.getAttribute('data-page-fields') === page ? '' : 'none'
+	})
 
 	const chipsHost = document.querySelector('[data-filter-chips]')
 	const chipsList = chipsHost?.querySelector('[data-filter-chips-list]')
@@ -239,6 +252,18 @@ export default (root) => {
 			field.querySelectorAll('.filter-option[data-value]').forEach((o) => {
 				o.classList.toggle('is-active', active.has(o.dataset.value))
 			})
+			// reset the trigger label too — otherwise the field still READS as selected
+			// after its chip is removed (checkboxes cleared but the label kept the value)
+			const labelEl = field.querySelector('.filter-field__value')
+			if (labelEl) {
+				if (field.hasAttribute('data-multi')) {
+					const n = field.querySelectorAll('.filter-option__input:checked').length
+					labelEl.textContent = n ? `${labelEl.dataset.placeholder || ''}: ${n}` : labelEl.dataset.placeholder || ''
+				} else {
+					const act = field.querySelector('.filter-option.is-active')
+					labelEl.textContent = act ? act.dataset.label || act.dataset.value : labelEl.dataset.placeholder || ''
+				}
+			}
 			field.__reorder?.()
 		})
 		fields.forEach((f) => {
