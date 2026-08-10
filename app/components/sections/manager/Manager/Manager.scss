@@ -437,34 +437,37 @@
                 @include prop-vw(padding-bottom, 21, sm);
                 @include prop-vw(font-size, 14, sm);
             }
-            // divider inset 34 from the left, sitting 10px above the item's bottom —
-            // on EVERY item, incl. the last
+            // divider inset from the left (past the wider score column), sitting 10px
+            // above the item's bottom — on EVERY item, incl. the last
             &::before {
                 content: '';
                 position: absolute;
                 right: 0;
-                @include prop-vw(left, 34, xl);
+                @include prop-vw(left, 44, xl);
                 @include prop-vw(bottom, 10, xl);
                 height: 1px;
                 background: $color-border;
 
                 @include only(mobile) {
-                    @include prop-vw(left, 34, sm);
+                    @include prop-vw(left, 44, sm);
                     @include prop-vw(bottom, 10, sm);
                 }
             }
         }
-        // score: 30 wide, overflow → …, regular weight; colour by category
+        // score: fixed width so the names line up; wide enough for «X,XX» and
+        // tabular figures so digit width never varies (иначе «0,94» шире «0,99»
+        // и обрезается в «0,…»). regular weight; colour by category.
         &__cat-score {
             flex-shrink: 0;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             font-weight: normal;
-            @include prop-vw(width, 30, xl);
+            font-variant-numeric: tabular-nums;
+            @include prop-vw(width, 40, xl);
 
             @include only(mobile) {
-                @include prop-vw(width, 30, sm);
+                @include prop-vw(width, 40, sm);
             }
             &--a {
                 color: $color-green;
