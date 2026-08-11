@@ -115,10 +115,18 @@ export default (root) => {
 	}
 
 	const tableApis = () => tables.map((t) => t.__dataTable).filter(Boolean)
+	// the visits calendar isn't a table but exposes the same applyFilters contract —
+	// queried live (not captured once) because it mounts asynchronously
+	const calendarApis = () =>
+		[...document.querySelectorAll('[data-module="VisitsCalendar"]')].map((c) => c.__visitsCalendar).filter(Boolean)
 	const apply = () => {
+		const payload = { query: input?.value || '', filters }
 		const apis = tableApis()
-		if (apis.length) apis.forEach((api) => api.applyFilters({ query: input?.value || '', filters }))
-		else applyTaskFilter(input?.value || '', filters)
+		const cals = calendarApis()
+		apis.forEach((api) => api.applyFilters(payload))
+		cals.forEach((api) => api.applyFilters(payload))
+		// no table and no calendar → this is the tasks page (plain rows)
+		if (!apis.length && !cals.length) applyTaskFilter(payload.query, filters)
 		renderChips()
 	}
 
@@ -552,10 +560,15 @@ export default (root) => {
 		resetAllBtn?.removeEventListener('click', onResetAll)
 	})
 
-	// Re-apply once the table signals readiness (handles either mount order).
+	// Re-apply once the table (or the visits calendar) signals readiness — both
+	// mount asynchronously, so either order works.
 	const onTableReady = () => apply()
 	document.addEventListener('datatable:ready', onTableReady)
-	disposers.push(() => document.removeEventListener('datatable:ready', onTableReady))
+	document.addEventListener('visitscalendar:ready', onTableReady)
+	disposers.push(() => {
+		document.removeEventListener('datatable:ready', onTableReady)
+		document.removeEventListener('visitscalendar:ready', onTableReady)
+	})
 
 	// reflect filters from a shared URL back into the field widgets, then let
 	// collectFilters() rebuild the list (with proper labels) from them

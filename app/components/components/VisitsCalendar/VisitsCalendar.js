@@ -129,7 +129,86 @@ export default async function VisitsCalendar(root) {
 		if (!store.has(key)) store.set(key, jsonMode || isWeekend(date) ? [] : eventsForDay(date).map((e) => ({ ...e })))
 		return store.get(key)
 	}
-	const dayEvents = (date) => bucket(date).slice().sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))
+	// ---- header filter integration ----------------------------------------
+	// HeaderSearch drives tables through their __dataTable API; the calendar isn't
+	// a table, so it exposes the same contract (applyFilters) and filters its own
+	// events. Matching mirrors DataTable.matches(): OR within a key, AND across
+	// keys, ranges compared as dates/numbers, unknown key → fall back to full text.
+	const normF = (s) => (s == null ? '' : String(s)).trim().toLowerCase()
+	const toDateF = (s) => {
+		const m = /(\d{2})\.(\d{2})\.(\d{4})/.exec(String(s))
+		return m ? new Date(+m[3], +m[2] - 1, +m[1]).getTime() : null
+	}
+	const toNumF = (s) => {
+		const n = parseFloat(String(s).replace(/\s+/g, '').replace(',', '.').replace(/[^\d.-]/g, ''))
+		return Number.isNaN(n) ? null : n
+	}
+	// which event fields answer a given filter key (a calendar has no columns)
+	const FIELD_BY_KEY = {
+		employee: ['employee', 'name'],
+		manager: ['manager', 'managerCode', 'managerEmail'],
+		pharmacy: ['pharmacy'],
+		type: ['type'],
+		category: ['cat'],
+		cat: ['cat'],
+		status: ['status'],
+		date: ['date'],
+		comment: ['comment'],
+	}
+	let filterState = { query: '', filters: [] }
+	const evAllText = (ev) =>
+		[ev.employee, ev.name, ev.pharmacy, ev.manager, ev.type, ev.comment, ev.date, ev.time].map(normF).join(' ')
+	const evTextFor = (ev, key) =>
+		(FIELD_BY_KEY[key] || [key])
+			.map((f) => ev[f])
+			.filter((v) => v != null && v !== '')
+			.map(normF)
+			.join(' ')
+
+	function matchesFilter(ev) {
+		const { query, filters } = filterState
+		if (query && !evAllText(ev).includes(normF(query))) return false
+		if (!filters.length) return true
+		const byKey = new Map()
+		for (const f of filters) {
+			if (!byKey.has(f.key)) byKey.set(f.key, [])
+			byKey.get(f.key).push(f)
+		}
+		for (const [key, fs] of byKey) {
+			const ranges = fs.filter((f) => f.range)
+			if (ranges.length) {
+				const raw = (FIELD_BY_KEY[key] || [key]).map((f) => ev[f]).find((v) => v != null && v !== '')
+				if (raw == null) continue // visits carry no such field → this key can't judge them
+				const ok = ranges.some(({ range }) => {
+					const isDate = /\d{2}\.\d{2}\.\d{4}/.test(`${range.from}${range.to}`)
+					const v = isDate ? toDateF(raw) : toNumF(raw)
+					if (v == null) return false
+					const lo = isDate ? toDateF(range.from) : toNumF(range.from)
+					const hi = isDate ? toDateF(range.to) : toNumF(range.to)
+					return (lo == null || v >= lo) && (hi == null || v <= hi)
+				})
+				if (!ok) return false
+				continue
+			}
+			const text = evTextFor(ev, key) || evAllText(ev)
+			const ok = fs.some((f) =>
+				f.list
+					? String(f.value)
+							.split(/[,\s]+/)
+							.map(normF)
+							.filter(Boolean)
+							.some((t) => text.includes(t))
+					: text.includes(normF(f.value))
+			)
+			if (!ok) return false
+		}
+		return true
+	}
+
+	const dayEvents = (date) =>
+		bucket(date)
+			.filter(matchesFilter)
+			.sort((a, b) => String(a.time || '').localeCompare(String(b.time || '')))
 
 	// move a visit to another day (and hour, in the time grid). Returns true if something
 	// actually changed. Both source and target days are on screen during a drop, so their
@@ -685,10 +764,30 @@ export default async function VisitsCalendar(root) {
 		})
 	}
 
+	// Same contract as DataTable's __dataTable, so HeaderSearch can drive the
+	// calendar without knowing anything about it. Filters survive navigation and
+	// view switches — render() re-reads filterState through dayEvents().
+	root.__visitsCalendar = {
+		applyFilters(next = {}) {
+			filterState = {
+				query: next.query || '',
+				filters: Array.isArray(next.filters) ? next.filters : [],
+			}
+			render()
+		},
+		reset() {
+			filterState = { query: '', filters: [] }
+			render()
+		},
+	}
+
 	render()
+	// tell the header filter we're mountable now (it may have applied before us)
+	document.dispatchEvent(new CustomEvent('visitscalendar:ready'))
 
 	return () => {
 		disposers.forEach((d) => d())
 		delete root.__visitsCalBound
+		delete root.__visitsCalendar
 	}
 }
