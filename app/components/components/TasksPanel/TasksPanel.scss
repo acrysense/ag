@@ -534,6 +534,12 @@
         }
     }
 
+    // read-only tasks panel (сотрудник в своём ЛК): статус — просто индикатор
+    .tasks-panel.is-readonly .task-row__status {
+        pointer-events: none;
+        cursor: default;
+    }
+
     .task-row {
         position: relative;
         display: flex;

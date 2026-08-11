@@ -142,8 +142,20 @@ export default async (root) => {
 	if (!root || root.__tasksPanelBound) return
 	root.__tasksPanelBound = true
 
+	// Read-only mode (employee's own ЛК page): the backend puts data-tasks-readonly
+	// on the panel — the employee can only VIEW tasks. No create, no "…" actions
+	// menu, no closing via the status circle, no confirm button, no hidden-eye
+	// marker (hidden tasks aren't rendered for the employee anyway).
+	const readOnly = root.hasAttribute('data-tasks-readonly')
+
 	// JSON-driven mode: build the list before any wiring touches .task-row nodes
 	await resolveTasks(root)
+
+	if (readOnly) {
+		root.classList.add('is-readonly')
+		root.querySelectorAll('[data-task-create], .task-row__confirm').forEach((el) => (el.hidden = true))
+		root.querySelectorAll('.task-row__hidden').forEach((el) => el.remove())
+	}
 
 	const disposers = []
 
@@ -722,6 +734,7 @@ export default async (root) => {
 	if (list) {
 		const CHECK = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>'
 		const onStatusClick = (e) => {
+			if (readOnly) return // employee can't close/reopen tasks
 			const status = e.target.closest('.task-row__status')
 			if (!status || !list.contains(status)) return
 			const row = status.closest('.task-row')
@@ -756,6 +769,7 @@ export default async (root) => {
 		// away and the row is re-classified as fully closed (muted, moved down).
 		let confirmSeq = 0
 		const onConfirmClick = (e) => {
+			if (readOnly) return // viewing employee can't confirm completion
 			const btn = e.target.closest('.task-row__confirm')
 			if (!btn || !list.contains(btn)) return
 			const row = btn.closest('.task-row')
@@ -800,6 +814,12 @@ export default async (root) => {
 	// Trailing tools (eye + "…") live in their own .task-row__tools wrapper.
 	// Extracted so newly created rows get the same treatment.
 	const enhanceRow = (row) => {
+		// read-only: no "…" actions menu at all (and drop one if the markup had it)
+		if (readOnly) {
+			row.querySelector('.actions-menu')?.remove()
+			row.querySelector('.task-row__hidden')?.remove()
+			return
+		}
 		let tools = row.querySelector('.task-row__tools')
 		if (!tools) {
 			tools = document.createElement('div')
