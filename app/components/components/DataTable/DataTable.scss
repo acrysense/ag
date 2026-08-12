@@ -117,6 +117,24 @@
         // Visits.scss (.visits-history / .visits-pf .data-table.visits-table) — they
         // have their own column sets and override these.
 
+        // 14+ columns (бэк добавил колонку, напр. «Менеджер» на аптеках): the 13
+        // percentages above sum to 100%, so an extra column would get ~0 width and
+        // wrap letter-by-letter. Drop the fixed widths and widen the table — fixed
+        // layout then shares the space evenly. Individual columns can still be
+        // pinned via "width" in the JSON column config (inline style wins).
+        &:has(.data-table__th:nth-child(14)) {
+            @include prop-vw(min-width, 1550, xl);
+            @include only(desktop) {
+                @include prop-vw(min-width, 1550, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(min-width, 1550, sm);
+            }
+            .data-table__th {
+                width: auto;
+            }
+        }
+
         &__th {
             position: relative;
             @include prop-vw(height, 60, xl);
