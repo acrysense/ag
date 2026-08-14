@@ -123,13 +123,34 @@ function buildTable(root, config, empty) {
 	const sizes = config.pageSizes || (config.pageSize ? [config.pageSize] : [20, 50, 100])
 	const pageSize = config.pageSize || sizes[0] || 20
 
+	// 14+ columns with no explicit widths: the global 13-column CSS preset can't
+	// apply (its percentages sum to 100%), and an even split starves text columns
+	// («Сотрудник» wraps to three lines). Weight the shares by content type —
+	// text ≈ 3× a badge, numbers in between — and clamp so nothing balloons.
+	// Any explicit col.width in the config switches this off (backend took over).
+	const autoWidths = (() => {
+		if (cols.length < 14 || cols.some((c) => c.width)) return null
+		const weight = (c) => {
+			if (c.type === 'cat' || c.type === 'trend' || c.type === 'geo') return 0.6
+			if (c.align === 'num' || c.align === 'center') return 1
+			// link = the name column (ФИО / аптека) — the longest content on the row
+			return c.type === 'link' || c.type === 'select' ? 2.6 : 1.9
+		}
+		const ws = cols.map(weight)
+		const sum = ws.reduce((a, b) => a + b, 0)
+		const clamped = ws.map((w) => Math.min(16, Math.max(4.2, (w / sum) * 100)))
+		const norm = 100 / clamped.reduce((a, b) => a + b, 0)
+		return clamped.map((w) => `${(w * norm).toFixed(3)}%`)
+	})()
+
 	const thead = cols
-		.map((c) => {
+		.map((c, i) => {
 			const sortAttr = c.sort ? ` data-sort-key="${esc(c.key)}" data-sort-type="${esc(c.sort)}"` : ''
 			// per-column width from the config (e.g. "16%") — inline, so it overrides the
 			// default nth-child widths, which are calibrated for the 13-column ERP tables
 			// and wrong for a table with a different column set (e.g. «История визитов»)
-			const widthAttr = c.width ? ` style="width:${esc(c.width)}"` : ''
+			const width = c.width || (autoWidths && autoWidths[i])
+			const widthAttr = width ? ` style="width:${esc(width)}"` : ''
 			return `<th class="data-table__th${alignCls(c.align, 'data-table__th')}"${sortAttr}${widthAttr}>${esc(c.label || '')}</th>`
 		})
 		.join('')
