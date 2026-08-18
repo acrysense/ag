@@ -184,6 +184,21 @@
             }
         }
 
+        // #202: the form sits inline among the task rows — the global
+        // .field__input is 16 (fluid → ~17px on wide screens), so the text
+        // visibly grew on entering edit mode. Use the exact row-title token
+        // (14) so the size never changes between viewing and editing.
+        .field__input,
+        .field__textarea {
+            @include prop-vw(font-size, 14, xl);
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+
         &__grid {
             display: flex;
             align-items: flex-start;
