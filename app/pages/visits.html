@@ -101,7 +101,9 @@
 											<thead>
 												<tr>
 													<th class="data-table__th" data-sort-key="employee" data-sort-type="text">Сотрудник</th>
+													<th class="data-table__th" data-sort-key="manager" data-sort-type="text">Менеджер</th>
 													<th class="data-table__th" data-sort-key="pharmacy" data-sort-type="text">Аптека</th>
+													<th class="data-table__th" data-sort-key="company" data-sort-type="text">Розница</th>
 													<th class="data-table__th">Кат.</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="plan" data-sort-type="number">План</th>
 													<th class="data-table__th data-table__th--num" data-sort-key="fact" data-sort-type="number">Факт</th>
@@ -129,7 +131,9 @@
 												)}}
 												<tr class="data-table__row">
 													<td class="data-table__td" data-filter-key="employee"><a href="/employee" class="data-table__link">{{this.name}}</a></td>
+													<td class="data-table__td" data-filter-key="manager">Райченок А. А.</td>
 													<td class="data-table__td" data-filter-key="pharmacy">{{this.pharmacy}}</td>
+													<td class="data-table__td" data-filter-key="company">Аптека групп Север</td>
 													<td class="data-table__td" data-filter-key="category"><span class="data-table__cat data-table__cat--{{this.cat}}">{{this.cat}}</span></td>
 													<td class="data-table__td data-table__td--num">{{this.plan}}</td>
 													<td class="data-table__td data-table__td--num">{{this.fact}}</td>
