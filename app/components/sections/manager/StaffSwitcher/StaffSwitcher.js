@@ -34,6 +34,13 @@ export default (head) => {
 	const titleEl = panel.querySelector('[data-staff-title]')
 	let current = byKey[source.default] ? source.default : order[0]
 
+	// #209: normalise the prev/next glyphs. The reference markup uses
+	// #icon-arrow-left / #icon-arrow-right; backend-rendered pages shipped
+	// #icon-caret in both buttons (two "v" chevrons). Force the right sprites
+	// whatever the markup came with.
+	head.querySelector('[data-staff-prev] use')?.setAttribute('href', '#icon-arrow-left')
+	head.querySelector('[data-staff-next] use')?.setAttribute('href', '#icon-arrow-right')
+
 	// the master table re-creates its rows on every sort/filter/page change, so the
 	// highlight is re-applied from the key rather than held on element references
 	const markSelected = () => {

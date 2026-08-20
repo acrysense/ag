@@ -867,6 +867,20 @@
             @include prop-vw(gap, 10, sm);
         }
 
+        // #202 (продолжение): «Дата» и «Комментарий» — глобальный .field__input
+        // (16, на широких экранах ~17px), остальные поля модалки (ui-select) — 14.
+        // Приводим к одному размеру, чтобы дата не выбивалась.
+        .field__input,
+        .field__textarea {
+            @include prop-vw(font-size, 14, xl);
+            @include only(desktop) {
+                @include prop-vw(font-size, 14, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 14, sm);
+            }
+        }
+
         &__row {
             display: grid;
             grid-template-columns: 1fr 1fr;

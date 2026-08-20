@@ -235,9 +235,13 @@
 			}
 		}
 		&__name {
-			// centre the (single-line) title against the 24px Да/Нет buttons
-			display: flex;
-			align-items: center;
+			// centre the (single-line) title against the 24px Да/Нет buttons.
+			// #205: block + align-content, NOT flex — the backend may render the
+			// required «*» as its own element inside the name, and a flex container
+			// turns it into a second flex item pushed to the right of a wrapped
+			// title; in block layout it stays inline right after the text.
+			display: block;
+			align-content: center;
 			@include prop-vw(min-height, 24, xl);
 			@include prop-vw(font-size, 14, xl);
 			line-height: 1.57142857143;
