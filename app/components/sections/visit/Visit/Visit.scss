@@ -1454,6 +1454,10 @@
 			justify-content: center;
 			@include prop-vw(gap, 10, xl);
 			@include prop-vw(margin-top, 25, xl);
+			// на заглушках кнопки без полужирного (глобальный .btn — 600)
+			& > .btn {
+				font-weight: normal;
+			}
 			@include only(desktop) {
 				@include prop-vw(gap, 10, lg);
 				@include prop-vw(margin-top, 25, lg);
