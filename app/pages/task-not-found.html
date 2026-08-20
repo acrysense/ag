@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light tasks-page">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__container">
+						<a href="/tasks" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+
+						<!--
+							Профильная заглушка «Задача не найдена» (референс для бэка):
+							тот же блок .visit-empty, что и у «Визит не найден» — меняются
+							только иконка (#icon-erp-tasks) и тексты/ссылки.
+						-->
+						<section class="data-panel visit-empty">
+							<span class="visit-empty__icon">
+								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-erp-tasks"></use></svg>
+							</span>
+							<h1 class="visit-empty__title">Задача не найдена</h1>
+							<p class="visit-empty__text">Возможно, задача была удалена или изменился её адрес. Проверьте ссылку или вернитесь к списку задач.</p>
+							<div class="visit-empty__actions">
+								<a href="/tasks" class="btn">К списку задач</a>
+								<a href="/" class="btn btn--secondary">На главную</a>
+							</div>
+						</section>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>
