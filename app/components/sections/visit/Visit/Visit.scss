@@ -1365,4 +1365,105 @@
 		}
 	}
 
+	// Профильная заглушка «Визит не найден» — обычная белая панель в стиле
+	// страницы визита (не плакатный 404): иконка раздела, заголовок, пояснение
+	// и кнопки. Референс-разметка: pages/visit-not-found.html.
+	.visit-empty {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		@include prop-vw(padding-block, 60, xl);
+		text-align: center;
+
+		@include only(desktop) {
+			@include prop-vw(padding-block, 60, lg);
+		}
+		@include only(mobile) {
+			@include prop-vw(padding-block, 40, sm);
+		}
+		&__icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			@include prop-vw(width, 64, xl);
+			@include prop-vw(height, 64, xl);
+			color: $color-dark-grey;
+			background: $color-bg;
+			@include prop-vw(border-radius, 18, xl);
+			& > svg {
+				@include prop-vw(width, 28, xl);
+				@include prop-vw(height, 28, xl);
+			}
+			@include only(desktop) {
+				@include prop-vw(width, 64, lg);
+				@include prop-vw(height, 64, lg);
+				@include prop-vw(border-radius, 18, lg);
+				& > svg {
+					@include prop-vw(width, 28, lg);
+					@include prop-vw(height, 28, lg);
+				}
+			}
+			@include only(mobile) {
+				@include prop-vw(width, 56, sm);
+				@include prop-vw(height, 56, sm);
+				@include prop-vw(border-radius, 16, sm);
+				& > svg {
+					@include prop-vw(width, 24, sm);
+					@include prop-vw(height, 24, sm);
+				}
+			}
+		}
+		&__title {
+			@include prop-vw(margin-top, 20, xl);
+			font-family: $font-secondary;
+			@include prop-vw(font-size, 22, xl);
+			font-weight: bold;
+			color: $color-black;
+			@include only(desktop) {
+				@include prop-vw(margin-top, 20, lg);
+				@include prop-vw(font-size, 22, lg);
+			}
+			@include only(mobile) {
+				@include prop-vw(margin-top, 16, sm);
+				@include prop-vw(font-size, 20, sm);
+			}
+		}
+		&__text {
+			@include prop-vw(margin-top, 8, xl);
+			@include prop-vw(max-width, 420, xl);
+			@include prop-vw(font-size, 14, xl);
+			line-height: 1.57142857143;
+			color: $color-dark-grey;
+			@include only(desktop) {
+				@include prop-vw(margin-top, 8, lg);
+				@include prop-vw(max-width, 420, lg);
+				@include prop-vw(font-size, 14, lg);
+			}
+			@include only(mobile) {
+				@include prop-vw(margin-top, 8, sm);
+				max-width: none;
+				@include prop-vw(font-size, 14, sm);
+			}
+		}
+		&__actions {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			@include prop-vw(gap, 10, xl);
+			@include prop-vw(margin-top, 25, xl);
+			@include only(desktop) {
+				@include prop-vw(gap, 10, lg);
+				@include prop-vw(margin-top, 25, lg);
+			}
+			@include only(mobile) {
+				@include prop-vw(gap, 10, sm);
+				@include prop-vw(margin-top, 20, sm);
+				width: 100%;
+				& > .btn {
+					flex: 1 1 auto;
+				}
+			}
+		}
+	}
+
 }

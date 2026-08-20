@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light visit-page">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/Header/Header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__container">
+						<a href="/visits" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+
+						<!--
+							Профильная заглушка «Визит не найден» (референс для бэка):
+							обычная панель в стиле страницы визита. Тексты и ссылки —
+							на усмотрение бэка; иконку можно заменить на любую из спрайта.
+						-->
+						<section class="data-panel visit-empty">
+							<span class="visit-empty__icon">
+								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-erp-visits"></use></svg>
+							</span>
+							<h1 class="visit-empty__title">Визит не найден</h1>
+							<p class="visit-empty__text">Возможно, визит был удалён или изменился его адрес. Проверьте ссылку или вернитесь к списку визитов.</p>
+							<div class="visit-empty__actions">
+								<a href="/visits" class="btn">К списку визитов</a>
+								<a href="/" class="btn btn--secondary">На главную</a>
+							</div>
+						</section>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+	</body>
+</html>
