@@ -123,18 +123,25 @@ function buildTable(root, config, empty) {
 	const sizes = config.pageSizes || (config.pageSize ? [config.pageSize] : [20, 50, 100])
 	const pageSize = config.pageSize || sizes[0] || 20
 
-	// 14+ columns with no explicit widths: the global 13-column CSS preset can't
-	// apply (its percentages sum to 100%), and an even split starves text columns
-	// («Сотрудник» wraps to three lines). Weight the shares by content type —
-	// text ≈ 3× a badge, numbers in between — and clamp so nothing balloons.
-	// Any explicit col.width in the config switches this off (backend took over).
+	// Non-canonical column count (≠13) with no explicit widths: the global CSS
+	// preset is calibrated for exactly 13 columns — any other count either starves
+	// the extra columns (14+, percentages already sum to 100%) or mis-assigns the
+	// shifted presets (12 and fewer). Weight the shares by content type — text ≈ 3×
+	// a badge, numbers in between — and clamp so nothing balloons.
+	// Off when: any explicit col.width (backend took over), a page-specific table
+	// class (config.table → its own CSS preset), or the visits sections (widths
+	// live in Visits.scss).
 	const autoWidths = (() => {
-		if (cols.length < 14 || cols.some((c) => c.width)) return null
+		if (cols.length === 13 || cols.some((c) => c.width)) return null
+		if (config.table) return null
+		if (root.classList.contains('visits-pf') || root.classList.contains('visits-history')) return null
 		const weight = (c) => {
 			if (c.type === 'cat' || c.type === 'trend' || c.type === 'geo') return 0.6
-			if (c.align === 'num' || c.align === 'center') return 1
+			// numbers need room for their (often two-word) headers — «Количество
+			// чеков», «Пенетрация карт лояльности» — not just for the digits
+			if (c.align === 'num' || c.align === 'center') return 1.35
 			// link = the name column (ФИО / аптека) — the longest content on the row
-			return c.type === 'link' || c.type === 'select' ? 2.6 : 1.9
+			return c.type === 'link' || c.type === 'select' ? 2.4 : 1.9
 		}
 		const ws = cols.map(weight)
 		const sum = ws.reduce((a, b) => a + b, 0)
@@ -177,8 +184,12 @@ function buildTable(root, config, empty) {
 	// used by wide tables like the pharmacy staff / manager-table
 	const cardsView = config.cardsView === false ? '' : ' is-cards-view'
 	const tableCls = `data-table${cardsView}${config.table ? ' ' + esc(config.table) : ''}`
+	// auto-width mode also guarantees each column ~106px of real estate: the wider
+	// the column set, the wider the table (horizontal scroll picks up the excess) —
+	// so two-word numeric headers never stack letter-by-letter
+	const tableStyle = autoWidths ? ` style="min-width:${cols.length * 106}px"` : ''
 	const wrap = document.createElement('div')
-	wrap.innerHTML = `${controls}<div class="data-table__scroll"><table class="${tableCls}"><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table><div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div></div>${footer}`
+	wrap.innerHTML = `${controls}<div class="data-table__scroll"><table class="${tableCls}"${tableStyle}><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table><div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div></div>${footer}`
 	while (wrap.firstChild) root.appendChild(wrap.firstChild)
 }
 
