@@ -1454,9 +1454,34 @@
 			justify-content: center;
 			@include prop-vw(gap, 10, xl);
 			@include prop-vw(margin-top, 25, xl);
-			// на заглушках кнопки без полужирного (глобальный .btn — 600)
+			// на заглушках кнопки компактные: высота 36 (глобальный .btn ~52 за счёт
+			// padding-block 17) и без полужирного (глобальный — 600)
 			& > .btn {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				padding-block: 0;
+				@include prop-vw(padding-inline, 20, xl);
+				@include prop-vw(height, 36, xl);
+				@include prop-vw(font-size, 14, xl);
 				font-weight: normal;
+				@include prop-vw(border-radius, 10, xl);
+			}
+			@include only(desktop) {
+				& > .btn {
+					@include prop-vw(padding-inline, 20, lg);
+					@include prop-vw(height, 36, lg);
+					@include prop-vw(font-size, 14, lg);
+					@include prop-vw(border-radius, 10, lg);
+				}
+			}
+			@include only(mobile) {
+				& > .btn {
+					@include prop-vw(padding-inline, 20, sm);
+					@include prop-vw(height, 36, sm);
+					@include prop-vw(font-size, 14, sm);
+					@include prop-vw(border-radius, 10, sm);
+				}
 			}
 			@include only(desktop) {
 				@include prop-vw(gap, 10, lg);
