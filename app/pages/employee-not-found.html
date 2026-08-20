@@ -4,7 +4,7 @@
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
 	</head>
-	<body class="bg-light tasks-page">
+	<body class="bg-light employee-page">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		<div class="wrapper">
 			{{> layouts/Header/Header }}
@@ -12,24 +12,23 @@
 				{{> layouts/Sidebar/Sidebar }}
 				<div class="wrapper__main">
 					<div class="wrapper__container">
-						<a href="/tasks" class="wrapper__back">
+						<a href="/employees" class="wrapper__back">
 							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
 							<span>Назад</span>
 						</a>
 
 						<!--
-							Профильная заглушка «Задача не найдена» (референс для бэка):
-							тот же блок .visit-empty, что и у «Визит не найден» — меняются
-							только иконка (#icon-erp-tasks) и тексты/ссылки.
+							Профильная заглушка «Сотрудник не найден» (референс для бэка):
+							тот же блок .visit-empty — иконка #icon-erp-employees и свои тексты.
 						-->
 						<section class="data-panel visit-empty">
 							<span class="visit-empty__icon">
-								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-task-check"></use></svg>
+								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-erp-employees"></use></svg>
 							</span>
-							<h1 class="visit-empty__title">Задача не найдена</h1>
-							<p class="visit-empty__text">Возможно, задача была удалена или изменился её адрес. Проверьте ссылку или вернитесь к списку задач.</p>
+							<h1 class="visit-empty__title">Сотрудник не найден</h1>
+							<p class="visit-empty__text">Возможно, карточка сотрудника была удалена или изменился её адрес. Проверьте ссылку или вернитесь к списку сотрудников.</p>
 							<div class="visit-empty__actions">
-								<a href="/tasks" class="btn">К списку задач</a>
+								<a href="/employees" class="btn">К списку сотрудников</a>
 								<a href="/" class="btn btn--secondary">На главную</a>
 							</div>
 						</section>
