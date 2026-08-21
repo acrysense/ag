@@ -135,19 +135,20 @@ function buildTable(root, config, empty) {
 		if (cols.length === 13 || cols.some((c) => c.width)) return null
 		if (config.table) return null
 		if (root.classList.contains('visits-pf') || root.classList.contains('visits-history')) return null
-		const weight = (c) => {
-			if (c.type === 'cat' || c.type === 'trend' || c.type === 'geo') return 0.6
-			// numbers need room for their (often two-word) headers — «Количество
-			// чеков», «Пенетрация карт лояльности» — not just for the digits
-			if (c.align === 'num' || c.align === 'center') return 1.35
+		// PIXEL widths per content type (percentages kept losing to the actual
+		// content). A numeric column must fit its longest RU header word —
+		// «высокодоходных» ≈ 104px at the 12px semibold header font — plus 10px
+		// left padding and 24px right padding (sort chevron) → 140px.
+		// On screens wider than the sum the fixed layout stretches columns
+		// proportionally; on narrower ones the scroll container takes over.
+		const px = (c) => {
+			// badge columns still carry word headers («Кластер», «Кат. команды»)
+			if (c.type === 'cat' || c.type === 'trend' || c.type === 'geo') return 88
+			if (c.align === 'num' || c.align === 'center') return 140
 			// link = the name column (ФИО / аптека) — the longest content on the row
-			return c.type === 'link' || c.type === 'select' ? 2.4 : 1.9
+			return c.type === 'link' || c.type === 'select' ? 180 : 145
 		}
-		const ws = cols.map(weight)
-		const sum = ws.reduce((a, b) => a + b, 0)
-		const clamped = ws.map((w) => Math.min(16, Math.max(4.2, (w / sum) * 100)))
-		const norm = 100 / clamped.reduce((a, b) => a + b, 0)
-		return clamped.map((w) => `${(w * norm).toFixed(3)}%`)
+		return cols.map((c) => `${px(c)}px`)
 	})()
 
 	const thead = cols
@@ -184,10 +185,11 @@ function buildTable(root, config, empty) {
 	// used by wide tables like the pharmacy staff / manager-table
 	const cardsView = config.cardsView === false ? '' : ' is-cards-view'
 	const tableCls = `data-table${cardsView}${config.table ? ' ' + esc(config.table) : ''}`
-	// auto-width mode also guarantees each column ~106px of real estate: the wider
-	// the column set, the wider the table (horizontal scroll picks up the excess) —
-	// so two-word numeric headers never stack letter-by-letter
-	const tableStyle = autoWidths ? ` style="min-width:${cols.length * 106}px"` : ''
+	// auto-width mode: the table's min-width is the exact sum of the pixel column
+	// widths — wider sets scroll horizontally instead of squeezing the columns
+	const tableStyle = autoWidths
+		? ` style="min-width:${autoWidths.reduce((a, w) => a + parseInt(w, 10), 0)}px"`
+		: ''
 	const wrap = document.createElement('div')
 	wrap.innerHTML = `${controls}<div class="data-table__scroll"><table class="${tableCls}"${tableStyle}><thead><tr>${thead}</tr></thead><tbody>${tbody}</tbody></table><div class="data-table__empty" data-table-empty hidden>Ничего не найдено</div></div>${footer}`
 	while (wrap.firstChild) root.appendChild(wrap.firstChild)
