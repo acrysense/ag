@@ -198,20 +198,24 @@ $collapse: $collapse-dur $collapse-ease;
         // белым числом, прижат к правому краю строки. На активном пункте — синий,
         // под цвет активного текста. Значение подставляет бэк (текст span или
         // data-count); при 0/пустом — скрывается через JS (атрибут hidden).
-        // padding-block чуть больше сверху: цифры без «хвостов» оптически уезжают
-        // вверх, лишний верхний пиксель возвращает их в центр.
+        // Геометрия строгая: фикс-высота + flex-центр (никаких асимметричных
+        // паддингов), tabular-nums — цифры одной ширины; min-width держит форму
+        // на «1», padding-inline даёт рост вширь под «12» и «873».
         &__badge {
             margin-left: auto;
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
             @include prop-vw(min-width, 22, xl);
-            @include prop-vw(padding-block-start, 4, xl);
-            @include prop-vw(padding-block-end, 3, xl);
-            @include prop-vw(padding-inline, 6, xl);
+            @include prop-vw(height, 18, xl);
+            padding-block: 0;
+            @include prop-vw(padding-inline, 8, xl);
             @include prop-vw(font-size, 12, xl);
             font-weight: 600;
+            font-variant-numeric: tabular-nums;
             line-height: 1;
+            white-space: nowrap;
             color: $color-white;
             background: $color-dark-grey;
             @include prop-vw(border-radius, 6, xl);
@@ -221,17 +225,15 @@ $collapse: $collapse-dur $collapse-ease;
 
             @include only(desktop) {
                 @include prop-vw(min-width, 22, lg);
-                @include prop-vw(padding-block-start, 4, lg);
-                @include prop-vw(padding-block-end, 3, lg);
-                @include prop-vw(padding-inline, 6, lg);
+                @include prop-vw(height, 18, lg);
+                @include prop-vw(padding-inline, 8, lg);
                 @include prop-vw(font-size, 12, lg);
                 @include prop-vw(border-radius, 6, lg);
             }
             @include only(mobile) {
                 @include prop-vw(min-width, 22, sm);
-                @include prop-vw(padding-block-start, 4, sm);
-                @include prop-vw(padding-block-end, 3, sm);
-                @include prop-vw(padding-inline, 6, sm);
+                @include prop-vw(height, 18, sm);
+                @include prop-vw(padding-inline, 8, sm);
                 @include prop-vw(font-size, 12, sm);
                 @include prop-vw(border-radius, 6, sm);
             }

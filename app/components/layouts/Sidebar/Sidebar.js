@@ -24,7 +24,7 @@ export default (root) => {
 			return
 		}
 		badge.hidden = false
-		badge.textContent = n > 99 ? '99+' : String(n)
+		badge.textContent = String(n) // трёхзначные (873) показываем как есть
 		const link = badge.closest('.sidebar__link')
 		const label = link?.querySelector('span:not(.sidebar__badge)')?.textContent?.trim()
 		if (link && label) link.setAttribute('aria-label', `${label}: ${n} новых задач`)
