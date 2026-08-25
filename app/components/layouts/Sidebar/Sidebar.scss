@@ -201,11 +201,12 @@ $collapse: $collapse-dur $collapse-ease;
         // Геометрия строгая: фикс-высота + flex-центр (никаких асимметричных
         // паддингов), tabular-nums — цифры одной ширины; min-width держит форму
         // на «1», padding-inline даёт рост вширь под «12» и «873».
+        // Вертикаль — типографская (line-height = высоте бейджа), а не флексовая:
+        // flex-центр с line-height:1 Chrome и Safari считают по-разному (в Safari
+        // цифры уезжали вверх). Строка высотой в бейдж центрируется одинаково везде.
         &__badge {
             margin-left: auto;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-block;
             flex-shrink: 0;
             @include prop-vw(min-width, 22, xl);
             @include prop-vw(height, 18, xl);
@@ -214,7 +215,8 @@ $collapse: $collapse-dur $collapse-ease;
             @include prop-vw(font-size, 12, xl);
             font-weight: 600;
             font-variant-numeric: tabular-nums;
-            line-height: 1;
+            @include prop-vw(line-height, 18, xl);
+            text-align: center;
             white-space: nowrap;
             color: $color-white;
             background: $color-dark-grey;
@@ -228,6 +230,7 @@ $collapse: $collapse-dur $collapse-ease;
                 @include prop-vw(height, 18, lg);
                 @include prop-vw(padding-inline, 8, lg);
                 @include prop-vw(font-size, 12, lg);
+                @include prop-vw(line-height, 18, lg);
                 @include prop-vw(border-radius, 6, lg);
             }
             @include only(mobile) {
@@ -235,6 +238,7 @@ $collapse: $collapse-dur $collapse-ease;
                 @include prop-vw(height, 18, sm);
                 @include prop-vw(padding-inline, 8, sm);
                 @include prop-vw(font-size, 12, sm);
+                @include prop-vw(line-height, 18, sm);
                 @include prop-vw(border-radius, 6, sm);
             }
         }
