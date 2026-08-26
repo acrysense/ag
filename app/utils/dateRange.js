@@ -18,7 +18,10 @@ const firstOfCurrentMonth = () => {
 	return new Date(now.getFullYear(), now.getMonth(), 1)
 }
 
-export function mountDateRange(field, onChange, { single = false } = {}) {
+// maxDays ограничивает длину диапазона (365 — «не больше года» из #226);
+// поле может переопределить его атрибутом data-max-days.
+export function mountDateRange(field, onChange, { single = false, maxDays = 365 } = {}) {
+	maxDays = Number(field?.dataset?.maxDays) || maxDays
 	if (!field || field.__dateRangeBound) return () => {}
 	field.__dateRangeBound = true
 
@@ -88,7 +91,14 @@ export function mountDateRange(field, onChange, { single = false } = {}) {
 			start = t
 			end = null
 		} else if (t >= start) {
-			end = t
+			// max range guard (#226: выборка не больше года): вторая дата дальше
+			// лимита → она становится новым началом вместо неверного диапазона
+			if (maxDays && (t - start) / 86400000 > maxDays) {
+				start = t
+				end = null
+			} else {
+				end = t
+			}
 		} else {
 			start = t
 			end = null

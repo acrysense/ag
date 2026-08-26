@@ -416,6 +416,14 @@ export default async (root) => {
 		}
 		if (state.query) params.set('q', state.query)
 		if (state.filters.length) params.set('filters', JSON.stringify(state.filters))
+		// Date-range filters («Период») additionally go as flat DateStart/DateEnd
+		// params in dd.mm.yyyy — the backend's own contract for every page method.
+		// Still inside `filters` too, so nothing that already reads it breaks.
+		const range = state.filters.find((f) => f.range && /^\d{2}\.\d{2}\.\d{4}$/.test(String(f.range.from || '')))
+		if (range) {
+			params.set('DateStart', range.range.from)
+			params.set('DateEnd', range.range.to || range.range.from)
+		}
 		try {
 			const sep = config.endpoint.includes('?') ? '&' : '?'
 			const res = await fetch(config.endpoint + sep + params.toString(), { headers: { Accept: 'application/json' } })
