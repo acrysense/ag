@@ -123,16 +123,17 @@ function buildTable(root, config, empty) {
 	const sizes = config.pageSizes || (config.pageSize ? [config.pageSize] : [20, 50, 100])
 	const pageSize = config.pageSize || sizes[0] || 20
 
-	// Non-canonical column count (≠13) with no explicit widths: the global CSS
-	// preset is calibrated for exactly 13 columns — any other count either starves
-	// the extra columns (14+, percentages already sum to 100%) or mis-assigns the
-	// shifted presets (12 and fewer). Weight the shares by content type — text ≈ 3×
-	// a badge, numbers in between — and clamp so nothing balloons.
+	// JSON-driven tables size their columns by content type. The global CSS preset
+	// is a fixed 13-value ladder calibrated for ONE legacy column set, so it only
+	// fits a table with exactly those columns in that order — a different 13-column
+	// set (e.g. «Менеджеры») gets the wrong widths and its headers break mid-word.
+	// Hence: no column-count exemption at all. Static (hand-written) tables never
+	// reach this code, so the CSS preset still serves them.
 	// Off when: any explicit col.width (backend took over), a page-specific table
 	// class (config.table → its own CSS preset), or the visits sections (widths
 	// live in Visits.scss).
 	const autoWidths = (() => {
-		if (cols.length === 13 || cols.some((c) => c.width)) return null
+		if (cols.some((c) => c.width)) return null
 		if (config.table) return null
 		if (root.classList.contains('visits-pf') || root.classList.contains('visits-history')) return null
 		// PIXEL widths per content type (percentages kept losing to the actual

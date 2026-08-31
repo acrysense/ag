@@ -21,8 +21,8 @@
     "file": "assets/css/app-CT54I4DO.css",
     "src": "_app-CT54I4DO.css"
   },
-  "_app-Ck36-O-q.js": {
-    "file": "assets/js/app-Ck36-O-q.js",
+  "_app-cxc2fOsX.js": {
+    "file": "assets/js/app-cxc2fOsX.js",
     "name": "app",
     "dynamicImports": [
       "components/components/Accordion/Accordion.js",
@@ -77,11 +77,11 @@
     "file": "assets/js/scroll-lock-CkQIV5rM.js",
     "name": "scroll-lock"
   },
-  "_swiper-2NW1A3kW.js": {
-    "file": "assets/js/swiper-2NW1A3kW.js",
+  "_swiper-hYPd8373.js": {
+    "file": "assets/js/swiper-hYPd8373.js",
     "name": "swiper",
     "imports": [
-      "_app-Ck36-O-q.js"
+      "_app-cxc2fOsX.js"
     ],
     "dynamicImports": [
       "../node_modules/swiper/swiper.mjs",
@@ -186,7 +186,7 @@
     "isDynamicEntry": true
   },
   "components/components/DataTable/DataTable.js": {
-    "file": "assets/js/DataTable-ByoJ2bmK.js",
+    "file": "assets/js/DataTable-BYCG6U3O.js",
     "name": "DataTable",
     "src": "components/components/DataTable/DataTable.js",
     "isDynamicEntry": true,
@@ -329,14 +329,14 @@
     ]
   },
   "components/sections/news/NewsInner/NewsInner.js": {
-    "file": "assets/js/NewsInner-C9gSCjdU.js",
+    "file": "assets/js/NewsInner-Ca3HBhIX.js",
     "name": "NewsInner",
     "src": "components/sections/news/NewsInner/NewsInner.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-2NW1A3kW.js",
+      "_swiper-hYPd8373.js",
       "_scroll-lock-CkQIV5rM.js",
-      "_app-Ck36-O-q.js"
+      "_app-cxc2fOsX.js"
     ]
   },
   "components/sections/package/Package/Package.js": {
@@ -361,13 +361,13 @@
     "isDynamicEntry": true
   },
   "components/sections/shared/Promo/Promo.js": {
-    "file": "assets/js/Promo-D8PSf7pd.js",
+    "file": "assets/js/Promo-CqUNhRLr.js",
     "name": "Promo",
     "src": "components/sections/shared/Promo/Promo.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-2NW1A3kW.js",
-      "_app-Ck36-O-q.js"
+      "_swiper-hYPd8373.js",
+      "_app-cxc2fOsX.js"
     ]
   },
   "components/sections/visit/Visit/Visit.js": {
