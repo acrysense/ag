@@ -1,0 +1,67 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Аудит myag.xx28.ru — 2026-09-01</title><style>
+:root{--fg:#1a2430;--muted:#5b6b7c;--line:#e2e9f0;--code:#eef2f6;--accent:#0072e5}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--fg);line-height:1.6;background:#fff}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:28px;border-bottom:2px solid var(--line);padding-bottom:12px;margin-top:0}
+h2{font-size:21px;margin-top:36px;border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:17px;margin-top:26px}h4{font-size:15px;color:var(--muted)}
+code{background:var(--code);padding:2px 5px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em}
+pre{background:#0f1a24;color:#e6edf3;padding:14px 16px;border-radius:8px;overflow:auto}
+pre code{background:none;color:inherit;padding:0}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#f5f8fb}tr:nth-child(even) td{background:#fafcfe}
+a{color:var(--accent)}hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}li{margin:4px 0}strong{color:#0b1520}
+@media print{.wrap{max-width:none}}
+</style></head><body><div class="wrap"><h1>Аудит myag.xx28.ru — 2026-09-01</h1>
+<p>Read-only аудит в залогиненной сессии (учётка-руководитель): производительность, безопасность (без изменений и без обхода авторизации), фронтенд-код, вёрстка. Пентест (SQLi/CSRF/загрузка файлов, обход доступа) не проводился — требует стенда и отдельного согласования.</p>
+<hr>
+<h2>A. Закрыто с нашей стороны</h2>
+<h3>AG-6 · Актуальная сборка фронтенда — готова к выкату</h3>
+<p>На проде был старый <code>app-CT54I4DO.css</code>; собрана свежая. Выкат:</p>
+<pre><code>rsync -a --delete /Users/sviatoslavandreiev/Web/Vite/ag/dist/ &quot;$TARGET&quot;/ &amp;&amp; cd &quot;$TARGET&quot; &amp;&amp; git add -A &amp;&amp; git commit -m &quot;chore(deploy): актуальная сборка фронтенда&quot;</code></pre>
+<h3>AG-11 · DOM-XSS в чипах фильтра — исправлено</h3>
+<p><code>HeaderSearch.js</code> вставлял метки чипов (имена сотрудников/аптек с сервера) через <code>innerHTML</code> без экранирования. Добавлен <code>escChip()</code>, обе вставки обёрнуты. Входит в сборку AG-6.</p>
+<hr>
+<h2>B. Для бэка — важное</h2>
+<h3>AG-1 · ERP-страницы генерируются 6–14 c на сервере</h3>
+<p><strong>Приоритет:</strong> Critical</p>
+<p>Время до первого байта на ERP-страницах — 6–14 c (чистая работа PHP до того, как запустится наш JS). <code>/lk/</code> для сравнения — 0.12 c. Наш рендер таблиц быстрый (строки тянутся отдельным ajax ~1 КБ); тормозит серверная сборка страницы, потому что бэк вшивает в HTML ~2280 опций сотрудников + ~1161 опцию фильтров из БД на каждый заход, без кеша.</p>
+<table><thead><tr><th>Страница</th><th>Сервер</th><th>HTML</th></tr></thead><tbody><tr><td>/erp/visits/</td><td>8–14 c</td><td>1.1 МБ</td></tr><tr><td>/erp/tasks/</td><td>6.3 c</td><td>1.0 МБ</td></tr><tr><td>/erp/managers/</td><td>6.6 c</td><td>108 КБ</td></tr><tr><td>/erp/pharmacies/</td><td>5.8 c</td><td>145 КБ</td></tr><tr><td>/erp/employee/</td><td>5.7 c</td><td>357 КБ</td></tr></tbody></table>
+<p><strong>Совместная задача.</strong> Фронт-часть (ведём мы): переделать фильтр-селекты и селект сотрудника в модалке на ленивую загрузку опций по AJAX при открытии поля + виртуализация длинных списков. Бэк-часть: отдать эндпоинт со списком (сотрудники/аптеки/менеджеры) и перестать вшивать опции в HTML; закешировать справочники. Цель: время сервера &lt; 1 c, вес визитов &lt; 200 КБ.</p>
+<h3>AG-2 · Нет HTTP-заголовков безопасности</h3>
+<p><strong>Приоритет:</strong> High</p>
+<p>Нет <code>Content-Security-Policy</code>, <code>X-Frame-Options</code>, <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options</code>, <code>Referrer-Policy</code>. <code>X-Powered-By: PHP/8.3.32</code> и <code>Server: nginx/1.26.3</code> раскрывают версии. Риски: кликджекинг, downgrade на http, помощь в подборе эксплойтов.</p>
+<p><strong>Сделать.</strong> <code>X-Frame-Options: SAMEORIGIN</code> (или CSP <code>frame-ancestors &#x27;self&#x27;</code>), HSTS, <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy</code>; <code>server_tokens off</code>, скрыть <code>X-Powered-By</code>. Хорошее (не трогать): сессионная кука <code>HttpOnly</code>.</p>
+<h3>AG-3 · Перепроверить разграничение доступа + ПДн в HTML</h3>
+<p><strong>Приоритет:</strong> High</p>
+<p>На руководительской учётке скоуп корректный (ajax-таблица 8 строк, экспорт 3.5 КБ). Но в HTML вшиты все 15 менеджеров, 980 сотрудников, карта «менеджер→сотрудники» на 542 человека, и <strong>реальные телефоны сотрудников</strong> (<code>375…</code>) в данных визитов. Нужно убедиться, что рядовому менеджеру сервер режет выборку, а не только UI.</p>
+<p><strong>Проверить (учётка обычного менеджера, read-only):</strong> <code>/ajax/visits.php</code> с чужим <code>filter_manager</code>, большим <code>limit</code>, <code>showAll</code>; <code>/ajax/export-excel.php</code> с подменёнными фильтрами; <code>detail.php?id=…</code> чужого визита/сотрудника по прямой ссылке (IDOR). Критерий — сервер режет по роли независимо от параметров. Не отдавать в HTML ПДн (телефоны), не нужные для отрисовки.</p>
+<h3>AG-4 · Дублируется <code>&lt;head&gt;</code> и скрипты визитов (+ двойная Метрика)</h3>
+<p><strong>Приоритет:</strong> Medium</p>
+<p><code>ShowHead()</code> выводится дважды: битриксовые <code>&lt;link&gt;</code>, <code>bx-core</code>, meta — по 2 раза; скрипты визитов (<code>calendar-cta</code>, <code>history-geo</code>, <code>visit-modal-errors</code>, <code>visit-manager-employees</code>) — по 2 тега и <strong>выполняются дважды</strong> (подтверждено: в модалке 4 тега вместо 2 → двойной биндинг обработчиков, возможны двойные сабмиты). Яндекс.Метрика тоже подключена дважды → визиты считаются вдвое.</p>
+<p><strong>Сделать.</strong> Убрать повторный вывод шапки и повторное подключение скриптов. Двойная Метрика уйдёт вместе с этим — проверить, что счётчик остался один.</p>
+<h3>AG-7 · Нет поля «Период» в фильтре визитов</h3>
+<p><strong>Приоритет:</strong> Medium</p>
+<p>В фильтре визитов поля: Категория / Сотрудник / Аптека / Розница / Менеджер. Поля «Период» нет → фильтрация по датам (<code>DateStart</code>/<code>DateEnd</code>, #226) не работает. Вывести поле в группе <code>data-page-fields=&quot;visits&quot;</code> (разметка есть в актуальной сборке), метод страницы должен читать <code>DateStart</code>/<code>DateEnd</code>.</p>
+<h3>AG-12 · Проверить ajax-эндпоинты на SQL-инъекции</h3>
+<p><strong>Приоритет:</strong> High</p>
+<p>Эндпоинты с пользовательскими параметрами: <code>/ajax/visits.php</code> (<code>mode</code>, <code>filter_*</code>, <code>size</code>, <code>PAGEN_1</code>), <code>/ajax/managers.php</code> (<code>date_start</code>, <code>date_end</code>), <code>/ajax/tasks_page.php</code> (<code>tab</code>, <code>archive</code>), <code>/ajax/export-excel.php</code> (<code>type</code>, <code>filter_*</code>).</p>
+<p><strong>Сделать.</strong> Код-ревью: все параметры — только через подготовленные выражения / Bitrix ORM, без конкатенации в SQL; даты/<code>size</code>/<code>PAGEN_1</code> привести к типу, <code>mode</code>/<code>tab</code>/<code>type</code> — по белому списку. Динамический тест <code>sqlmap</code> — только на стенде, с валидной сессией, против копии данных.</p>
+<hr>
+<h2>C. Низкий приоритет / по желанию</h2>
+<h3>AG-8 · Битриксовые стили перекрывают вёрстку (только для админ-панели)</h3>
+<p><code>pubstyles.css</code>, <code>admin-public.css</code>, <code>hot_keys.css</code>, <code>popup.css</code> подключены после <code>app.css</code> и без CSS-слоёв → перебивают вёрстку. Видно <strong>только пользователям с админ-панелью (тестировщикам)</strong>, обычный пользователь этого не видит. Ценность фикса — убрать фантомные баги в QA (тестер видит поломку, которой у пользователя нет). Подключать админ-стили только в режиме правки.</p>
+<h3>AG-9 · Активная иконка сайдбара не синеет (косметика)</h3>
+<p>Иконки меню выводятся <code>&lt;img src=&quot;.svg&quot;&gt;</code>, у активного пункта не красятся (нужен инлайновый <code>&lt;svg&gt;&lt;use&gt;</code>). Чисто косметика, можно не трогать.</p>
+<hr>
+<h2>Проверено и в порядке (действий не требует)</h2>
+<ul><li>Мобильная вёрстка (375px): нет бокового скролла; широкие таблицы (13–16 колонок) скроллятся внутри</li></ul>
+<p>  контейнера; календарь корректен.</p>
+<ul><li>XSS в нашем коде: <code>DataTable</code>, <code>VisitsCalendar</code>, <code>TasksPanel</code>, <code>Toasts</code>, <code>Visit</code> экранируют данные</li></ul>
+<p>  сервера. Единственная дырка (AG-11) закрыта.</p>
+<ul><li>Ошибки консоли: приложение чистое; в консоли только блокировщик рекламы режет Метрику.</li><li>Битые ресурсы: 404-ов нет; иконки-спрайт все резолвятся.</li><li>Экспорт Excel: валидный XLSX, размер по скоупу учётки, лишнего не отдаёт.</li><li>Наш JS лёгкий и порезан по компонентам (~230 КБ на визитах); Chart.js (602 КБ) на страницы без</li></ul>
+<p>  графиков не тянется. Кеш статики — 90 дней.</p>
+<h2>Не проверялось (нужен пентест на стенде)</h2>
+<p>SQLi (AG-12), CSRF на создание визита/подтверждение задачи, неограниченная загрузка файлов (аватар), активный обход доступа (AG-3), Safari/WebKit-рендеринг.</p></div></body></html>

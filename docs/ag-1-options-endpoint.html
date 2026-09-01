@@ -1,0 +1,48 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AG-1 · Эндпоинт-справочник для ленивой загрузки опций</title><style>
+:root{--fg:#1a2430;--muted:#5b6b7c;--line:#e2e9f0;--code:#eef2f6;--accent:#0072e5}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--fg);line-height:1.6;background:#fff}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:28px;border-bottom:2px solid var(--line);padding-bottom:12px;margin-top:0}
+h2{font-size:21px;margin-top:36px;border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:17px;margin-top:26px}h4{font-size:15px;color:var(--muted)}
+code{background:var(--code);padding:2px 5px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em}
+pre{background:#0f1a24;color:#e6edf3;padding:14px 16px;border-radius:8px;overflow:auto}
+pre code{background:none;color:inherit;padding:0}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#f5f8fb}tr:nth-child(even) td{background:#fafcfe}
+a{color:var(--accent)}hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}li{margin:4px 0}strong{color:#0b1520}
+@media print{.wrap{max-width:none}}
+</style></head><body><div class="wrap"><h1>AG-1 · Эндпоинт-справочник для ленивой загрузки опций</h1>
+<p>Цель: перестать вшивать в HTML тысячи <code>&lt;option&gt;</code> (селект сотрудника в модалке визита ~2280, фильтры ~1161). Фронт грузит опции по AJAX при открытии поля, с серверным поиском и пагинацией. Это убирает вес страницы (~1 МБ), основную часть 6–14 c серверной генерации и утечку ПДн в HTML.</p>
+<h2>Что делает бэк</h2>
+<p>Один эндпоинт-справочник. Предлагаемый адрес: <code>GET /ajax/options.php</code>.</p>
+<h3>Параметры запроса</h3>
+<table><thead><tr><th>Параметр</th><th>Тип</th><th>Обяз.</th><th>Описание</th></tr></thead><tbody><tr><td><code>type</code></td><td>string</td><td>да</td><td>Справочник: <code>employee</code> | <code>pharmacy</code> | <code>manager</code> | <code>company</code>. Валидировать по белому списку.</td></tr><tr><td><code>q</code></td><td>string</td><td>нет</td><td>Поисковая строка. Пусто = первая страница всего списка. Поиск по названию/ФИО.</td></tr><tr><td><code>page</code></td><td>int</td><td>нет</td><td>Номер страницы, с 1. По умолчанию 1.</td></tr><tr><td><code>size</code></td><td>int</td><td>нет</td><td>Размер страницы. По умолчанию 50. Ограничить сверху (например ≤ 100).</td></tr><tr><td><code>manager</code></td><td>string</td><td>нет</td><td>Для <code>type=employee</code>: код менеджера — вернуть только его сотрудников (см. связь ниже).</td></tr></tbody></table>
+<h3>Ответ (200, <code>application/json; charset=utf-8</code>)</h3>
+<pre><code>{
+  &quot;items&quot;: [
+    { &quot;value&quot;: &quot;98b81383-544e-11ef-bbc6-005056011102&quot;, &quot;label&quot;: &quot;Андриевская О. Е.&quot; }
+  ],
+  &quot;total&quot;: 2280,
+  &quot;page&quot;: 1,
+  &quot;size&quot;: 50,
+  &quot;hasMore&quot;: true
+}</code></pre>
+<ul><li><code>items</code> — массив <code>{ value, label }</code>. <code>value</code> — код (UUID), <code>label</code> — то, что видит пользователь.</li><li><code>total</code> — общее число записей под текущим <code>q</code>/<code>type</code>/<code>manager</code> (для счётчика и понимания, что есть ещё).</li><li><code>hasMore</code> — есть ли следующая страница (можно вычислять как <code>page * size &lt; total</code>).</li></ul>
+<h3>Требования</h3>
+<ol><li><strong>Скоуп по роли — на сервере.</strong> Эндпоинт обязан отдавать только то, что доступно текущему</li></ol>
+<p>   пользователю по его роли (обычный менеджер — свой круг, руководитель — шире). Это одновременно    закрывает AG-3: перестаём вшивать всех в HTML.</p>
+<ol><li><strong>Только подготовленные выражения / ORM.</strong> <code>q</code> уходит в запрос только параметризованно (AG-12).</li></ol>
+<p>   <code>page</code>/<code>size</code> привести к <code>int</code>, <code>type</code>/<code>manager</code> — по белому списку.</p>
+<ol><li><strong>Кеш справочников</strong> (список меняется редко) — чтобы запрос был быстрым.</li><li><strong>Стабильная сортировка</strong> (по алфавиту), одинаковая между страницами, иначе пагинация «поедет».</li></ol>
+<h3>Связь менеджер → сотрудники</h3>
+<p>Сейчас в HTML отдаётся <code>window.AG_VISIT_EMPLOYEES_BY_MANAGER</code> (карта на 542 человека). После внедрения она не нужна: фронт при выборе менеджера в модалке запросит <code>/ajax/options.php?type=employee&amp;manager=&lt;код&gt;</code> и получит только его сотрудников. Карту из HTML убрать.</p>
+<h2>Что делает фронт (наша часть, уже в работе)</h2>
+<ul><li><code>ui-select</code> (селект сотрудника/менеджера в модалке) и фильтр-поля переводятся на ленивую загрузку:</li></ul>
+<p>  опции грузятся при открытии поля, поиск шлёт <code>q</code> на сервер (с debounce), догрузка следующих страниц   по скроллу. Включается атрибутом <code>data-options-src=&quot;/ajax/options.php?type=employee&quot;</code> на поле —   без него компонент работает по-старому на инлайн-опциях (миграция страниц по одной).</p>
+<ul><li>Пустой <code>&lt;select&gt;</code>/фильтр в HTML: бэку достаточно вывести оболочку поля без <code>&lt;option&gt;</code>/<code>&lt;label&gt;</code> внутри</li></ul>
+<p>  и повесить <code>data-options-src</code>. Разметку-образец пришлём вместе с интеграцией.</p>
+<h2>Порядок внедрения</h2>
+<ol><li>Бэк поднимает <code>/ajax/options.php</code> по этому контракту (можно начать с <code>type=employee</code>).</li><li>Фронт включает ленивый режим на селекте модалки → проверяем на визитах.</li><li>Далее — фильтры (employee/pharmacy/manager/company) и остальные страницы.</li><li>Убираем инлайн-списки и <code>AG_VISIT_EMPLOYEES_BY_MANAGER</code> из HTML → вес и время падают.</li></ol></div></body></html>
