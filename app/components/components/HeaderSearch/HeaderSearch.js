@@ -1,6 +1,10 @@
 import { mountDateRange } from '@/utils/dateRange'
 import { tableUrlEnabled, readTableUrl } from '@/utils/tableUrl'
 
+// server-supplied labels (employee/pharmacy names) go into chip innerHTML —
+// escape to prevent HTML injection and keep names with &/</> rendering correctly
+const escChip = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
+
 // Reusable header search + filter dropdown. Drives a [data-data-table] via its
 // public __dataTable API (employees), or filters task rows directly (tasks).
 // Opt-in per page: only activates when the page sets <body data-header-search>.
@@ -146,7 +150,7 @@ export default (root) => {
 			chip.type = 'button'
 			chip.className = 'filter-chip'
 			chip.dataset.index = String(i)
-			chip.innerHTML = `<span>${f.label}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
+			chip.innerHTML = `<span>${escChip(f.label)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
 			chipsList.appendChild(chip)
 		})
 		chipsHost.hidden = filters.length === 0
@@ -228,7 +232,7 @@ export default (root) => {
 			chip.type = 'button'
 			chip.className = 'filter-chip filter-chip--inline'
 			chip.dataset.value = cb.value
-			chip.innerHTML = `<span>${cb.dataset.label || cb.value}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
+			chip.innerHTML = `<span>${escChip(cb.dataset.label || cb.value)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
 			host.appendChild(chip)
 		})
 	}
