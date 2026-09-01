@@ -1,0 +1,48 @@
+<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Задачи для бэкенда — myag (единый список)</title><style>
+:root{--fg:#1a2430;--muted:#5b6b7c;--line:#e2e9f0;--code:#eef2f6;--accent:#0072e5}
+*{box-sizing:border-box}body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;color:var(--fg);line-height:1.6;background:#fff}
+.wrap{max-width:860px;margin:0 auto;padding:48px 24px 80px}
+h1{font-size:28px;border-bottom:2px solid var(--line);padding-bottom:12px;margin-top:0}
+h2{font-size:21px;margin-top:36px;border-bottom:1px solid var(--line);padding-bottom:6px}
+h3{font-size:17px;margin-top:26px}h4{font-size:15px;color:var(--muted)}
+code{background:var(--code);padding:2px 5px;border-radius:4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em}
+pre{background:#0f1a24;color:#e6edf3;padding:14px 16px;border-radius:8px;overflow:auto}
+pre code{background:none;color:inherit;padding:0}
+table{border-collapse:collapse;width:100%;margin:16px 0;font-size:14px}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+th{background:#f5f8fb}tr:nth-child(even) td{background:#fafcfe}
+a{color:var(--accent)}hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+ul,ol{padding-left:22px}li{margin:4px 0}strong{color:#0b1520}
+@media print{.wrap{max-width:none}}
+</style></head><body><div class="wrap"><h1>Задачи для бэкенда — myag (единый список)</h1>
+<p>Только то, что делает бэк. Фронт по всем пунктам готов и в сборке. Порядок — по важности. Детали и обоснования — в docs/audit-myag-2026-09-01, контракт AG-1 — в docs/ag-1-options-endpoint.</p>
+<h2>1. AG-1 · Эндпоинт-справочник + убрать инлайн-списки — Critical</h2>
+<p>Причина: ERP-страницы генерируются на сервере 6–14 c (личный кабинет для сравнения — 0.12 c), HTML ~1 МБ. Виноваты вшитые в разметку ~2280 опций сотрудников + ~1161 опция фильтров, каждый заход из БД, без кеша.</p>
+<ul><li>Поднять <code>GET /ajax/options.php</code> по контракту (docs/ag-1-options-endpoint): параметры <code>type/q/page/size/manager</code>,</li></ul>
+<p>  ответ <code>{items:[{value,label}], total, hasMore}</code>, скоуп по роли на сервере, только подготовленные выражения, кеш.</p>
+<ul><li>Перестать вшивать <code>&lt;option&gt;</code>/<code>&lt;label&gt;</code> в HTML и убрать <code>window.AG_VISIT_EMPLOYEES_BY_MANAGER</code>.</li><li>Повесить <code>data-options-src</code> на поля (образцы разметки — в ТЗ). Фронт-часть уже реализована и протестирована.</li><li>Цель: время сервера &lt; 1 c, вес визитов &lt; 200 КБ.</li></ul>
+<h2>2. AG-2 · HTTP-заголовки безопасности — High</h2>
+<p>Сейчас нет ни одного: <code>Content-Security-Policy</code>, <code>X-Frame-Options</code>, <code>Strict-Transport-Security</code>, <code>X-Content-Type-Options</code>, <code>Referrer-Policy</code>. <code>X-Powered-By: PHP/8.3.32</code> и <code>Server: nginx/1.26.3</code> светят версии.</p>
+<ul><li>Добавить <code>X-Frame-Options: SAMEORIGIN</code> (или CSP <code>frame-ancestors &#x27;self&#x27;</code>), HSTS,</li></ul>
+<p>  <code>X-Content-Type-Options: nosniff</code>, <code>Referrer-Policy</code>.</p>
+<ul><li><code>server_tokens off</code>, скрыть <code>X-Powered-By</code>.</li></ul>
+<h2>3. AG-3 · Скоуп по роли + ПДн в HTML — High</h2>
+<p>Активная проверка показала: на руководительской роли серверный скоуп РАБОТАЕТ (список не расширить параметрами <code>showAll/limit/all/manager/user_id</code>; IDOR по визитам/сотрудникам закрыт; SQLi не найдено).</p>
+<ul><li>Подтвердить то же для роли РЯДОВОГО менеджера.</li><li>Убрать из HTML телефоны сотрудников (<code>375…</code>) и прочие ПДн, не нужные для отрисовки — уходит вместе с AG-1.</li></ul>
+<h2>4. AG-13 · CSRF-токен на изменяющих + валидация загрузки — Medium</h2>
+<p>Фронт шлёт создание/изменение/удаление визита POST&#x27;ом с JSON-телом БЕЗ токена — бэк принимает действие по одной cookie-сессии (сигнатура CSRF).</p>
+<ul><li>Проверять Bitrix <code>sessid</code> на изменяющих эндпоинтах (<code>visits-handler.php</code>, подтверждение задач),</li></ul>
+<p>  либо принимать только <code>application/json</code> и валидировать <code>Origin</code>/<code>Referer</code>.</p>
+<ul><li>Валидация загрузки аватара: тип и размер файла, неисполняемый каталог.</li><li>(Проверить эксплуатируемость можно curl&#x27;ом «Copy as cURL» из DevTools — но фикс нужен в любом случае.)</li></ul>
+<h2>5. AG-7 · Поле «Период» в фильтре визитов — Medium</h2>
+<p>Сейчас поля нет → фильтрация по датам не работает. Вывести поле в группе <code>data-page-fields=&quot;visits&quot;</code> (разметка есть в сборке), метод страницы должен читать <code>DateStart</code>/<code>DateEnd</code>.</p>
+<h2>6. AG-4 · Дубли <code>&lt;head&gt;</code>/скриптов + двойная Метрика — Medium</h2>
+<p><code>ShowHead()</code> выводится дважды: битриксовые <code>&lt;link&gt;</code>, <code>bx-core</code>, meta — по 2 раза; скрипты визитов (<code>calendar-cta</code>, <code>history-geo</code>, <code>visit-modal-errors</code>, <code>visit-manager-employees</code>) — по 2 тега и выполняются дважды (двойные обработчики → возможны двойные сабмиты). Яндекс.Метрика подключена дважды (визиты считаются вдвое).</p>
+<ul><li>Убрать повторный вывод шапки и повторное подключение скриптов. Проверить, что счётчик Метрики остался один.</li></ul>
+<h2>7. AG-8 · Битриксовые стили перекрывают вёрстку — Low</h2>
+<p><code>pubstyles.css</code>, <code>admin-public.css</code>, <code>hot_keys.css</code>, <code>popup.css</code> подключены после <code>app.css</code> и без CSS-слоёв → перебивают вёрстку. Видно ТОЛЬКО пользователям с админ-панелью (тестировщикам).</p>
+<ul><li>Подключать админ-стили только в режиме правки. Ценность — убрать фантомные баги в QA.</li></ul>
+<h2>8. AG-12 · Ревью на SQL-инъекции — Low</h2>
+<p>Активной проверкой SQLi не найдено (id→int, даты валидируются, filter_* до SQL не доходят). Для полноты — код-ревью, что все параметры уходят в БД параметризованно / через ORM; при желании sqlmap на стенде.</p>
+<hr>
+<p>Не бэку (справочно): AG-6 (выкат свежего dist), AG-9 (синяя иконка сайдбара), AG-11 (XSS), лоадер задач, AG-1 фронт-часть — всё сделано на фронте и в сборке.</p></div></body></html>
