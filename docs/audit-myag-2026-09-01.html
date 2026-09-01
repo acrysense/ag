@@ -37,7 +37,8 @@ ul,ol{padding-left:22px}li{margin:4px 0}strong{color:#0b1520}
 <h3>AG-3 · Перепроверить разграничение доступа + ПДн в HTML</h3>
 <p><strong>Приоритет:</strong> High</p>
 <p>На руководительской учётке скоуп корректный (ajax-таблица 8 строк, экспорт 3.5 КБ). Но в HTML вшиты все 15 менеджеров, 980 сотрудников, карта «менеджер→сотрудники» на 542 человека, и <strong>реальные телефоны сотрудников</strong> (<code>375…</code>) в данных визитов. Нужно убедиться, что рядовому менеджеру сервер режет выборку, а не только UI.</p>
-<p><strong>Проверить (учётка обычного менеджера, read-only):</strong> <code>/ajax/visits.php</code> с чужим <code>filter_manager</code>, большим <code>limit</code>, <code>showAll</code>; <code>/ajax/export-excel.php</code> с подменёнными фильтрами; <code>detail.php?id=…</code> чужого визита/сотрудника по прямой ссылке (IDOR). Критерий — сервер режет по роли независимо от параметров. Не отдавать в HTML ПДн (телефоны), не нужные для отрисовки.</p>
+<p><strong>Активная проверка (проведена, read-only):</strong> на этой роли серверный скоуп РЕАЛЬНО работает — список визитов нельзя расширить параметрами (<code>showAll/limit/all/manager/user_id</code> игнорируются, всегда только своя выборка); IDOR закрыт (чужие визиты <code>detail.php?id=</code> и сотрудники <code>employee_code=</code> → «не найден»); SQLi на этих параметрах не найдено.</p>
+<p><strong>Осталось бэку:</strong> подтвердить то же для роли РЯДОВОГО менеджера и <strong>убрать из HTML телефоны/ПДн</strong> (и карту <code>AG_VISIT_EMPLOYEES_BY_MANAGER</code>), не нужные для отрисовки — уходит вместе с AG-1.</p>
 <h3>AG-4 · Дублируется <code>&lt;head&gt;</code> и скрипты визитов (+ двойная Метрика)</h3>
 <p><strong>Приоритет:</strong> Medium</p>
 <p><code>ShowHead()</code> выводится дважды: битриксовые <code>&lt;link&gt;</code>, <code>bx-core</code>, meta — по 2 раза; скрипты визитов (<code>calendar-cta</code>, <code>history-geo</code>, <code>visit-modal-errors</code>, <code>visit-manager-employees</code>) — по 2 тега и <strong>выполняются дважды</strong> (подтверждено: в модалке 4 тега вместо 2 → двойной биндинг обработчиков, возможны двойные сабмиты). Яндекс.Метрика тоже подключена дважды → визиты считаются вдвое.</p>
@@ -50,6 +51,10 @@ ul,ol{padding-left:22px}li{margin:4px 0}strong{color:#0b1520}
 <p>Эндпоинты с пользовательскими параметрами: <code>/ajax/visits.php</code> (<code>mode</code>, <code>filter_*</code>, <code>size</code>, <code>PAGEN_1</code>), <code>/ajax/managers.php</code> (<code>date_start</code>, <code>date_end</code>), <code>/ajax/tasks_page.php</code> (<code>tab</code>, <code>archive</code>), <code>/ajax/export-excel.php</code> (<code>type</code>, <code>filter_*</code>).</p>
 <p><strong>Сделать.</strong> Код-ревью: все параметры — только через подготовленные выражения / Bitrix ORM, без конкатенации в SQL; даты/<code>size</code>/<code>PAGEN_1</code> привести к типу, <code>mode</code>/<code>tab</code>/<code>type</code> — по белому списку. Динамический тест <code>sqlmap</code> — только на стенде, с валидной сессией, против копии данных.</p>
 <hr>
+<h3>AG-13 · Изменяющие запросы без анти-CSRF токена</h3>
+<p><strong>Приоритет:</strong> Medium</p>
+<p>Фронт (visitModal.js, persistVisit) шлёт создание/изменение/удаление визита POST&#x27;ом с JSON-телом <code>{action, ...}</code> и БЕЗ токена (sessid). Раз приложение работает — бэк принимает изменяющее действие по одной cookie-сессии. Это сигнатура CSRF. Смягчает то, что тело <code>application/json</code> (кросс-доменно без CORS-preflight не пошлёшь); эксплуатируемость зависит от того, принимает ли эндпоинт <code>text/plain</code>/form-тело.</p>
+<p><strong>Сделать (не дожидаясь проверки — фикс нужен в любом случае).</strong> Проверять Bitrix <code>sessid</code> на изменяющих эндпоинтах (<code>visits-handler.php</code>, подтверждение задач), либо принимать только <code>application/json</code> и валидировать <code>Origin</code>/<code>Referer</code>. Заодно — валидация загрузки аватара (тип/размер, неисполняемый каталог).</p>
 <h2>C. Низкий приоритет / по желанию</h2>
 <h3>AG-8 · Битриксовые стили перекрывают вёрстку (только для админ-панели)</h3>
 <p><code>pubstyles.css</code>, <code>admin-public.css</code>, <code>hot_keys.css</code>, <code>popup.css</code> подключены после <code>app.css</code> и без CSS-слоёв → перебивают вёрстку. Видно <strong>только пользователям с админ-панелью (тестировщикам)</strong>, обычный пользователь этого не видит. Ценность фикса — убрать фантомные баги в QA (тестер видит поломку, которой у пользователя нет). Подключать админ-стили только в режиме правки.</p>
@@ -61,5 +66,7 @@ ul,ol{padding-left:22px}li{margin:4px 0}strong{color:#0b1520}
 <p>  контейнера; календарь корректен.</p>
 <ul><li>XSS в нашем коде: <code>DataTable</code>, <code>VisitsCalendar</code>, <code>TasksPanel</code>, <code>Toasts</code>, <code>Visit</code> экранируют данные</li></ul>
 <p>  сервера. Единственная дырка (AG-11) закрыта.</p>
-<ul><li>Ошибки консоли: приложение чистое; в консоли только блокировщик рекламы режет Метрику.</li><li>Битые ресурсы: 404-ов нет; иконки-спрайт все резолвятся.</li><li>Экспорт Excel: валидный XLSX, размер по скоупу учётки, лишнего не отдаёт.</li><li>Наш JS лёгкий и порезан по компонентам (~230 КБ на визитах); Chart.js (602 КБ) на страницы без</li></ul>
+<ul><li>Ошибки консоли: приложение чистое; в консоли только блокировщик рекламы режет Метрику.</li><li>Битые ресурсы: 404-ов нет; иконки-спрайт все резолвятся.</li><li>Экспорт Excel: валидный XLSX, размер по скоупу учётки, лишнего не отдаёт.</li><li>Активная проверка (read-only): SQLi не найдено (id→int, даты валидируются, filter_* до SQL не доходят,</li></ul>
+<p>  SQL-ошибок не утекает); IDOR закрыт; обход доступа через параметры списка не удался.</p>
+<ul><li>Наш JS лёгкий и порезан по компонентам (~230 КБ на визитах); Chart.js (602 КБ) на страницы без</li></ul>
 <p>  графиков не тянется. Кеш статики — 90 дней.</p></div></body></html>
