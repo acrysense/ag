@@ -485,6 +485,14 @@
         @include prop-vw(min-height, 160, xl);
         @include prop-vw(font-size, 14, xl);
         color: $color-dark-grey;
+
+        // без этого на мобилке размер считается по десктопной шкале и текст
+        // схлопывается до ~7.5px — приводим к мобильной шкале, как у остальных лоадеров
+        @include only(mobile) {
+            @include prop-vw(min-height, 160, sm);
+            @include prop-vw(gap, 10, sm);
+            @include prop-vw(font-size, 14, sm);
+        }
     }
     .tasks-panel__loader--error {
         color: $color-red;
