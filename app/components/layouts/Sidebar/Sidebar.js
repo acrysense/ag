@@ -31,6 +31,21 @@ export default (root) => {
 	}
 	initBadge()
 
+	// --- AG-9: перекрашиваем <img>-иконки меню через CSS-маску, чтобы активный пункт
+	// становился синим. Прод выводит иконки как <img src=iblock.svg> (без спрайта) —
+	// currentColor до них не доходит. Ставим --sidebar-icon из src и флажок-класс;
+	// SCSS красит маску в currentColor. На нашей сборке no-op (иконки — инлайновый svg).
+	const initImgIcons = () => {
+		root.querySelectorAll('.sidebar__link').forEach((link) => {
+			const img = link.querySelector(':scope > img')
+			const src = img?.getAttribute('src')
+			if (!src) return
+			link.style.setProperty('--sidebar-icon', `url("${src}")`)
+			link.classList.add('is--imgicon')
+		})
+	}
+	initImgIcons()
+
 	// --- desktop collapse (icon-only rail), persisted across pages ---
 	const COLLAPSE_KEY = 'ag:sidebar-collapsed'
 	const setCollapsed = (on, persist = true) => {

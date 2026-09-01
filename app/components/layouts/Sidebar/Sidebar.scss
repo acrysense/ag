@@ -193,6 +193,35 @@ $collapse: $collapse-dur $collapse-ease;
                     @include prop-vw(height, 20, sm);
                 }
             }
+            &.is--imgicon {
+                & > img {
+                    display: none;
+                }
+                // AG-9: прод выводит меню-иконки как <img> (без спрайта) → у активного
+                // пункта currentColor до них не доходит. JS ставит --sidebar-icon из src
+                // и класс .is--imgicon; здесь заменяем картинку маской в currentColor —
+                // иконка следует цвету пункта (тёмная / синяя на активном), как svg.
+                &::before {
+                    content: '';
+                    flex-shrink: 0;
+                    @include prop-vw(min-width, 20, xl);
+                    @include prop-vw(width, 20, xl);
+                    @include prop-vw(height, 20, xl);
+                    background: currentColor;
+                    -webkit-mask: var(--sidebar-icon) center / contain no-repeat;
+                    mask: var(--sidebar-icon) center / contain no-repeat;
+                    @include only(desktop) {
+                        @include prop-vw(min-width, 20, lg);
+                        @include prop-vw(width, 20, lg);
+                        @include prop-vw(height, 20, lg);
+                    }
+                    @include only(mobile) {
+                        @include prop-vw(min-width, 20, sm);
+                        @include prop-vw(width, 20, sm);
+                        @include prop-vw(height, 20, sm);
+                    }
+                }
+            }
         }
         // Счётчик новых задач у пункта «Моя страница»: нейтральный серый бейдж с
         // белым числом, прижат к правому краю строки. На активном пункте — синий,
