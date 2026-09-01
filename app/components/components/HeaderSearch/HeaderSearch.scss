@@ -475,6 +475,24 @@
                 @include prop-vw(margin-block, 6, sm);
             }
         }
+        // AG-1 lazy multi-select: selected options are pinned in this zone (always in
+        // the DOM so :checked stays the source of truth), the fetched pool follows below
+        &__selected:not(:empty) {
+            @include prop-vw(padding-bottom, 6, xl);
+            @include prop-vw(margin-bottom, 6, xl);
+            @include border-side(bottom, 1, solid, $color-border, xl);
+
+            @include only(desktop) {
+                @include prop-vw(padding-bottom, 6, lg);
+                @include prop-vw(margin-bottom, 6, lg);
+                @include border-side(bottom, 1, solid, $color-border, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(padding-bottom, 6, sm);
+                @include prop-vw(margin-bottom, 6, sm);
+                @include border-side(bottom, 1, solid, $color-border, sm);
+            }
+        }
         // inline chips of the chosen values, shown under the multiselect trigger
         &__chips {
             display: flex;

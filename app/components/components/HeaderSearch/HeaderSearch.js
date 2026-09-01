@@ -1,5 +1,6 @@
 import { mountDateRange } from '@/utils/dateRange'
 import { tableUrlEnabled, readTableUrl } from '@/utils/tableUrl'
+import { mountRemoteOptions, escOpt } from '@/utils/remoteOptions'
 
 // server-supplied labels (employee/pharmacy names) go into chip innerHTML —
 // escape to prevent HTML injection and keep names with &/</> rendering correctly
@@ -237,6 +238,7 @@ export default (root) => {
 		})
 	}
 	function clearField(field) {
+		if (field.__lazySync) field.__lazySync([])
 		field.querySelectorAll('.filter-option__input').forEach((cb) => (cb.checked = false))
 		field.querySelectorAll('.filter-option.is-active').forEach((o) => o.classList.remove('is-active'))
 		field.querySelectorAll('[data-filter-text], [data-range-from], [data-range-to]').forEach((i) => (i.value = ''))
@@ -262,6 +264,15 @@ export default (root) => {
 					const lbl = field.querySelector('.filter-field__value')
 					if (lbl) lbl.textContent = lbl.dataset.placeholder || ''
 				}
+				return
+			}
+			// lazy multi-select: rebuild the pinned selected zone from the current filters
+			// (chip removal / reset), so DOM :checked stays in step without inline options
+			if (field.__lazySync) {
+				const pairs = filters.filter((f) => f.key === key)
+				field.__lazySync(pairs)
+				const lbl = field.querySelector('.filter-field__value')
+				if (lbl) lbl.textContent = pairs.length ? `${lbl.dataset.placeholder || ''}: ${pairs.length}` : lbl.dataset.placeholder || ''
 				return
 			}
 			const active = new Set(filters.filter((f) => f.key === key).map((f) => f.value))
@@ -352,6 +363,51 @@ export default (root) => {
 		}
 		const optsRoot = optionsBox || field
 
+		// --- AG-1: opt-in lazy loading for multi-select filters. With data-options-src
+		// the options are fetched on open + searched server-side + paged on scroll.
+		// Selected options always stay in the DOM (a pinned .filter-field__selected zone)
+		// so readField / chips / label keep reading :checked unchanged; the fetched pool
+		// of UNCHECKED options lives below and is replaced on each search/page.
+		const remoteSrc = multi && optionsBox ? field.dataset.optionsSrc || '' : ''
+		let selZone = null
+		let remote = null
+		if (remoteSrc) {
+			selZone = document.createElement('div')
+			selZone.className = 'filter-field__selected'
+			const lazyZone = document.createElement('div')
+			lazyZone.className = 'filter-field__lazy'
+			optionsBox.append(selZone, lazyZone)
+			field.__lazySelected = new Set()
+			remote = mountRemoteOptions(optionsBox, lazyZone, {
+				src: remoteSrc,
+				// depends on another field (employee list ← chosen manager), like the modal
+				extraParams: () => {
+					const dep = field.dataset.optionsDepends
+					if (!dep) return {}
+					const depF = fields.find((f) => f.getAttribute('data-filter-key') === dep)
+					const v = depF && readField(depF)[0]?.value
+					return v ? { [dep]: v } : {}
+				},
+				// skip already-selected (they live checked in selZone) to avoid duplicates
+				optionHTML: (it) =>
+					field.__lazySelected.has(String(it.value))
+						? ''
+						: `<label class="filter-option"><input class="filter-option__input" type="checkbox" value="${escOpt(it.value)}" data-label="${escOpt(it.label)}" /><span class="filter-option__box" aria-hidden="true"></span><span>${escOpt(it.label)}</span></label>`,
+			})
+			field.__lazyRemote = remote
+			// rebuild the pinned selected zone from a list of {value,label} (used on chip
+			// removal / reset so DOM :checked stays the source of truth)
+			field.__lazySync = (pairs) => {
+				field.__lazySelected = new Set(pairs.map((x) => String(x.value)))
+				selZone.innerHTML = pairs
+					.map(
+						(x) =>
+							`<label class="filter-option"><input class="filter-option__input" type="checkbox" value="${escOpt(x.value)}" data-label="${escOpt(x.label)}" checked /><span class="filter-option__box" aria-hidden="true"></span><span>${escOpt(x.label)}</span></label>`,
+					)
+					.join('')
+			}
+		}
+
 		const setLabel = () => {
 			if (!labelEl || !multi) return
 			const n = field.querySelectorAll('.filter-option__input:checked').length
@@ -394,6 +450,7 @@ export default (root) => {
 			const willOpen = !field.classList.contains('is-open')
 			fields.forEach((f) => f !== field && f.classList.remove('is-open'))
 			field.classList.toggle('is-open', willOpen)
+			if (willOpen && remote) remote.loadFirst()
 		}
 		trigger?.addEventListener('click', onTrigger)
 		disposers.push(() => trigger?.removeEventListener('click', onTrigger))
@@ -426,8 +483,18 @@ export default (root) => {
 		if (multi) {
 			const onChange = (e) => {
 				if (!e.target.matches('.filter-option__input')) return
+				if (remoteSrc) {
+					const opt = e.target.closest('.filter-option')
+					if (e.target.checked) {
+						field.__lazySelected.add(String(e.target.value))
+						selZone.appendChild(opt) // pin the chosen option, out of the fetched pool
+					} else {
+						field.__lazySelected.delete(String(e.target.value))
+						opt.remove() // unchecked → drop; a later search can surface it again
+					}
+				}
 				setLabel()
-				reorder()
+				if (!remoteSrc) reorder()
 				renderFieldChips(field)
 			}
 			field.addEventListener('change', onChange)
@@ -436,6 +503,7 @@ export default (root) => {
 
 		if (search) {
 			const onSearch = () => {
+				if (remote) return remote.search(search.value)
 				const q = search.value.trim().toLowerCase()
 				optsRoot.querySelectorAll('.filter-option').forEach((o) => {
 					o.style.display = o.textContent.toLowerCase().includes(q) ? '' : 'none'
