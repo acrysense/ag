@@ -30,19 +30,26 @@ export default (root) => {
 	// (e.g. "pharmacies" / "managers") — not tied to a fixed list; otherwise the
 	// legacy detection (tasks-page class → tasks, else employees). If the named
 	// group isn't present in the DOM, fall back to the employees group.
+	const groups = [...root.querySelectorAll('[data-page-fields]')]
+	const named = (n) => groups.find((g) => g.getAttribute('data-page-fields') === n)
 	let page =
 		(document.body.getAttribute('data-header-search') || '').trim() ||
 		(document.body.classList.contains('tasks-page') ? 'tasks' : 'employees')
-	let fields = [...root.querySelectorAll(`[data-page-fields="${page}"] .filter-field`)]
-	if (!fields.length && page !== 'employees') {
-		page = 'employees'
-		fields = [...root.querySelectorAll(`[data-page-fields="employees"] .filter-field`)]
-	}
+	// The named group may simply not exist: the backend names its group after its
+	// own page («visits»), while <body data-header-search> carries no value — the
+	// name then resolves to «employees» and nothing matches. NEVER end up with
+	// every group hidden (that leaves an empty panel showing just its header):
+	// fall back to the only group, then to employees, then to the first one.
+	let group = named(page)
+	if (!group) group = groups.length === 1 ? groups[0] : named('employees') || groups[0]
+	if (group) page = group.getAttribute('data-page-fields')
 	// show only the active group, hide the rest — generic, any group name works
 	// (supersedes the name-specific CSS rules, since inline display wins)
-	root.querySelectorAll('[data-page-fields]').forEach((g) => {
-		g.style.display = g.getAttribute('data-page-fields') === page ? '' : 'none'
+	groups.forEach((g) => {
+		g.style.display = g === group ? '' : 'none'
 	})
+	// no groups at all → the fields live directly in the panel; drive them as is
+	const fields = group ? [...group.querySelectorAll('.filter-field')] : [...root.querySelectorAll('.filter-field')]
 
 	const chipsHost = document.querySelector('[data-filter-chips]')
 	const chipsList = chipsHost?.querySelector('[data-filter-chips-list]')
