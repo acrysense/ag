@@ -740,6 +740,16 @@
                 @include prop-vw(height, 20, sm);
             }
         }
+        // Fallback: если бэк вывел поля БЕЗ обёртки [data-page-fields], скроллить
+        // нечему — панель обрезается (dropdown: overflow hidden) и виден только
+        // заголовок. Любой прямой потомок панели, кроме шапки и кнопок, тоже
+        // становится скроллируемой областью.
+        .filter-search__dropdown > *:not(.filter-panel__head):not(.filter-panel__actions) {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
         // field groups scroll between the head and the actions
         .filter-search__dropdown > [data-page-fields] {
             flex: 1 1 auto;
