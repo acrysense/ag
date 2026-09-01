@@ -1,4 +1,5 @@
 import { mountDatepicker } from '@/utils/datepicker'
+import { mountRemoteOptions, escOpt } from '@/utils/remoteOptions'
 
 // POST a visit mutation to the backend and resolve on success / throw on failure.
 // Endpoint: modal[data-visits-action-url] or window.AG_VISITS_ACTION_URL (same
@@ -282,15 +283,42 @@ function initSelect(select) {
 	const panel = select.querySelector('[data-select-panel]')
 	const valueEl = select.querySelector('[data-select-value]')
 	const input = select.querySelector('[data-select-input]')
-	const options = [...select.querySelectorAll('.ui-select__option')]
 	if (!trigger || !panel) return null
 
 	const searchInput = select.querySelector('[data-select-search-input]')
 	const emptyEl = select.querySelector('[data-select-empty]')
+
+	// --- AG-1: opt-in lazy loading. With data-options-src the options are fetched
+	// on open + searched server-side + paged on scroll; without it, behaviour is
+	// unchanged (inline options filtered locally).
+	const remoteSrc = select.dataset.optionsSrc || panel.dataset.optionsSrc || ''
+	const optionsList = select.querySelector('[data-select-options]') || panel
+	const liveOptions = () => [...select.querySelectorAll('.ui-select__option')]
+
+	let remote = null
+	if (remoteSrc) {
+		const loadingEl = select.querySelector('[data-select-loading]')
+		const errorEl = select.querySelector('[data-select-error]')
+		remote = mountRemoteOptions(panel, optionsList, {
+			src: remoteSrc,
+			optionHTML: (it) =>
+				`<button type="button" class="ui-select__option" role="option" data-value="${escOpt(it.value)}">${escOpt(it.label)}</button>`,
+			extraParams: () => {
+				// employee list can depend on the chosen manager (data-options-depends)
+				const dep = select.dataset.optionsDepends
+				if (!dep) return {}
+				const depInput = select.closest('form')?.querySelector(`[name="${dep}"]`)
+				return depInput?.value ? { [dep]: depInput.value } : {}
+			},
+			states: { loading: loadingEl, empty: emptyEl, error: errorEl },
+		})
+	}
+
 	const applyFilter = (q) => {
+		if (remote) return remote.search(q)
 		const norm = q.trim().toLowerCase()
 		let visible = 0
-		options.forEach((o) => {
+		liveOptions().forEach((o) => {
 			const match = o.textContent.toLowerCase().includes(norm)
 			o.hidden = !match
 			if (match) visible++
@@ -303,10 +331,13 @@ function initSelect(select) {
 		open = state
 		select.classList.toggle('is-open', state)
 		trigger.setAttribute('aria-expanded', state ? 'true' : 'false')
-		if (state && searchInput) {
-			searchInput.value = ''
-			applyFilter('')
-			searchInput.focus({ preventScroll: true })
+		if (state) {
+			if (remote) remote.loadFirst()
+			if (searchInput) {
+				searchInput.value = ''
+				if (!remote) applyFilter('')
+				searchInput.focus({ preventScroll: true })
+			}
 		}
 	}
 
@@ -318,7 +349,7 @@ function initSelect(select) {
 	const onOption = (e) => {
 		const option = e.target.closest('.ui-select__option')
 		if (!option) return
-		options.forEach((o) => o.classList.toggle('is-active', o === option))
+		liveOptions().forEach((o) => o.classList.toggle('is-active', o === option))
 		const value = option.dataset.value ?? option.textContent.trim()
 		if (valueEl) valueEl.textContent = option.textContent.trim()
 		select.classList.add('is-filled')
@@ -339,7 +370,7 @@ function initSelect(select) {
 			trigger.focus({ preventScroll: true })
 		} else if (e.key === 'Enter') {
 			e.preventDefault()
-			const first = options.find((o) => !o.hidden)
+			const first = liveOptions().find((o) => !o.hidden)
 			if (first) first.click()
 		}
 	}
@@ -362,6 +393,7 @@ function initSelect(select) {
 			searchInput.removeEventListener('keydown', onSearchKey)
 		}
 		select.classList.remove('is-open')
+		remote?.destroy()
 	}
 }
 

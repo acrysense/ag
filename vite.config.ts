@@ -262,6 +262,30 @@ function devPagesRouter() {
 			server.watcher.on('add', (p) => p.endsWith('.html') && (MAP = buildMap()))
 			server.watcher.on('unlink', (p) => p.endsWith('.html') && (MAP = buildMap()))
 
+			// DEV-only mock of the AG-1 options endpoint (see docs/ag-1-options-endpoint.md).
+			// Lets us test lazy-loaded selects/filters on the real ~2000-name volume before
+			// the backend ships /ajax/options.php. Never bundled (apply: 'serve').
+			server.middlewares.use('/ajax/options.php', (req, res) => {
+				const q = new URL(req.url || '', 'http://localhost')
+				const type = q.searchParams.get('type') || 'employee'
+				const search = (q.searchParams.get('q') || '').trim().toLowerCase()
+				const page = Math.max(1, parseInt(q.searchParams.get('page') || '1', 10) || 1)
+				const size = Math.min(100, Math.max(1, parseInt(q.searchParams.get('size') || '50', 10) || 50))
+				const counts: Record<string, number> = { employee: 2280, pharmacy: 155, manager: 15, company: 6 }
+				const n = counts[type] ?? 100
+				const F = ['Иванов', 'Петров', 'Сидорова', 'Кузнецова', 'Смирнов', 'Попова', 'Соколов', 'Лебедева', 'Козлов', 'Новикова']
+				const label = (i: number) =>
+					type === 'pharmacy' ? `Аптека №${i + 1}`
+					: type === 'company' ? ['Аптека групп Центр', 'Аптека групп Юг', 'Аптека групп Север', 'Аптека групп Запад', 'Либерти-Фарм', 'Синтекс'][i % 6]
+					: `${F[i % F.length]} ${String.fromCharCode(1040 + (i % 32))}. ${String.fromCharCode(1040 + ((i * 7) % 32))}. (${i + 1})`
+				const all = Array.from({ length: n }, (_, i) => ({ value: `id-${type}-${i}`, label: label(i) }))
+				const filtered = search ? all.filter((o) => o.label.toLowerCase().includes(search)) : all
+				const start = (page - 1) * size
+				const items = filtered.slice(start, start + size)
+				res.setHeader('Content-Type', 'application/json; charset=utf-8')
+				res.end(JSON.stringify({ items, total: filtered.length, page, size, hasMore: start + size < filtered.length }))
+			})
+
 			server.middlewares.use((req, _res, next) => {
 				const url = (req.url || '/').split('?')[0]
 
