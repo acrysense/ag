@@ -16,54 +16,10 @@ export default (root) => {
 	const disposeKpiSort = initKpiSort(root)
 	if (disposeKpiSort) disposers.push(disposeKpiSort)
 
-	const disposeRowWrap = initRowWrap(root)
-	if (disposeRowWrap) disposers.push(disposeRowWrap)
 
 	return () => {
 		disposers.forEach((d) => d())
 		delete root.__employeeBound
-	}
-}
-
-// On mobile, stack a profile row (label over value) when its label wraps to 2+
-// lines. Measured in the un-stacked state to avoid a layout feedback loop.
-function initRowWrap(root) {
-	const rows = [...root.querySelectorAll('.employee__row')]
-	if (!rows.length) return null
-	const mql = window.matchMedia('(max-width: 743.98px)')
-	const STACKED = 'employee__row--stacked'
-
-	const isWrapped = (el) => {
-		const cs = getComputedStyle(el)
-		let lh = parseFloat(cs.lineHeight)
-		if (Number.isNaN(lh)) lh = parseFloat(cs.fontSize) * 1.4
-		return el.offsetHeight > lh * 1.5
-	}
-
-	const update = () => {
-		const mobile = mql.matches
-		rows.forEach((r) => r.classList.remove(STACKED)) // measure rows un-stacked
-		if (!mobile) return
-		const wraps = rows.map((r) => {
-			const label = r.querySelector('.employee__label')
-			return label ? isWrapped(label) : false
-		})
-		rows.forEach((r, i) => r.classList.toggle(STACKED, wraps[i]))
-	}
-
-	let frame = null
-	const onResize = () => {
-		cancelAnimationFrame(frame)
-		frame = requestAnimationFrame(update)
-	}
-
-	update()
-	window.addEventListener('resize', onResize)
-
-	return () => {
-		cancelAnimationFrame(frame)
-		window.removeEventListener('resize', onResize)
-		rows.forEach((r) => r.classList.remove(STACKED))
 	}
 }
 

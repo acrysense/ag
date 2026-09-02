@@ -152,14 +152,14 @@
             @include only(desktop) {
                 @include prop-vw(gap, 10, lg);
             }
+            // Mobile: allow wrap so a long value drops UNDER the label at full width
+            // instead of being squeezed into a narrow column (pure CSS — works on any
+            // page the profile block appears on, no per-module JS needed).
             @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
+                flex-wrap: wrap;
+                @include prop-vw(column-gap, 10, sm);
+                @include prop-vw(row-gap, 3, sm);
             }
-        }
-        // set by JS on mobile when the label wraps to 2+ lines
-        &__row--stacked {
-            flex-direction: column;
-            @include prop-vw(gap, 2, sm);
         }
         &__label {
             display: block;
