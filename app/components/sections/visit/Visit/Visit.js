@@ -56,6 +56,19 @@ export default function Visit(root) {
 	if (root.__visitBound) return
 	root.__visitBound = true
 
+	// Autosave indicator in the header: stamp the current time and reveal it.
+	// Called on any change that a real autosave would persist. When the backend
+	// wires actual autosave, call markSaved() (or set data-visit-saved-time) on save.
+	const savedEl = root.querySelector('[data-visit-saved]')
+	const savedTimeEl = root.querySelector('[data-visit-saved-time]')
+	const pad2 = (n) => String(n).padStart(2, '0')
+	const markSaved = () => {
+		if (!savedTimeEl) return
+		const d = new Date()
+		savedTimeEl.textContent = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`
+		if (savedEl) savedEl.hidden = false
+	}
+
 	// --- actions dropdown (one open at a time) ---
 	// The menus sit inside clipping containers (the section's overflow:hidden used
 	// for the collapse animation, and the quant table's horizontal scroll), which
@@ -141,6 +154,7 @@ export default function Visit(root) {
 				d.hidden = false
 			}
 			editor.remove()
+			markSaved()
 		}
 		editor.querySelector('[data-q-comment-save]').addEventListener('click', () => close(true))
 		editor.querySelector('[data-q-comment-cancel]').addEventListener('click', () => close(false))
@@ -187,6 +201,7 @@ export default function Visit(root) {
 				} else if (d) {
 					d.remove()
 				}
+				markSaved()
 			}
 			form.remove()
 			body.hidden = false
@@ -354,6 +369,7 @@ export default function Visit(root) {
 			yn.closest('.visit-q__toggle')
 				?.querySelectorAll('[data-yn]')
 				.forEach((b) => b.classList.toggle('is-active', b === yn))
+			markSaved()
 			return
 		}
 
