@@ -23,6 +23,16 @@ async function persistVisit(actionUrl, action, payload) {
 export function mountVisitModal(modal) {
 	if (!modal || modal.__visitModalBound) return () => {}
 	const form = modal.querySelector('[data-visit-form]')
+
+	// Дату на мобилке выбирают календарём (он открывается по фокусу), печатать её не
+	// нужно. Делаем поле readonly на мобилке, чтобы по тапу не всплывала экранная
+	// клавиатура поверх календаря — тап открывает только календарь. (Зум <16px здесь
+	// уже не проблема: его глобально гасит viewport maximum-scale=1.)
+	const dateInput = form.querySelector('[data-datepicker-input]')
+	const dateMql = window.matchMedia('(max-width: 743.98px)')
+	const syncDateReadonly = () => { if (dateInput) dateInput.readOnly = dateMql.matches }
+	syncDateReadonly()
+	dateMql.addEventListener?.('change', syncDateReadonly)
 	if (!form) return () => {}
 	modal.__visitModalBound = true
 

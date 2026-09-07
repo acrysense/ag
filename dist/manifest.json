@@ -17,8 +17,12 @@
       "_utils-DAoBTj81.js"
     ]
   },
-  "_app-CAtuImZ-.js": {
-    "file": "assets/js/app-CAtuImZ-.js",
+  "_app-BQsZRvT-.css": {
+    "file": "assets/css/app-BQsZRvT-.css",
+    "src": "_app-BQsZRvT-.css"
+  },
+  "_app-BoBL1wcF.js": {
+    "file": "assets/js/app-BoBL1wcF.js",
     "name": "app",
     "dynamicImports": [
       "components/components/Accordion/Accordion.js",
@@ -51,15 +55,11 @@
       "components/sections/visit/Visit/Visit.js"
     ],
     "css": [
-      "assets/css/app-ChgD6JdQ.css"
+      "assets/css/app-BQsZRvT-.css"
     ],
     "assets": [
       "assets/images/ag-m2GDsMwR.svg"
     ]
-  },
-  "_app-ChgD6JdQ.css": {
-    "file": "assets/css/app-ChgD6JdQ.css",
-    "src": "_app-ChgD6JdQ.css"
   },
   "_comment-limits-DFrwny-C.js": {
     "file": "assets/js/comment-limits-DFrwny-C.js",
@@ -81,11 +81,11 @@
     "file": "assets/js/scroll-lock-CkQIV5rM.js",
     "name": "scroll-lock"
   },
-  "_swiper-BXd68bO9.js": {
-    "file": "assets/js/swiper-BXd68bO9.js",
+  "_swiper-4ts3XYue.js": {
+    "file": "assets/js/swiper-4ts3XYue.js",
     "name": "swiper",
     "imports": [
-      "_app-CAtuImZ-.js"
+      "_app-BoBL1wcF.js"
     ],
     "dynamicImports": [
       "../node_modules/swiper/swiper.mjs",
@@ -253,7 +253,7 @@
     "isDynamicEntry": true
   },
   "components/components/VisitModal/VisitModal.js": {
-    "file": "assets/js/VisitModal-CntNuJD3.js",
+    "file": "assets/js/VisitModal-KKLMz2Yw.js",
     "name": "VisitModal",
     "src": "components/components/VisitModal/VisitModal.js",
     "isDynamicEntry": true,
@@ -335,14 +335,14 @@
     ]
   },
   "components/sections/news/NewsInner/NewsInner.js": {
-    "file": "assets/js/NewsInner-B_VadwR8.js",
+    "file": "assets/js/NewsInner-CHBAsZ9v.js",
     "name": "NewsInner",
     "src": "components/sections/news/NewsInner/NewsInner.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-BXd68bO9.js",
+      "_swiper-4ts3XYue.js",
       "_scroll-lock-CkQIV5rM.js",
-      "_app-CAtuImZ-.js"
+      "_app-BoBL1wcF.js"
     ]
   },
   "components/sections/package/Package/Package.js": {
@@ -367,13 +367,13 @@
     "isDynamicEntry": true
   },
   "components/sections/shared/Promo/Promo.js": {
-    "file": "assets/js/Promo-Cowlw6_N.js",
+    "file": "assets/js/Promo-B62iLVxe.js",
     "name": "Promo",
     "src": "components/sections/shared/Promo/Promo.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-BXd68bO9.js",
-      "_app-CAtuImZ-.js"
+      "_swiper-4ts3XYue.js",
+      "_app-BoBL1wcF.js"
     ]
   },
   "components/sections/visit/Visit/Visit.js": {

@@ -733,6 +733,15 @@
             background: rgba(245, 248, 250, 0.6);
             backdrop-filter: blur(2.5px);
             animation: visit-modal-overlay-in 0.25s ease both;
+            // Mobile: the dialog is full-screen white, so the blurred backdrop is
+            // never visible — but blurring the huge page still costs the GPU seconds
+            // on open/close. Drop the blur (and the invisible overlay) on mobile.
+            @include only(mobile) {
+                background: transparent;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                animation: none;
+            }
         }
         &__dialog {
             position: relative;
