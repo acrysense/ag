@@ -685,7 +685,12 @@ export default defineConfig(({ mode }) => {
 
 					const baseMeta = [
 						{ charset: 'utf-8' },
-						{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
+						// maximum-scale=1: iOS Safari otherwise auto-zooms the page when a text
+						// input smaller than 16px gets focus and never zooms back, leaving the
+						// form stuck enlarged. Our design uses 14px inputs; capping the scale
+						// kills that focus-zoom across every field without bumping font sizes.
+						// Trade-off: no pinch-zoom on mobile (acceptable for this ERP UI).
+						{ name: 'viewport', content: 'width=device-width, initial-scale=1, maximum-scale=1' },
 						...(Array.isArray(site.meta) ? site.meta : []).filter(
 							(m: any) => !('charset' in m) && m?.name !== 'viewport'
 						),
