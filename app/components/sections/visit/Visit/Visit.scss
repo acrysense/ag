@@ -20,9 +20,54 @@
 	// ---- checklist panel ----
 	.visit {
 		&__head {
+			display: flex;
+			align-items: flex-start;
+			justify-content: space-between;
+			@include prop-vw(gap, 16, xl);
 			@include prop-vw(margin-bottom, 40, xl);
 			@include only(mobile) {
+				@include prop-vw(gap, 12, sm);
 				@include prop-vw(margin-bottom, 20, sm);
+			}
+		}
+		&__head-info {
+			min-width: 0;
+		}
+		// autosave indicator — pinned top-right of the header row, soft green pill
+		&__saved {
+			display: inline-flex;
+			align-items: center;
+			flex-shrink: 0;
+			@include prop-vw(gap, 6, xl);
+			@include prop-vw(margin-top, 4, xl);
+			@include prop-vw(padding-block, 5, xl);
+			@include prop-vw(padding-inline, 10, xl);
+			@include prop-vw(font-size, 13, xl);
+			line-height: 1;
+			white-space: nowrap;
+			color: $color-green;
+			background: $color-green-light;
+			@include prop-vw(border-radius, 20, xl);
+			&[hidden] {
+				display: none;
+			}
+			@include only(mobile) {
+				@include prop-vw(gap, 6, sm);
+				@include prop-vw(margin-top, 3, sm);
+				@include prop-vw(padding-block, 5, sm);
+				@include prop-vw(padding-inline, 9, sm);
+				@include prop-vw(font-size, 12, sm);
+				@include prop-vw(border-radius, 20, sm);
+			}
+		}
+		&__saved-icon {
+			flex-shrink: 0;
+			@include prop-vw(width, 13, xl);
+			@include prop-vw(height, 13, xl);
+			color: $color-green;
+			@include only(mobile) {
+				@include prop-vw(width, 12, sm);
+				@include prop-vw(height, 12, sm);
 			}
 		}
 		&__title {
