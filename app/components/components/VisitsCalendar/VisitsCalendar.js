@@ -303,7 +303,9 @@ export default async function VisitsCalendar(root) {
 				)
 				.join('')
 		let rows = ''
-		for (let h = 8; h <= 18; h++) {
+		// 08:00–19:00: рабочий день тянется до 19:30 (#240), поэтому сетка показывает и
+		// вечерние часы. Слоты только целые — 19:30 выбирается в самой форме визита.
+		for (let h = 8; h <= 19; h++) {
 			const hh = `${String(h).padStart(2, '0')}:00`
 			rows += `<span class="vcal__hour">${hh}</span>`
 			rows += days
