@@ -258,7 +258,7 @@
 		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-COb1cXpb.js"></script>
 		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-DNA96qEC.css" />
 	</head>
-	<body class="bg-light">
+	<body class="bg-light visit-page">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		<div class="wrapper">
 			<header class="header" data-module="Header" data-path="layouts">
@@ -1127,53 +1127,28 @@
 					</div>
 				</div>
 				<div class="wrapper__main">
-					<div class="wrapper__mid">
-						<!-- Demo for the backend: employee__avatar without a photo (initials
-						     placeholder) and with one. Omit the <img> inside .employee__avatar
-						     and the .employee__placeholder underneath shows through. -->
-						<section class="data-panel" style="margin-bottom: 20px">
-							<div class="employee__profile">
-								<div class="employee__left">
-									<div class="employee__avatar">
-										<span class="employee__placeholder">МС</span>
-									</div>
-								</div>
-								<div class="employee__info">
-									<h1 class="employee__name">Иванов Марьян Сергеевич</h1>
-									<div class="employee__rows">
-										<div class="employee__row">
-											<span class="employee__label">Должность:</span>
-											<span class="employee__value">Фармацевт</span>
-										</div>
-										<div class="employee__row">
-											<span class="employee__label">Вариант:</span>
-											<span class="employee__value">без фото — инициалы</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</section>
-						<section class="data-panel" style="margin-bottom: 20px">
-							<div class="employee__profile">
-								<div class="employee__left">
-									<div class="employee__avatar">
-										<span class="employee__placeholder">МС</span>
-										<img src="/bitrix/templates/auth/assets/images/ava-_NxuE3ev.jpg" alt="Иванов Марьян Сергеевич" />
-									</div>
-								</div>
-								<div class="employee__info">
-									<h1 class="employee__name">Иванов Марьян Сергеевич</h1>
-									<div class="employee__rows">
-										<div class="employee__row">
-											<span class="employee__label">Должность:</span>
-											<span class="employee__value">Фармацевт</span>
-										</div>
-										<div class="employee__row">
-											<span class="employee__label">Вариант:</span>
-											<span class="employee__value">с фото</span>
-										</div>
-									</div>
-								</div>
+					<div class="wrapper__container">
+						<a href="/visits" class="wrapper__back">
+							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+							<span>Назад</span>
+						</a>
+
+						<!--
+							Профильная заглушка «Визит не найден» (референс для бэка):
+							обычная панель в стиле страницы визита. Тексты и ссылки —
+							на усмотрение бэка; иконку можно заменить на любую из спрайта.
+						-->
+						<section class="data-panel visit-empty">
+							<span class="visit-empty__icon">
+								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-erp-visits"></use></svg>
+							</span>
+							<h1 class="visit-empty__title">Визит не найден</h1>
+							<p class="visit-empty__text">
+								Возможно, визит был удалён или изменился его адрес. Проверьте ссылку или вернитесь к списку визитов.
+							</p>
+							<div class="visit-empty__actions">
+								<a href="/visits" class="btn">К списку визитов</a>
+								<a href="/" class="btn btn--secondary">На главную</a>
 							</div>
 						</section>
 					</div>
