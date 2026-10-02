@@ -128,9 +128,30 @@ Do not bring back `vite-plugin-svg-icons` unless there is a specific project-lev
 The font pipeline expects ready web fonts:
 
 ```text
-app/assets/fonts/Inter/Inter-Var.woff2
+app/assets/fonts/Inter/Inter-Var-main.woff2    # кириллица, латиница, цифры, знаки (113 КБ)
+app/assets/fonts/Inter/Inter-Var-other.woff2   # остальные символы — качается, только если встретились
 app/assets/fonts/Inter/Inter-Var-Italic.woff2
+app/assets/fonts/Inter/Inter-Var.woff2         # исходник целиком (legacy: копируется, не подключается)
 ```
+
+Inter разрезан из `Inter-Var.woff2` (Inter 4.001, оси opsz и wght) по наборам символов
+`subsets` в `fonts.config.json`: файл `Inter-Var-<набор>.woff2` получает свой `unicode-range`,
+браузер качает только нужные части. Насыщенность ограничена 300–700 (как подключение), оптический
+размер сохранён — вид текста не меняется. Кириллица и латиница — в одном файле, чтобы между
+буквами и знаками («Чек-лист», «Ю.Г.») работал кернинг. Пересобрать части (Python, `fonttools`
+и `brotli` во временном venv — в проект не ставятся):
+
+```sh
+python3 -m venv /tmp/ft && /tmp/ft/bin/pip install --no-cache-dir fonttools brotli
+/tmp/ft/bin/fonttools varLib.instancer app/assets/fonts/Inter/Inter-Var.woff2 wght=300:700 -o /tmp/inter.ttf
+/tmp/ft/bin/pyftsubset /tmp/inter.ttf --unicodes="<диапазоны main из fonts.config.json>" \
+  --layout-features='*' --name-IDs='*' --notdef-outline --flavor=woff2 \
+  --output-file=app/assets/fonts/Inter/Inter-Var-main.woff2   # так же other
+rm -rf /tmp/ft /tmp/inter.ttf
+```
+
+`legacy` в `fonts.config.json` — файлы, которые копируются в сборку, но в `@font-face` не
+подключаются (на `Inter-Var.woff2` мог ссылаться `<link rel="preload">` в шаблоне бэка).
 
 `npm run fonts` runs automatically before `dev` and `build`. It copies fonts to `public/fonts` and
 generates `app/assets/styles/base/_fonts.generated.scss`.

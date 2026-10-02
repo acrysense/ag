@@ -28,7 +28,7 @@ BASE=/bitrix/templates/auth/ npm run build -- --mode cms
 (вместе с `manifest.json`, `assets/`, `favicon/`, `fonts/`).
 
 - **`BASE` обязателен** — иначе шрифты и ленивые скрипты грузятся от корня и ловят 404.
-  Проверка собранного: `grep -o '/[^"]*fonts/Inter/Inter-Var.woff2' dist/assets/css/app-*.css`
+  Проверка собранного: `grep -o '/[^"]*fonts/Inter/Inter-Var-main.woff2' dist/assets/css/app-*.css`
   → должно быть `/bitrix/templates/auth/fonts/...`.
 - Подключение CSS/JS — через **[`assets.php`](assets.php)** (вход ищется по `name === 'app'`,
   `$dir = SITE_TEMPLATE_PATH`). Замените им ваш старый assets.php.
