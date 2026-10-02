@@ -1,27 +1,146 @@
+@use 'sass:map';
+
 // fonts
 $font-base: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
 $font-secondary: 'RFRufo';
 
 // colors
-$color-white: #FFFFFF;
-$color-full-black: #000000;
-$color-black: #0F1A24;
-$color-dark-grey: #737F8C;
-$color-mid-grey: #ADB4C1;
-$color-grey: #D2DCE5;
-$color-light-grey: #D3D8DE;
-$color-blue: #0081FF;
-$color-blue-hover: #0D75DA;
-$color-form-focus: #0057FF;
-$color-red: #BC4141;
-$color-red-light: #F9DBDB;
-$color-border: #E1E1E1;
-$color-bg: #F3F6FC;
-$color-bg-light: #F5F8FA;
-$color-track: #E7EFF4;
-$color-green: #169E23;
-$color-green-light: #E8F5E9;
-$color-yellow: #FFCC00;
+// Палитра — общая с корпоративным сайтом (ag-site, app/assets/styles/base/_vars.scss): та же
+// карта $colors, правится в обоих проектах вместе. Цвет — palette("имя"); старые $color-*
+// ниже — те же значения из палитры, компоненты кабинета продолжают их использовать.
+// В конце карты — цвета только кабинета.
+$colors: (
+    // White, Белый
+    "white": #ffffff,
+    // Black.TXT
+    "black-txt": #0f1a24,
+    // Black.H — уточняется, нужен ли второй чёрный
+    "black-h": #000000,
+    // Dark-grey.TXT
+    "dark-grey-txt": #737f8c,
+    // Серый
+    "seryi": #6c757d,
+    // Grey
+    "grey": #d3d8de,
+    // Icon.Grey
+    "icon-grey": #adb4c1,
+    // Main Blue
+    "main-blue": #0081ff,
+    // Blue.Hover
+    "blue-hover": #0d75da,
+    // Blue.TXT — то же значение, что Blue.Hover, но отдельная переменная в Figma
+    "blue-txt": #0d75da,
+    // Yellow
+    "yellow": #c9a84c,
+    // Red
+    "red": #bc4141,
+    // BG/BG.Main
+    "bg-main": #eaeef2,
+    // BG/BG.Main 2
+    "bg-main-2": #d9dde0,
+    // BG/BG.Info
+    "bg-info": #f3f6fc,
+    // BG/BG.Violet
+    "bg-violet": #f2f5ff,
+    // BG/Grey
+    "bg-grey": #d2dce5,
+    // BG/BG.Purple
+    "bg-purple": #f9dbdb,
+    // Forms/Form.Focus
+    "form-focus": #0057ff,
+    // Forms/Form.Border
+    "form-border": #e1e1e1,
+    // Forms/Block.Berder
+    "block-border": #dde3e9,
+    // Без переменной в Figma: разделители быстрых ссылок в шапке (PC.HEADER.v2/User)
+    "divider": #d9d9d9,
+    // Без переменной в Figma: рамка выпадающего меню (Dropdown Menu, 4615:43188)
+    "dropdown-border": #ebedf0,
+    // Без переменной в Figma: даты в «День рождения» (4615:42940). Контраст 3.5:1 — по макету
+    "date-grey": #888888,
+    // Без переменной в Figma: обводка аватара и конфетти в «День рождения»
+    "festive-pink": #ff69b4,
+    // Без переменной в Figma: обводка аватара и конфетти в «День рождения»
+    "festive-gold": #ffd700,
+    // Без переменной в Figma: значок успеха в модалке (Success icon, 4134:27271)
+    "success": #2fa95c,
+    // Green — рейтинг комментария «+N»
+    "green": #169e23,
+    // Без переменной в Figma: моя реакция (Comment/Reaction · Mine)
+    "blue-soft": #e5f2ff,
+    // Без переменной в Figma: мой 👎 (Comment/Reaction · Mine dislike)
+    "red-soft": #ffeded,
+    // Наше, в Figma нет: незаполненная часть прогресса в точке карусели (Blue.Hover 25% на белом)
+    "blue-progress": #c3ddf6,
+    // Наше, в Figma нет: скелетон загрузки — светлее BG.Main, чтобы не было «серых плашек»
+    "skeleton": #edf0f4,
+    // BG/BG.Yellow — метка «Новости» в поиске
+    "bg-yellow": #fff0d6,
+    // BG/BG.Blue — метка и заглушка «Документы»
+    "bg-blue": #cddeff,
+    // BG/BG.Green — метка и заглушка «Вакансии»
+    "bg-green": #e8f6ee,
+    // Без переменной в Figma: заглушка материала неопределённого типа (Type=Other)
+    "bg-neutral": #eceef2,
+    // Без переменной в Figma: сайдбар «Искать в разделе» в окне поиска (4764:2652)
+    "bg-soft": #f8f9fb,
+    // Фон страницы входа — как в ЛК (ag, $color-bg-light)
+    "bg-auth": #f5f8fa,
+    // Без переменных в Figma: значки типа файла (Doc/File type, 4526:29709) — фон и подпись
+    "file-pdf-bg": #fdecea,
+    "file-pdf": #d93a2b,
+    "file-doc-bg": #e8f0fc,
+    "file-doc": #2b6cd9,
+    "file-xls-bg": #e6f4ec,
+    "file-xls": #1d8a4e,
+    "file-ppt-bg": #fcede4,
+    "file-ppt": #d9622b,
+    "file-zip-bg": #f6efd9,
+    "file-zip": #8a6d1d,
+    // Без переменной в Figma: вторая строка подсказки (Doc/Tooltip, 4526:29712)
+    "tooltip-meta": #b8c2cc,
+    // Без переменных в Figma: «Ссылка скопирована» у кнопки (Doc/Icon button · Copied) — фон и галочка
+    "copied-bg": #e5f5eb,
+    "copied": #1c8a57,
+    // Без переменной в Figma: значок папки (Doc/Tree item)
+    "folder-icon": #1f1f1f,
+    // Только кабинет: дорожки и переключатели (визиты, задачи, календарь)
+    "track": #e7eff4,
+    // Только кабинет: оценки «жёлтой» категории (на сайте "yellow" — другой цвет)
+    "rating-yellow": #ffcc00,
+    // Только кабинет: светло-зелёный фон (на сайте близкий "bg-green" — #e8f6ee)
+    "green-light": #e8f5e9
+);
+
+@function palette($name) {
+    $value: map.get($colors, $name);
+    @if $value == null {
+        @error 'Unknown color `#{$name}`: add it to $colors in _vars.scss';
+    }
+    @return $value;
+}
+
+// Прежние имена цветов кабинета — значения из палитры (не менялись)
+$color-white: palette("white");
+$color-full-black: palette("black-h");
+$color-black: palette("black-txt");
+$color-dark-grey: palette("dark-grey-txt");
+$color-mid-grey: palette("icon-grey");
+$color-grey: palette("bg-grey");
+$color-light-grey: palette("grey");
+$color-blue: palette("main-blue");
+$color-blue-hover: palette("blue-hover");
+$color-form-focus: palette("form-focus");
+$color-red: palette("red");
+$color-red-light: palette("bg-purple");
+$color-border: palette("form-border");
+$color-bg: palette("bg-info");
+// Фон страниц кабинета; на сайте это значение — фон страницы входа (bg-auth)
+$color-bg-light: palette("bg-auth");
+$color-track: palette("track");
+$color-green: palette("green");
+$color-green-light: palette("green-light");
+$color-yellow: palette("rating-yellow");
 
 // transition
 $transition-default: 0.25s ease-in-out;
