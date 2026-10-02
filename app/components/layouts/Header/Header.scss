@@ -13,25 +13,29 @@
             @include border-side(bottom, 1, solid, $color-border, sm);
         }
 
+        // Как шапка сайта (ag-site, PC.HEADER.v2): ряд 64 на 1920 (логотип 47 + поля 8.5), на
+        // мобильном 60 (логотип 40 + поля 10); на других ширинах масштабируется, как весь кабинет
         &__wrapper {
             display: flex;
             justify-content: space-between;
-            @include prop-vw(padding-block, 9.5, xl);
+            @include prop-vw(padding-block, 8.5, xl);
             width: 100%;
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 9.5, lg);
+                @include prop-vw(padding-block, 8.5, lg);
             }
             @include only(mobile) {
-                @include prop-vw(padding-block, 9.5, sm);
+                @include prop-vw(padding-block, 10, sm);
             }
         }
+        // Логотип с названием — те же картинки, что на сайте; как на сайте, 47 по высоте
+        // (название шириной 389, как в макете 1920), на мобильном 141×40
         &__logotype {
             display: block;
             overflow: hidden;
-            @include prop-vw(min-width, 390, xl);
-            @include prop-vw(width, 390, xl);
-            @include prop-vw(height, 40, xl);
+            @include prop-vw(min-width, 458, xl);
+            @include prop-vw(width, 458, xl);
+            @include prop-vw(height, 47, xl);
             img {
                 display: block;
                 width: 100%;
@@ -40,9 +44,9 @@
             }
 
             @include only(desktop) {
-                @include prop-vw(min-width, 390, lg);
-                @include prop-vw(width, 390, lg);
-                @include prop-vw(height, 40, lg);
+                @include prop-vw(min-width, 458, lg);
+                @include prop-vw(width, 458, lg);
+                @include prop-vw(height, 47, lg);
             }
             @include only(mobile) {
                 @include prop-vw(min-width, 141, sm);

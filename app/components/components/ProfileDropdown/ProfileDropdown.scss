@@ -69,9 +69,10 @@
                 transition: color $transition-default, transform $transition-fast;
             }
 
+            // Наведение — Blue.TXT, как имя в шапке сайта
             @media screen and (hover: hover) {
                 &:hover {
-                    color: $color-blue;
+                    color: palette("blue-txt");
                 }
             }
             @include only(desktop) {
@@ -124,7 +125,8 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             color: $color-white;
-            background: $color-grey;
+            // Без фото — как в шапке сайта: Grey, на мобильном Icon.Grey
+            background: palette("grey");
             border-radius: 50%;
 
             @include only(desktop) {
@@ -137,6 +139,7 @@
                 @include prop-vw(line-height, 30, lg);
             }
             @include only(mobile) {
+                background: palette("icon-grey");
                 @include prop-vw(margin-right, 5, sm);
                 @include prop-vw(min-width, 30, sm);
                 @include prop-vw(width, 30, sm);
@@ -148,10 +151,11 @@
         &__panel {
             @include up(tablet) {
                 @include prop-vw(padding, 20, xl);
-                @include prop-vw(min-width, 244, xl);
+                // Как меню под аватаром на сайте (кит: Dropdown menu 2725:18877): 240, тень списков
+                @include prop-vw(min-width, 240, xl);
                 background: $color-white;
                 @include prop-vw(border-radius, 10, xl);
-                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+                box-shadow: 0 5px 20px rgb(0 0 0 / 15%);
                 opacity: 0;
                 transform: translateY(-6px) scale(.98);
                 transition: opacity $transition-fast, transform $transition-fast;
@@ -191,10 +195,11 @@
                 transition: transform $transition-vs;
             }
         }
+        // Пункт: значок 20 и подпись через 15, наведение — Blue.TXT, как на сайте
         &__item {
             display: flex;
             align-items: center;
-            @include prop-vw(gap, 10, xl);
+            @include prop-vw(gap, 15, xl);
             padding: 0;
             width: 100%;
             @include prop-vw(font-size, 14, xl);
@@ -214,14 +219,14 @@
             
             @media screen and (hover: hover) {
                 &:hover {
-                    color: $color-blue;
+                    color: palette("blue-txt");
                     & > svg {
-                        color: $color-blue;
+                        color: palette("blue-txt");
                     }
                 }
             }
             @include only(desktop) {
-                @include prop-vw(gap, 10, lg);
+                @include prop-vw(gap, 15, lg);
                 @include prop-vw(font-size, 14, lg);
                 & > svg {
                     @include prop-vw(min-width, 20, lg);
@@ -230,7 +235,7 @@
                 }
             }
             @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
+                @include prop-vw(gap, 15, sm);
                 @include prop-vw(font-size, 14, sm);
                 & > svg {
                     @include prop-vw(min-width, 20, sm);

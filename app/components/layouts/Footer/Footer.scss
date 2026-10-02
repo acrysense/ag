@@ -1,3 +1,4 @@
+@use 'sass:math';
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
 
@@ -13,18 +14,19 @@
             @include border-side(top, 1, solid, $color-border, sm);
         }
 
+        // Как нижняя строка подвала сайта (PC.FOOTER v2): поля 20, на мобильном 24
         &__wrapper {
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            @include prop-vw(padding-block, 22, xl);
+            @include prop-vw(padding-block, 20, xl);
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 22, lg);
+                @include prop-vw(padding-block, 20, lg);
             }
             @include only(mobile) {
                 flex-direction: column;
-                @include prop-vw(padding-block, 20, sm);
+                @include prop-vw(padding-block, 24, sm);
             }
         }
         &__copyright {
@@ -32,14 +34,16 @@
             width: fit-content;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
-            line-height: 1.07142857143;
+            // Как копирайт сайта: M/400 14/22, Dark-grey.TXT; ссылка при наведении — Black.TXT
+            line-height: math.div(22, 14);
             color: $color-dark-grey;
             a {
                 display: inline;
+                transition: color $transition-default;
 
                 @media screen and (hover: hover) {
                     &:hover {
-                        color: $color-blue;
+                        color: palette("black-txt");
                     }
                 }
             }
