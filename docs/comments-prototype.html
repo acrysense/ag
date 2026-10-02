@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Комментарии — прототип</title>
+<meta name="description" content="Рабочий прототип реддит-стиля комментариев на моке с имитацией задержки: демо для менеджера и контракт API для бэкенда">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --bg:#F3F5F8; --surface:#FFFFFF; --surface-2:#EDF0F4; --surface-3:#E3E8EE;
+    --ink:#131820; --ink-2:#4B5563; --ink-3:#727E8C;
+    --line:#DCE1E8; --line-2:#C7CFD8;
+    --accent:#2D6BE0; --accent-soft:#E6EEFB;
+    --up:#E8590C; --up-soft:#FBEBE0; --down:#3F6FD6; --down-soft:#E5ECFA;
+    --good:#1C8A57; --warn:#B4791F;
+    --radius:14px;
+    --shadow:0 1px 2px rgba(19,24,32,.05), 0 8px 24px -12px rgba(19,24,32,.14);
+    --mono:"IBM Plex Mono", ui-monospace, monospace;
+  }
+  :root:not([data-theme="light"]){ @media (prefers-color-scheme:dark){
+    --bg:#0D1117; --surface:#161B22; --surface-2:#1C232D; --surface-3:#232C38;
+    --ink:#E7ECF2; --ink-2:#9AA6B4; --ink-3:#73808E;
+    --line:#28303B; --line-2:#333D49;
+    --accent:#5A9BF0; --accent-soft:#132A45;
+    --up:#F0743A; --up-soft:#33210F; --down:#6E97E6; --down-soft:#13233E;
+    --good:#43B67F; --warn:#D6A251;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 28px -14px rgba(0,0,0,.6);
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0D1117; --surface:#161B22; --surface-2:#1C232D; --surface-3:#232C38;
+    --ink:#E7ECF2; --ink-2:#9AA6B4; --ink-3:#73808E;
+    --line:#28303B; --line-2:#333D49;
+    --accent:#5A9BF0; --accent-soft:#132A45;
+    --up:#F0743A; --up-soft:#33210F; --down:#6E97E6; --down-soft:#13233E;
+    --good:#43B67F; --warn:#D6A251;
+    --shadow:0 1px 2px rgba(0,0,0,.35), 0 10px 28px -14px rgba(0,0,0,.6);
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:"IBM Plex Sans", system-ui, sans-serif; line-height:1.55;
+    -webkit-font-smoothing:antialiased;}
+  .wrap{max-width:860px; margin:0 auto; padding:0 20px}
+  h1,h2,h3{font-family:"Archivo", system-ui, sans-serif; margin:0; text-wrap:balance}
+  .mono{font-family:var(--mono)}
+  a{color:var(--accent)}
+
+  header{padding:40px 0 22px}
+  .eyebrow{font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-3); margin-bottom:14px; display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+  .eyebrow b{color:var(--accent); font-weight:600}
+  h1{font-size:clamp(26px,4.4vw,38px); font-weight:800; letter-spacing:-.02em; line-height:1.1}
+  .lede{color:var(--ink-2); max-width:64ch; margin-top:12px; font-size:15.5px}
+
+  /* tabs */
+  .tabs{position:sticky; top:0; z-index:20; background:var(--bg);
+    border-bottom:1px solid var(--line); display:flex; gap:4px; padding-top:6px}
+  .tabs .wrap{display:flex; gap:4px; padding:0 20px}
+  .tab{appearance:none; border:0; background:none; cursor:pointer;
+    font-family:"Archivo"; font-weight:600; font-size:14px; color:var(--ink-3);
+    padding:13px 14px 12px; border-bottom:2px solid transparent; margin-bottom:-1px}
+  .tab:hover{color:var(--ink)}
+  .tab[aria-selected="true"]{color:var(--accent); border-bottom-color:var(--accent)}
+  .panel{display:none; padding:26px 0 60px}
+  .panel[data-active]{display:block}
+
+  /* control bar */
+  .controls{display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center;
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-bottom:18px; box-shadow:var(--shadow)}
+  .ctl{display:flex; align-items:center; gap:9px}
+  .ctl > label{font-size:12px; font-family:var(--mono); text-transform:uppercase; letter-spacing:.06em; color:var(--ink-3)}
+  .seg{display:inline-flex; background:var(--surface-2); border:1px solid var(--line); border-radius:9px; padding:2px}
+  .seg button{appearance:none; border:0; background:none; cursor:pointer; font:inherit; font-size:13px;
+    color:var(--ink-2); padding:5px 11px; border-radius:7px; white-space:nowrap}
+  .seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); font-weight:600; box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .timing{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--ink-2);
+    background:var(--surface-2); border:1px solid var(--line); padding:5px 10px; border-radius:999px; white-space:nowrap}
+  .timing b{color:var(--good)}
+  .hint{font-size:12.5px; color:var(--ink-3); margin:-6px 2px 18px}
+
+  /* composer */
+  .composer{display:flex; gap:12px; margin-bottom:8px}
+  .avatar{flex:none; width:38px; height:38px; border-radius:50%; display:grid; place-items:center;
+    font-family:"Archivo"; font-weight:700; font-size:14px; color:#fff}
+  .composer .box{flex:1}
+  .composer textarea{width:100%; resize:vertical; min-height:44px; font:inherit; font-size:14.5px;
+    color:var(--ink); background:var(--surface); border:1px solid var(--line-2); border-radius:12px;
+    padding:11px 13px}
+  .composer textarea:focus-visible{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent)}
+  .composer .row{display:flex; justify-content:flex-end; gap:8px; margin-top:8px}
+  .btn{appearance:none; border:1px solid var(--line-2); background:var(--surface); color:var(--ink);
+    font:inherit; font-weight:600; font-size:13.5px; padding:8px 16px; border-radius:9px; cursor:pointer}
+  .btn:hover{border-color:var(--ink-3)}
+  .btn.primary{background:var(--accent); border-color:var(--accent); color:#fff}
+  .btn.primary:hover{filter:brightness(1.05)}
+  .btn:disabled{opacity:.5; cursor:default}
+
+  .thread-count{font-family:"Archivo"; font-weight:700; font-size:16px; margin:22px 2px 12px}
+  .thread-count span{color:var(--ink-3); font-weight:500}
+
+  /* comment */
+  .clist{display:flex; flex-direction:column; gap:2px}
+  .c{display:flex; gap:11px; padding:12px 0; position:relative}
+  .c-score-chip{font-family:var(--mono); font-size:11.5px; font-weight:600; padding:1px 7px; border-radius:999px;
+    color:var(--ink-3); background:var(--surface-2); border:1px solid var(--line); font-variant-numeric:tabular-nums; line-height:1.5}
+  .c-score-chip.pos{color:var(--up); background:var(--up-soft); border-color:transparent}
+  .c-score-chip.neg{color:var(--down); background:var(--down-soft); border-color:transparent}
+
+  .c-main{flex:1; min-width:0}
+  .c-head{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:3px}
+  .c-av{flex:none; width:22px; height:22px; border-radius:50%; display:grid; place-items:center;
+    font-family:"Archivo"; font-weight:700; font-size:10px; color:#fff}
+  .c-author{font-weight:600; font-size:13.5px; color:var(--ink)}
+  .c-role{font-size:11px; font-family:var(--mono); color:var(--accent); background:var(--accent-soft);
+    padding:1px 7px; border-radius:999px}
+  .c-time{font-size:12px; color:var(--ink-3)}
+  .c-text{font-size:14.5px; color:var(--ink); white-space:pre-wrap; overflow-wrap:anywhere; margin:2px 0 8px}
+  .c-mine .c-text{}
+
+  .c-actions{display:flex; align-items:center; gap:6px; flex-wrap:wrap}
+  .react-pill{display:inline-flex; align-items:center; gap:5px; cursor:pointer;
+    border:1px solid var(--line); background:var(--surface); border-radius:999px;
+    padding:2px 9px; font-size:13px; color:var(--ink-2); line-height:1.7}
+  .react-pill:hover{border-color:var(--line-2)}
+  .react-pill[data-mine="1"]{background:var(--accent-soft); border-color:var(--accent); color:var(--accent); font-weight:600}
+  .react-pill .n{font-family:var(--mono); font-size:11.5px; font-variant-numeric:tabular-nums}
+  .add-react{position:relative}
+  .add-react > button, .c-reply, .c-collapse{appearance:none; border:0; background:none; cursor:pointer;
+    font:inherit; font-size:12.5px; font-weight:600; color:var(--ink-3); padding:3px 7px; border-radius:7px}
+  .add-react > button:hover, .c-reply:hover, .c-collapse:hover{background:var(--surface-2); color:var(--ink)}
+  .picker{position:absolute; bottom:calc(100% + 6px); left:0; z-index:5; display:flex; gap:2px;
+    background:var(--surface); border:1px solid var(--line-2); border-radius:11px; padding:4px; box-shadow:var(--shadow)}
+  .picker button{appearance:none; border:0; background:none; cursor:pointer; font-size:18px;
+    width:34px; height:34px; border-radius:8px; line-height:1}
+  .picker button:hover{background:var(--surface-2)}
+
+  .c-children{margin-top:6px; padding-left:16px; border-left:2px solid var(--line);
+    display:flex; flex-direction:column}
+  .c.collapsed > .c-main > .c-children,
+  .c.collapsed > .c-main > .c-actions .load-replies{display:none}
+  .load-replies{margin:2px 0 4px; font-size:12.5px; font-weight:600; color:var(--accent);
+    background:none; border:0; cursor:pointer; padding:5px 2px; display:inline-flex; align-items:center; gap:6px}
+  .load-replies:hover{text-decoration:underline}
+  .spin{width:13px; height:13px; border:2px solid var(--line-2); border-top-color:var(--accent);
+    border-radius:50%; display:inline-block; animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+
+  .reply-box{margin:8px 0 4px; display:flex; gap:9px}
+  .reply-box textarea{flex:1; resize:vertical; min-height:38px; font:inherit; font-size:14px; color:var(--ink);
+    background:var(--surface); border:1px solid var(--line-2); border-radius:10px; padding:8px 11px}
+  .reply-box textarea:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+  .load-more{width:100%; margin-top:14px; padding:12px; text-align:center; font-weight:600; font-size:14px;
+    color:var(--accent); background:var(--surface); border:1px solid var(--line); border-radius:12px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px}
+  .load-more:hover{border-color:var(--accent)}
+  .skeleton{display:flex; flex-direction:column; gap:16px; padding:8px 0}
+  .sk{display:flex; gap:11px}
+  .sk .bar{height:11px; border-radius:6px; background:linear-gradient(90deg,var(--surface-2),var(--surface-3),var(--surface-2));
+    background-size:200% 100%; animation:sh 1.2s ease-in-out infinite}
+  @keyframes sh{to{background-position:-200% 0}}
+  .just-added{animation:pop .5s ease}
+  @keyframes pop{from{background:var(--accent-soft)} to{background:transparent}}
+
+  /* spec panels */
+  .doc h2{font-size:22px; font-weight:700; letter-spacing:-.01em; margin:28px 0 10px}
+  .doc h2:first-child{margin-top:0}
+  .doc h3{font-size:15px; margin:20px 0 8px}
+  .doc p{color:var(--ink-2); max-width:70ch; margin:0 0 12px}
+  .doc ul{color:var(--ink-2); padding-left:20px; margin:0 0 12px}
+  .doc li{margin:5px 0}
+  .doc b{color:var(--ink)}
+  pre{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:15px 16px;
+    overflow-x:auto; margin:0 0 14px; font-family:var(--mono); font-size:12.5px; line-height:1.55; color:var(--ink)}
+  pre .k{color:var(--accent)} pre .s{color:var(--good)} pre .c1{color:var(--ink-3)} pre .m{color:var(--up)}
+  code.inl{font-family:var(--mono); font-size:12.5px; background:var(--surface-2); border:1px solid var(--line);
+    padding:1px 6px; border-radius:6px; color:var(--ink)}
+  .ep{display:inline-flex; gap:8px; align-items:center; font-family:var(--mono); font-size:13px; margin-bottom:4px}
+  .verb{font-weight:600; padding:2px 8px; border-radius:6px; font-size:11px; letter-spacing:.03em}
+  .verb.get{background:var(--accent-soft); color:var(--accent)}
+  .verb.post{background:#E8F5EC; color:var(--good)}
+  :root[data-theme="dark"] .verb.post, :root:not([data-theme="light"]) .verb.post{background:#12301F}
+  .callout{border:1px solid var(--line); border-left:3px solid var(--warn); background:var(--surface);
+    border-radius:10px; padding:13px 16px; margin:0 0 14px; font-size:13.5px; color:var(--ink-2)}
+  .callout b{color:var(--ink)}
+  .tablewrap{overflow-x:auto; border:1px solid var(--line); border-radius:12px; margin:0 0 16px; background:var(--surface)}
+  table{border-collapse:collapse; width:100%; min-width:540px; font-size:13.5px}
+  th,td{text-align:left; padding:11px 14px; border-bottom:1px solid var(--line); vertical-align:top}
+  thead th{font-family:"Archivo"; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-3); background:var(--surface-2)}
+  tbody tr:last-child td{border-bottom:none}
+  .yes{color:var(--good); font-weight:600} .no{color:var(--ink-3)} .rec{color:var(--accent); font-weight:600}
+  .split{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 16px}
+  .split .col{border:1px solid var(--line); border-radius:12px; background:var(--surface); padding:16px 18px}
+  .split .col h3{margin:0 0 10px; font-size:14px}
+  .split .col.front h3{color:var(--accent)} .split .col.back h3{color:var(--up)}
+  .split ul{margin:0; padding-left:18px; font-size:13.5px}
+  .rec-box{border:1px solid var(--good); border-radius:12px; background:var(--surface); padding:16px 18px; margin:0 0 16px}
+  .rec-box .lab{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.08em; color:var(--good); font-weight:600; margin-bottom:6px}
+  .rec-box p{margin:0; color:var(--ink)}
+
+  footer{border-top:1px solid var(--line); padding:22px 0 50px; color:var(--ink-3); font-size:12.5px}
+
+  @media (max-width:640px){
+    .split{grid-template-columns:1fr}
+    .timing{margin-left:0; order:5; width:100%}
+    .c-children{padding-left:11px}
+  }
+  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow"><b>Проект natix</b> · прототип на моке · без бэкенда</div>
+    <h1>Комментарии в стиле Reddit</h1>
+    <p class="lede">Живое демо: ветки, реакции (👍 и 👎 работают как голос), сортировка и ленивая подгрузка — на тестовых данных с <b>имитацией задержки сети</b>. Меняйте задержку: клики остаются мгновенными и не «залипают», как было с таблицами.</p>
+  </div>
+</header>
+
+<nav class="tabs" role="tablist">
+  <div class="wrap">
+    <button class="tab" role="tab" aria-selected="true" data-tab="demo">Демо</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="backend">Для бэкенда</button>
+    <button class="tab" role="tab" aria-selected="false" data-tab="manager">Для менеджера</button>
+  </div>
+</nav>
+
+<!-- ================= DEMO ================= -->
+<main class="panel" data-active id="p-demo" role="tabpanel">
+  <div class="wrap">
+    <div class="controls">
+      <div class="ctl">
+        <label>Задержка сети</label>
+        <div class="seg" id="lat">
+          <button data-ms="0" aria-pressed="false">0</button>
+          <button data-ms="300" aria-pressed="true">300 мс</button>
+          <button data-ms="1200" aria-pressed="false">1200 мс</button>
+          <button data-ms="3000" aria-pressed="false">3000 мс</button>
+        </div>
+      </div>
+      <div class="ctl">
+        <label>Сортировка</label>
+        <div class="seg" id="sort">
+          <button data-sort="hot" aria-pressed="true">Популярные</button>
+          <button data-sort="top" aria-pressed="false">Лучшие</button>
+          <button data-sort="new" aria-pressed="false">Новые</button>
+        </div>
+      </div>
+      <div class="timing" id="timing">первая страница: <b>—</b></div>
+    </div>
+    <p class="hint">Реакции применяются <b>мгновенно</b> (оптимистично), даже при задержке 3000 мс — сеть уходит в фон. Рейтинг (👍 минус 👎) виден справа у имени. Подгрузка веток и «показать ещё» честно ждут «сервер».</p>
+
+    <div class="composer">
+      <div class="avatar" style="background:#2D6BE0">Я</div>
+      <div class="box">
+        <textarea id="new-text" placeholder="Написать комментарий…" rows="1"></textarea>
+        <div class="row"><button class="btn primary" id="new-send">Отправить</button></div>
+      </div>
+    </div>
+
+    <div class="thread-count" id="count"><span>загрузка…</span></div>
+    <div class="clist" id="root"></div>
+  </div>
+</main>
+
+<!-- ================= BACKEND ================= -->
+<section class="panel doc" id="p-backend" role="tabpanel">
+  <div class="wrap">
+    <h2>Контракт API для бэкенда</h2>
+    <p>Фронт не завязан на внутренности Битрикса — только на этот JSON-контракт. Хранение можно оставить на <b>форумном модуле</b> (<code class="inl">b_forum_message</code> уже держит текст, автора, родителя, модерацию), сверху добавить две таблицы под реакции и голоса. Мок в этом прототипе отдаёт ровно эти же ответы.</p>
+
+    <h3>База и авторизация</h3>
+    <ul>
+      <li>База: <code class="inl">/ajax/comments.php</code> (или контроллер <code class="inl">\Bitrix\Main\Engine\Controller</code>).</li>
+      <li>Запись (<span class="mono">create/react/vote</span>) — обязательно с <code class="inl">bitrix_sessid</code> (CSRF). Контроллер Битрикса навяжет сам через <code class="inl">configureActions</code>.</li>
+      <li>Пагинация — <b>курсорная</b>, страницами. Дерево целиком не отдаём никогда.</li>
+    </ul>
+
+    <h3>1. Список комментариев</h3>
+    <div class="ep"><span class="verb get">GET</span> /ajax/comments.php?entity=news&entityId=4836&parent=0&sort=hot&cursor=&limit=20</div>
+    <pre><span class="c1">// ответ: верхний уровень + по 2 ответа-превью, плюс флаги состояния</span>
+{
+  <span class="k">"currentUser"</span>: { <span class="k">"id"</span>:<span class="m">1684</span>, <span class="k">"isAdmin"</span>:<span class="k">false</span> },
+  <span class="k">"commentsEnabled"</span>: <span class="k">true</span>,   <span class="c1">// выкл — фронт прячет форму</span>
+  <span class="k">"minLength"</span>: <span class="m">10</span>,
+  <span class="k">"items"</span>: [{
+    <span class="k">"id"</span>: <span class="m">4841</span>,
+    <span class="k">"parentId"</span>: <span class="m">0</span>,
+    <span class="k">"author"</span>: { <span class="k">"id"</span>:<span class="m">1684</span>, <span class="k">"name"</span>:<span class="s">"Наталья"</span>, <span class="k">"role"</span>:<span class="s">"Менеджер"</span> },
+    <span class="k">"text"</span>: <span class="s">"С праздником!"</span>,
+    <span class="k">"createdAt"</span>: <span class="s">"2026-09-18T09:12:00Z"</span>,
+    <span class="k">"score"</span>: <span class="m">7</span>,               <span class="c1">// = кол-во like − кол-во dislike</span>
+    <span class="k">"reactions"</span>: { <span class="k">"like"</span>:<span class="m">9</span>, <span class="k">"clap"</span>:<span class="m">2</span>, <span class="k">"dislike"</span>:<span class="m">2</span> },
+    <span class="k">"myReactions"</span>: [<span class="s">"like"</span>],   <span class="c1">// агрегировано — БЕЗ N+1</span>
+    <span class="k">"status"</span>: <span class="s">"approved"</span>,     <span class="c1">// | "pending" (предмодерация)</span>
+    <span class="k">"canEdit"</span>: <span class="k">false</span>, <span class="k">"canDelete"</span>: <span class="k">false</span>,  <span class="c1">// решает бэк по правам</span>
+    <span class="k">"replyCount"</span>: <span class="m">5</span>,
+    <span class="k">"replies"</span>: [ <span class="c1">/* первые 2, та же форма */</span> ]
+  }],
+  <span class="k">"nextCursor"</span>: <span class="s">"eyJvIjoyMH0"</span>,   <span class="c1">// null если конец</span>
+  <span class="k">"total"</span>: <span class="m">37</span>
+}</pre>
+    <p>Ответы глубже превью — тем же эндпоинтом с <code class="inl">parent=&lt;id&gt;</code> и своим курсором. Так «показать ещё ответы» не тянет всю ветку.</p>
+
+    <h3>2. Создать / ответить</h3>
+    <div class="ep"><span class="verb post">POST</span> /ajax/comments.php?action=create</div>
+    <pre>{ <span class="k">"entity"</span>:<span class="s">"news"</span>, <span class="k">"entityId"</span>:<span class="m">4836</span>, <span class="k">"parentId"</span>:<span class="m">4841</span>,
+  <span class="k">"text"</span>:<span class="s">"Ответ"</span>, <span class="k">"sessid"</span>:<span class="s">"bitrix_sessid"</span> }
+<span class="c1">// → { "ok": true, "comment": { …та же форма, score:0, reactions:{} } }</span></pre>
+
+    <h3>3. Реакция (тоггл) — она же голос</h3>
+    <p>Отдельного «голосования» нет: 👍 и 👎 — это обычные реакции, из них считается <code class="inl">score</code>. Один эндпоинт на всё.</p>
+    <div class="ep"><span class="verb post">POST</span> /ajax/comments.php?action=react</div>
+    <pre>{ <span class="k">"commentId"</span>:<span class="m">4841</span>, <span class="k">"type"</span>:<span class="s">"like"</span>, <span class="k">"sessid"</span>:<span class="s">"…"</span> }
+<span class="c1">// type: like|dislike|smile|clap|heart|party|hmm</span>
+<span class="c1">// → { "ok": true, "reactions": {"like":10,"clap":2,"dislike":2},</span>
+<span class="c1">//     "myReactions": ["like"], "score": 8 }   // score пересчитан бэком</span></pre>
+
+    <h3>Модель данных</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Что</th><th>Где хранить</th><th>Статус</th></tr></thead>
+      <tbody>
+        <tr><td>Комментарии, ветки, автор, модерация</td><td class="mono">b_forum_message</td><td class="yes">есть — переиспользуем</td></tr>
+        <tr><td>Реакции (вкл. 👍/👎)</td><td class="mono">ag_comment_reaction<br>(comment_id, user_id, type)</td><td class="rec">одна новая таблица</td></tr>
+        <tr><td>score для сортировки</td><td class="mono">= count(like) − count(dislike),<br>денорм. в поле/кэш</td><td class="rec">считается из реакций</td></tr>
+      </tbody>
+    </table></div>
+    <p style="font-size:13px; color:var(--ink-3)">Голоса и реакции — одна сущность, поэтому таблица одна, а не две. Меньше кода и рассинхрона.</p>
+
+    <h3>Сортировка «Популярные» (hot)</h3>
+    <p>Ранжирование в стиле Reddit — score (👍 − 👎) с затуханием по времени, считается на бэке в запросе:</p>
+    <pre><span class="k">hot</span> = log10(max(|score|, 1)) + sign(score) * (unixCreated - 1700000000) / 45000</pre>
+
+    <h3>Модерация, права, авторизация — на стороне Битрикса</h3>
+    <p>Фронт эти правила не реализует, а только отражает флаги из ответа. Логика прав и модерации остаётся в Битриксе, где уже есть сессия и роли.</p>
+    <ul>
+      <li><b>Пишут только авторизованные.</b> Проверяет сессия Битрикса; неавторизованный запрос на запись отклоняется. Фронт по <code class="inl">currentUser</code> прячет форму для гостя.</li>
+      <li><b>Правка и удаление для админов.</b> Права считает бэк и кладёт <code class="inl">canEdit</code> / <code class="inl">canDelete</code> в каждый комментарий — фронт по ним показывает кнопки. Экшены: <span class="mono">action=edit / delete</span>.</li>
+      <li><b>Предмодерация.</b> Настройка форумного модуля. Новый комментарий приходит со <code class="inl">status: "pending"</code> — фронт помечает «на модерации».</li>
+      <li><b>Отключить комментарии у новости.</b> Флаг <code class="inl">commentsEnabled: false</code> — фронт прячет форму и показывает «комментарии отключены».</li>
+      <li><b>Минимум 10 символов.</b> Фронт проверяет перед отправкой (UX), бэк — авторитетно (значение в <code class="inl">minLength</code>).</li>
+      <li><b>Запись идемпотентна</b> и возвращает актуальные счётчики — фронт применяет оптимистично и откатывает при ошибке.</li>
+    </ul>
+
+    <div class="callout"><b>Миграция старых комментариев — почти ноль.</b> Текущие комментарии в новостях уже хранятся форумным модулем (<code class="inl">FORUM_POST</code>). Раз мы оставляем это хранение, переносить нечего — сверху добавляется одна таблица реакций. В своей БД с нуля пришлось бы мигрировать.</div>
+
+    <div class="callout"><b>Почему это не повторит лаг таблиц.</b> Тот лаг был от выдачи ~1 МБ одним куском (TTFB 6–14 с). Здесь каждый запрос — одна лёгкая страница (≤ limit записей) с уже вложенными реакциями. Маленькое отдаётся быстро само по себе. Требование в ТЗ: <b>страница ≤ 20–30, индексы по (entity, parent, score), реакции агрегированы в ответе — никаких N+1.</b></p>
+  </div>
+</section>
+
+<!-- ================= MANAGER ================= -->
+<section class="panel doc" id="p-manager" role="tabpanel">
+  <div class="wrap">
+    <h2>Как делаем</h2>
+    <p>Сейчас в новостях стоят штатные комментарии Битрикса: умеют ветки и одну «лайк», но выглядят по-битриксовому и не дают реакций с сортировкой. Решение ниже — не список опций, а то, как делаем.</p>
+
+    <div class="rec-box">
+      <div class="lab">Решение</div>
+      <p><b>Хранение оставляем на форумном модуле Битрикса, весь интерфейс делаем свой.</b> Данные, ветки, модерация, права и старые комментарии уже там — не трогаем. Бэк добавляет тонкий JSON-API и одну таблицу реакций. Фронт рисует всё в дизайне ЛК. Так получаем полный набор фич при низком риске, без «битриксового» вида и без миграции.</p>
+      <p style="margin-top:8px; color:var(--ink-2)">Не берём ни «оставить штатное» (нет реакций и вид не наш), ни «писать с нуля своей БД» (лишняя миграция и риск на ровном месте).</p>
+    </div>
+
+    <div class="rec-box" style="border-color:var(--accent)">
+      <div class="lab" style="color:var(--accent)">Голоса и реакции — одно и то же</div>
+      <p><b>Одна панель реакций, без отдельных стрелок.</b> 👍 и 👎 в панели и есть голосование: рейтинг = 👍 минус 👎, по нему же сортировка. На Reddit это стрелки, у нас — те же 👍/👎 в общей панели эмодзи (ровно как ты нарисовал). Отдельные стрелки не делаем — иначе «нравится» дублировалось бы дважды.</p>
+    </div>
+
+    <h3>Кто что делает</h3>
+    <div class="split">
+      <div class="col front">
+        <h3>Фронт (мы)</h3>
+        <ul>
+          <li>Весь UI: ветки, реакции, рейтинг, сортировка</li>
+          <li>Оптимистичный отклик (мгновенно, как в демо)</li>
+          <li>Ленивая подгрузка (переиспользуем пейджер AG-1)</li>
+          <li>Сворачивание веток, компоновка, дизайн</li>
+        </ul>
+      </div>
+      <div class="col back">
+        <h3>Бэк (Александр)</h3>
+        <ul>
+          <li>JSON-API поверх форумного модуля</li>
+          <li>Одна таблица реакций (👍/👎 в ней же)</li>
+          <li>hot-ранжирование в запросе</li>
+          <li>Флаги прав/модерации + CSRF (штатно в Битриксе)</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Из твоего списка — всё учтено</h3>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Пункт</th><th>Где реализуется</th></tr></thead>
+      <tbody>
+        <tr><td>Древовидные, ответы</td><td>фронт + форумный модуль</td></tr>
+        <tr><td>Лайк и эмодзи-реакции</td><td>фронт + таблица реакций</td></tr>
+        <tr><td>Голоса +/− (как в Reddit)</td><td>👍/👎 в панели реакций = голос</td></tr>
+        <tr><td>Только авторизованные, предмодерация,<br>отключение у новости, правка/удаление админом</td><td>Битрикс (флаги в ответе), фронт отражает</td></tr>
+        <tr><td>Перенос старых комментариев</td><td>≈ ноль — они уже на форуме</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Про готовые модули (sadieff / scoder)</h3>
+    <p>Смотрел. Реакции и голоса в них всё равно надо допиливать (из коробки максимум «лайк»), фронт у них свой — тот самый битриксовый вид, от которого уходим, плюс платная зависимость. Модерацию, ради которой их берут, форумный модуль даёт бесплатно. Поэтому пользы недостаточно, чтобы тянуть зависимость — гибрид выгоднее.</p>
+
+    <h3>План</h3>
+    <ul>
+      <li><b>Реакции:</b> твои 7 — 👍 😀 👏 ❤️ 🎉 🫤 👎. 👍/👎 = голос, рейтинг = их разница.</li>
+      <li><b>Старт:</b> включаем в новостях. Позже теми же компонентами — где скажешь (визиты, задачи).</li>
+      <li><b>Реалтайм</b> (новые комментарии живьём) — вторая фаза, через модуль Push&amp;Pull. Для старта не нужен.</li>
+    </ul>
+    <p style="color:var(--ink-3); font-size:13px">Дальше портируем этот прототип в проект (мок в <code class="inl">vite.config</code> + модуль <code class="inl">data-module="Comments"</code>), а контракт из вкладки «Для бэкенда» уходит Александру как ТЗ. Если по набору реакций или старту есть правки — скажи, подгоню.</p>
+  </div>
+</section>
+
+<footer><div class="wrap">Прототип на моке · данные вымышленные · задержка сети имитируется в браузере · v1</div></footer>
+
+<script>
+(function(){
+  "use strict";
+  // ---------- config ----------
+  var LAT = 300;                 // текущая имитация задержки (мс)
+  var SORT = "hot";
+  var PAGE = 8;                  // размер страницы верхнего уровня
+  // набор со скрина менеджера: 👍 😀 👏 ❤️ 🎉 🫤 👎
+  var REACTIONS = [["like","👍"],["smile","😀"],["clap","👏"],["heart","❤️"],["party","🎉"],["hmm","🫤"],["dislike","👎"]];
+  var EMO = {like:"👍",smile:"😀",clap:"👏",heart:"❤️",party:"🎉",hmm:"🫤",dislike:"👎"};
+  var COLORS = ["#2D6BE0","#E8590C","#1C8A57","#8B5CF6","#DB2777","#0EA5A5","#B4791F"];
+  function colorFor(name){ var s=0; for(var i=0;i<name.length;i++) s+=name.charCodeAt(i); return COLORS[s%COLORS.length]; }
+  function initials(name){ return name.trim().slice(0,1).toUpperCase(); }
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function now(){ return Date.now(); }
+
+  // ---------- seed "database" (то, что жило бы в b_forum_message + таблицах) ----------
+  var UID = 9000;
+  // голос = 👍 минус 👎; отдельных стрелок нет — реакции сами и есть голосование
+  function netScore(r){ return (r.like||0)-(r.dislike||0); }
+  function mk(id,parent,name,role,text,minAgo,score,reacts){
+    var r = reacts||{};
+    return { id:id, parentId:parent, author:{name:name,role:role}, text:text,
+      created: now()-minAgo*60000, score:netScore(r),
+      reactions:r, myReactions:[], mine:false };
+  }
+  var DB = [
+    mk(4841,0,"Наталья","Менеджер","С днём рождения, Александра Георгиевна! Спасибо за всё, что вы делаете для команды 🎂",180,14,{like:9,clap:3,heart:5}),
+    mk(4851,4841,"Александр М.","Разработка","Присоединяюсь! Отличный руководитель.",150,6,{like:4}),
+    mk(4852,4841,"Ирина П.","Аптека №12","🎉🎉🎉",140,3,{party:5}),
+    mk(4853,4851,"Наталья","Менеджер","Передам поздравления 🙌",120,2,{}),
+    mk(4842,0,"Дмитрий К.","Руководитель","Коллеги, напоминаю: отчёты по визитам за неделю сдаём до пятницы 18:00. В форме уже добавили слоты до 19:30.",95,11,{like:7,clap:1}),
+    mk(4861,4842,"Ирина П.","Аптека №12","А календарь тоже до 19:30 показывает?",80,4,{}),
+    mk(4862,4861,"Александр М.","Разработка","Сетку продлили до 19:00, а 19:30 выбирается в самой форме визита.",70,8,{like:5,clap:2}),
+    mk(4863,4862,"Ирина П.","Аптека №12","Поняла, спасибо!",65,1,{heart:1}),
+    mk(4843,0,"Ольга В.","Аптека №4","Подскажите, автосохранение в чек-листе точно работает? Боюсь потерять заполненное.",50,5,{like:2}),
+    mk(4871,4843,"Александр М.","Разработка","Да, сохраняется автоматически — в углу заголовка видно время последнего сохранения.",40,9,{like:6,heart:2}),
+    mk(4844,0,"Сергей Т.","Аптека №7","Хорошо бы ещё реакции на комментарии, как здесь 😄",25,7,{like:3,smile:4,clap:1}),
+    mk(4845,0,"Марина Л.","Аптека №2","Поддерживаю идею с реакциями!",12,4,{like:2,party:1}),
+    mk(4846,0,"Виктор Н.","Аптека №9","Удобно, что ответы сворачиваются — ветки не разъезжаются.",5,2,{like:1})
+  ];
+  // индекс детей
+  function childrenOf(pid){ return DB.filter(function(c){ return c.parentId===pid; }); }
+  function hotness(c){ var s=c.score; var sign=s>0?1:(s<0?-1:0);
+    return Math.log10(Math.max(Math.abs(s),1)) + sign*(c.created/45000000); }
+  function sortList(arr, sort){
+    var a = arr.slice();
+    if(sort==="top") a.sort(function(x,y){ return y.score-x.score; });
+    else if(sort==="new") a.sort(function(x,y){ return y.created-x.created; });
+    else a.sort(function(x,y){ return hotness(y)-hotness(x); });
+    return a;
+  }
+  function project(c, withReplies){
+    var o = { id:c.id, parentId:c.parentId, author:c.author, text:c.text, created:c.created,
+      score:c.score, reactions:Object.assign({},c.reactions),
+      myReactions:c.myReactions.slice(), replyCount:childrenOf(c.id).length, mine:c.mine };
+    if(withReplies){ o.replies = sortList(childrenOf(c.id),"new").slice(0,2).map(function(r){return project(r,false);}); }
+    return o;
+  }
+
+  // ---------- MOCK API (то, что заменит /ajax/comments.php) ----------
+  var api = {
+    list: async function(parent, sort, offset, limit){
+      await sleep(LAT);
+      var all = sortList(childrenOf(parent), sort);
+      var slice = all.slice(offset, offset+limit);
+      return { items: slice.map(function(c){ return project(c, true); }),
+        nextOffset: offset+limit < all.length ? offset+limit : null, total: all.length };
+    },
+    create: async function(parentId, text){
+      await sleep(Math.max(LAT,120));
+      var c = mk(++UID, parentId, "Я", "Вы", text, 0, 0, {}); c.mine=true; DB.push(c);
+      return project(c, false);
+    },
+    // react: сервер подтверждает; фронт уже применил оптимистично.
+    // 👍/👎 — тоже реакции, из них считается score (голос). Отдельного vote нет.
+    react: async function(id, type){ await sleep(LAT); return true; }
+  };
+
+  // ---------- rendering (чистый DOM-патч, без фреймворка) ----------
+  var ICON_UP = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  var ICON_DOWN = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>';
+  function rel(ts){ var m=Math.round((now()-ts)/60000);
+    if(m<1) return "только что"; if(m<60) return m+" мин"; var h=Math.round(m/60);
+    if(h<24) return h+" ч"; return Math.round(h/24)+" дн"; }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(ch){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch];}); }
+
+  function reactionBar(c){
+    var wrap = document.createElement("div"); wrap.className="c-actions";
+    // существующие реакции
+    Object.keys(c.reactions).forEach(function(t){
+      if(!c.reactions[t]) return;
+      var mine = c.myReactions.indexOf(t)>=0;
+      var pill=document.createElement("button"); pill.className="react-pill"; pill.dataset.mine=mine?"1":"0"; pill.dataset.type=t;
+      pill.innerHTML = EMO[t]+' <span class="n">'+c.reactions[t]+'</span>';
+      pill.addEventListener("click", function(){ toggleReact(c, t); });
+      wrap.appendChild(pill);
+    });
+    // добавить реакцию
+    var add=document.createElement("span"); add.className="add-react";
+    var ab=document.createElement("button"); ab.type="button"; ab.textContent="＋ реакция";
+    add.appendChild(ab);
+    ab.addEventListener("click", function(e){
+      e.stopPropagation();
+      var open = add.querySelector(".picker"); if(open){ open.remove(); return; }
+      var pk=document.createElement("div"); pk.className="picker";
+      REACTIONS.forEach(function(r){ var b=document.createElement("button"); b.type="button"; b.textContent=r[1];
+        b.title=r[0]; b.addEventListener("click", function(ev){ ev.stopPropagation(); pk.remove(); toggleReact(c, r[0]); }); pk.appendChild(b); });
+      add.appendChild(pk);
+      document.addEventListener("click", function close(){ pk.remove(); document.removeEventListener("click", close); });
+    });
+    wrap.appendChild(add);
+    // ответить
+    var reply=document.createElement("button"); reply.className="c-reply"; reply.textContent="Ответить";
+    reply.addEventListener("click", function(){ toggleReplyBox(c, wrap.parentNode); });
+    wrap.appendChild(reply);
+    return wrap;
+  }
+
+  function renderComment(c, depth){
+    var el=document.createElement("div"); el.className="c"+(c.mine?" c-mine":""); el.dataset.id=c.id;
+
+    // main
+    var main=document.createElement("div"); main.className="c-main";
+    var head=document.createElement("div"); head.className="c-head";
+    var av=document.createElement("span"); av.className="c-av"; av.style.background=colorFor(c.author.name); av.textContent=initials(c.author.name);
+    var au=document.createElement("span"); au.className="c-author"; au.textContent=c.author.name;
+    var ro=document.createElement("span"); ro.className="c-role"; ro.textContent=c.author.role;
+    var tm=document.createElement("span"); tm.className="c-time"; tm.textContent="· "+rel(c.created);
+    var col=document.createElement("button"); col.className="c-collapse"; col.textContent="[–]"; col.title="Свернуть";
+    col.addEventListener("click", function(){ el.classList.toggle("collapsed"); col.textContent=el.classList.contains("collapsed")?"[+]":"[–]"; });
+    // рейтинг = 👍−👎, обновляется при клике на 👍/👎
+    var sc=document.createElement("span"); sc.className="c-score-chip"; sc.title="Рейтинг: 👍 минус 👎";
+    function paintScore(){ sc.textContent=(c.score>0?"+":"")+c.score; sc.className="c-score-chip"+(c.score>0?" pos":c.score<0?" neg":" zero"); }
+    paintScore(); el.__paintScore=paintScore;
+    head.appendChild(col); head.appendChild(av); head.appendChild(au); head.appendChild(ro); head.appendChild(tm); head.appendChild(sc);
+
+    var txt=document.createElement("div"); txt.className="c-text"; txt.textContent=c.text;
+
+    main.appendChild(head); main.appendChild(txt);
+    main.appendChild(reactionBar(c));
+
+    // children container
+    var kids=document.createElement("div"); kids.className="c-children"; kids.dataset.for=c.id;
+    if(c.replies && c.replies.length){ c.replies.forEach(function(r){ kids.appendChild(renderComment(r, depth+1)); }); }
+    var remaining = c.replyCount - (c.replies?c.replies.length:0);
+    if(remaining>0){
+      var lm=document.createElement("button"); lm.className="load-replies";
+      lm.textContent="Показать ещё "+remaining+" "+plural(remaining,"ответ","ответа","ответов");
+      lm.addEventListener("click", function(){ loadReplies(c, kids, lm); });
+      kids.appendChild(lm);
+    }
+    if(kids.childNodes.length) main.appendChild(kids);
+
+    el.appendChild(main);
+    return el;
+  }
+  function plural(n,a,b,c){ var d=n%10,e=n%100; if(d===1&&e!==11)return a; if(d>=2&&d<=4&&(e<10||e>=20))return b; return c; }
+
+  // ---------- interactions (optimistic) ----------
+  function findDB(id){ for(var i=0;i<DB.length;i++) if(DB[i].id===id) return DB[i]; return null; }
+
+  function toggleReact(c, type){
+    var rec = findDB(c.id) || c;
+    var i = rec.myReactions.indexOf(type);
+    if(i>=0){ rec.myReactions.splice(i,1); rec.reactions[type]=(rec.reactions[type]||1)-1; if(rec.reactions[type]<=0) delete rec.reactions[type]; }
+    else { rec.myReactions.push(type); rec.reactions[type]=(rec.reactions[type]||0)+1; }
+    rec.score = netScore(rec.reactions);   // 👍/👎 меняют рейтинг
+    // sync проекции c и перерисовать только панель действий + чип рейтинга
+    c.reactions = Object.assign({}, rec.reactions); c.myReactions = rec.myReactions.slice(); c.score = rec.score;
+    var elRoot = document.querySelector('.c[data-id="'+c.id+'"]');
+    if(elRoot && elRoot.__paintScore) elRoot.__paintScore();
+    var elC = elRoot ? elRoot.querySelector(':scope > .c-main') : null;
+    if(elC){ var old=elC.querySelector(":scope > .c-actions"); var fresh=reactionBar(c); if(old) elC.replaceChild(fresh, old); }
+    api.react(c.id, type);
+  }
+
+  function toggleReplyBox(c, mainEl){
+    var ex = mainEl.querySelector(":scope > .reply-box");
+    if(ex){ ex.remove(); return; }
+    var box=document.createElement("div"); box.className="reply-box";
+    var ta=document.createElement("textarea"); ta.placeholder="Ответить "+c.author.name+"…"; ta.rows=1;
+    var b=document.createElement("button"); b.className="btn primary"; b.textContent="Ответить"; b.style.alignSelf="flex-start";
+    box.appendChild(ta); box.appendChild(b);
+    var actions=mainEl.querySelector(":scope > .c-actions"); mainEl.insertBefore(box, actions.nextSibling);
+    ta.focus();
+    b.addEventListener("click", async function(){
+      var v=ta.value.trim(); if(!v) return; b.disabled=true; b.textContent="…";
+      var nc=await api.create(c.id, v);
+      var kids=mainEl.querySelector(':scope > .c-children[data-for="'+c.id+'"]');
+      if(!kids){ kids=document.createElement("div"); kids.className="c-children"; kids.dataset.for=c.id; mainEl.appendChild(kids); }
+      var node=renderComment(nc, 1); node.classList.add("just-added"); kids.insertBefore(node, kids.firstChild);
+      box.remove();
+    });
+  }
+
+  async function loadReplies(c, kids, btn){
+    btn.innerHTML='<span class="spin"></span> загрузка…';
+    var have = kids.querySelectorAll(':scope > .c[data-id]').length;
+    var res = await api.list(c.id, "new", have, 20);
+    res.items.forEach(function(r){ kids.insertBefore(renderComment(r,2), btn); });
+    btn.remove();
+  }
+
+  // ---------- top-level load ----------
+  var rootEl = document.getElementById("root");
+  var countEl = document.getElementById("count");
+  var loadMoreBtn = null;
+  var offset = 0;
+
+  function skeleton(n){
+    var s=document.createElement("div"); s.className="skeleton";
+    for(var i=0;i<n;i++){ var r=document.createElement("div"); r.className="sk";
+      r.innerHTML='<div style="width:34px"></div><div style="flex:1"><div class="bar" style="width:40%"></div><div class="bar" style="width:90%;margin-top:9px"></div><div class="bar" style="width:70%;margin-top:7px"></div></div>';
+      s.appendChild(r); }
+    return s;
+  }
+
+  async function loadFirst(){
+    rootEl.innerHTML=""; if(loadMoreBtn){ loadMoreBtn.remove(); loadMoreBtn=null; }
+    offset=0; countEl.innerHTML='<span>загрузка…</span>';
+    var sk=skeleton(4); rootEl.appendChild(sk);
+    var t0=performance.now();
+    var res=await api.list(0, SORT, 0, PAGE);
+    var dt=Math.round(performance.now()-t0);
+    sk.remove();
+    res.items.forEach(function(c){ rootEl.appendChild(renderComment(c,0)); });
+    offset=res.nextOffset;
+    countEl.innerHTML = res.total+' <span>'+plural(res.total,"комментарий","комментария","комментариев")+'</span>';
+    document.getElementById("timing").innerHTML='первая страница: <b>'+dt+' мс</b> · сеть '+LAT+' мс';
+    if(offset!=null) mountLoadMore();
+  }
+  function mountLoadMore(){
+    loadMoreBtn=document.createElement("button"); loadMoreBtn.className="load-more"; loadMoreBtn.textContent="Показать ещё комментарии";
+    loadMoreBtn.addEventListener("click", async function(){
+      loadMoreBtn.innerHTML='<span class="spin"></span> загрузка…';
+      var res=await api.list(0, SORT, offset, PAGE);
+      res.items.forEach(function(c){ rootEl.appendChild(renderComment(c,0)); });
+      offset=res.nextOffset;
+      if(offset==null) loadMoreBtn.remove(); else loadMoreBtn.textContent="Показать ещё комментарии";
+    });
+    rootEl.parentNode.appendChild(loadMoreBtn);
+  }
+
+  // ---------- controls ----------
+  document.getElementById("lat").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-ms]"); if(!b) return;
+    LAT=+b.dataset.ms;
+    [].forEach.call(this.children,function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
+  });
+  document.getElementById("sort").addEventListener("click", function(e){
+    var b=e.target.closest("button[data-sort]"); if(!b) return;
+    SORT=b.dataset.sort;
+    [].forEach.call(this.children,function(x){ x.setAttribute("aria-pressed", x===b?"true":"false"); });
+    loadFirst();
+  });
+  // composer
+  var nt=document.getElementById("new-text");
+  document.getElementById("new-send").addEventListener("click", async function(){
+    var v=nt.value.trim(); if(!v) return; this.disabled=true; this.textContent="…";
+    var nc=await api.create(0, v); nt.value="";
+    var node=renderComment(nc,0); node.classList.add("just-added"); rootEl.insertBefore(node, rootEl.firstChild);
+    this.disabled=false; this.textContent="Отправить";
+  });
+
+  // ---------- tabs ----------
+  var tabs=document.querySelectorAll(".tab");
+  var panels={ demo:document.getElementById("p-demo"), backend:document.getElementById("p-backend"), manager:document.getElementById("p-manager") };
+  tabs.forEach(function(t){ t.addEventListener("click", function(){
+    tabs.forEach(function(x){ x.setAttribute("aria-selected","false"); });
+    t.setAttribute("aria-selected","true");
+    Object.keys(panels).forEach(function(k){ if(k===t.dataset.tab) panels[k].setAttribute("data-active",""); else panels[k].removeAttribute("data-active"); });
+    window.scrollTo({top:0, behavior:"instant" in window?"instant":"auto"});
+  }); });
+
+  loadFirst();
+})();
+</script>
+</body>
+</html>
