@@ -24,6 +24,34 @@ const withBase = (p: string) => {
 	return base + norm
 }
 
+// Наведение только для мыши (как в ag-site): правила с :hover уходят в @media (hover: hover) —
+// на телефоне после нажатия кнопка не остаётся «подсвеченной». Правила, которые сами показывают
+// или прячут элемент (opacity, visibility, display), не трогаются: на телефоне такие элементы
+// сейчас появляются по нажатию, и это поведение остаётся. Уже обёрнутые вручную
+// (@media screen and (hover: hover)) — тоже.
+function hoverOnly() {
+	const params = '(hover: hover)'
+	const reveals = new Set(['opacity', 'visibility', 'display'])
+	return {
+		postcssPlugin: 'hover-only',
+		Rule(rule: any, { AtRule }: any) {
+			if (!rule.selector.includes(':hover')) return
+			for (let parent = rule.parent; parent; parent = parent.parent) {
+				if (parent.type === 'atrule' && /hover:\s*hover/.test(parent.params)) return
+			}
+			if (rule.nodes?.some((node: any) => node.type === 'decl' && reveals.has(node.prop))) return
+			const hover = rule.selectors.filter((s: string) => s.includes(':hover'))
+			const rest = rule.selectors.filter((s: string) => !s.includes(':hover'))
+			const media = new AtRule({ name: 'media', params })
+			media.append(rule.clone({ selectors: hover }))
+			if (!rest.length) return rule.replaceWith(media)
+			rule.selectors = rest
+			rule.after(media)
+		},
+	}
+}
+hoverOnly.postcss = true
+
 function captureBase(mode: string, prefixPageLinks: boolean) {
 	return {
 		name: 'capture-base',
@@ -743,7 +771,7 @@ export default defineConfig(({ mode }) => {
 		css: {
 			devSourcemap: true,
 			postcss: {
-				plugins: [autoprefixer()],
+				plugins: [autoprefixer(), hoverOnly()],
 			},
 		},
 	}
