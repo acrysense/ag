@@ -18,9 +18,11 @@ async function readConfig() {
 				varWght: config.defaults?.varWght || '300 700',
 			},
 			families: config.families || {},
+			subsets: config.subsets || {},
+			legacy: config.legacy || [],
 		}
 	} catch {
-		return { defaults: { display: 'swap', varWght: '300 700' }, families: {} }
+		return { defaults: { display: 'swap', varWght: '300 700' }, families: {}, subsets: {}, legacy: [] }
 	}
 }
 
@@ -71,7 +73,14 @@ async function copy(file, target) {
 	await fs.copyFile(file, target)
 }
 
-function emitFace({ family, sourceWoff2, sourceWoff, style, weight, display }) {
+// Набор символов — последнее слово имени файла (Inter-Variable-cyrillic.woff2), диапазон — из
+// subsets в fonts.config.json. Браузер качает только те файлы, символы которых есть на странице
+// (как в ag-site).
+function subsetRange(fileName, subsets) {
+	return subsets[tokens(fileName).at(-1)] || null
+}
+
+function emitFace({ family, sourceWoff2, sourceWoff, style, weight, display, unicodeRange }) {
 	const sources = [`url("${sourceWoff2}") format("woff2")`]
 	if (sourceWoff) sources.push(`url("${sourceWoff}") format("woff")`)
 
@@ -82,6 +91,7 @@ function emitFace({ family, sourceWoff2, sourceWoff, style, weight, display }) {
 		`\tfont-weight: ${weight};`,
 		`\tfont-style: ${style};`,
 		`\tfont-display: ${display};`,
+		...(unicodeRange ? [`\tunicode-range: ${unicodeRange};`] : []),
 		'}',
 	].join('\n')
 }
@@ -119,6 +129,10 @@ for (const file of files.sort()) {
 
 	await copy(file, targetWoff2)
 
+	// legacy — файл остаётся в сборке (на него может ссылаться старый <link rel="preload"> в
+	// шаблоне бэка), но в @font-face не подключается
+	if (config.legacy.includes(fileName)) continue
+
 	const siblingWoff = file.replace(/\.woff2$/i, '.woff')
 	let sourceWoff = null
 	try {
@@ -140,6 +154,7 @@ for (const file of files.sort()) {
 			style,
 			weight: variable ? variableWeight : guessWeight(fileName),
 			display: config.defaults.display,
+			unicodeRange: subsetRange(fileName, config.subsets),
 		})
 	)
 }
