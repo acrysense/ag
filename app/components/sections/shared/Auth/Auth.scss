@@ -6,8 +6,7 @@
         position: relative;
         z-index: 1;
         overflow: hidden;
-		// Как страница входа сайта (AuthCard): свой светлый фон, не фон кабинета
-		background: palette("bg-auth");
+		background: $color-bg-light;
 
         @include up(tablet) {
             &::before {
@@ -141,7 +140,7 @@
                 @include prop-vw(padding, 40, xl);
                 background: $color-white;
                 @include prop-vw(border-radius, 20, xl);
-                box-shadow: $shadow-content-block;
+                @include content-block-frame;
             }
             @include only(mobile) {
                 @include prop-vw(padding, 10, sm);
