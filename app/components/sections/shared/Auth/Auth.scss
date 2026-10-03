@@ -1,6 +1,9 @@
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
 
+// Вход и восстановление — без пропорционального масштаба, как на сайте (sections/auth/AuthCard):
+// размеры макета 1920 на всех ширинах от 768, на телефоне — макета 360. Иначе на ноутбуке
+// (1440) карточка и текст были на четверть меньше, чем на сайте (решили 2026-10-03)
 @layer components {
     .auth {
         position: relative;
@@ -12,11 +15,14 @@
             &::before {
                 content: '';
                 position: absolute;
-                @include prop-vw(right, -65, xl);
-                @include prop-vw(bottom, 100, xl);
+                // Как на сайте: 815×740 на 1920, уже — уменьшается с шириной окна (не наезжает на
+                // карточку)
+                right: -3.4vw;
+                bottom: 100px;
+                z-index: -1;
                 display: block;
-                @include prop-vw(width, 815, xl);
-                @include prop-vw(height, 740, xl);
+                width: min(815px, 42.5vw);
+                aspect-ratio: 815 / 740;
                 background-image: url(/assets/images/ag.svg);
                 background-repeat: no-repeat;
                 background-size: contain;
@@ -26,22 +32,22 @@
 
         &__back {
             position: absolute;
-            @include prop-vw(top, 40, xl);
-            @include prop-vw(left, 40, xl);
+            top: 40px;
+            left: 40px;
             z-index: 1;
             display: flex;
             align-items: center;
-            @include prop-vw(gap, 10, xl);
-            @include prop-vw(padding-top, 10, xl);
+            gap: 10px;
+            padding-top: 10px;
             width: fit-content;
-            @include prop-vw(font-size, 12, xl);
+            font-size: 12px;
             font-weight: normal;
             color: $color-black;
-            @include border-side(top, 1, solid, $color-black, xl);
+            border-top: 1px solid $color-black;
             & > svg {
-                @include prop-vw(min-width, 12, xl);
-                @include prop-vw(width, 12, xl);
-                @include prop-vw(height, 16, xl);
+                min-width: 12px;
+                width: 12px;
+                height: 16px;
             }
 
             @media screen and (hover: hover) {
@@ -53,54 +59,54 @@
                 }
             }
             @include only(desktop) {
-                @include prop-vw(top, 40, lg);
-                @include prop-vw(left, 40, lg);
-                @include prop-vw(gap, 10, lg);
-                @include prop-vw(padding-top, 10, lg);
-                @include prop-vw(font-size, 12, lg);
+                top: 40px;
+                left: 40px;
+                gap: 10px;
+                padding-top: 10px;
+                font-size: 12px;
                 border-top: none;
                 & > svg {
-                    @include prop-vw(min-width, 12, lg);
-                    @include prop-vw(width, 12, lg);
-                    @include prop-vw(height, 16, lg);
+                    min-width: 12px;
+                    width: 12px;
+                    height: 16px;
                 }
             }
             @include only(mobile) {
-                @include prop-vw(top, 20, sm);
-                @include prop-vw(left, 10, sm);
-                @include prop-vw(gap, 10, sm);
+                top: 20px;
+                left: 10px;
+                gap: 10px;
                 padding-top: 0;
-                @include prop-vw(font-size, 12, sm);
+                font-size: 12px;
                 border-top: none;
                 & > svg {
-                    @include prop-vw(min-width, 12, sm);
-                    @include prop-vw(width, 12, sm);
-                    @include prop-vw(height, 16, sm);
+                    min-width: 12px;
+                    width: 12px;
+                    height: 16px;
                 }
             }
         }
         &__wrap {
-            @include prop-vw(padding-top, 120, xl);
-            @include prop-vw(padding-bottom, 140, xl);
+            padding-top: 120px;
+            padding-bottom: 140px;
             min-height: 100dvh;
 
             @include only(desktop) {
-                @include prop-vw(padding-top, 120, lg);
-                @include prop-vw(padding-bottom, 140, lg);
+                padding-top: 120px;
+                padding-bottom: 140px;
             }
             @include only(mobile) {
-                @include prop-vw(padding-top, 76, sm);
-                @include prop-vw(padding-bottom, 90, sm);
+                padding-top: 76px;
+                padding-bottom: 90px;
             }
         }
         &__main {
             margin-right: auto;
             margin-left: auto;
-            @include prop-vw(max-width, 440, xl);
+            max-width: 440px;
             width: 100%;
             
             @include only(desktop) {
-                @include prop-vw(max-width, 440, lg);
+                max-width: 440px;
             }
             @include only(mobile) {
                 max-width: none;
@@ -111,10 +117,10 @@
             overflow: hidden;
             margin-right: auto;
             margin-left: auto;
-            @include prop-vw(margin-bottom, 40, xl);
-            @include prop-vw(min-width, 118, xl);
-            @include prop-vw(width, 118, xl);
-            @include prop-vw(height, 120, xl);
+            margin-bottom: 40px;
+            min-width: 118px;
+            width: 118px;
+            height: 120px;
             img {
                 display: block;
                 width: 100%;
@@ -123,27 +129,27 @@
             }
             
             @include only(desktop) {
-                @include prop-vw(margin-bottom, 40, lg);
-                @include prop-vw(min-width, 118, lg);
-                @include prop-vw(width, 118, lg);
-                @include prop-vw(height, 120, lg);
+                margin-bottom: 40px;
+                min-width: 118px;
+                width: 118px;
+                height: 120px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-bottom, 20, sm);
-                @include prop-vw(min-width, 99, sm);
-                @include prop-vw(width, 99, sm);
-                @include prop-vw(height, 100, sm);
+                margin-bottom: 20px;
+                min-width: 99px;
+                width: 99px;
+                height: 100px;
             }
         }
         &__wrapper {
             @include up(tablet) {
-                @include prop-vw(padding, 40, xl);
+                padding: 40px;
                 background: $color-white;
-                @include prop-vw(border-radius, 20, xl);
+                border-radius: 20px;
                 @include content-block-frame;
             }
             @include only(mobile) {
-                @include prop-vw(padding, 10, sm);
+                padding: 10px;
             }
         }
         &__top {
@@ -155,23 +161,23 @@
             margin-left: auto;
             width: fit-content;
             font-family: $font-secondary;
-            @include prop-vw(font-size, 26, xl);
+            font-size: 26px;
             font-weight: bold;
             
             @include only(desktop) {
-                @include prop-vw(font-size, 26, lg);
+                font-size: 26px;
             }
             @include only(mobile) {
-                @include prop-vw(font-size, 22, sm);
+                font-size: 22px;
             }
         }
         &__description {
             display: block;
-            @include prop-vw(margin-top, 10, xl);
+            margin-top: 10px;
             margin-right: auto;
             margin-left: auto;
             width: fit-content;
-            @include prop-vw(font-size, 14, xl);
+            font-size: 14px;
             font-weight: normal;
             line-height: 1.57142857143;
             a {
@@ -184,34 +190,34 @@
             }
             
             @include only(desktop) {
-                @include prop-vw(margin-top, 10, lg);
-                @include prop-vw(font-size, 14, lg);
+                margin-top: 10px;
+                font-size: 14px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 10, sm);
-                @include prop-vw(font-size, 14, sm);
+                margin-top: 10px;
+                font-size: 14px;
             }
         }
         &__form {
-            @include prop-vw(margin-top, 40, xl);
+            margin-top: 40px;
             width: 100%;
             
             @include only(desktop) {
-                @include prop-vw(margin-top, 40, lg);
+                margin-top: 40px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 40, sm);
+                margin-top: 40px;
             }
         }
         &__btn {
-            @include prop-vw(margin-top, 40, xl);
+            margin-top: 40px;
             width: 100%;
             
             @include only(desktop) {
-                @include prop-vw(margin-top, 40, lg);
+                margin-top: 40px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 40, sm);
+                margin-top: 40px;
             }
         }
         &__slogan {
@@ -223,10 +229,10 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            @include prop-vw(padding, 42, xl);
+            padding: 42px;
             width: 100%;
             font-family: $font-secondary;
-            @include prop-vw(font-size, 32, xl);
+            font-size: 32px;
             font-style: normal;
             font-weight: normal;
             line-height: 1;
@@ -236,32 +242,32 @@
             background: $color-grey;
             
             @include only(desktop) {
-                @include prop-vw(padding, 42, lg);
-                @include prop-vw(font-size, 32, lg);
+                padding: 42px;
+                font-size: 32px;
             }
             @include only(mobile) {
-                @include prop-vw(padding, 23, sm);
-                @include prop-vw(font-size, 26, sm);
+                padding: 23px;
+                font-size: 26px;
             }
         }
     }
 
     .auth-form {
         &__input + &__input {
-            @include prop-vw(margin-top, 10, xl);
+            margin-top: 10px;
 
             @include only(desktop) {
-                @include prop-vw(margin-top, 10, lg);
+                margin-top: 10px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 10, sm);
+                margin-top: 10px;
             }
         }
         &__link {
             display: block;
-            @include prop-vw(margin-top, 10, xl);
+            margin-top: 10px;
             width: fit-content;
-            @include prop-vw(font-size, 12, xl);
+            font-size: 12px;
             font-weight: normal;
 
             @media screen and (hover: hover) {
@@ -270,19 +276,19 @@
                 }
             }
             @include only(desktop) {
-                @include prop-vw(margin-top, 10, lg);
-                @include prop-vw(font-size, 12, lg);
+                margin-top: 10px;
+                font-size: 12px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 10, sm);
-                @include prop-vw(font-size, 12, sm);
+                margin-top: 10px;
+                font-size: 12px;
             }
         }
         &__error {
             display: block;
-            @include prop-vw(margin-top, 20, xl);
+            margin-top: 20px;
             width: fit-content;
-            @include prop-vw(font-size, 12, xl);
+            font-size: 12px;
             font-weight: normal;
             color: $color-red;
 
@@ -292,18 +298,18 @@
                 }
             }
             @include only(desktop) {
-                @include prop-vw(margin-top, 20, lg);
-                @include prop-vw(font-size, 12, lg);
+                margin-top: 20px;
+                font-size: 12px;
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 20, sm);
-                @include prop-vw(font-size, 12, sm);
+                margin-top: 20px;
+                font-size: 12px;
             }
         }
         &__btn {
             position: relative;
             z-index: 1;
-            @include prop-vw(margin-top, 20, xl);
+            margin-top: 20px;
             width: 100%;
             &[data-loading="true"] {
                 color: transparent;
@@ -313,8 +319,8 @@
                     inset: 0;
                     z-index: 1;
                     margin: auto;
-                    @include prop-vw(width, 24, xl);
-                    @include prop-vw(height, 24, xl);
+                    width: 24px;
+                    height: 24px;
                     background-image: url(/assets/images/loader.svg);
                     background-repeat: no-repeat;
                     background-size: contain;
@@ -324,24 +330,55 @@
             }
 
             @include only(desktop) {
-                @include prop-vw(margin-top, 20, lg);
+                margin-top: 20px;
                 &[data-loading="true"] {
                     &::after {
-                        @include prop-vw(width, 24, lg);
-                        @include prop-vw(height, 24, lg);
+                        width: 24px;
+                        height: 24px;
                     }
                 }
             }
             @include only(mobile) {
-                @include prop-vw(margin-top, 20, sm);
+                margin-top: 20px;
                 &[data-loading="true"] {
                     &::after {
-                        @include prop-vw(width, 24, sm);
-                        @include prop-vw(height, 24, sm);
+                        width: 24px;
+                        height: 24px;
                     }
                 }
             }
         }
     }
 
+    // Поля и кнопка — общие компоненты кабинета (масштабируются); на входе — размеры 1920, без
+    // масштаба, как всё на этой странице
+    .auth {
+        .field__input {
+            padding: 12.75px 15px;
+            font-size: 16px;
+            border-width: 1px;
+            border-radius: 14px;
+
+            &::placeholder {
+                font-size: 14px;
+            }
+        }
+        .field--toggle .field__input {
+            padding-right: 40px;
+        }
+        .field__visibility {
+            right: 12px;
+            width: 24px;
+            height: 24px;
+        }
+        .field__visibility-icon {
+            width: 16px;
+            height: 16px;
+        }
+        .btn {
+            padding: 17px 26px;
+            font-size: 16px;
+            border-radius: 14px;
+        }
+    }
 }
