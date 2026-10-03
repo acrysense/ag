@@ -2,8 +2,9 @@ name: Build Pages + Release (Bitrix-ready)
 
 on:
   push:
-    # proto/fixed-scale — прототип «без масштаба, как сайт» для сравнения: демо /ag/proto/
-    branches: [ main, proto/fixed-scale ]
+    # Прототип (ветка proto/fixed-scale) собирается вместе с main в /ag/proto/. Выкладывать
+    # демо можно только из main — после пуша в прототип перезапустить: gh workflow run deploy.yml
+    branches: [ main ]
     tags:     [ 'v*' ]
   workflow_dispatch:
 
@@ -61,7 +62,6 @@ jobs:
       - uses: actions/deploy-pages@v4
 
   build-cms:
-    if: github.ref != 'refs/heads/proto/fixed-scale'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
