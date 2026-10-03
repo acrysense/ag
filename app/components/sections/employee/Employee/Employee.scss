@@ -23,7 +23,6 @@
                 @include prop-vw(padding-inline, 10, sm);
                 border-radius: 0;
                 box-shadow: none;
-                border: 0;
             }
         }
         &__profile {
@@ -405,7 +404,6 @@
             @include prop-vw(padding-inline, 10, sm);
             border-radius: 0;
             box-shadow: none;
-            border: 0;
         }
 
         &__heading {

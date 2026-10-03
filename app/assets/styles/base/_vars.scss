@@ -146,9 +146,10 @@ $color-bg-soft-light: palette("bg-auth");
 // («для лучшего контраста с фоном»; окна и выпадающие — своими тенями)
 $shadow-content-block: 0 2px 8px rgb(15 23 42 / 5%);
 
+// Рамка — внутренней тенью («Inside» в Figma): не занимает места, ширина содержимого и таблиц
+// та же, что без рамки (настоящая border съедала 2px и давала таблицам прокрутку вбок)
 @mixin content-block-frame {
-    border: 1px solid palette("block-border");
-    box-shadow: $shadow-content-block;
+    box-shadow: inset 0 0 0 1px palette("block-border"), $shadow-content-block;
 }
 $color-track: palette("track");
 $color-green: palette("green");
