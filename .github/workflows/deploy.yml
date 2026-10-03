@@ -2,7 +2,8 @@ name: Build Pages + Release (Bitrix-ready)
 
 on:
   push:
-    branches: [ main ]
+    # proto/fixed-scale — прототип «без масштаба, как сайт» для сравнения: демо /ag/proto/
+    branches: [ main, proto/fixed-scale ]
     tags:     [ 'v*' ]
   workflow_dispatch:
 
@@ -15,7 +16,9 @@ jobs:
   build-gh:
     runs-on: ubuntu-latest
     steps:
+      # Демо всегда из main (и при пуше в ветку прототипа)
       - uses: actions/checkout@v4
+        with: { ref: main }
       - uses: actions/setup-node@v4
         with: { node-version: '22', cache: 'npm' }
       - run: npm i
@@ -29,6 +32,24 @@ jobs:
         run: |
           npm run prebuild || echo "no prebuild"
           npm run build
+      # Прототип для сравнения (ветка proto/fixed-scale) — рядом, в /ag/proto/; нет ветки — пропуск
+      - name: Build prototype into /ag/proto/
+        env:
+          MODE: gh
+          BASE: /ag/proto/
+          SITE_URL: https://acrysense.github.io
+          CANONICAL_BASE: https://acrysense.github.io/ag/proto/
+          CANONICAL_OFF: "1"
+        run: |
+          if git ls-remote --exit-code --heads origin proto/fixed-scale; then
+            git fetch --depth 1 origin proto/fixed-scale
+            git worktree add ../proto FETCH_HEAD
+            cd ../proto
+            npm i
+            npm run prebuild || echo "no prebuild"
+            npm run build
+            cp -R dist "$GITHUB_WORKSPACE/dist/proto"
+          fi
       - uses: actions/upload-pages-artifact@v3
         with: { path: ./dist }
 
@@ -40,6 +61,7 @@ jobs:
       - uses: actions/deploy-pages@v4
 
   build-cms:
+    if: github.ref != 'refs/heads/proto/fixed-scale'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
