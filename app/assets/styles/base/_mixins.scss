@@ -93,7 +93,15 @@ $alias-bp: (
 	@return list.nth($order, $i + 1);
 }
 
+// Прототип «как на сайте» (ветка proto/fixed-scale): на десктопе (макеты 1440 и 1920) размеры
+// не масштабируются — значение макета как есть; сужаются поля и колонки (см. _layout.scss).
+// Телефон и планшет — по-прежнему пропорционально
+$fixed-desktop: true !default;
+
 @function vw-clamp($valueAt, $baseWidth, $from, $to: null) {
+	@if $fixed-desktop and $baseWidth >= 1440 {
+		@return #{$valueAt}px;
+	}
 	$k: math.div($valueAt, $baseWidth) * 100vw;
 
 	$a: $valueAt * math.div($from, $baseWidth);

@@ -857,4 +857,23 @@
             }
         }
     }
+
+    // Прототип «как на сайте»: поиск в шапке до 500, на узких экранах сужается (отступ 60 → 20),
+    // название и профиль не выталкиваются за край
+    @include up(desktop) {
+        body[data-header-search] .filter-search {
+            flex: 0 1 500px;
+            width: auto;
+            min-width: 200px;
+            margin-left: clamp(20px, 3.125vw, 60px);
+        }
+    }
+    // Окно фильтров (680) на узком десктопе раскрывается влево от правого края поля — иначе
+    // выходит за экран
+    @include only(desktop) {
+        body[data-header-search] .filter-search__dropdown {
+            right: 0;
+            left: auto;
+        }
+    }
 }
