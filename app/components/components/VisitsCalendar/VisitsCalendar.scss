@@ -336,7 +336,7 @@
 			justify-content: flex-start; // time hugs the left edge
 			@include prop-vw(min-height, 60, xl);
 			@include prop-vw(padding-left, 10, xl);
-			background: $color-bg-light;
+			background: $color-bg-soft-light;
 			@include only(mobile) {
 				// pin the time column to the left while the grid scrolls sideways
 				position: sticky;
@@ -662,7 +662,7 @@
 		display: flex;
 		flex-direction: column;
 		@include prop-vw(gap, 15, xl);
-		background: $color-bg-light;
+		background: $color-bg-soft-light;
 		@include prop-vw(border-radius, 20, xl);
 		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
 		animation: vcal-pop-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;

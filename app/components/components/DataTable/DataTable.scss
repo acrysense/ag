@@ -282,7 +282,7 @@
         @include up(tablet) {
             @media screen and (hover: hover) {
                 &__row:hover .data-table__td {
-                    background: $color-bg-light;
+                    background: $color-bg-soft-light;
                 }
             }
         }

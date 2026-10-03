@@ -14,50 +14,101 @@
             @include border-side(top, 1, solid, $color-border, sm);
         }
 
-        // Как нижняя строка подвала сайта (PC.FOOTER v2): поля 20, на мобильном 24
+        // Figma: PC.FOOTER v2 — компакт (Light), 4934:2564 — поля 20, в строку: копирайт M/400 14/22
+        // Dark-grey.TXT слева, справа ссылки S/400 12 Dark-grey.TXT через «•» Grey (промежуток 14).
+        // Мобильный (наше, как подвал сайта 360): столбиком, ссылки друг под другом
         &__wrapper {
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             justify-content: space-between;
+            @include prop-vw(gap, 20, xl);
             @include prop-vw(padding-block, 20, xl);
 
             @include only(desktop) {
+                @include prop-vw(gap, 20, lg);
                 @include prop-vw(padding-block, 20, lg);
             }
             @include only(mobile) {
                 flex-direction: column;
+                align-items: flex-start;
+                @include prop-vw(gap, 15, sm);
                 @include prop-vw(padding-block, 24, sm);
             }
         }
         &__copyright {
-            display: block;
-            width: fit-content;
+            flex: none;
             @include prop-vw(font-size, 14, xl);
             font-weight: normal;
-            // Как копирайт сайта: M/400 14/22, Dark-grey.TXT; ссылка при наведении — Black.TXT
             line-height: math.div(22, 14);
             color: $color-dark-grey;
-            a {
-                display: inline;
-                transition: color $transition-default;
-
-                @media screen and (hover: hover) {
-                    &:hover {
-                        color: palette("black-txt");
-                    }
-                }
-            }
 
             @include only(desktop) {
                 @include prop-vw(font-size, 14, lg);
             }
             @include only(mobile) {
+                flex: initial;
                 @include prop-vw(font-size, 14, sm);
             }
         }
-        &__copyright + &__copyright {
+        &__links {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-end;
+            @include prop-vw(column-gap, 14, xl);
+            margin: 0;
+            padding: 0;
+            list-style: none;
+
+            > li {
+                display: flex;
+                align-items: center;
+                @include prop-vw(gap, 14, xl);
+            }
+            // «•» между ссылками — Grey
+            > li + li::before {
+                content: "•";
+                color: $color-light-grey;
+            }
+
+            @include only(desktop) {
+                @include prop-vw(column-gap, 14, lg);
+
+                > li {
+                    @include prop-vw(gap, 14, lg);
+                }
+            }
             @include only(mobile) {
-                @include prop-vw(margin-top, 15, sm);
+                flex-direction: column;
+                align-items: flex-start;
+                @include prop-vw(gap, 6, sm);
+
+                > li + li::before {
+                    content: none;
+                }
+            }
+        }
+        &__link {
+            @include prop-vw(font-size, 12, xl);
+            font-weight: normal;
+            line-height: normal;
+            color: $color-dark-grey;
+            transition: color $transition-default;
+
+            @media screen and (hover: hover) {
+                &:hover {
+                    color: palette("black-txt");
+                }
+            }
+            &:focus-visible {
+                color: palette("black-txt");
+            }
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 12, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 12, sm);
             }
         }
     }

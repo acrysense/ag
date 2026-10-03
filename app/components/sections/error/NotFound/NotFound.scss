@@ -44,7 +44,7 @@
                 @include prop-vw(max-width, 500, xl);
                 background: $color-white;
                 @include prop-vw(border-radius, 20, xl);
-                box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
+                @include content-block-frame;
             }
         }
         &__title {

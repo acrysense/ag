@@ -135,8 +135,20 @@ $color-red: palette("red");
 $color-red-light: palette("bg-purple");
 $color-border: palette("form-border");
 $color-bg: palette("bg-info");
-// Фон страниц кабинета; на сайте это значение — фон страницы входа (bg-auth)
-$color-bg-light: palette("bg-auth");
+// Фон страниц кабинета — как у сайта, BG.Main (решили 2026-10-03; раньше светлее, #F5F8FA).
+// Имя прежнее — им же закрашены серые полоски между белыми блоками на мобильном
+$color-bg-light: palette("bg-main");
+// Светлые заливки внутри блоков (поле поиска, строка таблицы, календарь) — прежний светлый тон
+$color-bg-soft-light: palette("bg-auth");
+
+// Белый контентный блок — как на сайте: рамка Block.Border 1px и тень 0 2 8 #0F172A 5%
+// («для лучшего контраста с фоном»; окна и выпадающие — своими тенями)
+$shadow-content-block: 0 2px 8px rgb(15 23 42 / 5%);
+
+@mixin content-block-frame {
+    border: 1px solid palette("block-border");
+    box-shadow: $shadow-content-block;
+}
 $color-track: palette("track");
 $color-green: palette("green");
 $color-green-light: palette("green-light");

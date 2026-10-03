@@ -195,7 +195,7 @@
             @include prop-vw(padding-right, 44, xl);
             @include prop-vw(font-size, 15, xl);
             color: $color-black;
-            background: $color-bg-light;
+            background: $color-bg-soft-light;
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 14, xl);
             transition: border-color $transition-default;
@@ -223,7 +223,7 @@
                 @include prop-vw(padding-right, 38, sm);
                 @include prop-vw(font-size, 12, sm);
                 line-height: 1.25;
-                background: $color-bg-light;
+                background: $color-bg-soft-light;
                 border: none;
                 @include prop-vw(border-radius, 7, sm);
             }
