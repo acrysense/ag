@@ -16,6 +16,10 @@ nvm use
 npm ci
 ```
 
+Bundler: Vite 8 (Rolldown; JS is minified by Oxc, CSS by Lightning CSS). Browsers: Chrome and Edge
+107+, Firefox 104+, Safari and iOS 16+ (`BUILD_TARGET` in `vite.config.ts`). The `browserslist` in
+`package.json` is used by Autoprefixer; the final CSS keeps only the prefixes these browsers need.
+
 ## Development
 
 ```sh
