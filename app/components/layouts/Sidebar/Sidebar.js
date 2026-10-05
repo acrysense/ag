@@ -31,12 +31,13 @@ export default (root) => {
 	}
 	initBadge()
 
-	// --- AG-9: перекрашиваем <img>-иконки меню через CSS-маску, чтобы активный пункт
-	// становился синим. Прод выводит иконки как <img src=iblock.svg> (без спрайта) —
+	// --- AG-9: перекрашиваем <img>-иконку активного пункта через CSS-маску, чтобы она
+	// становилась синей. Прод выводит иконки как <img src=iblock.svg> (без спрайта) —
 	// currentColor до них не доходит. Ставим --sidebar-icon из src и флажок-класс;
-	// SCSS красит маску в currentColor. На нашей сборке no-op (иконки — инлайновый svg).
+	// SCSS красит маску в currentColor. Только у активного: остальные <img> — как есть,
+	// логотипы брендов («Присоединяйтесь») остаются в своих цветах, как в макете.
 	const initImgIcons = () => {
-		root.querySelectorAll('.sidebar__link').forEach((link) => {
+		root.querySelectorAll('.sidebar__link.is--active').forEach((link) => {
 			const img = link.querySelector(':scope > img')
 			const src = img?.getAttribute('src')
 			if (!src) return
