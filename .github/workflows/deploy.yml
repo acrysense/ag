@@ -2,8 +2,7 @@ name: Build Pages + Release (Bitrix-ready)
 
 on:
   push:
-    # Прототип (ветка proto/fixed-scale) собирается вместе с main в /ag/proto/. Выкладывать
-    # демо можно только из main — после пуша в прототип перезапустить: gh workflow run deploy.yml
+    # Демо выкладывается только из main (окружение Pages разрешено только для main)
     branches: [ main ]
     tags:     [ 'v*' ]
   workflow_dispatch:
@@ -17,7 +16,7 @@ jobs:
   build-gh:
     runs-on: ubuntu-latest
     steps:
-      # Демо всегда из main (и при пуше в ветку прототипа)
+      # Демо всегда из main
       - uses: actions/checkout@v4
         with: { ref: main }
       - uses: actions/setup-node@v4
@@ -33,24 +32,6 @@ jobs:
         run: |
           npm run prebuild || echo "no prebuild"
           npm run build
-      # Прототип для сравнения (ветка proto/fixed-scale) — рядом, в /ag/proto/; нет ветки — пропуск
-      - name: Build prototype into /ag/proto/
-        env:
-          MODE: gh
-          BASE: /ag/proto/
-          SITE_URL: https://acrysense.github.io
-          CANONICAL_BASE: https://acrysense.github.io/ag/proto/
-          CANONICAL_OFF: "1"
-        run: |
-          if git ls-remote --exit-code --heads origin proto/fixed-scale; then
-            git fetch --depth 1 origin proto/fixed-scale
-            git worktree add ../proto FETCH_HEAD
-            cd ../proto
-            npm i
-            npm run prebuild || echo "no prebuild"
-            npm run build
-            cp -R dist "$GITHUB_WORKSPACE/dist/proto"
-          fi
       - uses: actions/upload-pages-artifact@v3
         with: { path: ./dist }
 
