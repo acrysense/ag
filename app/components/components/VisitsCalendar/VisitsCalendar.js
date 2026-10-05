@@ -394,12 +394,26 @@ export default async function VisitsCalendar(root) {
 	let popup = null
 	let backdrop = null
 	let popupEv = null // the event the open popup belongs to (for delete)
-	const closePopup = () => {
-		popup?.remove()
-		backdrop?.remove()
+	// Закрытие — карточка и фон гаснут (как на сайте, быстрее появления) и удаляются;
+	// animate: false — сразу (переключение на другой визит, выгрузка компонента)
+	const closingTimers = new Set()
+	const closePopup = (animate = true) => {
+		const els = [popup, backdrop].filter(Boolean)
 		popup = null
 		backdrop = null
 		popupEv = null
+		els.forEach((el) => {
+			if (!animate) return el.remove()
+			el.classList.add('is-closing')
+			const done = () => {
+				clearTimeout(timer)
+				closingTimers.delete(timer)
+				el.remove()
+			}
+			const timer = setTimeout(done, 400) // запасной путь, если animationend не придёт
+			closingTimers.add(timer)
+			el.addEventListener('animationend', done, { once: true })
+		})
 	}
 
 	// POST a visit mutation to the backend (same endpoint/convention as the modal).
@@ -428,7 +442,7 @@ export default async function VisitsCalendar(root) {
 	const ICON_TYPE = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-visit-type"></use></svg>'
 
 	function openPopup(trigger, ev) {
-		closePopup()
+		closePopup(false)
 		if (!ev) return
 		popupEv = ev
 		const planned = ev.status !== 'confirmed'
@@ -678,7 +692,12 @@ export default async function VisitsCalendar(root) {
 	disposers.push(() => root.removeEventListener('pointercancel', onPointerCancel))
 	disposers.push(() => document.removeEventListener('keydown', onKeydown))
 	disposers.push(endDrag)
-	disposers.push(closePopup)
+	disposers.push(() => {
+		closePopup(false)
+		closingTimers.forEach(clearTimeout)
+		closingTimers.clear()
+		document.querySelectorAll('.vcal-pop.is-closing, .vcal-pop-backdrop.is-closing').forEach((el) => el.remove())
+	})
 
 	// The create/edit modal dispatches `visit:saved`; update our store in place and
 	// cancel the modal's fallback page-reload. If we can't apply the change (missing

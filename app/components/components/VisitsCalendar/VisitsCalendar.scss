@@ -660,8 +660,7 @@
 	}
 
 	// Появление карточки визита — как на сайте: на десктопе как выпадающее меню (сдвиг 4px,
-	// 0.2 с), на телефоне (на весь экран, как окно «Создать визит») и фон — проявление за 0.3 с.
-	// Карточку создаёт и убирает скрипт — закрытие сразу
+	// 0.2 с), на телефоне (на весь экран, как окно «Создать визит») и фон — проявление за 0.3 с
 	@keyframes vcal-pop-in {
 		from { opacity: 0; transform: translateY(-4px); }
 		to { opacity: 1; transform: none; }
@@ -669,6 +668,28 @@
 	@keyframes vcal-pop-fade-in {
 		from { opacity: 0; }
 		to { opacity: 1; }
+	}
+	// закрытие — обратно и быстрее (× 0.67)
+	@keyframes vcal-pop-out {
+		to { opacity: 0; transform: translateY(-4px); }
+	}
+	@keyframes vcal-pop-fade-out {
+		to { opacity: 0; }
+	}
+	.vcal-pop.is-closing,
+	.vcal-pop-backdrop.is-closing {
+		pointer-events: none;
+	}
+	.vcal-pop.is-closing {
+		animation: vcal-pop-out $duration-popup * 0.67 $ease-out both;
+
+		@include only(mobile) {
+			animation-name: vcal-pop-fade-out;
+			animation-duration: $duration-overlay * 0.67;
+		}
+	}
+	.vcal-pop-backdrop.is-closing {
+		animation: vcal-pop-fade-out $duration-overlay * 0.67 $ease-out both;
 	}
 	@media (prefers-reduced-motion: reduce) {
 		.vcal-pop, .vcal-pop-backdrop { animation: none; }
