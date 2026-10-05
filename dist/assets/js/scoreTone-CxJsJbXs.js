@@ -1,1 +1,0 @@
-function c(o){const t=String(o??"").trim();if(!t)return"";const n=/(-?\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)/.exec(t);let e;if(n){const r=parseFloat(n[1].replace(",",".")),s=parseFloat(n[2].replace(",","."));if(!s)return"";e=r/s*100}else{const r=parseFloat(t.replace(",","."));if(Number.isNaN(r))return"";e=r}return e>=95?"green":e>=80?"yellow":"red"}export{c as s};

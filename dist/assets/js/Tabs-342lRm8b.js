@@ -1,0 +1,1 @@
+import{t as e}from"./tabs-BFzzcOtp.js";var t=t=>e(t);export{t as default};

@@ -78,21 +78,7 @@
 					animation-duration: 1.6s;
 				}
 			}
-
-			/* Critical header layout: without this the header renders as plain blocks before
-		       app.css applies, so the search field stretches full-width and then snaps to its
-		       real size (a visible jump on load, esp. under the CMS where app.css isn't always
-		       render-blocking). These mirror Header.scss / HeaderSearch.scss — keep in sync if
-		       the search width changes.
-		
-		       CRUCIAL: app.css puts all its rules in @layer (reset…utilities). Unlayered CSS
-		       beats ANY layered rule regardless of specificity, so if these lived unlayered
-		       they'd override app.css's "open" states (e.g. .filter-search.is-open
-		       .filter-search__dropdown{visibility:visible}) and the search filter / profile
-		       menu could never open. We declare our own `critical` layer BEFORE all of
-		       app.css's layers, so app.css always wins once loaded, while these still apply
-		       during the FOUC window before app.css exists. */
-			@layer critical, reset, vendor, base, layout, components, utilities;
+			@layer critical,reset,vendor,base,layout,components,utilities;
 			@layer critical {
 				.header__wrapper {
 					display: -webkit-box;
@@ -159,17 +145,6 @@
 						flex-wrap: wrap;
 					}
 				}
-				/* The header search's filter panel is absolutely positioned by app.css/JS. Until
-		           the bundle runs — slow on 3G — it sits IN FLOW, expanded to full height, which
-		           stretches the flex header row (align-items:stretch) so logo/search/user all blow
-		           up and the search wraps to a new line, then snaps back. Pre-collapse it out of
-		           flow (mirrors HeaderSearch.scss). Same story for the ProfileDropdown menu.
-		
-		           The out-of-flow positioning is unconditional (app.css overrides it once loaded,
-		           e.g. position:fixed for the mobile full-screen panel — the `critical` layer lets
-		           it win). But the HIDE (visibility/opacity) is scoped to :not(.is-open) so the
-		           moment the app toggles `.is-open` these rules stop matching and the panel opens —
-		           it can never get stuck hidden, even in a browser that ignores @layer. */
 				.filter-search__dropdown {
 					position: absolute;
 					top: -moz-calc(100% + 10px);
@@ -211,9 +186,7 @@
 				@media (max-width: 743.98px) {
 					.profile-dropdown__panel {
 						position: fixed;
-						inset: 0;
-						top: 0;
-						right: auto;
+						inset: 0 auto 0 0;
 					}
 				}
 			}
@@ -255,8 +228,8 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="AG" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-CkYgFgOk.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-BxwWfh2m.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-D21RF-Vh.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-AB6r3bhy.css" />
 	</head>
 	<body class="bg-light pharmacy-page">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>

@@ -1,0 +1,1 @@
+function e(e){let t=String(e??``).trim();if(!t)return``;let n=/(-?\d+(?:[.,]\d+)?)\s*\/\s*(\d+(?:[.,]\d+)?)/.exec(t),r;if(n){let e=parseFloat(n[1].replace(`,`,`.`)),t=parseFloat(n[2].replace(`,`,`.`));if(!t)return``;r=e/t*100}else{let e=parseFloat(t.replace(`,`,`.`));if(Number.isNaN(e))return``;r=e}return r>=95?`green`:r>=80?`yellow`:`red`}export{e as t};
