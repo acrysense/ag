@@ -2,7 +2,8 @@
 @use '@/assets/styles/base/vars' as *;
 
 // smooth, slightly characterful easing for the desktop collapse/expand
-$collapse-dur: 0.3s;
+// длительность — как у окон (токен $duration-overlay); кривая ease-in-out — для смены размера
+$collapse-dur: $duration-overlay;
 $collapse-ease: cubic-bezier(0.65, 0, 0.35, 1);
 $collapse: $collapse-dur $collapse-ease;
 
@@ -59,17 +60,15 @@ $collapse: $collapse-dur $collapse-ease;
             background: rgba(245, 248, 250, 0.6);
             backdrop-filter: blur(2.5px);
             border: none;
-            opacity: 0;
-            visibility: hidden;
             pointer-events: none;
-            transition: all 0.25s ease;
+            // Затемнение — как у окон сайта (0.3 с), закрытие быстрее
+            @include reveal-on('&.is-open', none, $duration-overlay);
             &.is-open {
-                opacity: 1;
-                visibility: visible;
                 pointer-events: auto;
                 .sidebar {
                     &__wrap {
                         transform: translate(0, 0);
+                        transition-duration: $duration-overlay;
                     }
                 }
             }
@@ -86,7 +85,7 @@ $collapse: $collapse-dur $collapse-ease;
                 @include prop-vw(max-width, 320, sm);
                 width: 100%;
                 background: $color-white;
-                transition: transform $transition-vs;
+                transition: transform $duration-overlay * 0.67 $ease-out;
             }
         }
         &__section {
@@ -410,7 +409,7 @@ $collapse: $collapse-dur $collapse-ease;
         // fade: quick on collapse, delayed on expand so nothing flickers while
         // the rail is still narrow. Heights collapse from a snug value → 0.
         @include up(desktop) {
-            transition: max-width $collapse, padding $collapse;
+            transition: width $collapse, padding $collapse;
 
             &__wrap {
                 transition: padding-top $collapse;
@@ -530,6 +529,14 @@ $collapse: $collapse-dur $collapse-ease;
             width: clamp(262px, 18.23vw, 350px);
             max-width: none;
             padding-inline: clamp(20px, 1.5625vw, 30px);
+
+            // свёрнутое меню — 90, иконка по центру; анимируется width (между clamp() и px браузер
+            // интерполирует, а max-width: none — нет: меню сворачивалось рывком)
+            &.is-collapsed {
+                width: 90px;
+                max-width: none;
+                padding-inline: 34px;
+            }
         }
     }
 }
