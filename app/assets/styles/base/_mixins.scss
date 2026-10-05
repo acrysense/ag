@@ -286,3 +286,213 @@ $fixed-desktop: true !default;
 		}
 	}
 }
+
+// Окна — как на ag-site (components/Modal): от 1024 карточка по центру (поля 32, заголовок
+// PC/HEADER/H3 22/24, крестик 20 без фона), ниже — шторка снизу (поля 16 и 20, заголовок
+// 360/HEADER/H4 18, крестик — круг 36 на BG.Main). Появление тоже как на сайте: шторка выезжает
+// снизу целиком, карточка проявляется с лёгким приближением, фон светлеет; закрытие обратно и
+// быстрее. Разметка окон ЛК прежняя: обёртка, подложка, окно. $closed — селектор закрытой обёртки
+
+// Обёртка на весь экран прокручивается целиком: выпадающие списки окна не обрезаются, высокое
+// окно докручивается. Закрытая ([hidden]) исчезает после анимации
+@mixin modal-wrap {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	align-items: flex-start;
+	padding: 40px 20px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	transition: display vars.$duration-popup allow-discrete;
+
+	&[hidden] {
+		display: none;
+	}
+
+	@include only(mobile) {
+		padding: 40px 0 0;
+	}
+}
+
+@mixin modal-overlay($closed) {
+	position: fixed;
+	inset: 0;
+	background: vars.$overlay-background;
+	backdrop-filter: blur(vars.$overlay-blur);
+	transition: opacity vars.$duration-overlay vars.$ease-out;
+
+	@starting-style {
+		opacity: 0;
+	}
+
+	#{$closed} & {
+		opacity: 0;
+		transition-duration: vars.$duration-popup;
+	}
+}
+
+@mixin modal-panel($closed, $max-width: 560px) {
+	--modal-shift: scale(0.96);
+	--modal-opacity: 0;
+
+	position: relative;
+	z-index: 1;
+	width: 100%;
+	margin: auto;
+	background: vars.$color-white;
+	transition:
+		opacity vars.$duration-overlay vars.$ease-out,
+		transform vars.$duration-overlay vars.$ease-out;
+
+	@starting-style {
+		opacity: var(--modal-opacity);
+		transform: var(--modal-shift);
+	}
+
+	#{$closed} & {
+		opacity: var(--modal-opacity);
+		transform: var(--modal-shift);
+		transition-duration: vars.$duration-popup;
+	}
+
+	@include up(desktop) {
+		max-width: $max-width;
+		padding: 32px;
+		border-radius: 20px;
+		box-shadow: vars.$shadow-content-block;
+	}
+
+	@include only(mobile) {
+		--modal-shift: translateY(100%);
+		--modal-opacity: 1;
+
+		max-width: none;
+		margin: auto 0 0;
+		@include prop-vw(padding-top, 16, sm);
+		@include prop-vw(padding-inline, 20, sm);
+		padding-bottom: calc(#{vw-range(16, sm)} + env(safe-area-inset-bottom));
+		border-radius: 20px 20px 0 0;
+		box-shadow: vars.$shadow-sheet;
+	}
+}
+
+// Шапка окна: заголовок и крестик
+@mixin modal-head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+
+	@include up(desktop) {
+		gap: 10px;
+		margin-bottom: 20px;
+	}
+
+	@include only(mobile) {
+		@include prop-vw(gap, 8, sm);
+		@include prop-vw(margin-bottom, 12, sm);
+	}
+}
+
+@mixin modal-title {
+	min-width: 0;
+	margin: 0;
+	font-family: vars.$font-secondary;
+	font-weight: 700;
+	color: vars.$color-black;
+	text-align: left;
+
+	@include up(desktop) {
+		font-size: 22px;
+		line-height: 24px;
+		letter-spacing: 0.22px;
+	}
+
+	@include only(mobile) {
+		@include prop-vw(font-size, 18, sm);
+		line-height: normal;
+		letter-spacing: normal;
+	}
+}
+
+// Крестик: на десктопе 20 без фона (поле нажатия 36), на шторке — круг 36 на BG.Main с крестиком
+// 10 у правого края (как на сайте — на 10 ближе к краю, чем заголовок). Наведение — Main Blue
+@mixin modal-close {
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	color: vars.$color-black;
+	cursor: pointer;
+	border: 0;
+	transition: color vars.$transition-default;
+
+	> svg {
+		display: block;
+	}
+
+	&:hover,
+	&:focus-visible {
+		color: vars.$color-blue;
+	}
+
+	@include up(desktop) {
+		box-sizing: content-box;
+		width: 20px;
+		min-width: 0;
+		height: 20px;
+		margin: -8px;
+		padding: 8px;
+		background: none;
+		border-radius: 0;
+
+		> svg {
+			width: 20px;
+			min-width: 0;
+			height: 20px;
+		}
+	}
+
+	@include only(mobile) {
+		@include prop-vw(width, 36, sm);
+		min-width: 0;
+		@include prop-vw(height, 36, sm);
+		@include prop-vw(margin-right, -10, sm);
+		background: vars.$color-bg-light;
+		border-radius: 50%;
+
+		> svg {
+			@include prop-vw(width, 10, sm);
+			min-width: 0;
+			@include prop-vw(height, 10, sm);
+		}
+	}
+}
+
+// Кнопки окна: на десктопе в ряд поровну, на шторке — друг под другом во всю ширину
+@mixin modal-actions {
+	display: flex;
+
+	> .btn {
+		justify-content: center;
+	}
+
+	@include up(desktop) {
+		flex-direction: row;
+		gap: 12px;
+
+		> .btn {
+			flex: 1 1 0;
+		}
+	}
+
+	@include only(mobile) {
+		flex-direction: column;
+		@include prop-vw(gap, 8, sm);
+
+		> .btn {
+			width: 100%;
+		}
+	}
+}

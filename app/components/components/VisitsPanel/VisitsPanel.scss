@@ -690,189 +690,48 @@
     // телефоне (окно на весь экран) — только проявление; закрытие — обратно и быстрее. Окно
     // скрывается [hidden]: display держится до конца затухания (allow-discrete), появление —
     // с @starting-style; где браузер не умеет — сразу. «Уменьшить движение» — без анимаций (reset)
+    // Окно «Визит» — как окна ag-site («Предложить тему»): карточка 560, на телефоне и планшете —
+    // шторка снизу; обёртка прокручивается целиком, чтобы календарь и списки полей не обрезались
     .visit-modal {
-        transition: display $duration-overlay * 0.67 allow-discrete;
-
-        position: fixed;
-        inset: 0;
+        @include modal-wrap;
         z-index: 200;
-        // Scroll the whole modal (not the dialog) so the browser scrollbar sits
-        // at the screen edge and the calendar popover is never clipped.
-        overflow-y: auto;
-        overflow-x: hidden;
-        // Centre the dialog via margin:auto (below), NOT align/justify-center —
-        // those clip the top when the dialog is taller than the viewport.
-        // flex-start (not the default stretch) lets the dialog grow with its
-        // content on mobile so its white background covers the whole sheet.
-        display: flex;
-        align-items: flex-start;
-        @include prop-vw(padding-block, 40, xl);
-        @include prop-vw(padding-inline, 20, xl);
-        &[hidden] {
-            display: none;
-        }
-
-        @include only(desktop) {
-            @include prop-vw(padding-block, 40, lg);
-            @include prop-vw(padding-inline, 20, lg);
-        }
-        @include only(mobile) {
-            padding: 0;
-        }
 
         &__overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(245, 248, 250, 0.6);
-            backdrop-filter: blur(2.5px);
-            transition: opacity $duration-overlay $ease-out;
-
-            @starting-style {
-                opacity: 0;
-            }
-            .visit-modal[hidden] & {
-                opacity: 0;
-                transition-duration: $duration-overlay * 0.67;
-            }
-            // Mobile: the dialog is full-screen white, so the blurred backdrop is
-            // never visible — but blurring the huge page still costs the GPU seconds
-            // on open/close. Drop the blur (and the invisible overlay) on mobile.
-            @include only(mobile) {
-                background: transparent;
-                backdrop-filter: none;
-                -webkit-backdrop-filter: none;
-            }
+            @include modal-overlay('.visit-modal[hidden]');
         }
         &__dialog {
-            position: relative;
-            z-index: 1;
-            // auto margins centre the dialog when it fits and pin it to the top
-            // (reachable) when it's taller than the viewport
-            margin: auto;
-            @include prop-vw(max-width, 320, xl);
-            width: 100%;
-            @include prop-vw(padding, 20, xl);
-            background: $color-white;
-            @include prop-vw(border-radius, 20, xl);
-            box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
-            --visit-modal-shift: scale(0.96);
-            transition:
-                opacity $duration-overlay $ease-out,
-                transform $duration-overlay $ease-out;
+            @include modal-panel('.visit-modal[hidden]', 560px);
 
-            @starting-style {
-                opacity: 0;
-                transform: var(--visit-modal-shift);
-            }
-            .visit-modal[hidden] & {
-                opacity: 0;
-                transform: var(--visit-modal-shift);
-                transition-duration: $duration-overlay * 0.67;
-            }
             @include only(mobile) {
-                --visit-modal-shift: none;
-            }
-
-            @include only(desktop) {
-                @include prop-vw(max-width, 320, lg);
-                @include prop-vw(padding, 20, lg);
-                @include prop-vw(border-radius, 20, lg);
-            }
-            @include only(mobile) {
-                // full-height flex column so the form stretches and the action
-                // bar can be pinned to the very bottom of the screen
-                display: flex;
-                flex-direction: column;
-                max-width: none;
-                min-height: 100%;
-                margin: 0;
-                // no bottom padding — the sticky action bar carries its own
-                @include prop-vw(padding-top, 20, sm);
-                @include prop-vw(padding-inline, 10, sm);
+                // снизу поле даёт закреплённая полоса кнопок (.visit-form__actions)
                 padding-bottom: 0;
-                border-radius: 0;
             }
         }
         &__head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            @include prop-vw(gap, 16, xl);
-            @include prop-vw(margin-bottom, 20, xl);
-
-            @include only(desktop) {
-                @include prop-vw(gap, 16, lg);
-                @include prop-vw(margin-bottom, 20, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(gap, 16, sm);
-                @include prop-vw(margin-bottom, 20, sm);
-            }
+            @include modal-head;
         }
         &__title {
-            display: block;
-            width: fit-content;
-            font-family: $font-secondary;
-            @include prop-vw(font-size, 26, xl);
-            font-weight: bold;
-            line-height: 1.07692307692;
-            color: $color-black;
-
-            @include only(desktop) {
-                @include prop-vw(font-size, 26, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(font-size, 22, sm);
-                line-height: 1.09090909091;
-            }
+            @include modal-title;
         }
+        // Крестик в разметке нарисован мельче значка сайта — показываем значок close из той же
+        // папки иконок, что и спрайт (маска цвета currentColor)
         &__close {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            @include prop-vw(min-width, 36, xl);
-            @include prop-vw(width, 36, xl);
-            @include prop-vw(height, 36, xl);
-            background: $color-bg;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background $transition-default;
-            & > svg {
-                @include prop-vw(min-width, 16, xl);
-                @include prop-vw(width, 16, xl);
-                @include prop-vw(height, 16, xl);
-                color: $color-dark-grey;
-                transition: color $transition-default;
-            }
-            @media screen and (hover: hover) {
-                &:hover {
-                    background: $color-grey;
-                    & > svg {
-                        color: $color-black;
-                    }
-                }
-            }
+            @include modal-close;
 
-            @include only(desktop) {
-                @include prop-vw(min-width, 36, lg);
-                @include prop-vw(width, 36, lg);
-                @include prop-vw(height, 36, lg);
-                & > svg {
-                    @include prop-vw(min-width, 16, lg);
-                    @include prop-vw(width, 16, lg);
-                    @include prop-vw(height, 16, lg);
-                }
+            > svg {
+                display: none;
+            }
+            &::before {
+                content: '';
+                width: 100%;
+                height: 100%;
+                background: currentColor;
+                mask: url('@/assets/icons/close.svg') center / contain no-repeat;
             }
             @include only(mobile) {
-                @include prop-vw(min-width, 34, sm);
-                @include prop-vw(width, 34, sm);
-                @include prop-vw(height, 34, sm);
-                & > svg {
-                    @include prop-vw(min-width, 16, sm);
-                    @include prop-vw(width, 16, sm);
-                    @include prop-vw(height, 16, sm);
+                &::before {
+                    @include prop-vw(width, 10, sm);
+                    @include prop-vw(height, 10, sm);
                 }
             }
         }
@@ -918,32 +777,33 @@
                 @include prop-vw(gap, 20, sm);
             }
         }
+        // Кнопки — как в окнах сайта, поровну в ряд; на телефоне и планшете — полоса внизу шторки,
+        // закреплена при прокрутке. В ряд и там (не друг под другом, как в подтверждениях сайта):
+        // закреплённая полоса из двух кнопок столбиком заняла бы пятую часть экрана
         &__actions {
-            display: flex;
-            @include prop-vw(gap, 20, xl);
-            @include prop-vw(margin-top, 10, xl);
-            @include prop-vw(padding-top, 20, xl);
-            @include border-side(top, 1, solid, $color-border, xl);
+            @include modal-actions;
 
-            @include only(desktop) {
-                @include prop-vw(gap, 20, lg);
-                @include prop-vw(margin-top, 10, lg);
-                @include prop-vw(padding-top, 20, lg);
-                @include prop-vw(border-top-width, 1, lg);
+            @include up(desktop) {
+                margin-top: 10px;
             }
             @include only(mobile) {
-                // pinned full-width bar at the bottom of the screen
                 position: sticky;
                 bottom: 0;
                 z-index: 2;
-                margin-top: auto; // sink to the bottom when content is short
-                // span edge-to-edge by cancelling the dialog's side padding
-                @include prop-vw(margin-inline, -10, sm);
-                @include prop-vw(gap, 20, sm);
-                @include prop-vw(padding-block, 16, sm);
-                @include prop-vw(padding-inline, 10, sm);
+                margin-top: auto;
+                // во всю ширину шторки: снимаем её боковые поля
+                @include prop-vw(margin-inline, -20, sm);
+                @include prop-vw(padding-top, 16, sm);
+                @include prop-vw(padding-inline, 20, sm);
+                padding-bottom: calc(#{vw-range(16, sm)} + env(safe-area-inset-bottom));
                 background: $color-white;
                 @include border-side(top, 1, solid, $color-border, sm);
+                flex-direction: row;
+
+                > .btn {
+                    flex: 1 1 0;
+                    width: auto;
+                }
             }
         }
         // auto-growing comment field (the base .field rule sets line-height:1,
