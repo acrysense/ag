@@ -91,3 +91,7 @@
 {{#if head.ogImage}}
     <meta name="twitter:image" content="{{asset head.ogImage}}" />
 {{/if}}
+{{~!-- Демо и dev: кнопка «Страницы» — навигация по страницам вёрстки при показе, как на ag-site (в сборке для CMS её нет) --~}}
+{{#if @root.demo}}
+<meta name="dev-pages" content="{{asset '/dev-pages.json'}}" /><script type="module" src="/pages/dev/pages-nav.js"></script>
+{{/if}}

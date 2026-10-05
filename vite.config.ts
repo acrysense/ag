@@ -384,8 +384,15 @@ function outNameFromHtmlPath(absHtmlPath: string) {
 		.replace(/[\\/]/g, '-')
 }
 
-function getHtmlInputs() {
-	const files = fg.sync('pages/**/*.html', { cwd: APP_ROOT, dot: false })
+// Служебные страницы (dev/pages.html — «Страницы вёрстки») — только в dev и демо, как на ag-site
+const DEV_PAGES_GLOB = 'pages/dev/**'
+
+function getHtmlInputs(mode: string) {
+	const files = fg.sync('pages/**/*.html', {
+		cwd: APP_ROOT,
+		dot: false,
+		ignore: mode === 'cms' ? [DEV_PAGES_GLOB] : [],
+	})
 	const inputs: Record<string, string> = {}
 	for (const file of files) {
 		const name = file
@@ -541,6 +548,59 @@ function svgSpritePlugin() {
 	}
 }
 
+// Список страниц вёрстки для навигации при показе: страница «Страницы» (dev/pages.html) и кнопка
+// «Страницы» на страницах демо (pages/dev/pages-nav.js). Собирается из app/pages/*.html и поля nav
+// в <page>.page.json ({ group, title, order, note }); в dev отдаётся сервером, в демо-сборке лежит
+// файлом. В сборку для CMS не попадает (там нет ни списка, ни кнопки).
+const PAGES_INDEX_FILE = 'dev-pages.json'
+
+function buildPagesIndex(dev: boolean) {
+	const pages = fg
+		.sync('pages/*.html', { cwd: APP_ROOT })
+		.map((rel) => {
+			const name = path.basename(rel, '.html')
+			const cfg = loadJSON(resolve(APP_ROOT, 'pages', `${name}.page.json`)) || {}
+			const nav = cfg.nav || {}
+			return {
+				name,
+				url: withBase(`/${name}.html`),
+				title: nav.title || String(cfg.title || name).split(' — ')[0],
+				group: nav.group || 'Прочее',
+				order: Number.isFinite(nav.order) ? nav.order : 999,
+				note: nav.note || '',
+			}
+		})
+		.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title, 'ru'))
+	return JSON.stringify({
+		pagesUrl: withBase(dev ? '/dev/pages.html' : '/dev-pages.html'),
+		// Витрины компонентов в ЛК нет
+		showcaseUrl: null,
+		pages,
+	})
+}
+
+function pagesIndexPlugin(mode: string) {
+	if (mode === 'cms') return null
+	return {
+		name: 'local-pages-index',
+		configureServer(server) {
+			server.middlewares.use((req, res, next) => {
+				if (req.url?.split('?')[0] !== `/${PAGES_INDEX_FILE}`) return next()
+				res.setHeader('Content-Type', 'application/json; charset=utf-8')
+				res.setHeader('Cache-Control', 'no-cache')
+				res.end(buildPagesIndex(true))
+			})
+		},
+		generateBundle() {
+			this.emitFile({
+				type: 'asset',
+				fileName: PAGES_INDEX_FILE,
+				source: buildPagesIndex(false),
+			})
+		},
+	}
+}
+
 function flattenPagesToRoot() {
 	return {
 		name: 'flatten-pages-to-root',
@@ -551,7 +611,11 @@ function flattenPagesToRoot() {
 				if (asset?.type !== 'asset' || !fileName.endsWith('.html')) continue
 				if (!fileName.startsWith('pages/')) continue
 
-				const newName = fileName.split('/').pop()!
+				// То же правило, что в getHtmlInputs и dev-роутере: pages/dev/pages.html → dev-pages.html
+				const newName = fileName
+					.replace(/^pages\//, '')
+					.replace(/\([^)]*\)\//g, '')
+					.replace(/\//g, '-')
 				const source = String(asset.source ?? '')
 
 				this.emitFile({ type: 'asset', fileName: newName, source })
@@ -581,7 +645,7 @@ export default defineConfig(({ mode }) => {
 			// длинных списках набегали пиксели. Для этого esbuild — в devDependencies
 			cssMinify: 'esbuild',
 			rolldownOptions: {
-				input: getHtmlInputs(),
+				input: getHtmlInputs(mode),
 				// Без отчёта о долгих плагинах: дольше всех — format-html (Prettier по HTML), так задумано
 				checks: { bundlerTimings: false },
 				output: {
@@ -772,10 +836,14 @@ export default defineConfig(({ mode }) => {
 
 						page: { canonical },
 						head: { title, description, ogImage, twitterCard },
+						// Демо и dev (не --mode cms): кнопка «Страницы» (pages/dev/pages-nav.js) — в шаблон
+						// для Битрикса не попадает
+						demo: mode !== 'cms',
 					}
 				},
 			}),
 			svgSpritePlugin(),
+			pagesIndexPlugin(mode),
 			flattenPagesToRoot(),
 			formatHtml(prefixPageLinks, mode),
 			copyStaticAssets(),
