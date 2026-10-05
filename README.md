@@ -20,6 +20,11 @@ Bundler: Vite 8 (Rolldown; JS is minified by Oxc, CSS by Lightning CSS). Browser
 107+, Firefox 104+, Safari and iOS 16+ (`BUILD_TARGET` in `vite.config.ts`). The `browserslist` in
 `package.json` is used by Autoprefixer; the final CSS keeps only the prefixes these browsers need.
 
+Sizing: phone and tablet scale with the viewport (`prop-vw` / `vw-clamp`, mockups 360 and 1920); from
+1024 the desktop uses the mockup pixels as is, like ag-site — gutters and columns shrink first
+(`_layout.scss`), side columns move under the main one below 1280. The switch is `--desktop` (0 / 1)
+on `:root`, so every scaled value stays one plain CSS declaration.
+
 ## Development
 
 ```sh
