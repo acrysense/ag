@@ -394,6 +394,7 @@ export default async function VisitsCalendar(root) {
 	let popup = null
 	let backdrop = null
 	let popupEv = null // the event the open popup belongs to (for delete)
+	let popupTrigger = null // the tile that opened it — focus goes back there on Esc
 	// Закрытие — карточка и фон гаснут (как на сайте, быстрее появления) и удаляются;
 	// animate: false — сразу (переключение на другой визит, выгрузка компонента)
 	const closingTimers = new Set()
@@ -445,6 +446,7 @@ export default async function VisitsCalendar(root) {
 		closePopup(false)
 		if (!ev) return
 		popupEv = ev
+		popupTrigger = trigger
 		const planned = ev.status !== 'confirmed'
 		popup = document.createElement('div')
 		popup.className = 'vcal-pop'
@@ -595,8 +597,16 @@ export default async function VisitsCalendar(root) {
 		}
 	}
 	const onPointerCancel = () => endDrag()
+	// Esc: отменяет перетаскивание; иначе закрывает карточку визита и возвращает фокус на визит,
+	// с которого её открыли (как окна и меню на сайте)
 	const onKeydown = (e) => {
-		if (e.key === 'Escape' && drag) endDrag() // abort: no data mutated until drop
+		if (e.key !== 'Escape') return
+		if (drag) return endDrag() // abort: no data mutated until drop
+		if (popup) {
+			const trigger = popupTrigger
+			closePopup()
+			if (trigger?.isConnected) trigger.focus({ preventScroll: true })
+		}
 	}
 
 	// ---- one delegated handler --------------------------------------------
