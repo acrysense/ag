@@ -1,5 +1,8 @@
 import { lockBody } from '@/utils/scroll-lock'
 
+// Длительность закрытия окна — $duration-popup в _vars.scss
+const CLOSE_MS = 200
+
 export function openAvatarCropModal(file) {
 	return new Promise((resolve) => {
 		if (!file) return resolve(null)
@@ -64,9 +67,10 @@ export function openAvatarCropModal(file) {
 		}
 
 		function layoutImage() {
-			const r = viewport.getBoundingClientRect()
-			vpW = r.width
-			vpH = r.height
+			// Размер без transform: окно появляется с приближением (scale), getBoundingClientRect
+			// в этот момент вернул бы уменьшенный размер и картинка не дотянулась бы до краёв
+			vpW = viewport.clientWidth
+			vpH = viewport.clientHeight
 
 			scale = Math.max(vpW / iw, vpH / ih)
 			const dispW = iw * scale
@@ -223,7 +227,9 @@ export function openAvatarCropModal(file) {
 			cleaned = true
 			releaseScroll()
 			URL.revokeObjectURL(url)
-			root.remove()
+			// Закрывается с анимацией, как окна сайта (AvatarCropModal.scss), потом убирается из DOM
+			root.classList.add('is-closing')
+			setTimeout(() => root.remove(), CLOSE_MS)
 			window.removeEventListener('keydown', onKey)
 			window.removeEventListener('pointermove', onPointerMove)
 			window.removeEventListener('pointerup', onPointerUp)
