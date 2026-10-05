@@ -91,7 +91,7 @@
         &__panel {
             overflow: hidden;
             height: 0;
-            transition: height .25s ease;
+            transition: height $transition-default;
             @include prop-vw(padding-inline, 17, xl);
             &::before {
                 content: '';

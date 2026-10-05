@@ -160,12 +160,12 @@
 			// the width in both, while min 0 keeps the mobile inner-scroll working.
 			grid-template-columns: minmax(0, 1fr);
 			grid-template-rows: 1fr;
-			transition: grid-template-rows 0.3s ease;
+			transition: grid-template-rows $transition-default;
 		}
 		&__body-inner {
 			min-height: 0;
 			overflow: hidden;
-			transition: opacity 0.3s ease;
+			transition: opacity $transition-default;
 		}
 		&.is-collapsed {
 			.visit-sec__body {

@@ -308,7 +308,7 @@
             background: $color-white;
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 10, xl);
-            transition: all 0.25s ease-in-out;
+            transition: border-color $transition-default;
             &::placeholder {
                 opacity: 1;
                 color: #575F76;
@@ -366,7 +366,9 @@
             background: transparent;
             border: none;
             @include prop-vw(border-radius, 10, xl);
-            transition: all 0.25s ease-in-out;
+            transition:
+                color $transition-default,
+                background-color $transition-default;
             &:focus {
                 outline: none;
             }
@@ -510,7 +512,8 @@
         &__row-group {
             overflow: hidden;
             max-height: 0;
-            transition: all 0.4s ease;
+            // раскрытие по высоте — как на сайте (0.25 с, ease-in-out)
+            transition: max-height $transition-default;
             &.is--open {
                 max-height: var(--dropdown-height);
             }
@@ -545,7 +548,7 @@
             justify-content: center;
             flex: 1 1 auto;
             @include prop-vw(width, 110, xl);
-            transition: background 0.2s ease;
+            transition: background-color $transition-default;
             &--sm {
                 @include prop-vw(max-width, 80, xl);
                 @include prop-vw(width, 80, xl);
@@ -612,7 +615,7 @@
                 @include prop-vw(width, 20, xl);
                 @include prop-vw(height, 20, xl);
                 color: $color-blue;
-                transition: opacity 0.2s ease;
+                transition: opacity $transition-default;
                 &.minus {
                     opacity: 0;
                 }

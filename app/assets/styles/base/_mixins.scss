@@ -1,6 +1,7 @@
 @use 'sass:math';
 @use 'sass:map';
 @use 'sass:list';
+@use '@/assets/styles/base/vars';
 
 $fluid-cap: 2560 !default;
 $mq-epsilon: 0.02 !default;
@@ -220,4 +221,62 @@ $fixed-desktop: true !default;
 
 @mixin minvh-minus($px, $range: lg, $vh: min(100svh, 100dvh)) {
 	min-height: calc(#{$vh} - #{vw-range($px, $range)});
+}
+
+// Показ классом (панель всегда в разметке, скрыта прозрачностью) — один стандарт с ag-site
+// (appear-when): проявление со сдвигом и плавным замедлением, закрытие — обратно и быстрее
+// (× 0.67). Закрытая панель — visibility: hidden: на неё не попасть с клавиатуры. $open —
+// селектор открытого состояния относительно панели («.menu.is-open &», «&.is-open»)
+@mixin reveal-on($open, $shift: translateY(-4px), $duration: vars.$duration-popup) {
+	opacity: 0;
+	visibility: hidden;
+	transform: $shift;
+	transition:
+		opacity $duration * 0.67 vars.$ease-out,
+		transform $duration * 0.67 vars.$ease-out,
+		visibility 0s linear $duration * 0.67;
+
+	#{$open} {
+		opacity: 1;
+		visibility: visible;
+		transform: none;
+		transition:
+			opacity $duration vars.$ease-out,
+			transform $duration vars.$ease-out,
+			visibility 0s;
+	}
+}
+
+// То же для панели, скрытой display: none (как appear-when на ag-site): плавно — где браузер
+// умеет @starting-style, в остальных — сразу. $open — селектор открытого состояния
+// $fade: false — без проявления, только сдвиг (нижний лист выезжает целиком, как на сайте)
+@mixin appear-when(
+	$open,
+	$display: block,
+	$shift: translateY(-4px),
+	$duration: vars.$duration-popup,
+	$fade: true
+) {
+	$from-opacity: if($fade, 0, 1);
+
+	display: none;
+	opacity: $from-opacity;
+	transform: $shift;
+	transition:
+		opacity $duration * 0.67 vars.$ease-out,
+		transform $duration * 0.67 vars.$ease-out,
+		display $duration * 0.67 allow-discrete,
+		overlay $duration * 0.67 allow-discrete;
+
+	#{$open} {
+		display: $display;
+		opacity: 1;
+		transform: none;
+		transition-duration: $duration;
+
+		@starting-style {
+			opacity: $from-opacity;
+			transform: $shift;
+		}
+	}
 }

@@ -15,8 +15,6 @@
                         }
                     }
                     &__panel {
-                        opacity: 1;
-                        transform: translateY(0) scale(1);
                         pointer-events: auto;
                     }
                 }
@@ -26,12 +24,11 @@
             &.is-open {
                 .profile-dropdown {
                     &__panel {
-                        opacity: 1;
-                        visibility: visible;
                         pointer-events: auto;
                     }
                     &__wrap {
                         transform: translate(0, 0);
+                        transition-duration: $duration-overlay;
                     }
                 }
             }
@@ -160,10 +157,9 @@
                 background: $color-white;
                 @include prop-vw(border-radius, 10, xl);
                 box-shadow: 0 5px 20px rgb(0 0 0 / 15%);
-                opacity: 0;
-                transform: translateY(-6px) scale(.98);
-                transition: opacity $transition-fast, transform $transition-fast;
                 pointer-events: none;
+                // Как выпадающие меню сайта: проявление со сдвигом 4px за 0.2 с
+                @include reveal-on('.profile-dropdown.is-open &');
             }
             @include only(mobile) {
                 position: fixed;
@@ -179,10 +175,9 @@
                 // light blurred dimmer — same overlay as the page's modals/sheets
                 background: rgba(245, 248, 250, 0.6);
                 backdrop-filter: blur(2.5px);
-                opacity: 0;
-                visibility: hidden;
                 pointer-events: none;
-                transition: all 0.25s ease;
+                // Затемнение — как у окон сайта (0.3 с), закрытие быстрее
+                @include reveal-on('.profile-dropdown.is-open &', none, $duration-overlay);
             }
         }
         &__wrap {
@@ -196,7 +191,7 @@
                 @include prop-vw(max-width, 320, sm);
                 width: 100%;
                 background: $color-white;
-                transition: transform $transition-vs;
+                transition: transform $duration-overlay * 0.67 $ease-out;
             }
         }
         // Пункт: значок 20 и подпись через 15, наведение — Blue.TXT, как на сайте

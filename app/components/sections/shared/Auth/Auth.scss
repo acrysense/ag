@@ -325,7 +325,7 @@
                     background-repeat: no-repeat;
                     background-size: contain;
                     background-position: center center;
-                    animation: spin .8s linear infinite;
+                    animation: spin $duration-spin linear infinite;
                 }
             }
 

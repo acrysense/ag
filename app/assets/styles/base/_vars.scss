@@ -160,3 +160,17 @@ $color-yellow: palette("rating-yellow");
 $transition-default: 0.25s ease-in-out;
 $transition-vs: 0.467s cubic-bezier(0.16, 1, 0.3, 1);
 $transition-fast: 0.467s ease;
+
+// Движение — один стандарт с ag-site (там же _vars.scss): спокойно, без пружин, плавное
+// замедление. Закрытие — обратно и быстрее (× 0.67)
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+// Выпадающие списки, календарь, меню профиля, меню ⋯, тосты
+$duration-popup: 0.2s;
+// Окна, нижние листы, мобильное меню, поиск на весь экран
+$duration-overlay: 0.3s;
+// Блик скелетона: один проход по плашке
+$duration-skeleton: 1.3s;
+// Пункты, проявляющиеся по одному (догруженные новости)
+$duration-reveal-item: 0.35s;
+// Крутилка в кнопке («Показать ещё», вход)
+$duration-spin: 0.8s;

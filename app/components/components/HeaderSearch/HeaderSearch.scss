@@ -254,15 +254,8 @@
             top: calc(100% + 10px);
             left: 0;
             z-index: 60;
-            visibility: hidden;
-            opacity: 0;
-            transform: translateY(-6px);
-            transition: opacity $transition-default, transform $transition-default, visibility $transition-default;
-        }
-        &.is-open &__dropdown {
-            visibility: visible;
-            opacity: 1;
-            transform: translateY(0);
+            // Как выпадающие списки сайта: сдвиг 4px за 0.2 с, закрытие быстрее
+            @include reveal-on('.filter-search.is-open &');
         }
     }
 
@@ -422,9 +415,9 @@
                 @include prop-vw(padding, 8, lg);
                 @include prop-vw(border-radius, 12, lg);
             }
-        }
-        &.is-open &__panel {
-            display: flex;
+            @include up(tablet) {
+                @include appear-when('.filter-field.is-open &', flex);
+            }
         }
         &__search {
             display: block;
@@ -704,10 +697,28 @@
         // --- full-screen filter ---
         // raise the whole search above the header profile (z 1000) so its
         // full-screen dropdown isn't trapped under .filter-search's own z-index
+        // z-index опускается после затухания — панель не уходит под шапку, пока гаснет
+        body[data-header-search] .filter-search {
+            transition: z-index 0s linear $duration-overlay * 0.67;
+        }
         body[data-header-search] .filter-search.is-open {
             z-index: 1100;
+            transition: none;
+        }
+        // Раскладка на весь экран — и в закрытом виде: при закрытии панель гаснет на месте, а не
+        // прыгает под поле. Появление — проявлением за 0.3 с, как поиск на весь экран на сайте
+        body[data-header-search] .filter-search .filter-search__dropdown {
+            transform: none;
+            transition:
+                opacity $duration-overlay * 0.67 $ease-out,
+                visibility 0s linear $duration-overlay * 0.67;
         }
         body[data-header-search] .filter-search.is-open .filter-search__dropdown {
+            transition:
+                opacity $duration-overlay $ease-out,
+                visibility 0s;
+        }
+        body[data-header-search] .filter-search .filter-search__dropdown {
             position: fixed;
             inset: 0;
             z-index: 1;
@@ -794,17 +805,37 @@
         }
 
         // --- each field as a bottom sheet ---
-        .filter-field.is-open::before {
+        // затемнение и лист — как нижние листы сайта: фон проявляется, лист выезжает снизу (0.3 с),
+        // закрытие — обратно и быстрее
+        .filter-field::before {
             content: '';
             position: fixed;
             inset: 0;
             z-index: 1110;
+            display: none;
+            opacity: 0;
             // light blurred dimmer — same overlay as the page's modals/sheets
             background: rgba(245, 248, 250, 0.6);
             backdrop-filter: blur(2.5px);
+            transition:
+                opacity $duration-overlay * 0.67 $ease-out,
+                display $duration-overlay * 0.67 allow-discrete;
         }
-        .filter-field.is-open .filter-field__panel,
-        .filter-field.is-open .filter-field__panel.filter-field__panel--calendar {
+        .filter-field.is-open::before {
+            display: block;
+            opacity: 1;
+            transition-duration: $duration-overlay;
+
+            @starting-style {
+                opacity: 0;
+            }
+        }
+        .filter-field__panel {
+            @include appear-when('.filter-field.is-open &', flex, translateY(100%), $duration-overlay, false);
+        }
+        // раскладка листа — и в закрытом виде, чтобы лист уезжал вниз, а не прыгал под поле
+        .filter-field .filter-field__panel,
+        .filter-field .filter-field__panel.filter-field__panel--calendar {
             position: fixed;
             left: 0;
             right: 0;
@@ -816,7 +847,6 @@
             max-width: none;
             max-height: 80vh;
             margin: 0;
-            display: flex;
             flex-direction: column;
             overflow-y: auto;
             @include prop-vw(border-radius, 16, sm);
@@ -825,6 +855,10 @@
             @include prop-vw(padding-block, 12, sm);
             @include prop-vw(padding-inline, 16, sm);
             box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+        }
+        // календарь на десктопе — display: block (правило выше сильнее); лист на телефоне — flex
+        .filter-field.is-open .filter-field__panel.filter-field__panel--calendar {
+            display: flex;
         }
         // drag handle (JS-injected) sticks to the top of the sheet
         .filter-field__sheet-head {

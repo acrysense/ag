@@ -139,7 +139,7 @@
             background: transparent;
             border: none;
             border-radius: 0;
-            transition: all $transition-default;
+            transition: color $transition-default;
             &:focus {
                 outline: none;
             }

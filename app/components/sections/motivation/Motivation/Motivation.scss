@@ -324,7 +324,9 @@
             background: transparent;
             border: none;
             @include prop-vw(border-radius, 10, xl);
-            transition: all $transition-default;
+            transition:
+                color $transition-default,
+                background-color $transition-default;
             &:focus {
                 outline: none;
             }

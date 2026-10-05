@@ -1,4 +1,5 @@
 @use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
 
 @layer base {
 	// Переключатель для vw-clamp (_mixins): 0 — планшет и телефон, 1 — десктоп (от 1024, размеры
@@ -23,11 +24,11 @@
 	}
 
 	a {
-		transition: color 0.25s ease-in-out;
+		transition: color $transition-default;
 	}
 
 	svg {
-		transition: color 0.25s ease-in-out;
+		transition: color $transition-default;
 	}
 
 	// shared spinner rotation (used by the tasks / visits-calendar / news loaders)

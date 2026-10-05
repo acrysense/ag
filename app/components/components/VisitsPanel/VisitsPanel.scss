@@ -686,20 +686,13 @@
     }
 
     // --- Create-visit modal ---
-    // soft entrance: overlay fades, dialog fades + lifts a touch (plays on open,
-    // since removing [hidden] flips display none → flex and restarts the animation)
-    @keyframes visit-modal-overlay-in {
-        from { opacity: 0; }
-        to { opacity: 1; }
-    }
-    @keyframes visit-modal-dialog-in {
-        from { opacity: 0; transform: translateY(12px) scale(0.98); }
-        to { opacity: 1; transform: none; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-        .visit-modal__overlay, .visit-modal__dialog { animation: none; }
-    }
+    // Как окна сайта: фон проявляется, окно — проявление с приближением от 96% (0.3 с), на
+    // телефоне (окно на весь экран) — только проявление; закрытие — обратно и быстрее. Окно
+    // скрывается [hidden]: display держится до конца затухания (allow-discrete), появление —
+    // с @starting-style; где браузер не умеет — сразу. «Уменьшить движение» — без анимаций (reset)
     .visit-modal {
+        transition: display $duration-overlay * 0.67 allow-discrete;
+
         position: fixed;
         inset: 0;
         z-index: 200;
@@ -732,7 +725,15 @@
             inset: 0;
             background: rgba(245, 248, 250, 0.6);
             backdrop-filter: blur(2.5px);
-            animation: visit-modal-overlay-in 0.25s ease both;
+            transition: opacity $duration-overlay $ease-out;
+
+            @starting-style {
+                opacity: 0;
+            }
+            .visit-modal[hidden] & {
+                opacity: 0;
+                transition-duration: $duration-overlay * 0.67;
+            }
             // Mobile: the dialog is full-screen white, so the blurred backdrop is
             // never visible — but blurring the huge page still costs the GPU seconds
             // on open/close. Drop the blur (and the invisible overlay) on mobile.
@@ -740,7 +741,6 @@
                 background: transparent;
                 backdrop-filter: none;
                 -webkit-backdrop-filter: none;
-                animation: none;
             }
         }
         &__dialog {
@@ -755,7 +755,23 @@
             background: $color-white;
             @include prop-vw(border-radius, 20, xl);
             box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.05);
-            animation: visit-modal-dialog-in 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+            --visit-modal-shift: scale(0.96);
+            transition:
+                opacity $duration-overlay $ease-out,
+                transform $duration-overlay $ease-out;
+
+            @starting-style {
+                opacity: 0;
+                transform: var(--visit-modal-shift);
+            }
+            .visit-modal[hidden] & {
+                opacity: 0;
+                transform: var(--visit-modal-shift);
+                transition-duration: $duration-overlay * 0.67;
+            }
+            @include only(mobile) {
+                --visit-modal-shift: none;
+            }
 
             @include only(desktop) {
                 @include prop-vw(max-width, 320, lg);
