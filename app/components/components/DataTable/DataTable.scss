@@ -8,7 +8,7 @@
     [data-data-table].is-loading .data-table__scroll {
         opacity: 0.55;
         pointer-events: none;
-        transition: opacity 0.15s ease;
+        transition: opacity $duration-popup $ease-out;
     }
 
     // initial load: a spinner that holds the panel height while the JSON
@@ -57,17 +57,48 @@
     .data-table.is-empty {
         display: none;
     }
-    .data-table__spinner {
-        width: 28px;
-        height: 28px;
-        border: 3px solid $color-grey;
-        border-top-color: $color-blue;
-        border-radius: 50%;
-        animation: spin 0.7s linear infinite;
+    // Первая загрузка — скелетон таблицы (как на сайте): шапка и строки по высоте настоящих
+    // (60 и 46), на телефоне — карточки, как строки таблицы там
+    .data-table__skeleton {
+        @include prop-vw(margin-top, 10, xl);
     }
-    @media (prefers-reduced-motion: reduce) {
-        .data-table__spinner {
-            animation-duration: 1.8s;
+    .data-table__skeleton-row {
+        display: grid;
+        grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr));
+        gap: 24px;
+        align-items: center;
+        height: 46px;
+        border-bottom: 1px solid $color-border;
+
+        > .skeleton:nth-child(1) {
+            width: 70%;
+        }
+        > .skeleton:nth-child(2n) {
+            width: 55%;
+        }
+        > .skeleton:nth-child(2n + 3) {
+            width: 40%;
+        }
+
+        &--head {
+            height: 60px;
+
+            > .skeleton {
+                height: 10px;
+            }
+        }
+
+        @include only(mobile) {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 10px;
+            height: auto;
+            @include prop-vw(padding-block, 16, sm);
+            @include prop-vw(padding-inline, 10, sm);
+
+            &--head,
+            > .skeleton:nth-child(n + 4) {
+                display: none;
+            }
         }
     }
     .data-table__scroll {

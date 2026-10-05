@@ -1,6 +1,7 @@
 import { mountStaticPagination, mountDataPagination } from '@/utils/pagination'
 import { tableUrlEnabled, readTableUrl, writeTableUrl } from '@/utils/tableUrl'
 import { scoreTone } from '@/utils/scoreTone'
+import { skeleton, loadingLabel } from '@/utils/skeleton'
 
 // Reusable data-table behaviour: column sorting, row filtering, empty state and
 // a simple page-size limiter. Page-agnostic — driven entirely by data-attrs:
@@ -220,6 +221,24 @@ async function resolveConfig(root) {
 	return null
 }
 
+// Первая загрузка — скелетон таблицы, как на сайте: шапка и 6 строк (на телефоне — карточки)
+const SKELETON_COLS = 5
+function tableSkeleton() {
+	const el = document.createElement('div')
+	el.className = 'data-table__skeleton'
+	el.append(loadingLabel('Загрузка данных…'))
+	const row = (head) => {
+		const r = document.createElement('div')
+		r.className = `data-table__skeleton-row${head ? ' data-table__skeleton-row--head' : ''}`
+		r.setAttribute('aria-hidden', 'true')
+		for (let i = 0; i < SKELETON_COLS; i++) r.append(skeleton('text'))
+		return r
+	}
+	el.append(row(true))
+	for (let i = 0; i < 6; i++) el.append(row(false))
+	return el
+}
+
 export default async (root) => {
 	if (!root || root.__dataTableBound) return
 	root.__dataTableBound = true
@@ -230,14 +249,13 @@ export default async (root) => {
 	// keeps its height instead of collapsing to nothing.
 	let loaderEl = null
 	if (root.dataset.tableSrc) {
-		loaderEl = document.createElement('div')
-		loaderEl.className = 'data-table__loader'
-		loaderEl.innerHTML =
-			'<span class="data-table__spinner" aria-hidden="true"></span><span class="data-table__loader-text">Загрузка данных…</span>'
+		loaderEl = tableSkeleton()
 		root.appendChild(loaderEl)
+		root.setAttribute('aria-busy', 'true')
 	}
 	const config = await resolveConfig(root)
 	loaderEl?.remove()
+	root.removeAttribute('aria-busy')
 	if (root.dataset.tableSrc && !config) {
 		const err = document.createElement('div')
 		err.className = 'data-table__loader data-table__loader--error'

@@ -2,33 +2,78 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer components {
-	// loader shown while the JSON visits (data-visits-src) are fetched
-	.vcal__loader {
+	// Загрузка — скелетон месяца (как на сайте): заголовок, «Создать визит» и переключатель вида,
+	// дни недели и сетка 5 × 5 будних дней; на телефоне — список дней
+	.vcal__skeleton {
 		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
+	.vcal__skeleton-bar {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 20px 16px;
 		align-items: center;
-		justify-content: center;
-		@include prop-vw(gap, 10, xl);
-		@include prop-vw(min-height, 320, xl);
-		@include prop-vw(font-size, 14, xl);
-		color: $color-dark-grey;
+	}
+	.vcal__skeleton-title {
+		grid-column: 1 / -1;
+		width: 220px;
+		height: 26px;
+	}
+	.vcal__skeleton-button {
+		width: 150px;
+		height: 40px;
+		border-radius: 14px;
+	}
+	.vcal__skeleton-switch {
+		width: 200px;
+		height: 40px;
+		border-radius: 14px;
+	}
+	.vcal__skeleton-grid {
+		display: grid;
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+	}
+	.vcal__skeleton-weekday {
+		width: 60%;
+		height: 10px;
+		margin-bottom: 20px;
+	}
+	.vcal__skeleton-cell {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		min-height: 160px;
+		padding: 14px 10px 0 0;
+		border-top: 1px solid $color-border;
 
-		@include only(mobile) {
-			@include prop-vw(min-height, 240, sm);
-			@include prop-vw(gap, 10, sm);
-			@include prop-vw(font-size, 14, sm);
+		> .skeleton:nth-child(2) {
+			width: 80%;
+		}
+		> .skeleton:nth-child(3) {
+			width: 65%;
 		}
 	}
-	.vcal__spinner {
-		width: 28px;
-		height: 28px;
-		border: 3px solid $color-grey;
-		border-top-color: $color-blue;
-		border-radius: 50%;
-		animation: spin 0.7s linear infinite;
+	.vcal__skeleton-date {
+		width: 18px;
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.vcal__spinner {
-			animation-duration: 1.8s;
+	@include only(mobile) {
+		.vcal__skeleton {
+			@include prop-vw(padding-inline, 10, sm);
+		}
+		.vcal__skeleton-grid {
+			grid-template-columns: minmax(0, 1fr);
+		}
+		.vcal__skeleton-weekday,
+		.vcal__skeleton-cell:nth-child(n + 11) {
+			display: none;
+		}
+		.vcal__skeleton-cell {
+			min-height: 0;
+			padding-block: 14px;
+		}
+		.vcal__skeleton-switch {
+			width: 140px;
 		}
 	}
 
@@ -614,21 +659,14 @@
 		}
 	}
 
-	// soft entrance for the event popup + its mobile backdrop
+	// Появление карточки визита — как на сайте: на десктопе как выпадающее меню (сдвиг 4px,
+	// 0.2 с), на телефоне (на весь экран, как окно «Создать визит») и фон — проявление за 0.3 с.
+	// Карточку создаёт и убирает скрипт — закрытие сразу
 	@keyframes vcal-pop-in {
-		from { opacity: 0; transform: translateY(8px) scale(0.98); }
+		from { opacity: 0; transform: translateY(-4px); }
 		to { opacity: 1; transform: none; }
 	}
-	@keyframes vcal-pop-in-mobile {
-		from { opacity: 0; transform: translate(-50%, -46%) scale(0.97); }
-		to { opacity: 1; transform: translate(-50%, -50%); }
-	}
-	// full-screen sheet entrance (mobile popup)
-	@keyframes vcal-pop-in-sheet {
-		from { opacity: 0; transform: translateY(16px); }
-		to { opacity: 1; transform: none; }
-	}
-	@keyframes vcal-pop-backdrop-in {
+	@keyframes vcal-pop-fade-in {
 		from { opacity: 0; }
 		to { opacity: 1; }
 	}
@@ -648,7 +686,7 @@
 			background: rgba(245, 248, 250, 0.6);
 			backdrop-filter: blur(2.5px);
 			-webkit-backdrop-filter: blur(2.5px);
-			animation: vcal-pop-backdrop-in 0.22s ease both;
+			animation: vcal-pop-fade-in $duration-overlay $ease-out both;
 		}
 	}
 
@@ -665,7 +703,7 @@
 		background: $color-bg-soft-light;
 		@include prop-vw(border-radius, 20, xl);
 		box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-		animation: vcal-pop-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+		animation: vcal-pop-in $duration-popup $ease-out both;
 
 		// mobile modal close button (top-right); desktop uses outside-click
 		&__close {
@@ -859,7 +897,8 @@
 			position: fixed;
 			inset: 0;
 			z-index: 1201;
-			animation-name: vcal-pop-in-sheet;
+			animation-name: vcal-pop-fade-in;
+			animation-duration: $duration-overlay;
 			transform: none;
 			width: 100%;
 			max-width: none;

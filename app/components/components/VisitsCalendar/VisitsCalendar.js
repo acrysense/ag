@@ -6,6 +6,7 @@
 // base-aware link to the visit page (Vite sets BASE_URL per build:
 // "/" locally, "/ag/" on GitHub Pages, "/bitrix/templates/auth/" for cms)
 import { scoreTone } from '@/utils/scoreTone'
+import { skeleton, loadingLabel } from '@/utils/skeleton'
 
 const VISIT_HREF = import.meta.env.BASE_URL + 'visit'
 
@@ -75,6 +76,31 @@ function mondayOf(date) {
 	d.setDate(d.getDate() - dow)
 	d.setHours(0, 0, 0, 0)
 	return d
+}
+
+// Загрузка — скелетон месяца, как на сайте: дни недели и сетка 5 × 5 (будни), в ячейке число и
+// две строки визитов; на телефоне — список дней. Убирается первой отрисовкой календаря
+function calendarSkeleton() {
+	const el = document.createElement('div')
+	el.className = 'vcal__skeleton'
+	el.append(loadingLabel('Загрузка визитов…'))
+	const bar = document.createElement('div')
+	bar.className = 'vcal__skeleton-bar'
+	bar.setAttribute('aria-hidden', 'true')
+	bar.append(skeleton('text', 'vcal__skeleton-title'), skeleton('text', 'vcal__skeleton-button'), skeleton('text', 'vcal__skeleton-switch'))
+	el.append(bar)
+	const grid = document.createElement('div')
+	grid.className = 'vcal__skeleton-grid'
+	grid.setAttribute('aria-hidden', 'true')
+	for (let i = 0; i < 5; i++) grid.append(skeleton('text', 'vcal__skeleton-weekday'))
+	for (let i = 0; i < 25; i++) {
+		const cell = document.createElement('div')
+		cell.className = 'vcal__skeleton-cell'
+		cell.append(skeleton('text', 'vcal__skeleton-date'), skeleton('text'), skeleton('text'))
+		grid.append(cell)
+	}
+	el.append(grid)
+	return el
 }
 
 export default async function VisitsCalendar(root) {
@@ -750,13 +776,15 @@ export default async function VisitsCalendar(root) {
 	const src = root.dataset.visitsSrc
 	const inlineEl = root.querySelector('[data-visits-data]')
 	if (src || inlineEl) {
-		root.innerHTML = '<div class="vcal__loader"><span class="vcal__spinner" aria-hidden="true"></span><span>Загрузка визитов…</span></div>'
+		root.replaceChildren(calendarSkeleton())
+		root.setAttribute('aria-busy', 'true')
 		let data = null
 		try {
 			data = src ? await (await fetch(src, { headers: { Accept: 'application/json' } })).json() : JSON.parse(inlineEl.textContent)
 		} catch (err) {
 			console.warn('[VisitsCalendar] failed to load visits', err)
 		}
+		root.removeAttribute('aria-busy')
 		const list = Array.isArray(data) ? data : data && Array.isArray(data.visits) ? data.visits : []
 		jsonMode = true
 		list.forEach((ev) => {

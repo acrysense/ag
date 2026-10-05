@@ -1,5 +1,6 @@
 import { mountDatepicker } from '@/utils/datepicker'
 import { MAX_COMMENT_LEN, limitLineBreaks } from '@/utils/comment-limits'
+import { skeleton, loadingLabel } from '@/utils/skeleton'
 
 // ---- JSON-driven task list -------------------------------------------------
 const escTask = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
@@ -64,6 +65,21 @@ function buildTaskListHTML(tasks) {
 	return `<ul class="tasks-list">${tasks.map(taskRowHTML).join('')}</ul>`
 }
 
+// Загрузка — скелетон списка, как на сайте: 4 строки (кружок статуса, задача, срок)
+function tasksSkeleton() {
+	const el = document.createElement('div')
+	el.className = 'tasks-panel__skeleton'
+	el.append(loadingLabel('Загрузка задач…'))
+	for (let i = 0; i < 4; i++) {
+		const row = document.createElement('div')
+		row.className = 'tasks-panel__skeleton-row'
+		row.setAttribute('aria-hidden', 'true')
+		row.append(skeleton('circle', 'tasks-panel__skeleton-check'), skeleton('text'), skeleton('text'))
+		el.append(row)
+	}
+	return el
+}
+
 // If the section declares data-tasks-src / inline data-tasks-data, fetch the JSON
 // and build the list in place (with a loader) before the panel wiring runs.
 async function resolveTasks(root) {
@@ -75,9 +91,8 @@ async function resolveTasks(root) {
 	const place = (node) => (anchor ? anchor.before(node) : root.appendChild(node))
 	root.querySelector('.tasks-list')?.remove() // drop any placeholder list
 
-	const loader = document.createElement('div')
-	loader.className = 'tasks-panel__loader'
-	loader.innerHTML = '<span class="tasks-panel__spinner" aria-hidden="true"></span><span>Загрузка задач…</span>'
+	const loader = tasksSkeleton()
+	root.setAttribute('aria-busy', 'true')
 	place(loader)
 
 	let data = null
@@ -87,6 +102,7 @@ async function resolveTasks(root) {
 		console.warn('[TasksPanel] failed to load tasks', err)
 	}
 	loader.remove()
+	root.removeAttribute('aria-busy')
 
 	const tasks = Array.isArray(data) ? data : data && Array.isArray(data.tasks) ? data.tasks : null
 	if (!tasks) {
@@ -113,9 +129,8 @@ const counts = (data) => ({
 // kept: the status / confirm handlers are bound to it (not delegated from root), so
 // replacing the element would silently kill them.
 async function loadTasksInto(root, list, src) {
-	const loader = document.createElement('div')
-	loader.className = 'tasks-panel__loader'
-	loader.innerHTML = '<span class="tasks-panel__spinner" aria-hidden="true"></span><span>Загрузка задач…</span>'
+	const loader = tasksSkeleton()
+	root.setAttribute('aria-busy', 'true')
 	list.replaceChildren()
 	list.after(loader)
 
@@ -126,6 +141,7 @@ async function loadTasksInto(root, list, src) {
 		console.warn('[TasksPanel] failed to load tasks', err)
 	}
 	loader.remove()
+	root.removeAttribute('aria-busy')
 
 	const tasks = Array.isArray(data) ? data : data && Array.isArray(data.tasks) ? data.tasks : null
 	if (!tasks) {

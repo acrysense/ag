@@ -1,0 +1,72 @@
+@use '@/assets/styles/base/mixins' as *;
+@use '@/assets/styles/base/vars' as *;
+
+// Скелетон загрузки — один в один с ag-site (components/Skeleton): светлая заготовка на месте
+// содержимого, по ней слева направо проходит блик. Варианты: строка текста, строки
+// (.skeleton-lines), круг, картинка. Размеры круга и картинки задаёт блок. При «уменьшить
+// движение» — без блика. Из JS — utils/skeleton.js
+@layer components {
+    .skeleton {
+        display: block;
+        background-color: palette("skeleton");
+        border-radius: 6px;
+
+        // Блик — полоса в 60% ширины плашки, уходит за края с обеих сторон
+        @media (prefers-reduced-motion: no-preference) {
+            background-image: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgb(255 255 255 / 0.9) 50%,
+                transparent 100%
+            );
+            background-repeat: no-repeat;
+            background-position: -150% 0;
+            background-size: 60% 100%;
+            animation: skeleton-wave $duration-skeleton ease-in-out infinite;
+        }
+    }
+
+    // Строка текста: высота строки, ширина — по блоку
+    .skeleton--text {
+        height: 12px;
+    }
+
+    .skeleton--circle {
+        flex: none;
+        border-radius: 50%;
+    }
+
+    .skeleton--media {
+        border-radius: 10px;
+    }
+
+    // Несколько строк: разной длины, как настоящий абзац (последняя короче)
+    .skeleton-lines {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        min-width: 0;
+
+        > .skeleton:nth-child(3n + 1) {
+            width: 92%;
+        }
+
+        > .skeleton:nth-child(3n + 2) {
+            width: 100%;
+        }
+
+        > .skeleton:nth-child(3n) {
+            width: 74%;
+        }
+
+        > .skeleton:last-child:not(:first-child) {
+            width: 55%;
+        }
+    }
+
+    @keyframes skeleton-wave {
+        to {
+            background-position: 250% 0;
+        }
+    }
+}
