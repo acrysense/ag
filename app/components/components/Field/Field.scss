@@ -17,7 +17,7 @@
                     border-color: $color-red;
                 }
                 &__error {
-                    display: block;
+                    display: flex;
                 }
             }
         }
@@ -62,24 +62,25 @@
             position: relative;
             z-index: 1;
         }
+        // Поле — как на ag-site (Field): высота 46 (поля 11 + строка 22), текст и подсказка 16;
+        // наведение — рамка Icon.Grey (фокус и ошибка — поверх), фокус — Form.Focus
         &__input,
         &__textarea {
             display: block;
-            @include prop-vw(padding-block, 12.75, xl);
+            @include prop-vw(padding-block, 11, xl);
             @include prop-vw(padding-inline, 15, xl);
             width: 100%;
             @include prop-vw(font-size, 16, xl);
             font-weight: normal;
-            line-height: 1;
+            line-height: 1.375;
             color: $color-black;
             background: $color-white;
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 14, xl);
             transition: background $transition-default, border $transition-default;
             &::placeholder {
-                @include prop-vw(font-size, 14, xl);
                 color: $color-dark-grey;
-                transition: color $transition-default;
+                opacity: 1;
             }
             &:focus {
                 outline: none;
@@ -91,32 +92,25 @@
                 border-color: $color-border;
             }
 
-            @media screen and (hover: hover) {
-                &:hover:not([disabled]) {
-                    &::placeholder {
-                        color: rgba($color-black, 0.5);
-                    }
-                }
-            }
             @include only(desktop) {
-                @include prop-vw(padding-block, 12.75, lg);
+                @include prop-vw(padding-block, 11, lg);
                 @include prop-vw(padding-inline, 15, lg);
                 @include prop-vw(font-size, 16, lg);
                 @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 14, lg);
-                &::placeholder {
-                    @include prop-vw(font-size, 14, lg);
-                }
             }
 			@include only(mobile) {
-                @include prop-vw(padding-block, 12.75, sm);
+                @include prop-vw(padding-block, 11, sm);
                 @include prop-vw(padding-inline, 15, sm);
                 @include prop-vw(font-size, 16, sm);
                 @include border-all(1, solid, $color-border, sm);
                 @include prop-vw(border-radius, 14, sm);
-                &::placeholder {
-                    @include prop-vw(font-size, 14, sm);
-                }
+            }
+        }
+        &:not(.is--error) &__input,
+        &:not(.is--error) &__textarea {
+            &:hover:not([disabled]):not(:focus) {
+                border-color: $color-mid-grey;
             }
         }
         &__textarea {
@@ -212,21 +206,43 @@
                 @include prop-vw(font-size, 12, sm);
             }
         }
+        // Ошибка поля — как на сайте: значок «!» 14 и текст 12/16 (не только цвет)
         &__error {
             display: none;
+            align-items: center;
+            @include prop-vw(gap, 4, xl);
             @include prop-vw(margin-top, 2, xl);
             width: fit-content;
             @include prop-vw(font-size, 12, xl);
             font-weight: normal;
+            line-height: 1.33333333333;
             color: $color-red;
+            &::before {
+                content: '';
+                flex: none;
+                @include prop-vw(width, 14, xl);
+                @include prop-vw(height, 14, xl);
+                background: currentColor;
+                mask: url('@/assets/icons/alert.svg') center / contain no-repeat;
+            }
 
             @include only(desktop) {
+                @include prop-vw(gap, 4, lg);
                 @include prop-vw(margin-top, 2, lg);
                 @include prop-vw(font-size, 12, lg);
+                &::before {
+                    @include prop-vw(width, 14, lg);
+                    @include prop-vw(height, 14, lg);
+                }
             }
 			@include only(mobile) {
+                @include prop-vw(gap, 4, sm);
                 @include prop-vw(margin-top, 2, sm);
                 @include prop-vw(font-size, 12, sm);
+                &::before {
+                    @include prop-vw(width, 14, sm);
+                    @include prop-vw(height, 14, sm);
+                }
             }
         }
     }

@@ -10,6 +10,7 @@
         &.is-open {
             z-index: 40;
         }
+        // Поле списка — как на ag-site: текст 16 (строка 22 → высота 46), наведение — рамка Icon.Grey
         &__trigger {
             display: flex;
             align-items: center;
@@ -18,9 +19,9 @@
             width: 100%;
             @include prop-vw(padding-block, 11, xl);
             @include prop-vw(padding-inline, 15, xl);
-            @include prop-vw(font-size, 14, xl);
+            @include prop-vw(font-size, 16, xl);
             font-weight: normal;
-            line-height: 1.57142857143;
+            line-height: 1.375;
             text-align: left;
             background: $color-white;
             @include border-all(1, solid, $color-border, xl);
@@ -36,7 +37,7 @@
                 @include prop-vw(gap, 8, lg);
                 @include prop-vw(padding-block, 11, lg);
                 @include prop-vw(padding-inline, 15, lg);
-                @include prop-vw(font-size, 14, lg);
+                @include prop-vw(font-size, 16, lg);
                 @include border-all(1, solid, $color-border, lg);
                 @include prop-vw(border-radius, 14, lg);
             }
@@ -44,10 +45,14 @@
                 @include prop-vw(gap, 8, sm);
                 @include prop-vw(padding-block, 11, sm);
                 @include prop-vw(padding-inline, 15, sm);
-                @include prop-vw(font-size, 14, sm);
+                @include prop-vw(font-size, 16, sm);
                 @include border-all(1, solid, $color-border, sm);
                 @include prop-vw(border-radius, 14, sm);
             }
+        }
+        // ошибка (.field.is--error) и открытый список — поверх наведения
+        &:not(.is-open):not(.field.is--error *) &__trigger:hover:not(:focus) {
+            border-color: $color-mid-grey;
         }
         &.is-open &__trigger {
             border-color: $color-form-focus;
