@@ -120,10 +120,15 @@
 						display: block;
 					}
 				}
-				@media (min-width: 1024px) and (max-width: 1439.98px) {
+				@media (min-width: 1024px) {
 					body[data-header-search] .filter-search {
-						width: max(355.5555555556px, 34.7222222222vw);
-						margin-left: max(42.6666666667px, 4.1666666667vw);
+						-webkit-box-flex: 0;
+						-webkit-flex: 0 1 500px;
+						-moz-box-flex: 0;
+						flex: 0 1 500px;
+						width: auto;
+						min-width: 200px;
+						margin-left: clamp(20px, 3.125vw, 60px);
 					}
 				}
 				@media (max-width: 743.98px) {
@@ -228,8 +233,8 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="AG" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-j99hYod-.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-DvvhCB70.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-DIvgd4RU.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-C-GICAQF.css" />
 	</head>
 	<body>
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>

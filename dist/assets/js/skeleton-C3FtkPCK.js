@@ -1,0 +1,1 @@
+function e(e=`text`,t=``){let n=document.createElement(`span`);return n.className=`skeleton skeleton--${e}${t?` ${t}`:``}`,n.setAttribute(`aria-hidden`,`true`),n}function t(e){let t=document.createElement(`span`);return t.className=`visually-hidden`,t.setAttribute(`role`,`status`),t.textContent=e,t}export{e as n,t};
