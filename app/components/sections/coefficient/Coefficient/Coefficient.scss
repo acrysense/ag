@@ -383,6 +383,11 @@
             line-height: 1;
             text-transform: uppercase;
             color: $color-dark-grey;
+            // Десктоп без масштаба: значение («878.20 BYN») в одну строку — сужается подпись слева
+            @include up(desktop) {
+                flex-shrink: 0;
+                white-space: nowrap;
+            }
             
             @include only(desktop) {
                 @include prop-vw(margin-left, 20, lg);

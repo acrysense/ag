@@ -52,14 +52,22 @@
         &__wrapper {
             display: flex;
             flex-wrap: wrap;
+
+            // Десктоп без масштаба: колонок — сколько поместится плиток от 220 (на 1920 — 4 по 260),
+            // как на сайте; иначе на узком окне плитки сжимаются и кнопки уходят на вторую строку
+            @include up(desktop) {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 40px 13.33px;
+            }
         }
         &__item {
             &--reveal {
                 animation: news-fade .25s ease-out both;
             }
 
-            // desktop: 4 per row, 13.33 between columns; vertical rhythm stays 40
-            @include up(tablet) {
+            // планшет: 4 в ряд, между колонками 13.33, ряды через 40 (десктоп — сетка в __wrapper)
+            @include only(tablet) {
                 @include width-cols(4, 13.33, xl);
                 &:not(:nth-child(4n + 1)) {
                     @include prop-vw(margin-left, 13.33, xl);

@@ -29,6 +29,12 @@
                 flex-direction: column;
                 @include prop-vw(gap, 10, sm);
             }
+            // Десктоп без масштаба: визиты рядом — с 1280, как на сайте; уже встают под карточку
+            // и KPI, иначе ФИО рвётся по словам, а у KPI виден один столбец
+            @media (min-width: 1024px) and (max-width: 1279.98px) {
+                flex-direction: column;
+                align-items: stretch;
+            }
         }
         // left column: card + KPI stacked with a 10px gap; fills to 1080 (= 1440
         // content − 350 visits − 10 gap)
@@ -198,6 +204,9 @@
             }
             @include only(mobile) {
                 width: 100%;
+            }
+            @media (min-width: 1024px) and (max-width: 1279.98px) {
+                width: auto;
             }
         }
         // visits block styling now lives in the shared .visit-hist component
@@ -674,6 +683,12 @@
         @include only(mobile) {
             flex-direction: column;
             @include prop-vw(gap, 10, sm);
+        }
+        // Десктоп без масштаба: «Таргет» рядом — с 1280, как на сайте; уже встаёт под форму
+        // (ширина — как у формы, правило ширины в .visits-plan__target)
+        @media (min-width: 1024px) and (max-width: 1279.98px) {
+            flex-direction: column;
+            align-items: stretch;
         }
 
         &__main {

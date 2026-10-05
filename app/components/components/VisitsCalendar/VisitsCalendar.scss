@@ -964,6 +964,13 @@
 			background: $color-bg-light;
 			@include prop-vw(gap, 10, sm);
 		}
+		// Десктоп без масштаба: рядом — с 1280, как на сайте; уже «Цель» встаёт под календарь,
+		// иначе календарю остаётся ~400 и дни недели наезжают друг на друга
+		@media (min-width: 1024px) and (max-width: 1279.98px) {
+			flex-direction: column;
+			align-items: stretch;
+			gap: 10px;
+		}
 		&__cal {
 			flex: 1 1 auto;
 			min-width: 0;
@@ -979,6 +986,9 @@
 			@include prop-vw(width, 340, xl);
 			@include only(desktop) {
 				@include prop-vw(width, 300, lg);
+			}
+			@media (min-width: 1024px) and (max-width: 1279.98px) {
+				width: auto;
 			}
 			@include only(mobile) {
 				width: 100%;

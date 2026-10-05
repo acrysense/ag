@@ -47,6 +47,10 @@
             border: none;
             border-radius: 0;
             transition: color $transition-default;
+            // Десктоп без масштаба: имя в одну строку — при нехватке места сужается поиск в шапке
+            @include up(desktop) {
+                white-space: nowrap;
+            }
             &:focus {
                 outline: none;
             }

@@ -29,6 +29,12 @@
 				flex-direction: column;
 				@include prop-vw(gap, 10, sm);
 			}
+			// Десктоп без масштаба: боковая рядом — с 1280, как на сайте; уже встаёт под основную,
+			// иначе основной остаётся ~350 и таблица KPI наезжает сама на себя
+			@media (min-width: 1024px) and (max-width: 1279.98px) {
+				flex-direction: column;
+				align-items: stretch;
+			}
 		}
 		&__main,
 		&__aside {
@@ -57,6 +63,9 @@
 			// otherwise win over the shared &__main,&__aside 100% rule)
 			@include only(mobile) {
 				width: 100%;
+			}
+			@media (min-width: 1024px) and (max-width: 1279.98px) {
+				width: auto;
 			}
 		}
 
