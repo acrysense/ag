@@ -19,6 +19,8 @@
 	.wrapper {
 		display: flex;
 		flex-direction: column;
+		// vh — для браузеров без svh (Chrome 107)
+		min-height: 100vh;
 		min-height: 100svh;
 		&__content {
 			display: flex;

@@ -88,6 +88,7 @@
         &__wrap {
             padding-top: 120px;
             padding-bottom: 140px;
+            min-height: 100vh; // Chrome 107 — без dvh
             min-height: 100dvh;
 
             @include only(desktop) {

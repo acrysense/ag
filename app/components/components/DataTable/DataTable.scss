@@ -153,7 +153,9 @@
         // wrap letter-by-letter. Drop the fixed widths and widen the table — fixed
         // layout then shares the space evenly. Individual columns can still be
         // pinned via "width" in the JSON column config (inline style wins).
-        &:has(.data-table__th:nth-child(14)) {
+        // .data-table--wide — то же для браузеров без :has (utils/has-fallback.js)
+        &:has(.data-table__th:nth-child(14)),
+        &.data-table--wide {
             @include prop-vw(min-width, 1550, xl);
             @include only(desktop) {
                 @include prop-vw(min-width, 1550, lg);

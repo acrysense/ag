@@ -220,6 +220,8 @@ $fixed-desktop: true !default;
 }
 
 @mixin minvh-minus($px, $range: lg, $vh: min(100svh, 100dvh)) {
+	// vh — для браузеров без svh/dvh (Chrome 107)
+	min-height: calc(100vh - #{vw-range($px, $range)});
 	min-height: calc(#{$vh} - #{vw-range($px, $range)});
 }
 

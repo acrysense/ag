@@ -569,7 +569,9 @@
         // Count only VISIBLE rows (matching the JS empty-state check): if the filter or
         // the completed toggle hides every row, they stay in the DOM but the "нет задач"
         // / "по фильтру не найдено" placeholder must still show.
-        &:has(> .task-row:not(.is-filtered-out):not(.is-hidden)) > :not(.task-row):not(.tasks-list__edit) {
+        // .has-visible-rows — то же для браузеров без :has (utils/has-fallback.js)
+        &:has(> .task-row:not(.is-filtered-out):not(.is-hidden)) > :not(.task-row):not(.tasks-list__edit),
+        &.has-visible-rows > :not(.task-row):not(.tasks-list__edit) {
             display: none;
         }
     }

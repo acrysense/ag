@@ -2,6 +2,7 @@ import 'virtual:svg-icons-register'
 import '@/assets/styles/main.scss'
 import { mount, unmount } from '@/core/mount'
 import { autosize } from '@/utils/autosize'
+import { watchHasFallbacks } from '@/utils/has-fallback'
 
 // hide the initial-load overlay once styles + sprite are in and the app mounted
 function hideAppLoader() {
@@ -17,6 +18,7 @@ function hideAppLoader() {
 function init() {
 	mount(document)
 	autosize(document)
+	watchHasFallbacks()
 
 	const lifecycleObserver = new MutationObserver((mutations) => {
 		for (const mutation of mutations) {
