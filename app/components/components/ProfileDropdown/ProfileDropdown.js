@@ -8,7 +8,7 @@ export default (root) => {
 	const closeBtn = panel?.querySelector('.profile-dropdown__close')
 	if (!trigger || !panel || !wrap) return
 
-	const mql = window.matchMedia('(max-width: 743px)')
+	const mql = window.matchMedia('(max-width: 1023.98px)')
 	const isMobile = () => mql.matches
 
 	trigger.setAttribute('aria-haspopup', 'menu')

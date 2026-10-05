@@ -74,7 +74,7 @@ export default (root) => {
 	}
 	btnCollapse?.addEventListener('click', onCollapseClick)
 
-	const mql = window.matchMedia('(max-width: 743px)')
+	const mql = window.matchMedia('(max-width: 1023.98px)')
 	const isMobile = () => mql.matches
 
 	let isOpen = false

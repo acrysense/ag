@@ -29,7 +29,7 @@ export function mountVisitModal(modal) {
 	// клавиатура поверх календаря — тап открывает только календарь. (Зум <16px здесь
 	// уже не проблема: его глобально гасит viewport maximum-scale=1.)
 	const dateInput = form.querySelector('[data-datepicker-input]')
-	const dateMql = window.matchMedia('(max-width: 743.98px)')
+	const dateMql = window.matchMedia('(max-width: 1023.98px)')
 	const syncDateReadonly = () => { if (dateInput) dateInput.readOnly = dateMql.matches }
 	syncDateReadonly()
 	dateMql.addEventListener?.('change', syncDateReadonly)

@@ -520,7 +520,7 @@ export default (root) => {
 	})
 
 	// ---- header dropdown open/close ----
-	const mqMobile = window.matchMedia('(max-width: 743.98px)')
+	const mqMobile = window.matchMedia('(max-width: 1023.98px)')
 	let open = false
 	const setOpen = (s) => {
 		open = s

@@ -8,7 +8,7 @@
 const DOTS_SVG =
 	'<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg>'
 
-const mqMobile = () => window.matchMedia('(max-width: 743.98px)')
+const mqMobile = () => window.matchMedia('(max-width: 1023.98px)')
 
 // windowed page list: current ±1 on desktop; compact ≤5-slot window on mobile
 export function windowPages(total, page, isMobile) {

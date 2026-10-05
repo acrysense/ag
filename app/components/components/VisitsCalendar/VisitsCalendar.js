@@ -137,7 +137,7 @@ export default async function VisitsCalendar(root) {
 	const anchorAttr = root.dataset.anchor
 	const start = anchorAttr ? new Date(anchorAttr) : new Date(2026, 4, 1)
 	// On mobile the single-column Day view is the usable default; desktop keeps Month.
-	const isMobile = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 743px)').matches
+	const isMobile = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 1023.98px)').matches
 	let view = isMobile ? 'day' : 'month'
 	let cursor = new Date(start.getFullYear(), start.getMonth(), isWeekend(start) ? start.getDate() + 1 : start.getDate())
 	cursor.setHours(0, 0, 0, 0)
@@ -500,7 +500,7 @@ export default async function VisitsCalendar(root) {
 		backdrop.className = 'vcal-pop-backdrop'
 		document.body.appendChild(backdrop)
 		document.body.appendChild(popup)
-		if (!window.matchMedia('(max-width: 743px)').matches) {
+		if (!window.matchMedia('(max-width: 1023.98px)').matches) {
 			const r = trigger.getBoundingClientRect()
 			const top = Math.min(window.scrollY + r.bottom + 6, window.scrollY + window.innerHeight - popup.offsetHeight - 12)
 			popup.style.top = `${Math.max(window.scrollY + 12, top)}px`

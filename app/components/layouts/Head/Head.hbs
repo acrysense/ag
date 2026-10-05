@@ -32,9 +32,9 @@
         .header__inner{display:flex;align-items:center}
         .filter-search{display:none}
         body[data-header-search] .filter-search{flex:0 0 auto;align-self:center;width:max(266.6666666667px,26.0416666667vw);margin-left:max(32px,3.125vw);margin-right:auto}
-        @media (min-width:744px){body[data-header-search] .filter-search{display:block}}
+        @media (min-width:1024px){body[data-header-search] .filter-search{display:block}}
         @media (min-width:1024px){body[data-header-search] .filter-search{flex:0 1 500px;width:auto;min-width:200px;margin-left:clamp(20px,3.125vw,60px)}}
-        @media (max-width:743.98px){body[data-header-search] .filter-search{display:block;order:10;flex:0 0 100%;width:100%;margin-inline:0}body[data-header-search] .header__wrapper{flex-wrap:wrap}}
+        @media (max-width:1023.98px){body[data-header-search] .filter-search{display:block;order:10;flex:0 0 100%;width:100%;margin-inline:0}body[data-header-search] .header__wrapper{flex-wrap:wrap}}
         /* The header search's filter panel is absolutely positioned by app.css/JS. Until
            the bundle runs — slow on 3G — it sits IN FLOW, expanded to full height, which
            stretches the flex header row (align-items:stretch) so logo/search/user all blow
@@ -53,7 +53,7 @@
         .profile-dropdown{position:relative}
         .profile-dropdown__panel{position:absolute;top:calc(100% + 8px);right:0}
         .profile-dropdown:not(.is-open) .profile-dropdown__panel{opacity:0;pointer-events:none;visibility:hidden}
-        @media (max-width:743.98px){.profile-dropdown__panel{position:fixed;inset:0;top:0;right:auto}}
+        @media (max-width:1023.98px){.profile-dropdown__panel{position:fixed;inset:0;top:0;right:auto}}
     }
 </style>
 <script>window.addEventListener("load",function(){var l=document.querySelector("[data-app-loader]");if(l){l.classList.add("is-hidden");setTimeout(function(){l.parentNode&&l.remove()},500)}})</script>
