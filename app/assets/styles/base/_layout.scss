@@ -26,6 +26,9 @@
 		}
 		&__main {
 			width: 100%;
+			// Флекс-элемент рядом с боковой панелью: без min-width: 0 широкое содержимое (таблицы,
+			// галерея) не даёт колонке сжаться — на планшете страница шире экрана, а панель сжимается
+			min-width: 0;
 
 			@include up(tablet) {
 				@include prop-vw(padding-block, 20, xl);
@@ -55,6 +58,8 @@
 				@include prop-vw(max-width, 820, lg);
 			}
 			@include only(tablet) {
+				// auto, а не 100%: иначе отступ слева выталкивает блок за край экрана
+				width: auto;
 				@include prop-vw(margin-left, 50, xl);
 				@include prop-vw(padding-inline, 125, xl);
 				@include prop-vw(max-width, 1330, xl);
