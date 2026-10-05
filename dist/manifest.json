@@ -17,12 +17,8 @@
       "_utils-CTVDHeUi.js"
     ]
   },
-  "_app-AB6r3bhy.css": {
-    "file": "assets/css/app-AB6r3bhy.css",
-    "src": "_app-AB6r3bhy.css"
-  },
-  "_app-D21RF-Vh.js": {
-    "file": "assets/js/app-D21RF-Vh.js",
+  "_app-BBXWO74B.js": {
+    "file": "assets/js/app-BBXWO74B.js",
     "name": "app",
     "dynamicImports": [
       "components/components/Accordion/Accordion.js",
@@ -55,11 +51,15 @@
       "components/sections/visit/Visit/Visit.js"
     ],
     "css": [
-      "assets/css/app-AB6r3bhy.css"
+      "assets/css/app-CZfcBXd4.css"
     ],
     "assets": [
       "assets/images/ag-m2GDsMwR.svg"
     ]
+  },
+  "_app-CZfcBXd4.css": {
+    "file": "assets/css/app-CZfcBXd4.css",
+    "src": "_app-CZfcBXd4.css"
   },
   "_comment-limits-UxSF7hZ1.js": {
     "file": "assets/js/comment-limits-UxSF7hZ1.js",
@@ -81,11 +81,11 @@
     "file": "assets/js/scroll-lock-D4dlW757.js",
     "name": "scroll-lock"
   },
-  "_swiper-CyETfnJg.js": {
-    "file": "assets/js/swiper-CyETfnJg.js",
+  "_swiper-CsvAc0yw.js": {
+    "file": "assets/js/swiper-CsvAc0yw.js",
     "name": "swiper",
     "imports": [
-      "_app-D21RF-Vh.js"
+      "_app-BBXWO74B.js"
     ],
     "dynamicImports": [
       "../node_modules/swiper/swiper.mjs",
@@ -335,13 +335,13 @@
     ]
   },
   "components/sections/news/NewsInner/NewsInner.js": {
-    "file": "assets/js/NewsInner-CVbjup09.js",
+    "file": "assets/js/NewsInner-BZXvKqUD.js",
     "name": "NewsInner",
     "src": "components/sections/news/NewsInner/NewsInner.js",
     "isDynamicEntry": true,
     "imports": [
       "_scroll-lock-D4dlW757.js",
-      "_swiper-CyETfnJg.js"
+      "_swiper-CsvAc0yw.js"
     ]
   },
   "components/sections/package/Package/Package.js": {
@@ -366,12 +366,12 @@
     "isDynamicEntry": true
   },
   "components/sections/shared/Promo/Promo.js": {
-    "file": "assets/js/Promo-BflGU52c.js",
+    "file": "assets/js/Promo-DGG5HnpG.js",
     "name": "Promo",
     "src": "components/sections/shared/Promo/Promo.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-CyETfnJg.js"
+      "_swiper-CsvAc0yw.js"
     ]
   },
   "components/sections/visit/Visit/Visit.js": {
