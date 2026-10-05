@@ -7,7 +7,13 @@ import Handlebars from 'handlebars'
 import autoprefixer from 'autoprefixer'
 import { format as formatCode } from 'prettier'
 
-const APP_ROOT = resolve(__dirname, 'app')
+const APP_ROOT = resolve(import.meta.dirname, 'app')
+
+// Браузеры — как было в Vite 7 (Vite 8 поднял минимум до Safari 16.4 / Chrome 111): не отрезаем
+// iPhone на iOS 16.0–16.3. iOS — отдельной строкой: по ней и JS, и CSS (Lightning CSS) — без неё
+// «safari16» считается только настольным и из CSS выпадают префиксы для iPhone
+// (-webkit-text-size-adjust)
+const BUILD_TARGET = ['chrome107', 'edge107', 'firefox104', 'safari16', 'ios16']
 const ICONS_ROOT = resolve(APP_ROOT, 'assets/icons')
 const SVG_SPRITE_ID = 'virtual:svg-icons-register'
 const RESOLVED_SVG_SPRITE_ID = `\0${SVG_SPRITE_ID}`
@@ -240,8 +246,8 @@ function copyStaticAssets() {
 		apply: 'build',
 		closeBundle() {
 			for (const { dir, pattern } of groups) {
-				const srcDir = path.resolve(__dirname, `app/assets/${dir}`)
-				const outDir = path.resolve(__dirname, `dist/assets/${dir}`)
+				const srcDir = path.resolve(import.meta.dirname, `app/assets/${dir}`)
+				const outDir = path.resolve(import.meta.dirname, `dist/assets/${dir}`)
 				if (!fs.existsSync(srcDir)) continue
 
 				const files = fg.sync(pattern, { cwd: srcDir })
@@ -366,7 +372,7 @@ function loadJSON(p: string) {
 }
 
 function outNameFromHtmlPath(absHtmlPath: string) {
-	const appRoot = resolve(__dirname, 'app') + sep
+	const appRoot = resolve(import.meta.dirname, 'app') + sep
 	const rel = absHtmlPath.startsWith(appRoot) ? absHtmlPath.slice(appRoot.length) : absHtmlPath
 
 	const clean = rel.replace(/^[/\\]+/, '')
@@ -561,16 +567,23 @@ export default defineConfig(({ mode }) => {
 	return {
 		root: APP_ROOT,
 		base: process.env.BASE || '/',
-		publicDir: resolve(__dirname, 'public'),
-		resolve: { alias: { '@': resolve(__dirname, 'app') } },
+		publicDir: resolve(import.meta.dirname, 'public'),
+		resolve: { alias: { '@': resolve(import.meta.dirname, 'app') } },
 
 		build: {
-			outDir: resolve(__dirname, 'dist'),
+			outDir: resolve(import.meta.dirname, 'dist'),
 			emptyOutDir: true,
 			cssCodeSplit: true,
 			manifest: 'manifest.json',
-			rollupOptions: {
+			target: BUILD_TARGET,
+			// CSS сжимает esbuild, как в Vite 7: Lightning CSS (по умолчанию в Vite 8) сокращает числа до
+			// 6 знаков, а у ЛК размеры через vw — 10px на 1920 становились 9.98px (шаг 1/64 px), на
+			// длинных списках набегали пиксели. Для этого esbuild — в devDependencies
+			cssMinify: 'esbuild',
+			rolldownOptions: {
 				input: getHtmlInputs(),
+				// Без отчёта о долгих плагинах: дольше всех — format-html (Prettier по HTML), так задумано
+				checks: { bundlerTimings: false },
 				output: {
 					entryFileNames: 'assets/js/[name]-[hash].js',
 					chunkFileNames: 'assets/js/[name]-[hash].js',
@@ -594,7 +607,7 @@ export default defineConfig(({ mode }) => {
 			captureBase(mode, prefixPageLinks),
 			devPagesRouter(),
 			handlebarsPlugin({
-				partialDirectory: resolve(__dirname, 'app/components'),
+				partialDirectory: resolve(import.meta.dirname, 'app/components'),
 				helpers: {
 					asset(v: any) {
 						return typeof v === 'string' ? withBase(v) : v
@@ -706,7 +719,7 @@ export default defineConfig(({ mode }) => {
 				},
 
 				context: (htmlPath) => {
-					const site = loadJSON(resolve(__dirname, 'site.config.json')) || {}
+					const site = loadJSON(resolve(import.meta.dirname, 'site.config.json')) || {}
 					const absoluteHtmlPath = htmlPath.startsWith(APP_ROOT)
 						? htmlPath
 						: resolve(APP_ROOT, htmlPath.replace(/^[/\\]+/, ''))
