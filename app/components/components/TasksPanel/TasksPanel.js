@@ -1042,7 +1042,7 @@ export default async (root) => {
 	// status + tools centre against the title+meta block reliably (CSS grid +
 	// display:contents was too fiddly). Desktop keeps the original DOM. ---
 	if (list) {
-		const mq = window.matchMedia('(max-width: 743.98px)')
+		const mq = window.matchMedia('(max-width: 1023.98px)')
 
 		const toMobile = (row) => {
 			if (row.dataset.layout === 'mobile') return

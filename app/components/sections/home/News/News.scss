@@ -66,16 +66,6 @@
                 animation: news-fade $duration-reveal-item $ease-out both;
             }
 
-            // планшет: 4 в ряд, между колонками 13.33, ряды через 40 (десктоп — сетка в __wrapper)
-            @include only(tablet) {
-                @include width-cols(4, 13.33, xl);
-                &:not(:nth-child(4n + 1)) {
-                    @include prop-vw(margin-left, 13.33, xl);
-                }
-                &:nth-child(n + 5) {
-                    @include prop-vw(margin-top, 40, xl);
-                }
-            }
             @include only(mobile) {
                 @include width-cols(2, 20, sm);
                 &:nth-child(2n) {

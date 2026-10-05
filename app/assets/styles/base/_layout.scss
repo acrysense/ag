@@ -59,13 +59,6 @@
 				@include prop-vw(padding-inline, 45, lg);
 				@include prop-vw(max-width, 820, lg);
 			}
-			@include only(tablet) {
-				// auto, а не 100%: иначе отступ слева выталкивает блок за край экрана
-				width: auto;
-				@include prop-vw(margin-left, 50, xl);
-				@include prop-vw(padding-inline, 125, xl);
-				@include prop-vw(max-width, 1330, xl);
-			}
 		}
 		&__double {
 			display: flex;
@@ -80,11 +73,6 @@
 				@include prop-vw(gap, 10, lg);
 				@include prop-vw(padding-inline, 40, lg);
 				@include prop-vw(max-width, 1250, lg);
-			}
-			@include only(tablet) {
-				@include prop-vw(gap, 10, md);
-				@include prop-vw(padding-inline, 60, xl);
-				@include prop-vw(max-width, 1560, xl);
 			}
 			@include only(mobile) {
 				flex-direction: column;

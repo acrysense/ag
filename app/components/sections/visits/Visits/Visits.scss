@@ -63,7 +63,9 @@
 			@include only(mobile) {
 				width: 100%;
 				@include prop-vw(height, 36, sm);
-				@include prop-vw(padding-inline, 10, sm);
+				// три подписи по 14 в одну строку на 360 (и 320): поля 8, не 10, иначе не хватает 5px
+				@include prop-vw(padding-inline, 8, sm);
+				white-space: nowrap;
 				@include prop-vw(font-size, 14, sm);
 				@include prop-vw(border-radius, 10, sm);
 			}

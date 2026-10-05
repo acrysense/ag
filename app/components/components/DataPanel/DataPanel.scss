@@ -103,6 +103,21 @@
                 line-height: 1.09090909091;
             }
         }
+        // Заголовок страницы списка (h1: Менеджеры, Аптеки, Сотрудники аптек) — PC/HEADER/H1 32/32 и
+        // 360/HEADER/H1 32/34, как на сайте (Figma, ERP.Managers list — 3620:13687); заголовки
+        // блоков (h2) — 26/28 и 22/24, как выше
+        &__title:is(h1) {
+            @include prop-vw(font-size, 32, xl);
+            line-height: 1;
+
+            @include only(desktop) {
+                @include prop-vw(font-size, 32, lg);
+            }
+            @include only(mobile) {
+                @include prop-vw(font-size, 32, sm);
+                line-height: 1.0625;
+            }
+        }
         &__export {
             display: inline-flex;
             align-items: center;

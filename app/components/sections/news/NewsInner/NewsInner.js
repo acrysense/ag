@@ -16,7 +16,7 @@ export default async (root) => {
 	const { Swiper, mods } = await getSwiper()
 	const { Navigation, Thumbs, FreeMode, Keyboard, A11y } = mods
 
-	const mobileMax = parseInt(block.dataset.mobileMax || '743', 10)
+	const mobileMax = parseInt(block.dataset.mobileMax || '1023', 10)
 	const mql = window.matchMedia(`(max-width:${mobileMax}px)`)
 
 	let main, thumbs

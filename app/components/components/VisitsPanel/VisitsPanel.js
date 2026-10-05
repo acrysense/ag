@@ -143,7 +143,7 @@ function initVisitsPagination(root) {
 	// On mobile the row is narrow, so we cap how many slots are shown — but
 	// keep that count constant and spend the free space near the edges
 	// (1 2 3 … N / 1 … k … N / 1 … N-2 N-1 N) instead of leaving gaps.
-	const mqMobile = window.matchMedia('(max-width: 743.98px)')
+	const mqMobile = window.matchMedia('(max-width: 1023.98px)')
 
 	function pageItems() {
 		const total = pageCount()

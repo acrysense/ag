@@ -82,7 +82,7 @@ export default (head) => {
 	// module aren't re-initialised. Closing returns the panel to its page slot (marked
 	// by panelHome). A body-level backdrop is also required to cover the viewport — the
 	// panel's own ancestors would clip it otherwise.
-	const isMobile = () => window.matchMedia('(max-width: 743.98px)').matches
+	const isMobile = () => window.matchMedia('(max-width: 1023.98px)').matches
 	const grabber = document.createElement('div')
 	grabber.className = 'manager__staff-grabber'
 	panel.insertBefore(grabber, panel.firstChild)
@@ -181,7 +181,7 @@ export default (head) => {
 	// separate flex containers, so `order` can't do this — the node has to move.
 	const nav = panel.querySelector('.manager__staff-nav')
 	const controls = panel.querySelector('.manager__staff-controls')
-	const mq = window.matchMedia('(max-width: 743.98px)')
+	const mq = window.matchMedia('(max-width: 1023.98px)')
 	const placeNav = () => {
 		if (!nav || !controls) return
 		const host = mq.matches ? controls : head

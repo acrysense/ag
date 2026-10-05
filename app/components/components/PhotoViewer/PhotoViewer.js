@@ -8,7 +8,7 @@ let main,
 	lastActive = null
 let releaseScroll = null
 let mountToken = 0
-const mql = window.matchMedia('(max-width:743px)')
+const mql = window.matchMedia('(max-width: 1023.98px)')
 
 const focusTrap = (e) => {
 	if (e.key !== 'Tab') return

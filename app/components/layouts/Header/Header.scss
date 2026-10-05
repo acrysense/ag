@@ -53,6 +53,13 @@
                 @include prop-vw(width, 141, sm);
                 @include prop-vw(height, 40, sm);
             }
+            // <source media="(min-width: 744px)"> в шаблоне шапки отдаёт длинный логотип (390×40) уже
+            // с 744, а телефонная шапка — до 1024: даём ему его пропорции, пока граница в разметке
+            // не сдвинута на 1024
+            @media (min-width: 744px) and (max-width: 1023.98px) {
+                @include prop-vw(min-width, 390, sm);
+                @include prop-vw(width, 390, sm);
+            }
         }
         &__inner {
             display: flex;
