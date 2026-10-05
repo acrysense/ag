@@ -1138,11 +1138,16 @@
 	}
 
 	// ---- drag & drop -----------------------------------------------------
-	// draggable visit tiles get the grab affordance; on touch devices they opt out
+	// Плитка визита в первую очередь открывает карточку — при наведении курсор как у ссылки;
+	// зажали — «схватить» (перетаскивание в другой день). On touch devices they opt out
 	// of the browser's own touch gestures so a drag never triggers a page scroll
 	.vcal__tevent,
 	.vcal__event {
-		cursor: grab;
+		cursor: pointer;
+
+		&:active {
+			cursor: grabbing;
+		}
 	}
 	@media (pointer: coarse) {
 		.vcal__tevent,
