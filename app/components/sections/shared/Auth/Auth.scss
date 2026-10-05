@@ -354,15 +354,12 @@
     // Поля и кнопка — общие компоненты кабинета (масштабируются); на входе — размеры 1920, без
     // масштаба, как всё на этой странице
     .auth {
+        // Как поле сайта (и поля кабинета): 46 — поля 11 + строка 22, текст и подсказка 16
         .field__input {
-            padding: 12.75px 15px;
+            padding: 11px 15px;
             font-size: 16px;
             border-width: 1px;
             border-radius: 14px;
-
-            &::placeholder {
-                font-size: 14px;
-            }
         }
         .field--toggle .field__input {
             padding-right: 40px;

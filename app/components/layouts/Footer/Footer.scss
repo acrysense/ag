@@ -9,8 +9,8 @@
         @include only(desktop) {
             @include border-side(top, 1, solid, $color-border, lg);
         }
+        // На телефоне — как подвал ag-site: фон страницы (не белый), строки через 20, ссылки через 8
         @include only(mobile) {
-            background: $color-white;
             @include border-side(top, 1, solid, $color-border, sm);
         }
 
@@ -31,7 +31,7 @@
             @include only(mobile) {
                 flex-direction: column;
                 align-items: flex-start;
-                @include prop-vw(gap, 15, sm);
+                @include prop-vw(gap, 20, sm);
                 @include prop-vw(padding-block, 24, sm);
             }
         }
@@ -81,7 +81,7 @@
             @include only(mobile) {
                 flex-direction: column;
                 align-items: flex-start;
-                @include prop-vw(gap, 6, sm);
+                @include prop-vw(gap, 8, sm);
 
                 > li + li::before {
                     content: none;

@@ -117,18 +117,19 @@
     }
     // free-text / numeric-range fields are inline inputs (no dropdown) — match
     // the select-trigger box so they sit consistently in the filter grid
+    // как поле ag-site: 46, текст 16, скругление 14
     .filter-field__input {
         display: block;
         width: 100%;
         min-width: 0;
-        @include prop-vw(padding-block, 12, xl);
-        @include prop-vw(padding-inline, 16, xl);
-        @include prop-vw(font-size, 15, xl);
-        line-height: 1.4;
+        @include prop-vw(padding-block, 11, xl);
+        @include prop-vw(padding-inline, 15, xl);
+        @include prop-vw(font-size, 16, xl);
+        line-height: 1.375;
         color: $color-black;
         background: $color-white;
         @include border-all(1, solid, $color-border, xl);
-        @include prop-vw(border-radius, 12, xl);
+        @include prop-vw(border-radius, 14, xl);
         transition: border-color $transition-default;
         &::placeholder {
             color: $color-dark-grey;
@@ -139,18 +140,18 @@
         }
 
         @include only(desktop) {
-            @include prop-vw(padding-block, 12, lg);
-            @include prop-vw(padding-inline, 16, lg);
-            @include prop-vw(font-size, 15, lg);
+            @include prop-vw(padding-block, 11, lg);
+            @include prop-vw(padding-inline, 15, lg);
+            @include prop-vw(font-size, 16, lg);
             @include border-all(1, solid, $color-border, lg);
-            @include prop-vw(border-radius, 12, lg);
+            @include prop-vw(border-radius, 14, lg);
         }
         @include only(mobile) {
             @include prop-vw(height, 46, sm);
             padding-block: 0;
             @include prop-vw(padding-inline, 15, sm);
-            @include prop-vw(font-size, 14, sm);
-            line-height: 1.57142857143;
+            @include prop-vw(font-size, 16, sm);
+            line-height: 1.375;
             @include prop-vw(border-radius, 14, sm);
         }
     }
@@ -187,64 +188,61 @@
         &__control {
             position: relative;
         }
+        // Поле поиска — как поиск ag-site (SiteSearch): белое, рамка Form.Border, скругление 14,
+        // высота 46, лупа 16 слева; текст 14, на сенсорных экранах 16 (иначе iOS увеличивает
+        // страницу). Наведение — рамка Icon.Grey, фокус — Form.Focus; на телефоне и планшете рамка
+        // синяя всегда (360.Search.Field сайта)
         &__input {
             display: block;
             width: 100%;
-            @include prop-vw(padding-block, 11, xl);
-            @include prop-vw(padding-left, 18, xl);
-            @include prop-vw(padding-right, 44, xl);
-            @include prop-vw(font-size, 15, xl);
+            height: 46px;
+            padding: 0 16px 0 42px;
+            font-size: 14px;
+            line-height: 22px;
             color: $color-black;
-            background: $color-bg-soft-light;
-            @include border-all(1, solid, $color-border, xl);
-            @include prop-vw(border-radius, 14, xl);
+            background: $color-white;
+            border: 1px solid $color-border;
+            border-radius: 14px;
             transition: border-color $transition-default;
             &::placeholder {
                 color: $color-dark-grey;
+                opacity: 1;
+            }
+            &:hover:not(:focus) {
+                border-color: $color-mid-grey;
             }
             &:focus {
                 outline: none;
                 border-color: $color-form-focus;
             }
-
-            @include only(desktop) {
-                @include prop-vw(padding-block, 11, lg);
-                @include prop-vw(padding-left, 18, lg);
-                @include prop-vw(padding-right, 44, lg);
-                @include prop-vw(font-size, 15, lg);
-                @include border-all(1, solid, $color-border, lg);
-                @include prop-vw(border-radius, 14, lg);
+            @media (pointer: coarse) {
+                font-size: 16px;
             }
-            // mobile: 40px-tall grey pill, 12px text, icon room on the right
+
             @include only(mobile) {
-                @include prop-vw(height, 40, sm);
-                padding-block: 0;
-                @include prop-vw(padding-left, 14, sm);
-                @include prop-vw(padding-right, 38, sm);
-                @include prop-vw(font-size, 12, sm);
-                line-height: 1.25;
-                background: $color-bg-soft-light;
-                border: none;
-                @include prop-vw(border-radius, 7, sm);
+                @include prop-vw(height, 46, sm);
+                @include prop-vw(padding-left, 42, sm);
+                @include prop-vw(padding-right, 16, sm);
+                @include prop-vw(border-radius, 14, sm);
+                &,
+                &:hover:not(:focus) {
+                    border-color: $color-form-focus;
+                }
             }
         }
         &__icon {
             position: absolute;
             top: 50%;
-            @include prop-vw(right, 16, xl);
+            right: auto; // в критическом CSS шапки (Head.hbs) лупа ещё справа
+            left: 16px;
             transform: translateY(-50%);
-            @include prop-vw(width, 20, xl);
-            @include prop-vw(height, 20, xl);
-            color: $color-dark-grey;
+            width: 16px;
+            height: 16px;
+            color: $color-black;
             pointer-events: none;
 
-            @include only(desktop) {
-                @include prop-vw(right, 16, lg);
-                @include prop-vw(width, 20, lg);
-                @include prop-vw(height, 20, lg);
-            }
             @include only(mobile) {
-                @include prop-vw(right, 14, sm);
+                @include prop-vw(left, 16, sm);
                 @include prop-vw(width, 16, sm);
                 @include prop-vw(height, 16, sm);
             }
@@ -283,13 +281,14 @@
         &__input {
             display: block;
             width: 100%;
-            @include prop-vw(padding-block, 12, xl);
-            @include prop-vw(padding-inline, 16, xl);
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(padding-block, 11, xl);
+            @include prop-vw(padding-inline, 15, xl);
+            @include prop-vw(font-size, 16, xl);
+            line-height: 1.375;
             color: $color-black;
             background: $color-white;
             @include border-all(1, solid, $color-border, xl);
-            @include prop-vw(border-radius, 12, xl);
+            @include prop-vw(border-radius, 14, xl);
             &::placeholder {
                 color: $color-dark-grey;
             }
@@ -298,11 +297,11 @@
                 border-color: $color-form-focus;
             }
             @include only(desktop) {
-                @include prop-vw(padding-block, 12, lg);
-                @include prop-vw(padding-inline, 16, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(padding-block, 11, lg);
+                @include prop-vw(padding-inline, 15, lg);
+                @include prop-vw(font-size, 16, lg);
                 @include border-all(1, solid, $color-border, lg);
-                @include prop-vw(border-radius, 12, lg);
+                @include prop-vw(border-radius, 14, lg);
             }
         }
         &__grid {
@@ -335,19 +334,21 @@
     // --- Custom select field ---
     .filter-field {
         position: relative;
+        // Поле фильтра — как поле ag-site: 46 (поля 11 + строка 22), текст 16, скругление 14
         &__trigger {
             display: flex;
             align-items: center;
             justify-content: space-between;
             @include prop-vw(gap, 8, xl);
             width: 100%;
-            @include prop-vw(padding-block, 12, xl);
-            @include prop-vw(padding-inline, 16, xl);
-            @include prop-vw(font-size, 15, xl);
+            @include prop-vw(padding-block, 11, xl);
+            @include prop-vw(padding-inline, 15, xl);
+            @include prop-vw(font-size, 16, xl);
+            line-height: 1.375;
             color: $color-black;
             background: $color-white;
             @include border-all(1, solid, $color-border, xl);
-            @include prop-vw(border-radius, 12, xl);
+            @include prop-vw(border-radius, 14, xl);
             text-align: left;
             cursor: pointer;
             & > svg {
@@ -359,19 +360,19 @@
             }
 
             @include only(desktop) {
-                @include prop-vw(padding-block, 12, lg);
-                @include prop-vw(padding-inline, 16, lg);
-                @include prop-vw(font-size, 15, lg);
+                @include prop-vw(padding-block, 11, lg);
+                @include prop-vw(padding-inline, 15, lg);
+                @include prop-vw(font-size, 16, lg);
                 @include border-all(1, solid, $color-border, lg);
-                @include prop-vw(border-radius, 12, lg);
+                @include prop-vw(border-radius, 14, lg);
             }
             @include only(mobile) {
                 @include prop-vw(gap, 8, sm);
                 @include prop-vw(height, 46, sm);
                 padding-block: 0;
                 @include prop-vw(padding-inline, 15, sm);
-                @include prop-vw(font-size, 14, sm);
-                line-height: 1.57142857143;
+                @include prop-vw(font-size, 16, sm);
+                line-height: 1.375;
                 @include border-all(1, solid, $color-border, sm);
                 @include prop-vw(border-radius, 14, sm);
                 & > svg {
@@ -379,6 +380,9 @@
                     @include prop-vw(height, 14, sm);
                 }
             }
+        }
+        &:not(.is-open) &__trigger:hover {
+            border-color: $color-mid-grey;
         }
         &.is-open &__trigger {
             border-color: $color-form-focus;
@@ -548,25 +552,24 @@
             width: 0;
             height: 0;
         }
-        // squircle SVG checkbox: grey outline empty, outline + dark tick when on
+        // Флажок — как флажки фильтров ag-site (FilterCheckbox): 18, скругление 5, рамка Icon.Grey;
+        // отмечен — Main Blue с белой галочкой, фокус с клавиатуры — рамка Form.Focus
         &__box {
             flex-shrink: 0;
-            @include prop-vw(width, 20, xl);
-            @include prop-vw(height, 20, xl);
-            background: center / contain no-repeat;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5001 18.9583H7.50008C2.97508 18.9583 1.04175 17.025 1.04175 12.5V7.49999C1.04175 2.97499 2.97508 1.04166 7.50008 1.04166H12.5001C17.0251 1.04166 18.9584 2.97499 18.9584 7.49999V12.5C18.9584 17.025 17.0251 18.9583 12.5001 18.9583ZM7.50008 2.29166C3.65841 2.29166 2.29175 3.65832 2.29175 7.49999V12.5C2.29175 16.3417 3.65841 17.7083 7.50008 17.7083H12.5001C16.3417 17.7083 17.7084 16.3417 17.7084 12.5V7.49999C17.7084 3.65832 16.3417 2.29166 12.5001 2.29166H7.50008Z" fill="%23ADB4C1"/></svg>');
-
-            @include only(desktop) {
-                @include prop-vw(width, 20, lg);
-                @include prop-vw(height, 20, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(width, 20, sm);
-                @include prop-vw(height, 20, sm);
-            }
+            width: 18px;
+            height: 18px;
+            background: $color-white center / 10px 7px no-repeat;
+            border: 1px solid $color-mid-grey;
+            border-radius: 5px;
+            transition: background-color $transition-default, border-color $transition-default;
         }
         &__input:checked + &__box {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M12.5001 18.9583H7.50008C2.97508 18.9583 1.04175 17.025 1.04175 12.5V7.49999C1.04175 2.97499 2.97508 1.04166 7.50008 1.04166H12.5001C17.0251 1.04166 18.9584 2.97499 18.9584 7.49999V12.5C18.9584 17.025 17.0251 18.9583 12.5001 18.9583ZM7.50008 2.29166C3.65841 2.29166 2.29175 3.65832 2.29175 7.49999V12.5C2.29175 16.3417 3.65841 17.7083 7.50008 17.7083H12.5001C16.3417 17.7083 17.7084 16.3417 17.7084 12.5V7.49999C17.7084 3.65832 16.3417 2.29166 12.5001 2.29166H7.50008Z" fill="%23ADB4C1"/><path d="M14.4666 6.80001C14.1999 6.53334 13.7999 6.53334 13.5333 6.80001L8.53325 11.8L6.46659 9.73334C6.19992 9.46667 5.79992 9.46667 5.53325 9.73334C5.26659 10 5.26659 10.4 5.53325 10.6667L8.06659 13.2C8.19992 13.3333 8.33325 13.4 8.53325 13.4C8.73325 13.4 8.86659 13.3333 8.99992 13.2L14.4666 7.73334C14.7333 7.46667 14.7333 7.06667 14.4666 6.80001Z" fill="%230F1A24"/></svg>');
+            background-color: $color-blue;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 7" fill="none"><path d="M1 3.5 3.8 6 9 1" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+            border-color: $color-blue;
+        }
+        &__input:focus-visible + &__box {
+            border-color: $color-form-focus;
         }
     }
 
