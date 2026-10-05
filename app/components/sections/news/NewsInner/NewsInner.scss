@@ -849,8 +849,11 @@
             @include prop-vw(top, 12, sm, true);
         }
     }
+    // Рамку iframe в Битриксе снимают стили редактора; без них (демо) браузер рисует свою
     .comments__wrap .bx-editor-iframe {
+        display: block;
         background: $color-white;
+        border: 0;
     }
     .comments__wrap .reviews-reply-form .feed-add-post-buttons {
         display: none !important;
