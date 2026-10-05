@@ -112,19 +112,21 @@
             @include prop-vw(max-width, 710, xl);
             width: 100%;
         }
+        // Заголовок страницы (ФИО, название аптеки): на десктопе PC/HEADER/H1 32/32, как на сайте
+        // (Figma, PC.Pharmacy v2 — 3641:13254); на телефоне 22/26 по макету 360.Pharmacy
         &__name {
             display: block;
             @include prop-vw(margin-bottom, 20, xl);
             width: fit-content;
             font-family: $font-secondary;
-            @include prop-vw(font-size, 26, xl);
+            @include prop-vw(font-size, 32, xl);
             font-weight: bold;
-            line-height: 1.07692307692;
+            line-height: 1;
             color: $color-black;
 
             @include only(desktop) {
                 @include prop-vw(margin-bottom, 20, lg);
-                @include prop-vw(font-size, 26, lg);
+                @include prop-vw(font-size, 32, lg);
             }
             @include only(mobile) {
                 @include prop-vw(margin-bottom, 10, sm);
