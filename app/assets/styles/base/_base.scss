@@ -1,4 +1,16 @@
+@use '@/assets/styles/base/mixins' as *;
+
 @layer base {
+	// Переключатель для vw-clamp (_mixins): 0 — планшет и телефон, 1 — десктоп (от 1024, размеры
+	// макета без масштаба)
+	:root {
+		--desktop: 0;
+
+		@include up(desktop) {
+			--desktop: 1;
+		}
+	}
+
 	html {
 		scroll-behavior: smooth;
 		font-size: 16px;

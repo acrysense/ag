@@ -522,4 +522,14 @@ $collapse: $collapse-dur $collapse-ease;
             }
         }
     }
+
+    // Десктоп без масштаба, как на сайте: меню 350 на 1920, на узких экранах сужается до 262 (поля 30 → 20)
+    @include up(desktop) {
+        .sidebar {
+            flex: 0 0 auto;
+            width: clamp(262px, 18.23vw, 350px);
+            max-width: none;
+            padding-inline: clamp(20px, 1.5625vw, 30px);
+        }
+    }
 }

@@ -308,4 +308,56 @@
 			@include prop-vw(padding-left, 10, sm);
 		}
 	}
+
+	// ---------- Десктоп без масштаба, как на ag-site ----------
+	// Размеры — макета 1920 без масштаба (_mixins: $fixed-desktop). На любой ширине от 1024 при
+	// сужении окна сначала сжимаются поля и пустые промежутки, потом колонки — как на сайте.
+	// Те же правила и для 1024–1439 (прежний отдельный макет 1440 не используется).
+	@include up(desktop) {
+		// Шапка и подвал — поля как у меню (30 → 20), логотип над пунктами меню
+		.container {
+			padding-inline: clamp(20px, 1.5625vw, 30px);
+		}
+
+		.wrapper__main {
+			flex: 1 1 auto;
+			min-width: 0;
+			max-width: 1570px;
+			padding-block: 20px;
+		}
+
+		// Главная: контент до 1080; справа пустое место, слева 50 и поля 125 — сжимаются
+		// первыми (до 20), потом сужается контент
+		.wrapper__container {
+			max-width: 1330px;
+			margin-left: clamp(0px, calc(100% - 1330px), 50px);
+			padding-inline: clamp(20px, calc((100% - 1080px) / 2), 125px);
+		}
+
+		// Сотрудник, визит: левая колонка до 1080, правая 262–350; поля 60 → 20. Рядом — с 1280, как
+		// на сайте; уже правая встаёт под левую — иначе левой остаётся ~360 и строки наезжают
+		.wrapper__double {
+			display: grid;
+			grid-template-columns: minmax(0, 1fr);
+			gap: 10px;
+
+			@media (min-width: 1280px) {
+				grid-template-columns: minmax(0, 1080px) minmax(262px, 350px);
+			}
+			max-width: 1560px;
+			padding-inline: clamp(20px, calc((100% - 1440px) / 2), 60px);
+		}
+
+		.wrapper__left,
+		.wrapper__right {
+			max-width: none;
+			min-width: 0;
+		}
+
+		// Сотрудники (таблица): контент до 1450; поля 60 → 20
+		.wrapper__wide {
+			max-width: 1570px;
+			padding-inline: clamp(20px, calc((100% - 1450px) / 2), 60px);
+		}
+	}
 }

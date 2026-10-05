@@ -93,19 +93,39 @@ $alias-bp: (
 	@return list.nth($order, $i + 1);
 }
 
+// Десктоп без масштаба, как на ag-site: от 1024 значение макета 1440 / 1920 как есть, при
+// сужении окна сжимаются поля и колонки (_layout.scss). Планшет — как было: значение на нижней
+// границе диапазона (макет × 1024 / ширина макета). Переключатель --desktop (0 / 1, _base.scss) —
+// одна строка CSS на свойство, без медиа-запроса. Телефон (макет 360) — пропорционально, как было
+$fixed-desktop: true !default;
+
 @function vw-clamp($valueAt, $baseWidth, $from, $to: null) {
 	$k: math.div($valueAt, $baseWidth) * 100vw;
 
 	$a: $valueAt * math.div($from, $baseWidth);
 
 	@if $to == null {
-		@return max(#{$a}px, #{$k});
+		$scaled: max(#{$a}px, #{$k});
+		@return _fixed-desktop($valueAt, $baseWidth, $scaled);
 	}
 
 	$b: $valueAt * math.div($to, $baseWidth);
 	$lower: math.min($a, $b);
 	$upper: math.max($a, $b);
-	@return clamp(#{$lower}px, #{$k}, #{$upper}px);
+	$scaled: clamp(#{$lower}px, #{$k}, #{$upper}px);
+	@return _fixed-desktop($valueAt, $baseWidth, $scaled);
+}
+
+// Макеты 1440 / 1920 при $fixed-desktop: на десктопе — значение макета, ниже — прежнее выражение
+// без изменений (планшет как был)
+@function _fixed-desktop($valueAt, $baseWidth, $scaled) {
+	@if not $fixed-desktop or $baseWidth < 1440 {
+		@return $scaled;
+	}
+	@if $valueAt == 0 {
+		@return 0px;
+	}
+	@return calc(#{$scaled} * (1 - var(--desktop)) + #{$valueAt}px * var(--desktop));
 }
 
 @function vw-range($px, $range: lg) {
