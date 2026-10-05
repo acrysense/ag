@@ -13,6 +13,9 @@ $breakpoints: (
 	mobile: 0,
 	tablet: 1024,
 	desktop: 1024,
+	// Только для up(wide): длинный логотип в шапке — с 1280, как на ag-site. В порядок для only()
+	// не входит (only(desktop) — по-прежнему 1024–1439)
+	wide: 1280,
 	lg: 1440,
 	xl: 1920,
 	cap: $fluid-cap,
