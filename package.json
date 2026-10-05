@@ -32,12 +32,15 @@
 	},
 	"browserslist": {
 		"production": [
-			"cover 99%",
-			"last 2 ios_saf versions",
-			"Firefox ESR",
-			"not dead",
-			"not op_mini all",
-			"not ie <= 11"
+			"chrome >= 107",
+			"edge >= 107",
+			"firefox >= 104",
+			"safari >= 16",
+			"ios_saf >= 16",
+			"and_chr >= 107",
+			"and_ff >= 104",
+			"samsung >= 21",
+			"opera >= 93"
 		],
 		"development": [
 			"last 1 chrome version",
