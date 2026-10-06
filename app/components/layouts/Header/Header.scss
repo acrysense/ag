@@ -31,30 +31,22 @@
         // Логотип с названием — те же картинки, что на сайте; как на сайте, 47 по высоте
         // (название шириной 389, как в макете 1920), на мобильном 141×40
         // Как на ag-site: длинный логотип (название в строку) — с 1280, короче — название в две
-        // строки: на телефоне и планшете 141×40, на 1024–1279 — 166×47. Размеры точные: <picture>
-        // меняет картинку при смене ширины не сразу, и длинная на кадр вылезала бы из рамки
+        // строки. Задана только высота (40 на телефоне и планшете, 47 на десктопе), ширина — от
+        // самой картинки: так логотип верный при любой разметке шапки — и с новой границей
+        // <source media> 1280, и со старой 744 (до правки шаблона на бэке длинный логотип с 744)
         &__logotype {
-            display: block;
-            overflow: hidden;
-            @include prop-vw(min-width, 141, sm);
-            @include prop-vw(width, 141, sm);
+            display: flex;
+            flex: none;
             @include prop-vw(height, 40, sm);
             img {
                 display: block;
-                width: 100%;
+                width: auto;
+                max-width: none;
                 height: 100%;
-                object-fit: contain;
-                object-position: left center;
             }
 
             @include up(desktop) {
-                min-width: 166px;
-                width: 166px;
                 height: 47px;
-            }
-            @include up(wide) {
-                min-width: 458px;
-                width: 458px;
             }
         }
         &__inner {
