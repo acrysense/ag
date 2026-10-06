@@ -1,0 +1,406 @@
+// Перенесено с ag-site (layouts/MainMenu/MainMenu.scss) — стили сайта (assets/styles/site). Меняется вместе с сайтом.
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Figma: 360.MainMenu v2 (4558:842). Только до десктопного брейкпоинта.
+@layer components {
+	.main-menu {
+		position: fixed;
+		inset: 0;
+		z-index: 50;
+		width: 100%;
+		max-width: 100%;
+		height: 100%;
+		max-height: 100%;
+		margin: 0;
+		padding: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		color: palette("black-txt");
+		background: palette("bg-main");
+		border: 0;
+
+		&[open] {
+			display: flex;
+			flex-direction: column;
+		}
+
+		// Витрина: открытое меню внутри карточки состояния, без фиксации. Своей прокрутки
+		// нет — прокручивается страница; иначе overscroll-behavior: contain гасил колесо
+		// и свайп над меню, и не прокручивалось ничего
+		&--static {
+			position: relative;
+			z-index: auto;
+			height: auto;
+			min-height: 100vh;
+			max-height: none;
+			overflow: visible;
+			overscroll-behavior: auto;
+		}
+
+		&__header {
+			display: flex;
+			flex: none;
+			align-items: center;
+			justify-content: space-between;
+			height: 56px;
+			padding: 0 8px 0 14px;
+		}
+
+		&__title {
+			@include text("h3-360");
+		}
+
+		&__close,
+		&__logout {
+			display: flex;
+			flex: none;
+			align-items: center;
+			justify-content: center;
+			width: 40px;
+			height: 40px;
+			padding: 0;
+			color: palette("black-txt");
+			background: palette("white");
+			border: 0;
+			border-radius: 20px;
+		}
+
+		&__logout {
+			background: palette("bg-main");
+		}
+
+		&__close-icon {
+			width: 14px;
+			height: 14px;
+		}
+
+		// Снизу 76px: над контентом лежит TabBar (60) — как в макете
+		&__content {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			padding: 12px 10px calc(76px + env(safe-area-inset-bottom));
+		}
+
+		&__profile {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			padding: 14px;
+			background: palette("white");
+			border-radius: $radius-inner-block;
+		}
+
+		// Гость: карточка входа на месте профиля (наше): заголовок, пояснение, кнопка во всю ширину
+		&__login {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			padding: 14px;
+			background: palette("white");
+			border-radius: $radius-inner-block;
+		}
+
+		&__login-title {
+			@include text("m-500");
+
+			margin: 0;
+		}
+
+		&__login-text {
+			@include text("s-400");
+
+			margin: 0;
+			color: palette("dark-grey-txt");
+		}
+
+		&__login-button {
+			width: 100%;
+			margin-top: 10px;
+		}
+
+		// Без фото — инициалы
+		&__avatar {
+			@include avatar(palette("icon-grey"));
+
+			width: 48px;
+			height: 48px;
+		}
+
+		&__initials {
+			@include avatar-initials;
+		}
+
+		&__profile-text {
+			display: flex;
+			flex: 1 1 auto;
+			flex-direction: column;
+			gap: 4px;
+			min-width: 0;
+		}
+
+		&__name {
+			@include text("l-500-360");
+		}
+
+		&__role {
+			@include text("s-400-360");
+
+			color: palette("dark-grey-txt");
+		}
+
+		&__profile-link {
+			@include text("s-500-360");
+
+			align-self: flex-start;
+			color: palette("blue-txt");
+		}
+
+		// Подписи разделов: в макете 360/S/500 с разрядкой 0.48px и верхним регистром
+		&__label {
+			@include text("s-500-360");
+
+			padding: 8px 0 0 4px;
+			letter-spacing: 0.04em;
+			color: palette("dark-grey-txt");
+			text-transform: uppercase;
+		}
+
+		&__card {
+			overflow: hidden;
+			background: palette("white");
+			border-radius: $radius-inner-block;
+		}
+
+		&__icon {
+			width: 20px;
+			height: 20px;
+		}
+
+		&__group,
+		&__row {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			width: 100%;
+			padding: 14px;
+			color: inherit;
+			text-align: left;
+			background: none;
+			border: 0;
+		}
+
+		&__group {
+			padding-block: 10px;
+			border-bottom: 1px solid palette("form-border");
+
+			&[aria-expanded="false"] {
+				border-bottom-color: transparent;
+			}
+		}
+
+		&__group-text {
+			display: flex;
+			flex: 1 1 auto;
+			flex-direction: column;
+			gap: 2px;
+			min-width: 0;
+		}
+
+		&__group-title {
+			@include text("m-500-360");
+		}
+
+		&__group-meta {
+			@include text("s-400-360");
+
+			overflow: hidden;
+			color: palette("dark-grey-txt");
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		&__group-arrow,
+		&__row-arrow {
+			flex: none;
+			width: 16px;
+			height: 16px;
+			color: palette("icon-grey");
+		}
+
+		&__group[aria-expanded="false"] &__group-arrow {
+			transform: rotate(180deg);
+		}
+
+		&__list {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+
+			li + li {
+				border-top: 1px solid palette("form-border");
+			}
+		}
+
+		&__row-text {
+			@include text("m-400-360");
+
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+
+		&__logo {
+			flex: none;
+			width: 20px;
+			height: 20px;
+			object-fit: contain;
+		}
+
+		// Плитки портала: 2 колонки, текущий раздел — синяя рамка и подпись
+		&__tiles {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 10px;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		&__tile {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			height: 100%;
+			padding: 14px;
+			color: palette("black-txt");
+			background: palette("white");
+			border: 1px solid transparent;
+			border-radius: $radius-inner-block;
+
+			&[aria-current="page"] {
+				color: palette("main-blue");
+				border-color: palette("main-blue");
+			}
+		}
+
+		&__tile-icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 36px;
+			height: 36px;
+			color: palette("black-txt");
+			background: palette("bg-info");
+			border-radius: 18px;
+		}
+
+		&__tile-text {
+			@include text("m-500-360");
+
+			overflow-wrap: anywhere;
+		}
+	}
+
+	// Наведение (наше, только цвет): пункты, плитки, «Выйти» — Blue.TXT, крестик — Main Blue,
+	// «Моя страница» — Blue.Hover
+	.main-menu__row:hover,
+	.main-menu__group:hover,
+	.main-menu__tile:hover,
+	.main-menu__logout:hover,
+	.main-menu__row:focus-visible,
+	.main-menu__group:focus-visible,
+	.main-menu__tile:focus-visible,
+	.main-menu__logout:focus-visible {
+		color: palette("blue-txt");
+	}
+
+	.main-menu__row,
+	.main-menu__group,
+	.main-menu__tile,
+	.main-menu__logout,
+	.main-menu__close,
+	.main-menu__profile-link {
+		transition:
+			color $transition-default,
+			border-color $transition-default;
+	}
+
+	.main-menu__close:hover,
+	.main-menu__close:focus-visible {
+		color: palette("main-blue");
+	}
+
+	.main-menu__profile-link:hover,
+	.main-menu__profile-link:focus-visible {
+		color: palette("blue-hover");
+	}
+
+	// Появление (наше): сначала проявляется фон, затем блоки по очереди поднимаются на 12px —
+	// короткой волной сверху вниз. Закрытие — просто гаснет, быстрее. Без сдвига всего меню:
+	// под ним не мелькает страница
+	.main-menu {
+		opacity: 0;
+		transition:
+			opacity $duration-popup $ease-out,
+			display $duration-popup allow-discrete,
+			overlay $duration-popup allow-discrete;
+
+		&[open] {
+			opacity: 1;
+			transition-duration: $duration-popup;
+
+			@starting-style {
+				opacity: 0;
+			}
+		}
+
+		&--static {
+			opacity: 1;
+		}
+	}
+
+	.main-menu[open]:not(.main-menu--static) {
+		.main-menu__header,
+		.main-menu__content > * {
+			transition:
+				opacity $duration-reveal-item $ease-out,
+				transform $duration-reveal-item $ease-out;
+			transition-delay: calc(#{$duration-popup} * 0.4 + var(--menu-i, 0) * 40ms);
+
+			@starting-style {
+				opacity: 0;
+				transform: translateY(12px);
+			}
+		}
+
+		.main-menu__content > :nth-child(1) {
+			--menu-i: 1;
+		}
+
+		.main-menu__content > :nth-child(2) {
+			--menu-i: 2;
+		}
+
+		.main-menu__content > :nth-child(3) {
+			--menu-i: 3;
+		}
+
+		.main-menu__content > :nth-child(4) {
+			--menu-i: 4;
+		}
+
+		.main-menu__content > :nth-child(5) {
+			--menu-i: 5;
+		}
+
+		.main-menu__content > :nth-child(n + 6) {
+			--menu-i: 6;
+		}
+	}
+
+	// Сворачивание группы — по высоте (MainMenu.js): на время анимации содержимое обрезается
+	.main-menu__list.is-animating {
+		overflow: hidden;
+	}
+}

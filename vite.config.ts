@@ -779,6 +779,16 @@ export default defineConfig(({ mode }) => {
 					not(v: any) {
 						return !v
 					},
+					// Инициалы по имени: «Волкова Анна» → «ВА» — как на ag-site (шапка и меню сайта)
+					initials(name: any) {
+						return String(name || '')
+							.trim()
+							.split(/\s+/)
+							.slice(0, 2)
+							.map((word) => word[0] || '')
+							.join('')
+							.toUpperCase()
+					},
 				},
 
 				context: (htmlPath) => {

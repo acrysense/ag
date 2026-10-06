@@ -1,0 +1,116 @@
+// Перенесено с ag-site (layouts/TabBar/TabBar.scss) — стили сайта (assets/styles/site). Меняется вместе с сайтом.
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Figma: 360.TabBar (4870:1538). До 767px, position: fixed, высота 60 + safe-area.
+// Default — Dark-grey.TXT, Active — Main Blue и полоска 32×3 сверху.
+@layer components {
+	.tab-bar {
+		position: fixed;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		z-index: 60;
+		padding: 0 4px env(safe-area-inset-bottom);
+		background: palette("white");
+		border-top: 1px solid palette("form-border");
+
+		@include up(tablet) {
+			display: none;
+		}
+
+		&--static {
+			position: relative;
+			z-index: auto;
+		}
+
+		&__list {
+			display: flex;
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		&__cell {
+			flex: 1 1 0;
+			min-width: 0;
+		}
+
+		&__item {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+			align-items: center;
+			justify-content: center;
+			width: 100%;
+			height: 59px;
+			// 9/7, а не 10/8: иначе слот 24 + 4 + строка подписи (15) не помещаются и подпись
+			// сжимается — у «Обучение» срезался хвост «у»
+			padding: 9px 4px 7px;
+			color: palette("dark-grey-txt");
+			background: none;
+			border: 0;
+
+			&[aria-current="page"],
+			&.is-active {
+				color: palette("main-blue");
+
+				&::before {
+					position: absolute;
+					top: -1px;
+					left: 50%;
+					width: 32px;
+					height: 3px;
+					content: "";
+					background: currentColor;
+					transform: translateX(-50%);
+				}
+			}
+		}
+
+		// Слот 24, иконка 20
+		&__icon {
+			width: 20px;
+			height: 20px;
+			margin: 2px;
+		}
+
+		// Подпись не сжимается; запас 2px сверху и снизу внутри (отрицательные поля — место то же):
+		// overflow: hidden для многоточия не срезает хвосты «у», «д»
+		&__label {
+			@include text("s-500-360");
+
+			flex: none;
+			max-width: 100%;
+			margin-block: -2px;
+			padding-block: 2px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+
+	// Контент страницы не уходит под TabBar
+	body:has(.tab-bar:not(.tab-bar--static)) {
+		@include down(tablet) {
+			padding-bottom: calc(60px + env(safe-area-inset-bottom));
+		}
+	}
+
+	// Браузеры без :has (Firefox до 121): в ЛК панели может не быть (старая разметка бэка) —
+	// отступ только при классе .has-tab-bar на body (utils/has-fallback.js), не всегда, как на сайте
+	@supports not selector(:has(*)) {
+		body.has-tab-bar {
+			@include down(tablet) {
+				padding-bottom: calc(60px + env(safe-area-inset-bottom));
+			}
+		}
+	}
+
+	// Наведение (наше): Blue.TXT
+	.tab-bar__item:hover:not([aria-current="page"], .is-active),
+	.tab-bar__item:focus-visible:not([aria-current="page"], .is-active) {
+		color: palette("blue-txt");
+	}
+}

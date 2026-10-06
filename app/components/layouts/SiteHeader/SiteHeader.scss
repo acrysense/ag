@@ -1,0 +1,462 @@
+// Перенесено с ag-site (layouts/Header/Header.scss) — стили сайта (assets/styles/site). Меняется вместе с сайтом.
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Figma: PC.HEADER.v2 (4652:8752) и 360.HEADER (4865:1334)
+@layer components {
+	// Блок — только у новой шапки (header--site): у старой шапки ЛК (layouts/Header) свои правила
+	.header--site {
+		position: relative;
+		z-index: 10;
+		background: palette("white");
+	}
+
+	.header {
+
+		// Мобильный: строка 60 (логотип, аватар, бургер) + строка поиска 66.
+		// Десктоп: строка 64 (логотип, поиск, вход) + строка меню 50.
+		&__top {
+			display: grid;
+			grid-template-areas:
+				"brand actions"
+				"search search";
+			grid-template-columns: minmax(0, 1fr) auto;
+			// Ряд поиска держит высоту (46 + поля 10): открытый поиск уходит на весь экран, и без
+			// этого шапка под ним схлопывалась — страница подпрыгивала, пока экран проявляется
+			grid-template-rows: auto 66px;
+			align-items: center;
+
+			@include up(desktop) {
+				grid-template-areas: "brand search actions";
+				grid-template-rows: auto;
+				// Поиск по центру, пока хватает места; уже — сжимается до 240px
+				grid-template-columns: minmax(max-content, 1fr) minmax(240px, 700px) minmax(
+						max-content,
+						1fr
+					);
+				// Зазор между колонками — наш, на макете 1920 места с запасом
+				column-gap: 24px;
+				height: 64px;
+				padding: 0 30px;
+			}
+		}
+
+		// Логотип с названием — картинка (как в ЛК): на мобильном 141×40 (как в макете 360:
+		// знак 40, название через 10); с 1024 — крупнее, 47 по высоте: название длинной картинки
+		// с 1280 тогда шириной 389, как текст в макете 1920
+		&__brand {
+			display: flex;
+			grid-area: brand;
+			align-items: center;
+			min-width: 0;
+			height: 60px;
+			padding: 10px;
+
+			@include up(desktop) {
+				height: auto;
+				padding: 0;
+			}
+		}
+
+		// Размеры заданы точно (не width: auto): при смене ширины экрана браузер меняет картинку
+		// <picture> не сразу, и на кадр длинный логотип вылезал за экран мобильной шапки
+		&__logo {
+			display: flex;
+
+			img {
+				width: 141px;
+				height: 40px;
+				object-fit: contain;
+				object-position: left center;
+
+				@include up(desktop) {
+					width: 166px;
+					height: 47px;
+				}
+
+				@include up(wide) {
+					width: 458px;
+				}
+			}
+		}
+
+		&__search {
+			grid-area: search;
+			margin: 10px;
+
+			@include up(desktop) {
+				margin: 0;
+			}
+		}
+
+		&__actions {
+			display: flex;
+			grid-area: actions;
+			gap: 15px;
+			align-items: center;
+			justify-self: end;
+			padding-right: 10px;
+
+			@include up(desktop) {
+				gap: 4px;
+				padding-right: 0;
+			}
+		}
+
+		// Быстрые ссылки вошедшего (PC.HEADER.v2/User, 4652:8833): кнопки 40×40,
+		// иконка 24 со смещением как в макете, справа разделитель
+		&__quick {
+			display: none;
+
+			@include up(desktop) {
+				display: flex;
+				gap: 5px;
+				margin: 0;
+				padding: 0 20px 0 0;
+				list-style: none;
+			}
+		}
+
+		&__quick-link {
+			position: relative;
+			display: block;
+			width: 40px;
+			height: 40px;
+			color: palette("black-txt");
+			transition: color $transition-default;
+
+			&:hover,
+			&:focus-visible {
+				color: palette("blue-hover");
+			}
+
+			&::after {
+				position: absolute;
+				top: 5px;
+				left: 39px;
+				width: 0.5px;
+				height: 30px;
+				content: "";
+				background: palette("divider");
+			}
+		}
+
+		&__quick-icon {
+			position: absolute;
+			top: 8px;
+			left: 5px;
+			width: 24px;
+			height: 24px;
+		}
+
+		&__user {
+			display: flex;
+			gap: 5px;
+			align-items: center;
+			color: palette("black-txt");
+
+			@include up(desktop) {
+				gap: 10px;
+			}
+		}
+
+		// Без фото — инициалы (на мобильном фон Icon.Grey, на десктопе Grey — как в макетах)
+		&__avatar {
+			@include avatar(palette("icon-grey"));
+
+			width: 30px;
+			height: 30px;
+
+			@include up(desktop) {
+				background: palette("grey");
+			}
+		}
+
+		&__initials {
+			@include avatar-initials;
+		}
+
+		// Имя видно на десктопе; на мобильном остаётся для скринридера
+		&__user-name {
+			@include text("m-400");
+
+			@include down(desktop) {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+			// Длинное имя не раздвигает шапку
+			@include up(desktop) {
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+		}
+
+		// В файле иконка смотрит вправо, в макете — вниз. Имя и стрелка — через 5px
+		&__user-arrow {
+			width: 16px;
+			height: 16px;
+			transform: rotate(90deg);
+
+			@include up(desktop) {
+				margin-left: -5px;
+			}
+		}
+
+		// Мобильный гость: «Button M.General, 36 px» из описания 360.HEADER
+		&__login {
+			@include down(desktop) {
+				height: 36px;
+				padding: 7px 12px;
+			}
+		}
+
+		&__burger {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 30px;
+			height: 30px;
+			padding: 0;
+			color: palette("black-txt");
+			background: none;
+			border: 0;
+
+			@include up(desktop) {
+				display: none;
+			}
+		}
+
+		&__burger-icon {
+			width: 30px;
+			height: 30px;
+		}
+
+		// Меню — строка под шапкой на десктопе; на мобильном — layouts/MainMenu
+		&__nav {
+			display: none;
+
+			@include up(desktop) {
+				display: flex;
+				align-items: center;
+				min-height: 50px;
+				padding: 0 30px;
+				border-top: 1px solid palette("form-border");
+			}
+		}
+	}
+
+	// Основное меню шапки (только десктоп: на мобильном — layouts/MainMenu)
+	.menu {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 40px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		&__item {
+			position: relative;
+			display: flex;
+			gap: 2px;
+			align-items: center;
+			min-height: 46px;
+		}
+
+		&__link,
+		&__sublink {
+			color: palette("black-txt");
+			transition: color $transition-default;
+
+			&:hover,
+			&:focus-visible {
+				color: palette("blue-hover");
+			}
+		}
+
+		&__link {
+			@include text("m-400");
+		}
+
+		// Открытый пункт в макете — Blue.Hover
+		&__item.is-open > &__link {
+			color: palette("blue-hover");
+		}
+
+		// Стрелка 10px, область нажатия 24px
+		&__toggle {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 24px;
+			height: 24px;
+			margin: 0 -7px;
+			padding: 0;
+			color: palette("black-txt");
+			background: none;
+			border: 0;
+		}
+
+		&__item.is-open > &__toggle,
+		&__toggle:hover,
+		&__toggle:focus-visible {
+			color: palette("blue-hover");
+		}
+
+		// Пункт без ссылки: подпись и стрелка — одна кнопка (ТЗ: «О холдинге» не кликабелен)
+		&__toggle--label {
+			gap: 2px;
+			width: auto;
+			height: auto;
+			margin: 0;
+
+			.menu__link {
+				color: inherit;
+			}
+		}
+
+		&__arrow {
+			width: 10px;
+			height: 10px;
+			transition: transform $transition-default;
+		}
+
+		&__item.is-open &__arrow {
+			transform: rotate(180deg);
+		}
+
+		// Figma: Dropdown Menu (4615:43188). Шрифт в макете Poppins — на сайте его нет, Inter.
+		// Из макета: на 6px выше низа пункта и на 4px левее
+		&__submenu {
+			position: absolute;
+			top: calc(100% - 6px);
+			left: -4px;
+			width: 222px;
+			margin: 0;
+			padding: 10px 0;
+			list-style: none;
+			background: palette("white");
+			border: 1px solid palette("dropdown-border");
+			border-radius: $radius-dropdown;
+			box-shadow: $shadow-content-block;
+		}
+
+		&__sublink {
+			@include text("m-400-360");
+
+			display: block;
+			padding: 10px 16px;
+		}
+	}
+
+	// Наведение (наше, только цвет): имя пользователя — Blue.TXT, бургер — Main Blue. Название
+	// сайта — не ссылка, без наведения; логотип-ссылка — картинка чуть прозрачнее (0.9)
+	.header__user:hover .header__user-name,
+	.header__user:focus-visible .header__user-name {
+		color: palette("blue-txt");
+	}
+
+	.header__user-name {
+		transition: color $transition-default;
+	}
+
+	.header__logo-link {
+		display: flex;
+		flex: none;
+		border-radius: 2px;
+		transition: opacity $transition-default;
+
+		&:hover {
+			opacity: 0.9;
+		}
+	}
+
+	.header__burger:hover,
+	.header__burger:focus-visible {
+		color: palette("main-blue");
+	}
+
+	// Появление (наше): подменю проявляется со сдвигом сверху
+	.menu__submenu {
+		@include appear;
+	}
+
+	.menu__toggle {
+		transition: color $transition-default;
+	}
+
+	// Меню под аватаром (кит: Dropdown menu 2725:18877): белая карточка, поля 20, скругление 10,
+	// тень списков; пункты 14/20 через 20, значок 20 через 15, разделитель Grey. Шрифт кита Poppins —
+	// на сайте Inter. Справа под аватаром; на мобильном — тоже
+	.header__user-menu {
+		position: relative;
+	}
+
+	button.header__user {
+		padding: 0;
+		font: inherit;
+		cursor: pointer;
+		background: none;
+		border: 0;
+	}
+
+	.header__user-menu.is-open .header__user-arrow {
+		transform: rotate(-90deg);
+	}
+
+	.header__user-arrow {
+		transition: transform $transition-default;
+	}
+
+	.user-menu {
+		position: absolute;
+		top: calc(100% + 10px);
+		right: 0;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		min-width: 240px;
+		margin: 0;
+		padding: 20px;
+		list-style: none;
+		background: palette("white");
+		border-radius: $radius-inner-block;
+		box-shadow: $shadow-list;
+
+		@include appear;
+	}
+
+	.user-menu__link {
+		@include text("m-400-360");
+
+		display: flex;
+		gap: 15px;
+		align-items: center;
+		color: palette("black-txt");
+		white-space: nowrap;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-txt");
+		}
+	}
+
+	.user-menu__icon {
+		flex: none;
+		width: 20px;
+		height: 20px;
+	}
+
+	.user-menu__divider {
+		height: 1px;
+		background: palette("grey");
+	}
+}

@@ -2,7 +2,9 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer layout {
-    .header {
+    // Старая шапка ЛК. Пока бэк выводит её — работает она; новая шапка (как на ag-site) —
+    // layouts/SiteHeader, метка header--site: правила самого блока ниже её не задевают
+    .header:not(.header--site) {
         background: $color-white;
         @include border-side(bottom, 1, solid, $color-border, xl);
 
@@ -12,6 +14,9 @@
         @include only(mobile) {
             @include border-side(bottom, 1, solid, $color-border, sm);
         }
+    }
+
+    .header {
 
         // Как шапка сайта (ag-site, PC.HEADER.v2): ряд 64 на 1920 (логотип 47 + поля 8.5), на
         // мобильном 60 (логотип 40 + поля 10); на других ширинах масштабируется, как весь кабинет

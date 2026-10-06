@@ -1,17 +1,21 @@
 {
 	"template": "ag",
-
 	"siteName": "AG",
 	"siteUrl": "",
-
 	"lang": "ru",
-
 	"meta": [
-		{ "charset": "utf-8" },
-		{ "name": "viewport", "content": "width=device-width, initial-scale=1, maximum-scale=1" },
-		{ "name": "format-detection", "content": "telephone=no" }
+		{
+			"charset": "utf-8"
+		},
+		{
+			"name": "viewport",
+			"content": "width=device-width, initial-scale=1, maximum-scale=1"
+		},
+		{
+			"name": "format-detection",
+			"content": "telephone=no"
+		}
 	],
-
 	"link": [
 		{
 			"rel": "preload",
@@ -26,16 +30,707 @@
 			"href": "/favicon/favicon-96x96.png",
 			"sizes": "96x96"
 		},
-		{ "rel": "icon", "type": "image/svg+xml", "href": "/favicon/favicon.svg" },
-		{ "rel": "shortcut icon", "href": "/favicon/favicon.ico" },
-		{ "rel": "apple-touch-icon", "sizes": "180x180", "href": "/favicon/apple-touch-icon.png" },
-		{ "rel": "manifest", "href": "/favicon/site.webmanifest" }
+		{
+			"rel": "icon",
+			"type": "image/svg+xml",
+			"href": "/favicon/favicon.svg"
+		},
+		{
+			"rel": "shortcut icon",
+			"href": "/favicon/favicon.ico"
+		},
+		{
+			"rel": "apple-touch-icon",
+			"sizes": "180x180",
+			"href": "/favicon/apple-touch-icon.png"
+		},
+		{
+			"rel": "manifest",
+			"href": "/favicon/site.webmanifest"
+		}
 	],
-
 	"seoDefaults": {
 		"title": "AG",
 		"description": "Стартовый проект на Vite: быстрый и гибкий старт.",
 		"ogImage": "",
 		"twitterCard": "summary_large_image"
+	},
+	"header": {
+		"homeUrl": "/index.html",
+		"user": {
+			"name": "Владислава Митрофановна",
+			"initials": "ВМ",
+			"url": "/index.html",
+			"links": [
+				{
+					"icon": "profile",
+					"label": "Личный кабинет",
+					"url": "/index.html"
+				},
+				{
+					"icon": "edu",
+					"label": "Учебный портал",
+					"url": "#"
+				},
+				{
+					"icon": "crm",
+					"label": "CRM",
+					"url": "/pharmacies.html"
+				}
+			],
+			"menu": [
+				{
+					"label": "Моя страница",
+					"url": "/index.html",
+					"icon": "profile"
+				},
+				{
+					"label": "Учебный портал",
+					"url": "#",
+					"icon": "edu"
+				},
+				{
+					"label": "Коэффициент",
+					"url": "/coefficient.html",
+					"icon": "multiplier"
+				},
+				{
+					"label": "Пакеты",
+					"url": "/package.html",
+					"icon": "box"
+				},
+				{
+					"label": "Мотивация",
+					"url": "/motivation.html",
+					"icon": "motivation"
+				},
+				{
+					"label": "Конкурсы",
+					"url": "/contests.html",
+					"icon": "apple"
+				},
+				{
+					"divider": true
+				},
+				{
+					"label": "Настройки",
+					"url": "/edit.html",
+					"icon": "settings"
+				},
+				{
+					"label": "Выйти",
+					"url": "/login.html",
+					"icon": "exit",
+					"modal": "main-menu-logout"
+				}
+			]
+		}
+	},
+	"mainMenu": {
+		"title": "Меню",
+		"user": {
+			"name": "Владислава Митрофановна",
+			"role": "Заведующая аптекой",
+			"url": "/index.html",
+			"urlText": "Моя страница"
+		},
+		"logout": {
+			"url": "/login.html",
+			"title": "Выйти из аккаунта?",
+			"text": "Чтобы снова открыть портал, понадобится войти по логину и паролю."
+		},
+		"groups": [
+			{
+				"key": "crm",
+				"label": "CRM",
+				"title": "CRM",
+				"icon": "case",
+				"meta": "6 разделов",
+				"expanded": true,
+				"items": [
+					{
+						"icon": "home",
+						"text": "Дашборд",
+						"url": "#"
+					},
+					{
+						"icon": "pharmacy",
+						"text": "Аптеки",
+						"url": "/pharmacies.html"
+					},
+					{
+						"icon": "manager",
+						"text": "Менеджеры",
+						"url": "/managers.html"
+					},
+					{
+						"icon": "profile",
+						"text": "Сотрудники",
+						"url": "/employees.html"
+					},
+					{
+						"icon": "calendar",
+						"text": "Визиты",
+						"url": "/visits.html"
+					},
+					{
+						"icon": "tasks",
+						"text": "Задачи",
+						"url": "/tasks.html"
+					}
+				]
+			},
+			{
+				"key": "cabinet",
+				"label": "Личный кабинет",
+				"title": "Личный кабинет",
+				"icon": "profile",
+				"meta": "5 разделов",
+				"expanded": true,
+				"items": [
+					{
+						"icon": "edu",
+						"text": "Учебный портал",
+						"url": "#"
+					},
+					{
+						"icon": "multiplier",
+						"text": "Коэффициент",
+						"url": "/coefficient.html"
+					},
+					{
+						"icon": "box",
+						"text": "Пакеты",
+						"url": "/package.html"
+					},
+					{
+						"icon": "motivation",
+						"text": "Мотивация",
+						"url": "/motivation.html"
+					},
+					{
+						"icon": "apple",
+						"text": "Конкурсы",
+						"url": "/contests.html"
+					}
+				]
+			}
+		],
+		"portal": {
+			"label": "Портал",
+			"items": [
+				{
+					"icon": "home",
+					"text": "Главная",
+					"url": "#"
+				},
+				{
+					"icon": "news",
+					"text": "Новости",
+					"url": "#"
+				},
+				{
+					"icon": "directory",
+					"text": "Справочник сотрудников",
+					"url": "#"
+				},
+				{
+					"icon": "wiki",
+					"text": "База знаний",
+					"url": "#"
+				},
+				{
+					"icon": "case",
+					"text": "Вакансии",
+					"url": "#"
+				},
+				{
+					"icon": "gallery",
+					"text": "Галерея",
+					"url": "#"
+				}
+			]
+		},
+		"join": {
+			"label": "Присоединяйтесь",
+			"items": [
+				{
+					"logo": "/assets/images/apte4ka.svg",
+					"text": "Гипермаркет Аптечка+",
+					"url": "#"
+				},
+				{
+					"logo": "/assets/images/adel.svg",
+					"text": "Аптеки ADEL",
+					"url": "#"
+				},
+				{
+					"logo": "/assets/images/dleki.svg",
+					"text": "Аптеки Добрыя лекi",
+					"url": "#"
+				},
+				{
+					"logo": "/assets/images/feelingood.svg",
+					"text": "Клуб FeelinGood",
+					"url": "#"
+				}
+			]
+		}
+	},
+	"tabBar": {
+		"items": [
+			{
+				"icon": "menu",
+				"text": "Меню",
+				"menu": true
+			},
+			{
+				"icon": "profile",
+				"text": "Кабинет",
+				"url": "/index.html"
+			},
+			{
+				"icon": "news",
+				"text": "Новости",
+				"url": "#"
+			},
+			{
+				"icon": "edu",
+				"text": "Обучение",
+				"url": "#"
+			}
+		]
+	},
+	"search": {
+		"action": "https://acrysense.github.io/ag-site/search.html",
+		"suggestUrl": "/__mock/search-suggest",
+		"filtersUrl": "/__mock/search-filters",
+		"sections": [
+			{
+				"value": "directory",
+				"text": "Справочник",
+				"icon": "profile",
+				"checked": true,
+				"where": "в Справочнике"
+			},
+			{
+				"value": "news",
+				"text": "Новости",
+				"icon": "news",
+				"where": "в Новостях"
+			},
+			{
+				"value": "documents",
+				"text": "Документы",
+				"icon": "directory",
+				"where": "в Документах"
+			},
+			{
+				"value": "vacancies",
+				"text": "Вакансии",
+				"icon": "case",
+				"where": "в Вакансиях"
+			}
+		],
+		"filters": [
+			{
+				"type": "select",
+				"name": "company[]",
+				"placeholder": "Юр. лицо",
+				"searchPlaceholder": "Найти юр. лицо",
+				"options": [
+					{
+						"value": "1",
+						"text": "ООО «Адель Фарм»"
+					},
+					{
+						"value": "2",
+						"text": "ООО «Аптека групп»"
+					},
+					{
+						"value": "3",
+						"text": "ООО «Добрыя лекі»"
+					}
+				]
+			},
+			{
+				"type": "select",
+				"name": "department[]",
+				"placeholder": "Отдел",
+				"searchPlaceholder": "Найти отдел",
+				"options": [
+					{
+						"value": "1",
+						"text": "Отдел маркетинга"
+					},
+					{
+						"value": "2",
+						"text": "Отдел продаж"
+					},
+					{
+						"value": "3",
+						"text": "Бухгалтерия"
+					},
+					{
+						"value": "4",
+						"text": "Отдел кадров"
+					},
+					{
+						"value": "5",
+						"text": "IT-отдел"
+					},
+					{
+						"value": "6",
+						"text": "Логистика"
+					},
+					{
+						"value": "7",
+						"text": "Склад"
+					}
+				]
+			},
+			{
+				"type": "select",
+				"name": "position[]",
+				"placeholder": "Должность",
+				"searchPlaceholder": "Найти должность",
+				"options": [
+					{
+						"value": "1",
+						"text": "Провизор"
+					},
+					{
+						"value": "2",
+						"text": "Фармацевт"
+					},
+					{
+						"value": "3",
+						"text": "Менеджер по закупкам"
+					},
+					{
+						"value": "4",
+						"text": "Маркетолог"
+					},
+					{
+						"value": "5",
+						"text": "Специалист по продажам"
+					},
+					{
+						"value": "6",
+						"text": "Руководитель направления"
+					}
+				]
+			},
+			{
+				"type": "select",
+				"name": "city[]",
+				"placeholder": "Город",
+				"searchPlaceholder": "Найти город",
+				"options": [
+					{
+						"value": "1",
+						"text": "Минск"
+					},
+					{
+						"value": "2",
+						"text": "Гродно"
+					},
+					{
+						"value": "3",
+						"text": "Брест"
+					},
+					{
+						"value": "4",
+						"text": "Гомель"
+					},
+					{
+						"value": "5",
+						"text": "Витебск"
+					},
+					{
+						"value": "6",
+						"text": "Могилёв"
+					}
+				]
+			}
+		],
+		"demoFilters": {
+			"directory": [
+				{
+					"type": "select",
+					"name": "company[]",
+					"placeholder": "Юр. лицо",
+					"searchPlaceholder": "Найти юр. лицо",
+					"options": [
+						{
+							"value": "1",
+							"text": "ООО «Адель Фарм»"
+						},
+						{
+							"value": "2",
+							"text": "ООО «Аптека групп»"
+						},
+						{
+							"value": "3",
+							"text": "ООО «Добрыя лекі»"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"name": "department[]",
+					"placeholder": "Отдел",
+					"searchPlaceholder": "Найти отдел",
+					"options": [
+						{
+							"value": "1",
+							"text": "Отдел маркетинга"
+						},
+						{
+							"value": "2",
+							"text": "Отдел продаж"
+						},
+						{
+							"value": "3",
+							"text": "Бухгалтерия"
+						},
+						{
+							"value": "4",
+							"text": "Отдел кадров"
+						},
+						{
+							"value": "5",
+							"text": "IT-отдел"
+						},
+						{
+							"value": "6",
+							"text": "Логистика"
+						},
+						{
+							"value": "7",
+							"text": "Склад"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"name": "position[]",
+					"placeholder": "Должность",
+					"searchPlaceholder": "Найти должность",
+					"options": [
+						{
+							"value": "1",
+							"text": "Провизор"
+						},
+						{
+							"value": "2",
+							"text": "Фармацевт"
+						},
+						{
+							"value": "3",
+							"text": "Менеджер по закупкам"
+						},
+						{
+							"value": "4",
+							"text": "Маркетолог"
+						},
+						{
+							"value": "5",
+							"text": "Специалист по продажам"
+						},
+						{
+							"value": "6",
+							"text": "Руководитель направления"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"name": "city[]",
+					"placeholder": "Город",
+					"searchPlaceholder": "Найти город",
+					"options": [
+						{
+							"value": "1",
+							"text": "Минск"
+						},
+						{
+							"value": "2",
+							"text": "Гродно"
+						},
+						{
+							"value": "3",
+							"text": "Брест"
+						},
+						{
+							"value": "4",
+							"text": "Гомель"
+						},
+						{
+							"value": "5",
+							"text": "Витебск"
+						},
+						{
+							"value": "6",
+							"text": "Могилёв"
+						}
+					]
+				}
+			],
+			"news": [
+				{
+					"type": "date",
+					"nameFrom": "date_from",
+					"nameTo": "date_to",
+					"placeholder": "Дата публикации"
+				},
+				{
+					"type": "select",
+					"name": "rubric[]",
+					"placeholder": "Рубрика",
+					"searchPlaceholder": "Найти рубрику",
+					"options": [
+						{
+							"value": "1",
+							"text": "Новости холдинга"
+						},
+						{
+							"value": "2",
+							"text": "СТМ"
+						},
+						{
+							"value": "3",
+							"text": "Товары"
+						},
+						{
+							"value": "4",
+							"text": "Мотивационные проекты"
+						},
+						{
+							"value": "5",
+							"text": "Акции"
+						},
+						{
+							"value": "6",
+							"text": "Учебный центр"
+						}
+					]
+				}
+			],
+			"documents": [
+				{
+					"type": "date",
+					"nameFrom": "date_from",
+					"nameTo": "date_to",
+					"placeholder": "Дата"
+				},
+				{
+					"type": "select",
+					"name": "filetype[]",
+					"placeholder": "Тип файла",
+					"searchPlaceholder": "Найти тип",
+					"options": [
+						{
+							"value": "1",
+							"text": "PDF"
+						},
+						{
+							"value": "2",
+							"text": "DOCX"
+						},
+						{
+							"value": "3",
+							"text": "XLSX"
+						},
+						{
+							"value": "4",
+							"text": "PPTX"
+						},
+						{
+							"value": "5",
+							"text": "Страница сайта"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"name": "folder[]",
+					"placeholder": "Папка",
+					"searchPlaceholder": "Найти папку",
+					"options": [
+						{
+							"value": "1",
+							"text": "Библиотека / Регламенты"
+						},
+						{
+							"value": "2",
+							"text": "Библиотека / Кадры"
+						},
+						{
+							"value": "3",
+							"text": "Библиотека / Бухгалтерия"
+						},
+						{
+							"value": "4",
+							"text": "Шаблоны"
+						}
+					]
+				}
+			],
+			"vacancies": [
+				{
+					"type": "number",
+					"label": "Зарплата, BYN",
+					"nameFrom": "salary_from",
+					"nameTo": "salary_to",
+					"placeholderFrom": "Зарплата от",
+					"placeholderTo": "до, BYN"
+				},
+				{
+					"type": "select",
+					"name": "city[]",
+					"placeholder": "Город",
+					"searchPlaceholder": "Найти город",
+					"options": [
+						{
+							"value": "1",
+							"text": "Минск"
+						},
+						{
+							"value": "2",
+							"text": "Гродно"
+						},
+						{
+							"value": "3",
+							"text": "Брест"
+						},
+						{
+							"value": "4",
+							"text": "Иваново"
+						}
+					]
+				},
+				{
+					"type": "select",
+					"name": "company[]",
+					"placeholder": "Юр. лицо",
+					"searchPlaceholder": "Найти юр. лицо",
+					"options": [
+						{
+							"value": "1",
+							"text": "ООО «Адель Фарм»"
+						},
+						{
+							"value": "2",
+							"text": "ООО «Аптека групп»"
+						},
+						{
+							"value": "3",
+							"text": "ООО «Добрыя лекі»"
+						}
+					]
+				}
+			]
+		}
 	}
 }

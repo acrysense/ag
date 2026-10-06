@@ -1,0 +1,491 @@
+// Перенесено с ag-site (components/Select/Select.scss) — стили сайта (assets/styles/site). Меняется вместе с сайтом.
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Figma: Select — Месяц (4704:1079), открыт — 4706:1207. Поле 46px, рамка Form.Border, подпись
+// серым, значение Black.TXT, стрелка 11.5×6.5; открыто — рамка Form.Focus, стрелка вверх.
+// Список: через 6px под полем, по его ширине, пункты 38px, выбранный — BG.Violet, Blue.TXT и
+// галочка, под курсором — BG.Main.
+@layer components {
+	.select {
+		position: relative;
+		min-width: 0;
+	}
+
+	.select__field {
+		position: relative;
+		display: flex;
+		gap: 6px;
+		align-items: center;
+		height: 46px;
+		padding: 0 15px;
+		background: palette("white");
+		border: 1px solid palette("form-border");
+		border-radius: $radius-button;
+		transition: border-color $transition-default;
+
+		// Наведение (наше): рамка Icon.Grey; фокус и ошибка — ниже, перекрывают
+		&:hover,
+		&:focus-visible {
+			border-color: palette("icon-grey");
+		}
+
+		&:focus-within,
+		.select.is-open & {
+			border-color: palette("form-focus");
+		}
+
+		// Фокус с клавиатуры — синяя рамка, как у полей (кольцо у кнопки внутри снято)
+		&:has(:focus-visible) {
+			@include field-focus;
+		}
+
+		:focus-visible {
+			outline: none;
+		}
+	}
+
+	.select__label {
+		@include text("m-400");
+
+		flex: none;
+		color: palette("dark-grey-txt");
+	}
+
+	.select__value {
+		@include text("m-400");
+
+		flex: 1 1 auto;
+		min-width: 0;
+		overflow: hidden;
+		color: palette("black-txt");
+		text-overflow: ellipsis;
+		white-space: nowrap;
+
+		// Ничего не выбрано — заглушка серым (фильтры поиска: «Должность»)
+		.select.is-placeholder & {
+			color: palette("dark-grey-txt");
+		}
+	}
+
+	// Нативный список и кнопка — прозрачным слоем на всё поле; кольцо фокуса рисует поле.
+	// Шрифт нативного 16px, чтобы iOS не увеличивал страницу
+	.select__control,
+	.select__button {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		padding: 0;
+		font-size: $field-font-size-min;
+		cursor: pointer;
+		background: none;
+		border: 0;
+		opacity: 0;
+		appearance: none;
+
+		&:focus-visible {
+			outline: none;
+		}
+	}
+
+	.select.is-enhanced .select__control {
+		pointer-events: none;
+	}
+
+	.select__icon {
+		flex: none;
+		width: 11.5px;
+		height: 6.5px;
+		color: palette("dark-grey-txt");
+		transition: transform $transition-default;
+
+		// До 768 список — нижний лист, стрелка поля не переворачивается
+		.select.is-open & {
+			@include up(tablet) {
+				transform: rotate(180deg);
+			}
+		}
+	}
+
+	// Окно: строка поиска (если есть), список с прокруткой, строка состояния. До 768 — нижний
+	// лист с заголовком и × (как у сортировки SortMenu)
+	.select__popup {
+		position: absolute;
+		top: calc(100% + 6px);
+		right: 0;
+		left: 0;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		max-height: min(520px, 60vh);
+		padding: 6px;
+		background: palette("white");
+		border: 1px solid palette("block-border");
+		border-radius: $radius-button;
+		box-shadow: $shadow-dropdown;
+
+		&[hidden] {
+			display: none;
+		}
+
+		.select.is-up & {
+			top: auto;
+			bottom: calc(100% + 6px);
+		}
+
+		@include down(tablet) {
+			@include sheet;
+
+			top: auto;
+			gap: 12px;
+		}
+	}
+
+	// Строки поиска в макете нет — поле в тех же цветах, что пункты
+	// Поиск по пунктам и свой крестик справа
+	.select__search-box {
+		position: relative;
+		display: flex;
+		flex: none;
+	}
+
+	.select__search-clear {
+		position: absolute;
+		top: 50%;
+		right: 6px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		padding: 0;
+		color: palette("icon-grey");
+		cursor: pointer;
+		background: none;
+		border: 0;
+		transform: translateY(-50%);
+		transition: color $transition-default;
+
+		// Наведение (наше, как у кнопок-значков): Main Blue
+		&:hover,
+		&:focus-visible {
+			color: palette("main-blue");
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.select__search-clear-icon {
+		width: 10px;
+		height: 10px;
+	}
+
+	.select__search {
+		@include text("m-400");
+
+		flex: 1 1 auto;
+		min-width: 0;
+		padding-right: 34px;
+		height: 38px;
+		padding: 8px 10px;
+		font-size: $field-font-size-min;
+		color: palette("black-txt");
+		background: palette("bg-info");
+		border: 1px solid transparent;
+		border-radius: $radius-dropdown;
+
+		&::placeholder {
+			color: palette("dark-grey-txt");
+		}
+
+		&::-webkit-search-cancel-button {
+			display: none;
+			appearance: none;
+		}
+	}
+
+	// Окно прокрутки — не выше ~7 пунктов; вид полосы — общий (base/_vendor.scss)
+	// Полоса — в правом поле окна (6px), в 2px от рамки: область прокрутки заходит в поле,
+	// список отступает на столько же — пункты той же ширины, что и без прокрутки
+	.select__scroll {
+		min-height: 0;
+		max-height: min(280px, 45vh);
+		margin-right: -6px;
+
+		// Ползунок 3px посередине зазора 6px: по 1.5px до рамки и до пунктов. Тянуть можно за
+		// всю дорожку (8px) — узкая только видимая полоса
+		.simplebar-track.simplebar-vertical::before {
+			inset: 2px 1.5px 2px 3.5px;
+		}
+
+		.simplebar-scrollbar::before {
+			right: 1.5px;
+			left: 3.5px;
+		}
+	}
+
+	.select__list {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		margin: 0;
+		padding: 0 6px 0 0;
+		list-style: none;
+	}
+
+	.select__sentinel {
+		flex: none;
+		height: 1px;
+	}
+
+	.select__status {
+		@include text("m-400");
+
+		display: flex;
+		flex: none;
+		gap: 10px;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 10px;
+		color: palette("dark-grey-txt");
+
+		// Пунктов нет — строка на месте первого пункта, без лишнего воздуха сверху и снизу
+		.select__scroll[hidden] + & {
+			padding-block: 0;
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.select__retry {
+		@include text("m-400");
+
+		padding: 0;
+		color: palette("main-blue");
+		cursor: pointer;
+		background: none;
+		border: 0;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+	}
+
+	.select__option {
+		@include text("m-400");
+
+		display: flex;
+		flex: none;
+		gap: 10px;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px 10px;
+		color: palette("black-txt");
+		cursor: pointer;
+		border-radius: $radius-dropdown;
+
+		&.is-active {
+			background: palette("bg-main");
+		}
+
+		&[aria-selected="true"] {
+			color: palette("blue-txt");
+			background: palette("bg-violet");
+		}
+
+		// В нижнем листе — крупнее под палец, как у сортировки
+		@include down(tablet) {
+			padding: 12px 10px;
+		}
+	}
+
+	.select__check {
+		display: none;
+		flex: none;
+		width: 13.8px;
+		height: 9.8px;
+		color: palette("main-blue");
+
+		[aria-selected="true"] > & {
+			display: block;
+		}
+	}
+
+	// ---------- multiple: фильтры поиска ----------
+	// Figma: Dropdown List — с поиском (4764:2732): окно по ширине поля, поля 15, скругление 10,
+	// тень 0 5 20; поиск 36 со скруглением 7; пункты через 15 — флажок 20 и текст M/400;
+	// выбранные сверху, под ними черта Grey. Шрифт поиска — 16 (iOS), в макете 12.
+	// Окно не уже 240: на узком поле названия не ломаются в три строки
+	.select--multi .select__popup {
+		right: auto;
+		width: max(100%, 240px);
+		gap: 15px;
+		padding: 15px;
+		border: 0;
+		border-radius: $radius-inner-block;
+		box-shadow: $shadow-list;
+
+		// До 768 — нижний лист, как у всех списков (свои поля и тень multiple — обратно к листу)
+		@include down(tablet) {
+			right: 0;
+			width: auto;
+			gap: 12px;
+			padding: 16px 10px calc(16px + env(safe-area-inset-bottom));
+			border-radius: $radius-content-block $radius-content-block 0 0;
+			box-shadow: $shadow-sheet;
+		}
+	}
+
+	.select--multi .select__search {
+		height: 36px;
+		padding: 6px 34px 6px 15px;
+		background: palette("white");
+		border-color: palette("form-border");
+		border-radius: 7px;
+		transition: border-color $transition-default;
+
+		// Фокус — рамка Form.Focus, как у полей (вместо системной обводки)
+		&:focus-visible {
+			@include field-focus;
+		}
+
+		@include down(tablet) {
+			margin-inline: 10px;
+		}
+	}
+
+	.select--multi .select__scroll {
+		@include down(tablet) {
+			// vh — для браузеров без dvh (Chrome до 108)
+			max-height: min(320px, 50vh);
+			max-height: min(320px, 50dvh);
+			margin-right: 0;
+			padding-inline: 10px;
+		}
+	}
+
+	.select--multi .select__list {
+		gap: 15px;
+	}
+
+	.select--multi .select__option {
+		justify-content: flex-start;
+		padding: 0;
+		line-height: 20px;
+		border-radius: 0;
+
+		&.is-active,
+		&[aria-selected="true"] {
+			color: palette("black-txt");
+			background: none;
+		}
+
+		// Под стрелками клавиатуры — синий текст (мышью — без подсветки, как в макете)
+		.is-keys &.is-active .select__option-text {
+			color: palette("blue-txt");
+		}
+
+		&:hover .select__option-text,
+		&:focus-visible .select__option-text {
+			color: palette("blue-txt");
+		}
+	}
+
+	// Флажок 20: рамка Icon.Grey, отмеченный — галочка Black.TXT (как в макете, без заливки)
+	.select__box {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 20px;
+		height: 20px;
+		color: palette("black-txt");
+		border: 1.5px solid palette("icon-grey");
+		border-radius: 5px;
+
+		.select__check {
+			width: 11px;
+			height: 8px;
+			color: inherit;
+		}
+
+		[aria-selected="true"] > & .select__check {
+			display: block;
+		}
+	}
+
+	.select__divider {
+		flex: none;
+		height: 1px;
+		background: palette("grey");
+	}
+
+	// Шапка листа, «Готово» и затемнение — только на мобильном
+	.select__sheet-head,
+	.select__done,
+	.select__backdrop {
+		display: none;
+	}
+
+	@include down(tablet) {
+		.select__sheet-head {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+			padding-left: 10px;
+		}
+
+		.select__done {
+			display: inline-flex;
+			width: calc(100% - 20px);
+			margin-inline: 10px;
+		}
+
+		.select__backdrop {
+			@include sheet-backdrop;
+			@include appear(none, $duration-overlay);
+
+			display: block;
+		}
+	}
+
+	.select__sheet-title {
+		@include text("h4-360");
+
+		flex: 1 1 auto;
+		min-width: 0;
+		color: palette("black-txt");
+	}
+
+	.select__sheet-close {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		color: palette("black-txt");
+		cursor: pointer;
+		background: palette("bg-main");
+		border: 0;
+		border-radius: 50%;
+	}
+
+	.select__sheet-close-icon {
+		width: 10px;
+		height: 10px;
+	}
+
+	// Появление (наше): список проявляется со сдвигом; нижний лист (до 768)
+	// выезжает снизу (переменные — в миксине sheet), затемнение проявляется
+	.select__popup {
+		@include appear;
+	}
+}
