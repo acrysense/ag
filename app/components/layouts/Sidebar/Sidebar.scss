@@ -117,7 +117,7 @@ $collapse: $collapse-dur $collapse-ease;
                 @include prop-vw(margin-top, 30, sm);
             }
         }
-        // Подпись раздела — как в макете (L.Menu, ERP.FAQ): 14/20 Dark-grey.TXT, до пунктов 20
+        // Подпись раздела: 14/20 Dark-grey.TXT, до пунктов 20
         &__label {
             display: block;
             @include prop-vw(margin-bottom, 10, xl);
@@ -142,7 +142,7 @@ $collapse: $collapse-dur $collapse-ease;
             padding: 0;
             list-style: none;
         }
-        // Пункт — как в макете: иконка 20, до текста 15, текст 14 Black.TXT; активный — #0057FF
+        // Пункт: иконка 20, до текста 15, текст 14 Black.TXT; активный — #0057FF
         &__link {
             display: flex;
             align-items: center;
@@ -357,7 +357,7 @@ $collapse: $collapse-dur $collapse-ease;
         }
 
         // --- desktop collapse toggle: 36x36 always (only the bg toggles) ---
-        // Значок 20 — как в макете: на уровне подписи первого раздела, в 15 от правого края, Black.TXT
+        // Значок 20: на уровне подписи первого раздела, в 15 от правого края, Black.TXT
         &__collapse {
             display: none; // desktop only
             position: absolute;

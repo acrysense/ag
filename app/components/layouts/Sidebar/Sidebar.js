@@ -35,7 +35,7 @@ export default (root) => {
 	// становилась синей. Прод выводит иконки как <img src=iblock.svg> (без спрайта) —
 	// currentColor до них не доходит. Ставим --sidebar-icon из src и флажок-класс;
 	// SCSS красит маску в currentColor. Только у активного: остальные <img> — как есть,
-	// логотипы брендов («Присоединяйтесь») остаются в своих цветах, как в макете.
+	// логотипы брендов («Присоединяйтесь») остаются в своих цветах.
 	const initImgIcons = () => {
 		root.querySelectorAll('.sidebar__link.is--active').forEach((link) => {
 			const img = link.querySelector(':scope > img')

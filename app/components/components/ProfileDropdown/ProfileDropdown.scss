@@ -152,7 +152,7 @@
         &__panel {
             @include up(tablet) {
                 @include prop-vw(padding, 20, xl);
-                // Как меню под аватаром на сайте (кит: Dropdown menu 2725:18877): 240, тень списков
+                // Как меню под аватаром на сайте: 240, тень списков
                 @include prop-vw(min-width, 240, xl);
                 background: $color-white;
                 @include prop-vw(border-radius, 10, xl);

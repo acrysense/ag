@@ -112,8 +112,8 @@
             @include prop-vw(max-width, 710, xl);
             width: 100%;
         }
-        // Заголовок страницы (ФИО, название аптеки): на десктопе PC/HEADER/H1 32/32, как на сайте
-        // (Figma, PC.Pharmacy v2 — 3641:13254); на телефоне 22/26 по макету 360.Pharmacy
+        // Заголовок страницы (ФИО, название аптеки): на десктопе PC/HEADER/H1 32/32, как на сайте;
+        // на телефоне 22/26
         &__name {
             display: block;
             @include prop-vw(margin-bottom, 20, xl);
