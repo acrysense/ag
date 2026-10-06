@@ -187,10 +187,24 @@ function prefixPageLinks(html: string, fileName: string, enabled: boolean, mode:
 		})
 	})
 
+	// Страницы результатов разделов поиска в шапке (data-action="/employees.html" — списки ЛК):
+	// на демо — с тем же префиксом, что ссылки страниц
+	const withActions = patched.replace(/\sdata-action\s*=\s*"(\/[^"]*)"/gi, (m, val) => {
+		if (isExternalLike(val)) return m
+		const base = BASE.endsWith('/') ? BASE : BASE + '/'
+		if (val.replace(/^\//, '').startsWith(base.replace(/^\//, ''))) return m
+		const next = withBase(val)
+		if (next !== val) {
+			changed++
+			if (samples.length < 6) samples.push(`data-action: ${val} → ${next}`)
+		}
+		return ` data-action="${next}"`
+	})
+
 	if (changed) {
 		console.log(`[prefixPageLinks] ${fileName}: changed=${changed}\n  ${samples.join('\n  ')}`)
 	}
-	return patched
+	return withActions
 }
 
 function formatHtml(prefixLinks: boolean, mode: string) {
