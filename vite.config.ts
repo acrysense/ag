@@ -586,8 +586,8 @@ function buildPagesIndex(dev: boolean) {
 		.sort((a, b) => a.order - b.order || a.title.localeCompare(b.title, 'ru'))
 	return JSON.stringify({
 		pagesUrl: withBase(dev ? '/dev/pages.html' : '/dev-pages.html'),
-		// Витрины компонентов в ЛК нет
-		showcaseUrl: null,
+		// Витрина компонентов: в dev и на демо (в сборку для CMS список не попадает вовсе)
+		showcaseUrl: withBase(dev ? '/dev/ui.html' : '/dev-ui.html'),
 		pages,
 	})
 }

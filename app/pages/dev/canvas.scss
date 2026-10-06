@@ -1,0 +1,321 @@
+@use "sass:list";
+@use "sass:map";
+@use "@/assets/styles/base/vars" as *;
+@use "@/assets/styles/base/mixins" as *;
+
+// Обвязка историй на холсте. Грузится только холстом, в CSS сайта не попадает,
+// поэтому значения свои, а не из токенов сайта. Шрифт обвязки системный, чтобы
+// не путать её с типографикой проекта внутри карточек.
+$canvas-bg: #f3f3f5;
+$canvas-card: #ffffff;
+$canvas-line: #e4e4e9;
+$canvas-text: #17171c;
+$canvas-muted: #6b6b76;
+$canvas-accent: #4f46e5;
+$canvas-pass: #2b8a3e;
+$canvas-fail: #c92a2a;
+$canvas-font:
+	system-ui,
+	-apple-system,
+	"Segoe UI",
+	Roboto,
+	Arial,
+	sans-serif;
+$canvas-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+// Затемнение под окнами — как ::backdrop окон ЛК
+$canvas-overlay: rgb(245 248 250 / 60%);
+
+body:has(.stories) {
+	background: $canvas-bg;
+}
+
+.stories {
+	display: grid;
+	gap: 56px;
+	padding: 20px 16px 48px;
+}
+
+.story {
+	&__header {
+		margin-bottom: 20px;
+		font-family: $canvas-font;
+		color: $canvas-text;
+	}
+
+	&__group {
+		font-size: 12px;
+		color: $canvas-muted;
+	}
+
+	&__title {
+		font-size: 22px;
+		font-weight: 650;
+		line-height: 1.25;
+	}
+
+	&__states {
+		display: grid;
+		gap: 16px;
+	}
+}
+
+// В одиночном режиме заголовок и описание показывает оболочка, а карточки состояний
+// идут во всю ширину: блоки сайта получают ту же ширину, что на настоящей странице
+.is-single-story {
+	.stories {
+		padding: 16px 0 48px;
+	}
+
+	.story-state,
+	.story-state__frame--page {
+		border-inline-width: 0;
+		border-radius: 0;
+	}
+
+	.story__header {
+		display: none;
+	}
+}
+
+// Карточка состояния: подпись сверху, компонент на белом внутри
+.story-state {
+	min-width: 0;
+	background: $canvas-card;
+	border: 1px solid $canvas-line;
+	border-radius: 14px;
+
+	&__label {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 8px;
+		align-items: baseline;
+		padding: 10px 14px;
+		font-family: $canvas-font;
+		font-size: 11px;
+		font-weight: 650;
+		line-height: 1.4;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: $canvas-muted;
+		border-bottom: 1px solid $canvas-line;
+	}
+
+	&__note {
+		font-size: 12px;
+		font-weight: 400;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+
+	&__frame {
+		padding: 16px;
+
+		// Фон страницы сайта под блоком (блоки на макете лежат на BG.Main); без полей
+		// по бокам — отступы блоку даёт .container, как на странице
+		&--page {
+			padding-inline: 0;
+			background: palette("bg-main");
+			border-radius: 0 0 13px 13px;
+		}
+	}
+
+	// Неприменимое состояние — одна строка без карточки
+	&--na {
+		background: none;
+		border-style: dashed;
+
+		.story-state__label {
+			border-bottom: 0;
+		}
+	}
+}
+
+// Одно состояние (?state=): только компонент, без подписи и карточки, на всю высоту
+.is-single-state {
+	.stories {
+		padding: 0;
+	}
+
+	.story__states {
+		display: block;
+	}
+
+	.story-state {
+		background: none;
+		border: 0;
+	}
+
+	.story-state__label {
+		display: none;
+	}
+
+	.story-state__frame {
+		min-height: 100vh;
+		background: $canvas-card;
+	}
+
+	.story-state__frame--page {
+		padding-block: 0;
+		background: palette("bg-main");
+	}
+}
+
+// Блоки поверх страницы в одиночном состоянии стоят там же, где на экране: окно — шторкой
+// снизу, с 768 по центру, на затемнённом фоне (как ::backdrop); нижняя панель, cookie и
+// тост — у нижнего края. Полноэкранные панели (меню, фильтры до 1024) и так от верха.
+.is-single-state .story-state__frame {
+	&:has(> .modal--static),
+	&:has(> .tab-bar--static),
+	&:has(> .cookie-banner--static),
+	&:has(.toast--static) {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-end;
+	}
+
+	&:has(> .modal--static) {
+		background: linear-gradient($canvas-overlay, $canvas-overlay), palette("bg-main");
+	}
+
+	> .modal--static {
+		margin: auto 0 0;
+
+		@include up(tablet) {
+			margin: auto;
+		}
+	}
+
+	// Меню открыто: нижняя панель поверх меню у низа экрана, как на телефоне
+	> .main-menu--static + .tab-bar--static {
+		position: sticky;
+		bottom: 0;
+		z-index: 1;
+	}
+
+	> .cookie-banner--static {
+		margin: 0 10px 10px;
+
+		@include up(tablet) {
+			width: 420px;
+			margin: 0 0 20px 20px;
+		}
+	}
+
+	// Тост: 20px от низа, по центру экрана
+	&:has(.toast--static) {
+		padding: 0 0 20px;
+
+		.story-row {
+			justify-content: center;
+		}
+	}
+}
+
+// Токены: палитра — из карты $colors в _vars.scss, canvas.js читает имена из --token-colors
+$token-color-names: ();
+@each $name, $value in $colors {
+	$token-color-names: list.append($token-color-names, $name);
+
+	.token-swatch--#{$name} {
+		--swatch: #{$value};
+	}
+}
+
+:root {
+	--token-colors: "#{$token-color-names}";
+}
+
+.tokens {
+	font-family: $canvas-font;
+	color: $canvas-text;
+
+	&--colors {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		gap: 12px;
+	}
+
+	&--icons {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+		gap: 8px;
+	}
+}
+
+.token-swatch {
+	margin: 0;
+	overflow: hidden;
+	background: $canvas-card;
+	border: 1px solid $canvas-line;
+	border-radius: 14px;
+
+	&__chip {
+		height: 88px;
+		background: var(--swatch);
+		border-bottom: 1px solid $canvas-line;
+	}
+
+	&__body {
+		display: grid;
+		gap: 2px;
+		padding: 10px 12px 12px;
+	}
+
+	&__name {
+		font-size: 14px;
+		font-weight: 600;
+	}
+
+	&__value {
+		font-family: $canvas-mono;
+		font-size: 12px;
+		color: $canvas-muted;
+	}
+}
+
+// Иконки спрайта: 24px, цвет от текста
+.token-icon {
+	display: grid;
+	gap: 8px;
+	justify-items: center;
+	margin: 0;
+	padding: 14px 8px 10px;
+	color: palette("black-txt");
+	background: $canvas-card;
+	border: 1px solid $canvas-line;
+	border-radius: 12px;
+
+	&__svg {
+		width: 24px;
+		height: 24px;
+	}
+
+	&__name {
+		font-size: 12px;
+		color: $canvas-muted;
+		text-align: center;
+		overflow-wrap: anywhere;
+	}
+}
+
+// Ряд кнопок в истории (открыть живые окна, вызвать уведомление)
+.story-row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+// Поиск в шапке и фильтры: ширина поля как в шапке (700) и место под окно
+.story-search-field {
+	max-width: 700px;
+	min-height: 620px;
+}
+
+// Фильтры раздела — две колонки, как в окне поиска
+.story-filters {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 10px;
+	max-width: 700px;
+	padding-block: 16px;
+}

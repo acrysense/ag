@@ -97,6 +97,15 @@ tools/
   build-fonts.mjs           # font copy and @font-face generation
 ```
 
+## Витрина компонентов
+
+Своя витрина, как на ag-site: `npm run ui` (или `npm run dev` и адрес `/dev/ui.html`), на демо —
+https://acrysense.github.io/ag/dev-ui.html. Слева компоненты по группам, над превью — заголовок,
+строка «Бэку:» (папка шаблона на GitHub) и вкладки состояний; ширина превью 360 / 768 / 1440.
+Истории — `app/pages/dev/canvas.html`, оболочка — `app/pages/dev/ui.html`. Разделы ЛК в историях
+лежат в той же обёртке, что на странице (`wrapper__main` → `wrapper__container`). В сборку для
+Битрикса (`--mode cms`) витрина не попадает.
+
 ## HTML and HBS partials
 
 Pages live in `app/pages`. Partials live in `app/components` and are referenced by path without the

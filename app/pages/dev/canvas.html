@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="{{ lang }}">
+	<head>
+		{{> layouts/Head/Head }}
+		<meta name="robots" content="noindex, nofollow" />
+		<script type="module" src="/app.js"></script>
+		<script type="module" src="./canvas.js"></script>
+	</head>
+	<body>
+		{{!--
+			Холст витрины: все истории компонентов. Оболочка ui.html открывает его в
+			iframe с ?story=<id> и показывает одну историю. Без параметра видны все.
+			Заголовок истории в одиночном режиме показывает оболочка.
+
+			widths="360 768" у истории или состояния — ширины, на которых блок есть (нижняя панель —
+			только до 1024); остальные кнопки ширины в витрине неактивны.
+
+			Новая история. backend — одна строка для бэка над превью: папка шаблона · главное
+			правило; без шаблона строки нет:
+			{{#> story id="button" group="Компоненты" title="Кнопка" backend="…"}}
+				{{#> state label="Обычная"}} разметка {{/state}}
+			{{/story}}
+			Каждый блок — во всех состояниях, которые у него бывают. Состояние, которого у блока быть
+			не может, помечается note="…", а не пропускается молча. Разделы ЛК — в той же обёртке,
+			что на странице (wrapper__main → wrapper__container).
+		--}}
+		{{#*inline "story"}}
+			<article class="story" data-story="{{id}}" data-group="{{group}}" data-title="{{title}}" {{#if widths}}data-widths="{{widths}}"{{/if}} {{#if backend}}data-backend="{{backend}}"{{/if}}>
+				<header class="story__header">
+					<p class="story__group">{{group}}</p>
+					<h2 class="story__title">{{title}}</h2>
+				</header>
+				<div class="story__states">{{> @partial-block}}</div>
+			</article>
+		{{/inline}}
+		{{#*inline "state"}}
+			<section class="story-state{{#if note}} story-state--na{{/if}}" data-state-label="{{label}}" {{#if widths}}data-widths="{{widths}}"{{/if}} {{#if note}}data-state-note="{{note}}"{{/if}}>
+				<h3 class="story-state__label">
+					{{label}}
+					{{#if note}}<span class="story-state__note">{{note}}</span>{{/if}}
+				</h3>
+				{{#unless note}}<div class="story-state__frame{{#if bg}} story-state__frame--{{bg}}{{/if}}">{{> @partial-block}}</div>{{/unless}}
+			</section>
+		{{/inline}}
+		{{#*inline "page"}}
+			<div class="wrapper__main"><div class="wrapper__container">{{> @partial-block}}</div></div>
+		{{/inline}}
+
+		<main class="stories">
+			{{#> story id="colors" group="Основа" title="Цвета"}}
+				<div class="tokens tokens--colors" data-token-list="colors"></div>
+			{{/story}}
+
+			{{#> story id="icons" group="Основа" title="Иконки"}}
+				<div class="tokens tokens--icons" data-icon-list></div>
+			{{/story}}
+
+			{{#> story id="site-header" group="Каркас" title="Шапка" backend='app/components/layouts/SiteHeader/ — данные site.header; старая шапка работает, пока бэк не переключил разметку'}}
+				{{#> state label="Вошёл" bg="page"}}
+					{{> layouts/SiteHeader/SiteHeader props=site.header id="story-header"}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="legacy-header" group="Каркас" title="Старая шапка" backend='app/components/layouts/Header/ — текущая разметка бэка, поддерживается до перехода на новую'}}
+				{{#> state label="Обычное" bg="page"}}
+					{{> layouts/Header/Header}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="site-search" group="Каркас" title="Поиск в шапке" backend='app/components/layouts/SiteSearch/ — разделы сайта и разделы CRM; данные site.search'}}
+				{{#> state label="Пусто" bg="page"}}
+					<div class="story-search-field">{{> layouts/SiteSearch/SiteSearch props=site.search id="story-search"}}</div>
+				{{/state}}
+				{{#> state label="Раздел CRM" bg="page"}}
+					<div class="story-search-field">{{> layouts/SiteSearch/SiteSearch props=site.search id="story-search-crm" section="crm-pharmacies"}}</div>
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="sidebar" widths="1440" group="Каркас" title="Боковое меню" backend='app/components/layouts/Sidebar/ — разделы кабинета, текущий отмечает бэк'}}
+				{{#> state label="Обычное" bg="page"}}
+					{{> layouts/Sidebar/Sidebar}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="footer" group="Каркас" title="Подвал" backend='app/components/layouts/Footer/ — нижняя полоса, как на сайте'}}
+				{{#> state label="Обычное" bg="page"}}
+					{{> layouts/Footer/Footer}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="main-menu" widths="360 768" group="Каркас" title="Мобильное меню" backend='app/components/layouts/MainMenu/ — данные site.mainMenu, разделы по доступу'}}
+				{{#> state label="Открыто" bg="page"}}
+					{{> layouts/MainMenu/MainMenu props=(obj title=site.mainMenu.title user=site.mainMenu.user logout=site.mainMenu.logout groups=site.mainMenu.groups portal=site.mainMenu.portal join=site.mainMenu.join id="story-menu" logoutId="story-menu-logout" open=true)}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="tab-bar" widths="360 768" group="Каркас" title="Нижняя панель" backend='app/components/layouts/TabBar/ — необязательна: без неё ЛК работает как раньше'}}
+				{{#> state label="Обычное" bg="page"}}
+					{{> layouts/TabBar/TabBar props=(obj items=site.tabBar.items static=true)}}
+				{{/state}}
+				{{#> state label="Меню открыто" bg="page"}}
+					{{> layouts/MainMenu/MainMenu props=(obj title=site.mainMenu.title user=site.mainMenu.user logout=site.mainMenu.logout groups=site.mainMenu.groups portal=site.mainMenu.portal join=site.mainMenu.join id="story-menu-tab-bar" logoutId="story-menu-tab-bar-logout" open=true)}}
+					{{> layouts/TabBar/TabBar props=(obj items=site.tabBar.items static=true menuOpen=true)}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="modal" group="Компоненты" title="Модальное окно" backend='app/components/components/Modal/ — открывает кнопка с data-modal-open="id"'}}
+				{{#> state label="Выход" bg="page"}}
+					{{#> components/Modal/Modal props=(obj id="story-modal-confirm" title=site.mainMenu.logout.title text=site.mainMenu.logout.text size="s" variant="confirm" close=false open=true)}}
+						<div class="modal__actions">
+							{{> components/SiteButton/SiteButton props=(obj href="#" text="Выйти" variant="error" size="l")}}
+							{{> components/SiteButton/SiteButton props=(obj text="Отмена" variant="light" size="l" attrs=(obj data-modal-close=""))}}
+						</div>
+					{{/components/Modal/Modal}}
+				{{/state}}
+				{{#> state label="Вживую"}}
+					<div class="story-row">
+						{{> components/SiteButton/SiteButton props=(obj text="Выйти из аккаунта?" variant="light" size="m" attrs=(obj data-modal-open="live-modal-confirm"))}}
+					</div>
+					{{#> components/Modal/Modal props=(obj id="live-modal-confirm" title=site.mainMenu.logout.title text=site.mainMenu.logout.text size="s" variant="confirm" close=false)}}
+						<div class="modal__actions">
+							{{> components/SiteButton/SiteButton props=(obj href="#" text="Выйти" variant="error" size="l")}}
+							{{> components/SiteButton/SiteButton props=(obj text="Отмена" variant="light" size="l" attrs=(obj data-modal-close="" autofocus=""))}}
+						</div>
+					{{/components/Modal/Modal}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="button" group="Компоненты" title="Кнопка" backend='app/components/components/Button/ — кнопки кабинета: основная, secondary, ghost, danger; размер sm'}}
+				{{#> state label="Варианты"}}
+					<div class="story-row">
+						{{> components/Button/Button props=(obj text="Сохранить")}}
+						{{> components/Button/Button props=(obj text="Отмена" variant="secondary")}}
+						{{> components/Button/Button props=(obj text="Подробнее" variant="ghost")}}
+						{{> components/Button/Button props=(obj text="Удалить" variant="danger")}}
+					</div>
+				{{/state}}
+				{{#> state label="Маленькие"}}
+					<div class="story-row">
+						{{> components/Button/Button props=(obj text="Сохранить" size="sm")}}
+						{{> components/Button/Button props=(obj text="Отмена" variant="secondary" size="sm")}}
+					</div>
+				{{/state}}
+				{{#> state label="Неактивная"}}
+					<div class="story-row">
+						{{> components/Button/Button props=(obj text="Сохранить" disabled=true)}}
+					</div>
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="site-button" group="Компоненты" title="Кнопка сайта" backend='app/components/components/SiteButton/ — кнопки шапки, меню и окон, как на сайте'}}
+				{{#> state label="Варианты"}}
+					<div class="story-row">
+						{{> components/SiteButton/SiteButton props=(obj text="Войти в ЛК" variant="general" size="m")}}
+						{{> components/SiteButton/SiteButton props=(obj text="Отмена" variant="light" size="l")}}
+						{{> components/SiteButton/SiteButton props=(obj text="Выйти" variant="error" size="l")}}
+						{{> components/SiteButton/SiteButton props=(obj text="12" icon="site-comment" hiddenText="Комментарии: " variant="light" size="s")}}
+					</div>
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="field" group="Компоненты" title="Поле" backend='app/components/components/Field/ — ошибку ставит класс is--error'}}
+				{{#> state label="Обычное"}}
+					{{> components/Field/Field props=(obj label="Логин" id="story-field" name="login" placeholder="Логин")}}
+				{{/state}}
+				{{#> state label="Заполнено, неактивно"}}
+					{{> components/Field/Field props=(obj label="Логин" help="Логин нельзя изменить" id="story-field-disabled" name="login" value="vladislava_89" disabled=true)}}
+				{{/state}}
+				{{#> state label="Пароль"}}
+					{{> components/Field/Field props=(obj variant="toggle" label="Пароль" id="story-field-password" name="password" type="password" togglePassword=true)}}
+				{{/state}}
+				{{#> state label="Многострочное"}}
+					{{> components/Field/Field props=(obj label="Комментарий" id="story-field-textarea" name="comment" textarea=true rows=4 placeholder="Напишите комментарий")}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="select" group="Компоненты" title="Выпадающий список" backend='app/components/components/Select/ — основа — нативный select, без JS работает системный список'}}
+				{{#> state label="Мультивыбор" bg="page"}}
+					<div class="story-search-field">{{> sections/search/SearchFilter/SearchFilter props=(lookup (lookup site.search.demoFilters "crm-pharmacies") 0)}}</div>
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="search-filters" group="Компоненты" title="Фильтры поиска" backend='app/components/sections/search/SearchFilter/ — список, период или число; фильтры раздела отдаёт сервер'}}
+				{{#> state label="Аптеки" bg="page"}}
+					<div class="story-filters">{{#each (lookup site.search.demoFilters "crm-pharmacies")}}{{> sections/search/SearchFilter/SearchFilter props=this}}{{/each}}</div>
+				{{/state}}
+				{{#> state label="Визиты" bg="page"}}
+					<div class="story-filters">{{#each (lookup site.search.demoFilters "crm-visits")}}{{> sections/search/SearchFilter/SearchFilter props=this}}{{/each}}</div>
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="avatar-upload" group="Компоненты" title="Загрузка аватара" backend='app/components/components/AvatarUpload/ — файл уходит в поле name, удаление — deleteName'}}
+				{{#> state label="Обычное"}}
+					{{> components/AvatarUpload/AvatarUpload props=(obj label="Фотография профиля" name="avatar" deleteName="avatar_delete")}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="toasts" group="Компоненты" title="Уведомления" backend='app/components/components/Toasts/ — вызов событием toast:show с detail { type, text }'}}
+				{{#> state label="Вживую"}}
+					<div class="story-row">
+						<button class="btn btn--secondary" type="button" data-demo-toast="success" data-demo-toast-text="Изменения сохранены">Успех</button>
+						<button class="btn btn--secondary" type="button" data-demo-toast="error" data-demo-toast-text="Не удалось сохранить изменения">Ошибка</button>
+						<button class="btn btn--secondary" type="button" data-demo-toast="" data-demo-toast-text="Это нейтральное событие">Нейтральное</button>
+					</div>
+					{{> components/Toasts/Toasts}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="top-notice" group="Компоненты" title="Плашка сверху" backend='app/components/components/TopNotice/ — текст правит админ; закрытая не показывается до нового key'}}
+				{{#> state label="Обычное"}}
+					{{> components/TopNotice/TopNotice props=(obj key="story-notice" html='Сообщение-растяжка для всех сотрудников компании. У нас важные <a href="#">новости</a>.')}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="profile" group="Главная" title="Профиль" backend='app/components/sections/home/Profile/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/home/Profile/Profile}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="tasks" group="Главная" title="Задачи" backend='app/components/components/TasksPanel/ — список задач подгружает скрипт'}}
+				{{#> state label="Мои" bg="page"}}{{#> page}}{{> components/TasksPanel/TasksPanel title="Мои задачи" idp="story-mine-" list="components/TasksPanel/TaskListMine" defaultAssignee="Иванов М.С."}}{{/page}}{{/state}}
+				{{#> state label="Сотрудников" bg="page"}}{{#> page}}{{> components/TasksPanel/TasksPanel title="Задачи сотрудников" idp="story-emp-" tab="employees" list="components/TasksPanel/TaskListEmployees" defaultAssignee="Иванов М.С."}}{{/page}}{{/state}}
+				{{#> state label="Пусто" bg="page"}}{{#> page}}{{> components/TasksPanel/TasksPanel title="Мои задачи" idp="story-empty-" list="components/TasksPanel/TaskListEmpty"}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="promo" group="Главная" title="Промо" backend='app/components/sections/shared/Promo/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/shared/Promo/Promo}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="news" group="Главная" title="Новости" backend='app/components/sections/home/News/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/home/News/News}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="visits-hist" group="CRM" title="Визиты в карточке" backend='app/components/components/VisitsHist/ — вкладки «Новые» и «История»'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> components/VisitsHist/VisitsHist}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="visits-panel" group="CRM" title="Визиты сотрудника" backend='app/components/components/VisitsPanel/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> components/VisitsPanel/VisitsPanel}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="visit-modal" group="CRM" title="Окно визита" backend='app/components/components/VisitModal/'}}
+				{{#> state label="Вживую"}}
+					<div class="story-row">
+						<button class="btn" type="button" data-visit-create>Добавить визит</button>
+					</div>
+					{{> components/VisitModal/VisitModal}}
+				{{/state}}
+			{{/story}}
+
+			{{#> story id="coefficient" group="Кабинет" title="Коэффициент" backend='app/components/sections/coefficient/Coefficient/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/coefficient/Coefficient/Coefficient}}{{/page}}{{/state}}
+				{{#> state label="Пусто" bg="page"}}{{#> page}}{{> sections/coefficient/Coefficient/Coefficient coefficient=(obj empty=true)}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="motivation" group="Кабинет" title="Мотивация" backend='app/components/sections/motivation/Motivation/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/motivation/Motivation/Motivation}}{{/page}}{{/state}}
+				{{#> state label="Пусто" bg="page"}}{{#> page}}{{> sections/motivation/Motivation/Motivation motivation=(obj empty=true)}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="package" group="Кабинет" title="Пакеты" backend='app/components/sections/package/Package/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/package/Package/Package}}{{/page}}{{/state}}
+				{{#> state label="Пусто" bg="page"}}{{#> page}}{{> sections/package/Package/Package package=(obj empty=true)}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="profile-edit" group="Кабинет" title="Редактирование профиля" backend='app/components/sections/profile/ProfileEdit/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/profile/ProfileEdit/ProfileEdit}}{{/page}}{{/state}}
+			{{/story}}
+
+			{{#> story id="auth" group="Вход" title="Вход" backend='app/components/sections/shared/Auth/ — обычная POST-форма входа Битрикса'}}
+				{{#> state label="Вход" bg="page"}}{{> sections/shared/Auth/Auth}}{{/state}}
+				{{#> state label="Восстановление" bg="page"}}{{> sections/shared/Auth/Auth auth=(obj recovery=true)}}{{/state}}
+			{{/story}}
+
+			{{#> story id="not-found" group="Служебные" title="Страница не найдена" backend='app/components/sections/error/NotFound/'}}
+				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/error/NotFound/NotFound}}{{/page}}{{/state}}
+			{{/story}}
+		</main>
+	</body>
+</html>
