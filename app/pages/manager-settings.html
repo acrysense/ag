@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -13,7 +13,7 @@
 				<div class="wrapper__main">
 					<div class="wrapper__mid wrapper__mid--narrow">
 						<a href="/manager" class="wrapper__back">
-							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
 							<span>Назад</span>
 						</a>
 

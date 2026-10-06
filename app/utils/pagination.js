@@ -1,3 +1,4 @@
+import { spriteHref } from '@/utils/icon'
 // Windowed `.ui-pagination` nav.
 // - mountStaticPagination(nav): infers total/current from markup, visual only
 //   (clicking a page just moves the marker) — used by static demo tables.
@@ -5,8 +6,7 @@
 //   page) and gets onGoTo(page) on clicks — used by the JSON-driven DataTable to
 //   actually page through the dataset.
 
-const DOTS_SVG =
-	'<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg>'
+const DOTS_SVG = `<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="${spriteHref('three-dots')}"></use></svg>`
 
 const mqMobile = () => window.matchMedia('(max-width: 1023.98px)')
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -13,7 +13,7 @@
 				<div class="wrapper__main">
 					<div class="wrapper__container">
 						<a href="/visits" class="wrapper__back">
-							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
 							<span>Назад</span>
 						</a>
 
@@ -24,7 +24,7 @@
 						-->
 						<section class="data-panel visit-empty">
 							<span class="visit-empty__icon">
-								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-erp-visits"></use></svg>
+								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="{{@root.sprite}}#icon-erp-visits"></use></svg>
 							</span>
 							<h1 class="visit-empty__title">Визит не найден</h1>
 							<p class="visit-empty__text">Возможно, визит был удалён или изменился его адрес. Проверьте ссылку или вернитесь к списку визитов.</p>

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -13,7 +13,7 @@
 				<div class="wrapper__main">
 					<div class="wrapper__wide">
                             <a href="/" class="wrapper__back wrapper__back--mobile">
-                                <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+                                <svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
                                 <span>Назад</span>
                             </a>
                             <div class="filter-chips" data-filter-chips hidden>
@@ -25,7 +25,7 @@
                                 <div class="data-panel__header">
                                     <h1 class="data-panel__title">Сотрудники аптек</h1>
                                     <a href="/" class="data-panel__export">
-                                        <svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-download"></use></svg>
+                                        <svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-download"></use></svg>
                                         <span class="data-panel__export-full">Экспорт в Excel</span>
                                         <span class="data-panel__export-short">Excel</span>
                                     </a>
@@ -35,7 +35,7 @@
                                     <div class="data-table__sort" data-dt-sort>
                                         <button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false">
                                             <span data-dt-sort-value>По умолчанию</span>
-                                            <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+                                            <svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-caret"></use></svg>
                                         </button>
                                         <div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
                                             <button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
@@ -307,7 +307,7 @@
                                         <button type="button" class="ui-pagination__item is-active" aria-current="page">2</button>
                                         <button type="button" class="ui-pagination__item">3</button>
                                         <button type="button" class="ui-pagination__item">4</button>
-                                        <span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg></span>
+                                        <span class="ui-pagination__dots"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-three-dots"></use></svg></span>
                                         <button type="button" class="ui-pagination__item">22</button>
                                         <button type="button" class="ui-pagination__item">23</button>
                                         <button type="button" class="ui-pagination__item">24</button>
@@ -321,7 +321,7 @@
                                             <button type="button" class="page-size__trigger" data-page-size-trigger aria-haspopup="listbox" aria-expanded="false">
                                                 <span data-page-size-value>20</span>
                                                 <svg aria-hidden="true" focusable="false" width="16" height="16">
-                                                    <use href="#icon-caret"></use>
+                                                    <use href="{{@root.sprite}}#icon-caret"></use>
                                                 </svg>
                                             </button>
                                             <div class="page-size__panel" data-page-size-panel role="listbox" aria-hidden="true">

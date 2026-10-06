@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -14,7 +14,7 @@
 					<div class="wrapper__double" data-module="Visit" data-path="sections/visit">
 						<div class="wrapper__left">
 							<a href="/visits" class="wrapper__back">
-								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+								<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
 								<span>Назад</span>
 							</a>
 
@@ -26,7 +26,7 @@
 										<span class="visit__date">09.05.2026, 11:26</span>
 									</div>
 									<span class="visit__saved" data-visit-saved>
-										<svg class="visit__saved-icon" aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg>
+										<svg class="visit__saved-icon" aria-hidden="true" focusable="false" width="14" height="14"><use href="{{@root.sprite}}#icon-check"></use></svg>
 										<span>Сохранено <time data-visit-saved-time>15:48</time></span>
 									</span>
 								</div>
@@ -35,7 +35,7 @@
 								<div class="visit-sec" data-collapsible>
 									<div class="visit-sec__head">
 										<h2 class="visit-sec__title">Качественные показатели</h2>
-										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-up-thin"></use></svg></button>
+										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="{{@root.sprite}}#icon-arrow-up-thin"></use></svg></button>
 									</div>
 									<div class="visit-sec__body">
 										<div class="visit-sec__body-inner">
@@ -61,12 +61,12 @@
 												</div>
 												<div class="actions-menu visit-q__menu" data-actions>
 													<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
-														<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-three-dots"></use></svg>
+														<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="{{@root.sprite}}#icon-three-dots"></use></svg>
 													</button>
 													<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
-														<button type="button" class="actions-menu__item" role="menuitem" data-q-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
-														<button type="button" class="actions-menu__item" role="menuitem" data-q-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
-														<button type="button" class="actions-menu__item" role="menuitem" data-q-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
+														<button type="button" class="actions-menu__item" role="menuitem" data-q-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="{{@root.sprite}}#icon-comments"></use></svg><span>Комментировать</span></button>
+														<button type="button" class="actions-menu__item" role="menuitem" data-q-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="{{@root.sprite}}#icon-edit-square"></use></svg><span>Редактировать</span></button>
+														<button type="button" class="actions-menu__item" role="menuitem" data-q-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="{{@root.sprite}}#icon-trash"></use></svg><span>Удалить</span></button>
 													</div>
 												</div>
 											</li>
@@ -80,7 +80,7 @@
 								<div class="visit-sec" data-collapsible>
 									<div class="visit-sec__head">
 										<h2 class="visit-sec__title">Количественные показатели</h2>
-										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-up-thin"></use></svg></button>
+										<button type="button" class="visit-sec__toggle" data-collapse-toggle aria-label="Свернуть"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="{{@root.sprite}}#icon-arrow-up-thin"></use></svg></button>
 									</div>
 									<div class="visit-sec__body">
 										<div class="visit-sec__body-inner">
@@ -113,12 +113,12 @@
 													<div class="visit-quant__td visit-quant__td--menu">
 														<div class="actions-menu visit-quant__menu" data-actions>
 															<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
-																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-three-dots"></use></svg>
+																<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="{{@root.sprite}}#icon-three-dots"></use></svg>
 															</button>
 															<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
-																<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Добавить комментарий</span></button>
-																<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
-																<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
+																<button type="button" class="actions-menu__item" role="menuitem" data-quant-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="{{@root.sprite}}#icon-comments"></use></svg><span>Добавить комментарий</span></button>
+																<button type="button" class="actions-menu__item" role="menuitem" data-quant-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="{{@root.sprite}}#icon-edit-square"></use></svg><span>Редактировать</span></button>
+																<button type="button" class="actions-menu__item" role="menuitem" data-quant-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="{{@root.sprite}}#icon-trash"></use></svg><span>Удалить</span></button>
 															</div>
 														</div>
 													</div>

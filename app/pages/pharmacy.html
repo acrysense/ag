@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -13,7 +13,7 @@
 				<div class="wrapper__main">
 					<div class="pharmacy">
 						<a href="/pharmacies" class="wrapper__back">
-							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
 							<span>Назад</span>
 						</a>
 
@@ -67,7 +67,7 @@
 											<div class="employee-kpi__sort" data-kpi-sort>
 												<button type="button" class="employee-kpi__sort-trigger" data-kpi-sort-trigger aria-haspopup="listbox" aria-expanded="false">
 													<span data-kpi-sort-value>Сортировать по</span>
-													<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
+													<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-caret"></use></svg>
 												</button>
 												<div class="employee-kpi__sort-panel" data-kpi-sort-panel role="listbox" aria-hidden="true">
 													<button type="button" class="employee-kpi__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
@@ -155,7 +155,7 @@
 									<div class="data-panel__header">
 										<h2 class="data-panel__title">Сотрудники</h2>
 										<a href="/" class="data-panel__export">
-											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-download"></use></svg>
+											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-download"></use></svg>
 											<span class="data-panel__export-full">Экспорт в Excel</span>
 											<span class="data-panel__export-short">Excel</span>
 										</a>
@@ -164,7 +164,7 @@
 										<div class="field manager__staff-search">
 											<div class="field__control">
 												<input class="field__input" type="text" placeholder="Найти" autocomplete="off" data-dt-search>
-												<svg class="manager__staff-search-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-search"></use></svg>
+												<svg class="manager__staff-search-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-search"></use></svg>
 											</div>
 										</div>
 										<div class="manager__staff-cats">

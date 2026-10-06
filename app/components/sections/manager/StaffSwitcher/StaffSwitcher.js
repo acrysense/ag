@@ -1,3 +1,4 @@
+import { spriteHref } from '@/utils/icon'
 // Master → detail on /manager: picking a pharmacy in «Аптеки в курации» reloads
 // the staff table below (its title and its rows). Every pharmacy's staff list
 // lives in one [data-staff-source] JSON blob, so the backend only has to render
@@ -38,8 +39,8 @@ export default (head) => {
 	// #icon-arrow-left / #icon-arrow-right; backend-rendered pages shipped
 	// #icon-caret in both buttons (two "v" chevrons). Force the right sprites
 	// whatever the markup came with.
-	head.querySelector('[data-staff-prev] use')?.setAttribute('href', '#icon-arrow-left')
-	head.querySelector('[data-staff-next] use')?.setAttribute('href', '#icon-arrow-right')
+	head.querySelector('[data-staff-prev] use')?.setAttribute('href', spriteHref('arrow-left'))
+	head.querySelector('[data-staff-next] use')?.setAttribute('href', spriteHref('arrow-right'))
 
 	// the master table re-creates its rows on every sort/filter/page change, so the
 	// highlight is re-applied from the key rather than held on element references

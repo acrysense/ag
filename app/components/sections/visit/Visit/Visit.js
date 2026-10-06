@@ -4,6 +4,7 @@
 // geolocation retry. Demo only — the markup is the source of truth.
 
 import { MAX_COMMENT_LEN, limitLineBreaks } from '@/utils/comment-limits'
+import { spriteHref } from '@/utils/icon'
 
 const escAttr = (s) => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;')
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
@@ -14,8 +15,8 @@ const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
 const COMMENT_HTML = `<div class="task-comment" data-q-comment-editor>
 	<textarea class="task-comment__input" name="q-comment" data-q-comment-input rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий" autocomplete="off"></textarea>
 	<div class="task-comment__actions">
-		<button type="button" class="task-comment__btn task-comment__btn--save" data-q-comment-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg></button>
-		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-q-comment-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg></button>
+		<button type="button" class="task-comment__btn task-comment__btn--save" data-q-comment-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${spriteHref('check')}"></use></svg></button>
+		<button type="button" class="task-comment__btn task-comment__btn--cancel" data-q-comment-cancel aria-label="Отмена"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${spriteHref('close-middle')}"></use></svg></button>
 	</div>
 </div>`
 

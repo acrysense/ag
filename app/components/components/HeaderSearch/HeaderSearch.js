@@ -1,6 +1,7 @@
 import { mountDateRange } from '@/utils/dateRange'
 import { tableUrlEnabled, readTableUrl } from '@/utils/tableUrl'
 import { mountRemoteOptions, escOpt } from '@/utils/remoteOptions'
+import { spriteHref } from '@/utils/icon'
 
 // server-supplied labels (employee/pharmacy names) go into chip innerHTML —
 // escape to prevent HTML injection and keep names with &/</> rendering correctly
@@ -151,7 +152,7 @@ export default (root) => {
 			chip.type = 'button'
 			chip.className = 'filter-chip'
 			chip.dataset.index = String(i)
-			chip.innerHTML = `<span>${escChip(f.label)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
+			chip.innerHTML = `<span>${escChip(f.label)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="${spriteHref('close-thin')}"></use></svg>`
 			chipsList.appendChild(chip)
 		})
 		chipsHost.hidden = filters.length === 0
@@ -233,7 +234,7 @@ export default (root) => {
 			chip.type = 'button'
 			chip.className = 'filter-chip filter-chip--inline'
 			chip.dataset.value = cb.value
-			chip.innerHTML = `<span>${escChip(cb.dataset.label || cb.value)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
+			chip.innerHTML = `<span>${escChip(cb.dataset.label || cb.value)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="${spriteHref('close-thin')}"></use></svg>`
 			host.appendChild(chip)
 		})
 	}

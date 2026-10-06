@@ -1,3 +1,4 @@
+import { spriteHref } from '@/utils/icon'
 // Фильтры списков ЛК из поиска в шапке (как на ag-site: layouts/SiteSearch). Разделы CRM поиска
 // («Аптеки», «Менеджеры», «Сотрудники аптек», «Визиты», «Задачи») ведут на страницы списков с
 // фильтрами в адресе; раздел этой же страницы поиск отдаёт событием site-search:apply — фильтры
@@ -194,7 +195,7 @@ export function initListFilters() {
 			chip.className = 'filter-chip'
 			chip.dataset.index = String(i)
 			chip.setAttribute('aria-label', `Убрать фильтр: ${f.label}`)
-			chip.innerHTML = `<span>${esc(f.label)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="#icon-close-thin"></use></svg>`
+			chip.innerHTML = `<span>${esc(f.label)}</span><svg aria-hidden="true" focusable="false" width="10" height="10"><use href="${spriteHref('close-thin')}"></use></svg>`
 			chipsList.appendChild(chip)
 		})
 		chipsHost.hidden = filters.length === 0

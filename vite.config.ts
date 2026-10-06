@@ -517,6 +517,27 @@ function createSvgSymbol(file: string) {
 	return `<symbol id="${symbolId}"${attributes}>${content}</symbol>`
 }
 
+// Спрайт иконок — отдельный файл assets/icons/sprite.svg, как на ag-site (в dev отдаётся
+// сервером, в сборке кладётся в dist). Иконки в разметке — <use href="…/sprite.svg#icon-имя">:
+// рисуются без JS, файл кешируется браузером. Путь к файлу — {{@root.sprite}} в шаблонах и
+// <html data-icons> для иконок из JS (utils/icon.js).
+const SPRITE_FILE = 'assets/icons/sprite.svg'
+
+function buildSymbols() {
+	return globSync('**/*.svg', { cwd: ICONS_ROOT, absolute: true }).sort().map(createSvgSymbol).join('')
+}
+
+function buildSprite() {
+	// Без комментариев и лишних пробелов между тегами: файл грузится на каждой странице
+	return `<svg xmlns="http://www.w3.org/2000/svg">${buildSymbols()}</svg>`
+		.replace(/<!--[\s\S]*?-->/g, '')
+		.replace(/>\s+</g, '><')
+		.replace(/\s{2,}/g, ' ')
+}
+
+// Прежний способ — спрайт, встроенный в страницу скриптом (virtual:svg-icons-register в app.js):
+// на нём держится текущая разметка бэка (<use href="#icon-…">). Убрать, когда бэк перейдёт на
+// ссылки на файл.
 function svgSpritePlugin() {
 	return {
 		name: 'local-svg-sprite',
@@ -528,7 +549,7 @@ function svgSpritePlugin() {
 
 			const files = globSync('**/*.svg', { cwd: ICONS_ROOT, absolute: true }).sort()
 			files.forEach((file) => this.addWatchFile(file))
-			const symbols = files.map(createSvgSymbol).join('')
+			const symbols = buildSymbols()
 			const sprite = symbols
 				? `<svg id="svg-icon-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">${symbols}</svg>`
 				: ''
@@ -551,6 +572,14 @@ function svgSpritePlugin() {
 				if (import.meta.hot) import.meta.hot.dispose(() => document.getElementById(spriteId)?.remove());
 			`
 		},
+		configureServer(server) {
+			server.middlewares.use((req, res, next) => {
+				if (req.url?.split('?')[0] !== `/${SPRITE_FILE}`) return next()
+				res.setHeader('Content-Type', 'image/svg+xml')
+				res.setHeader('Cache-Control', 'no-cache')
+				res.end(buildSprite())
+			})
+		},
 		handleHotUpdate({ file, server }) {
 			if (file.startsWith(ICONS_ROOT) && file.endsWith('.svg')) {
 				const module = server.moduleGraph.getModuleById(RESOLVED_SVG_SPRITE_ID)
@@ -558,6 +587,9 @@ function svgSpritePlugin() {
 				server.ws.send({ type: 'full-reload' })
 				return []
 			}
+		},
+		generateBundle() {
+			this.emitFile({ type: 'asset', fileName: SPRITE_FILE, source: buildSprite() })
 		},
 	}
 }
@@ -865,6 +897,8 @@ export default defineConfig(({ mode }) => {
 						// Раздел поиска в шапке, выбранный при открытии (страница списка — её раздел):
 						// "searchSection" в <page>.page.json
 						searchSection: pageCfg.searchSection || '',
+						// Файл спрайта иконок: <use href="{{@root.sprite}}#icon-…">, <html data-icons>
+						sprite: withBase(`/${SPRITE_FILE}`),
 					}
 				},
 			}),

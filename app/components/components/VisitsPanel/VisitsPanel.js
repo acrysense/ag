@@ -1,4 +1,5 @@
 import { mountTabs } from '@/utils/tabs'
+import { spriteHref } from '@/utils/icon'
 
 export default (root) => {
 	if (!root || root.__visitsPanelBound) return
@@ -211,7 +212,7 @@ function initVisitsPagination(root) {
 			if (it === '…') {
 				const dots = document.createElement('span')
 				dots.className = 'ui-pagination__dots'
-				dots.innerHTML = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-three-dots"></use></svg>'
+				dots.innerHTML = `<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="${spriteHref('three-dots')}"></use></svg>`
 				nav.appendChild(dots)
 				return
 			}

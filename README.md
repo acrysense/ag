@@ -125,16 +125,22 @@ Useful helpers include `asset`, `attrs`, `obj`, `arr`, `default`, `or`, `and`, `
 
 ## SVG sprite
 
-SVG icons are stored in `app/assets/icons`. The local SVG plugin creates an inline sprite from these
-files and registers it through `virtual:svg-icons-register`.
+SVG icons are stored in `app/assets/icons`. As on ag-site, the build writes them to one file,
+`assets/icons/sprite.svg` (served by the dev server, emitted to `dist`). Icons reference the file:
 
-Use icons as:
-
-```html
+```hbs
 <svg aria-hidden="true" focusable="false">
-	<use href="#icon-close"></use>
+	<use href="{{@root.sprite}}#icon-close"></use>
 </svg>
 ```
+
+Pages put the same path on `<html data-icons="{{sprite}}">`; icons created by JS use
+`spriteHref(id)` from `app/utils/icon.js` (`iconHref(name)` for the site icons, `#icon-site-…`).
+
+Backward compatibility: the current backend markup uses `<use href="#icon-close">` and has no
+`data-icons`. For it the old inline sprite is still injected by `virtual:svg-icons-register`
+(app.js), and `spriteHref` falls back to `#icon-…`. Remove the injection once the backend has
+switched its templates to the sprite file.
 
 Nested icon paths become nested IDs, for example `app/assets/icons/social/mail.svg` becomes
 `#icon-social-mail`.

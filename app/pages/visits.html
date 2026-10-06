@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -13,7 +13,7 @@
 				<div class="wrapper__main">
 					<div class="wrapper__wide">
 						<a href="/" class="wrapper__back wrapper__back--mobile">
-							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="#icon-arrow-back-thin"></use></svg>
+							<svg aria-hidden="true" focusable="false" viewBox="0 0 20 20"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
 							<span>Назад</span>
 						</a>
 						<div class="filter-chips" data-filter-chips hidden>
@@ -79,14 +79,14 @@
 									<div class="data-panel__header">
 										<h2 class="data-panel__title">План и факт визитов</h2>
 										<a href="/" class="data-panel__export">
-											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-download"></use></svg>
+											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-download"></use></svg>
 											<span class="data-panel__export-full">Экспорт в Excel</span>
 											<span class="data-panel__export-short">Excel</span>
 										</a>
 									</div>
 									<div class="data-table__controls">
 										<div class="data-table__sort" data-dt-sort>
-											<button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button>
+											<button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-caret"></use></svg></button>
 											<div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
 												<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
 												<button type="button" class="data-table__sort-option" role="option" data-sort="employee" data-dir="asc">Сотрудник (А–Я)</button>
@@ -155,14 +155,14 @@
 									<div class="data-panel__header">
 										<h2 class="data-panel__title">История визитов</h2>
 										<a href="/" class="data-panel__export">
-											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-download"></use></svg>
+											<svg class="data-panel__export-icon" aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-download"></use></svg>
 											<span class="data-panel__export-full">Экспорт в Excel</span>
 											<span class="data-panel__export-short">Excel</span>
 										</a>
 									</div>
 									<div class="data-table__controls">
 										<div class="data-table__sort" data-dt-sort>
-											<button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg></button>
+											<button type="button" class="data-table__sort-trigger" data-dt-sort-trigger aria-haspopup="listbox" aria-expanded="false"><span data-dt-sort-value>По умолчанию</span><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-caret"></use></svg></button>
 											<div class="data-table__sort-panel" data-dt-sort-panel role="listbox" aria-hidden="true">
 												<button type="button" class="data-table__sort-option is-active" role="option" data-sort="default">По умолчанию</button>
 												<button type="button" class="data-table__sort-option" role="option" data-sort="date" data-dir="desc">Сначала новые</button>
