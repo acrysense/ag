@@ -3,5 +3,6 @@
 		"group": "ERP",
 		"title": "Сотрудники аптек",
 		"order": 250
-	}
+	},
+	"searchSection": "crm-employees"
 }

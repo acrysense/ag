@@ -1,7 +1,33 @@
 @use 'sass:meta';
+@use '@/assets/styles/base/vars' as *;
 
 @layer vendor {
     @include meta.load-css('swiper/css');
     @include meta.load-css('swiper/css/navigation');
     @include meta.load-css('swiper/css/pagination');
+
+    // Своя прокрутка окон и списков блоков, перенесённых с ag-site (SimpleBar) — как на сайте:
+    // ползунок 4px Main Blue на подложке BG.Info, виден всегда
+    @include meta.load-css('simplebar/dist/simplebar.css');
+
+    .simplebar-track.simplebar-vertical {
+        width: 8px;
+
+        &::before {
+            position: absolute;
+            inset: 2px;
+            content: '';
+            background: palette('bg-info');
+            border-radius: 2px;
+        }
+    }
+
+    .simplebar-scrollbar::before {
+        background: palette('main-blue');
+        border-radius: 2px;
+    }
+
+    .simplebar-scrollbar.simplebar-visible::before {
+        opacity: 1;
+    }
 }

@@ -3,5 +3,6 @@
 		"group": "ERP",
 		"title": "Визиты",
 		"order": 280
-	}
+	},
+	"searchSection": "crm-visits"
 }

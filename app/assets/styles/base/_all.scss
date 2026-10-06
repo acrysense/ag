@@ -47,3 +47,17 @@
 @forward '@/components/components/Chart/Chart';
 @forward '@/components/components/VisitsCalendar/VisitsCalendar';
 @forward '@/components/components/HeaderSearch/HeaderSearch';
+
+// Перенесено с ag-site: общие компоненты, затем шапка, мобильное меню и нижняя панель сайта
+@forward '@/components/components/Icon/Icon';
+@forward '@/components/components/SiteButton/SiteButton';
+@forward '@/components/components/Modal/Modal';
+@forward '@/components/components/Select/Select';
+@forward '@/components/components/Calendar/Calendar';
+@forward '@/components/components/DateRange/DateRange';
+@forward '@/components/components/NumberRange/NumberRange';
+@forward '@/components/sections/search/SearchFilter/SearchFilter';
+@forward '@/components/layouts/SiteSearch/SiteSearch';
+@forward '@/components/layouts/SiteHeader/SiteHeader';
+@forward '@/components/layouts/MainMenu/MainMenu';
+@forward '@/components/layouts/TabBar/TabBar';

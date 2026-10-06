@@ -3,5 +3,6 @@
 		"group": "ERP",
 		"title": "Менеджеры",
 		"order": 220
-	}
+	},
+	"searchSection": "crm-managers"
 }

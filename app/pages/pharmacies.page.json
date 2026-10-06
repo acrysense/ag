@@ -3,5 +3,6 @@
 		"group": "ERP",
 		"title": "Аптеки",
 		"order": 200
-	}
+	},
+	"searchSection": "crm-pharmacies"
 }

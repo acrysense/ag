@@ -1,0 +1,476 @@
+// Копия base/_mixins.scss ag-site — для блоков, перенесённых с сайта (шапка, поиск, меню, нижняя панель).
+// Меняется вместе с сайтом; остальной ЛК пользуется своими base/_vars и base/_mixins.
+@use "sass:math";
+@use "sass:map";
+@use "sass:list";
+@use "@/assets/styles/site/vars";
+
+$fluid-cap: 2560 !default;
+$mq-epsilon: 0.02 !default;
+// Диапазон по умолчанию для vw-range и миксинов ниже: ширина десктопного макета.
+// Макеты my.apteka-group.by: десктоп 1920, мобильный 360.
+$default-range: xl !default;
+
+$breakpoints: (
+	mobile: 0,
+	// По описанию TabBar в Figma: мобильная версия до 767px
+	tablet: 768,
+	desktop: 1024,
+	// Наша, не из макета: с неё помещается ряд «В цифрах» 1920 (заголовок 80px слева)
+	wide: 1280,
+	cap: $fluid-cap,
+);
+
+$vw-ranges: (
+	mobile: (
+		from: map.get($breakpoints, mobile),
+		to: map.get($breakpoints, tablet),
+		base: 360,
+	),
+	tablet: (
+		from: map.get($breakpoints, tablet),
+		to: map.get($breakpoints, desktop),
+		base: 744,
+	),
+	desktop1440: (
+		from: map.get($breakpoints, desktop),
+		to: map.get($breakpoints, cap),
+		base: 1440,
+	),
+	desktop1920: (
+		from: map.get($breakpoints, desktop),
+		to: map.get($breakpoints, cap),
+		base: 1920,
+	),
+);
+
+$alias-range: (
+	sm: mobile,
+	md: tablet,
+	lg: desktop1440,
+	xl: desktop1920,
+	m: mobile,
+	t: tablet,
+	d: desktop1440,
+	w: desktop1920,
+);
+
+$alias-bp: (
+	sm: mobile,
+	md: tablet,
+);
+
+@function _range-key($k) {
+	@if map.has-key($vw-ranges, $k) {
+		@return $k;
+	}
+	@return map.get($alias-range, $k);
+}
+
+@function _r($k) {
+	@return map.get($vw-ranges, _range-key($k));
+}
+
+@function _rv($k, $n) {
+	@return map.get(_r($k), $n);
+}
+
+@function _bp-key($k) {
+	@if map.has-key($breakpoints, $k) {
+		@return $k;
+	}
+	@return map.get($alias-bp, $k);
+}
+
+@function _bp($k) {
+	@return map.get($breakpoints, _bp-key($k));
+}
+
+@function _next-bp-key($k) {
+	$order: (mobile, tablet, desktop, wide, cap);
+	$i: list.index($order, _bp-key($k));
+	@if $i == null {
+		@error 'Unknown breakpoint `#{$k}`';
+	}
+	@if $i >= list.length($order) {
+		@return null;
+	}
+	@return list.nth($order, $i + 1);
+}
+
+@function vw-clamp($valueAt, $baseWidth, $from, $to) {
+	$k: math.div($valueAt, $baseWidth) * 100vw;
+
+	$a: $valueAt * math.div($from, $baseWidth);
+	$b: $valueAt * math.div($to, $baseWidth);
+
+	$lower: math.min($a, $b);
+	$upper: math.max($a, $b);
+
+	@return clamp(#{$lower}px, #{$k}, #{$upper}px);
+}
+
+@function vw-range($px, $range: $default-range) {
+	$n: $px;
+	@if not math.is-unitless($px) {
+		$n: math.div($px, 1px);
+	}
+	@return vw-clamp($n, _rv($range, base), _rv($range, from), _rv($range, to));
+}
+
+// Плавное значение для размеров, которые иначе прыгают на брейкпоинте (мобильный — наш, десктоп —
+// макет): $min на ширине окна $from, $max на $to (px), между — по прямой, за пределами — края.
+// $rem — края в rem (шрифты: растут вместе с размером шрифта в браузере).
+@function fluid($min, $max, $from: 360, $to: 1024, $rem: false) {
+	$slope: math.div($max - $min, $to - $from);
+	$base: math.div(math.round(($min - $slope * $from) * 100), 100);
+	$vw: math.div(math.round($slope * 1000000), 10000) * 1vw;
+	@if $rem {
+		@return clamp(#{_px-to-rem($min)}, #{_px-to-rem($base)} + #{$vw}, #{_px-to-rem($max)});
+	}
+	@return clamp(#{$min}px, #{$base}px + #{$vw}, #{$max}px);
+}
+
+@mixin prop-vw($prop, $valueAt, $range) {
+	$base: _rv($range, base);
+	$from: _rv($range, from);
+	$to: _rv($range, to);
+	#{$prop}: vw-clamp($valueAt, $base, $from, $to);
+}
+
+@mixin up($key) {
+	$min: _bp($key);
+	@if $min <= 0 {
+		@content;
+	} @else {
+		@media (min-width: #{$min}px) {
+			@content;
+		}
+	}
+}
+@mixin down($key) {
+	$k: _bp-key($key);
+	$max: _bp($k) - $mq-epsilon;
+
+	@if $k == cap or $max <= 0 {
+		@content;
+	} @else {
+		@media (max-width: #{$max}px) {
+			@content;
+		}
+	}
+}
+
+@mixin only($key) {
+	$fromK: _bp-key($key);
+	$from: _bp($fromK);
+	$next: _next-bp-key($fromK);
+
+	@if $fromK == mobile {
+		$to: _bp($next) - 0.02;
+		@media (max-width: #{$to}px) {
+			@content;
+		}
+	} @else if $next == null {
+		@media (min-width: #{$from}px) {
+			@content;
+		}
+	} @else {
+		$to: _bp($next) - 0.02;
+		@media (min-width: #{$from}px) and (max-width: #{$to}px) {
+			@content;
+		}
+	}
+}
+
+@mixin width-cols($cols, $gapPx, $range: $default-range) {
+	width: calc((100% - #{$gapPx}px * (#{$cols} - 1)) / #{$cols});
+	width: calc((100% - #{vw-range($gapPx, $range)} * (#{$cols} - 1)) / #{$cols});
+}
+
+@mixin border-side($side, $px, $style: solid, $color: currentColor, $range: $default-range) {
+	border-#{$side}-style: $style;
+	border-#{$side}-color: $color;
+	border-#{$side}-width: vw-range($px, $range);
+}
+
+@mixin border-all($px, $style: solid, $color: currentColor, $range: $default-range) {
+	border-style: $style;
+	border-color: $color;
+	border-width: vw-range($px, $range);
+}
+
+@mixin prop-plus($prop, $percent, $px, $range: $default-range) {
+	#{$prop}: calc(#{$percent} + #{$px}px);
+	#{$prop}: calc(#{$percent} + #{vw-range($px, $range)});
+}
+
+@mixin prop-minus($prop, $percent, $px, $range: $default-range) {
+	#{$prop}: calc(#{$percent} - #{$px}px);
+	#{$prop}: calc(#{$percent} - #{vw-range($px, $range)});
+}
+
+@function palette($name) {
+	$value: map.get(vars.$colors, $name);
+	@if $value == null {
+		@error 'Unknown color `#{$name}`: add it to $colors in _vars.scss';
+	}
+	@return $value;
+}
+
+// Стиль текста из $text-styles. Способ задания размеров живёт только здесь:
+// блоки вызывают text("имя") и не знают, как он устроен.
+// Размеры фиксированные, как в макете: font-size в rem, line-height и letter-spacing —
+// относительно размера шрифта.
+@function _px-to-rem($px) {
+	@return math.div($px, 16) * 1rem;
+}
+
+@function _ratio($value, $size) {
+	@return math.div(math.round(math.div($value, $size) * 10000), 10000);
+}
+
+@mixin text($name) {
+	$style: map.get(vars.$text-styles, $name);
+	@if $style == null {
+		@error 'Unknown text style `#{$name}`: add it to $text-styles in _vars.scss';
+	}
+	$size: map.get($style, size);
+	$line-height: map.get($style, line-height);
+	@if $size == null or $line-height == null {
+		@error 'Text style `#{$name}` needs size and line-height';
+	}
+
+	$family: map.get($style, family);
+	@if $family == heading {
+		font-family: vars.$font-heading;
+	} @else if $family == body {
+		font-family: vars.$font-base;
+	}
+	font-size: _px-to-rem($size);
+	font-weight: map.get($style, weight);
+	// normal — Auto в Figma, иначе пиксели макета
+	@if $line-height == normal {
+		line-height: normal;
+	} @else {
+		line-height: _ratio($line-height, $size);
+	}
+
+	$letter-spacing: map.get($style, letter-spacing);
+	@if $letter-spacing {
+		letter-spacing: #{_ratio($letter-spacing, $size)}em;
+	}
+}
+
+// Скрыть визуально, оставить скринридеру (как класс .visually-hidden) — для частей текста,
+// которые видны только на одной ширине
+@mixin visually-hidden {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+	border: 0;
+}
+
+// Поле-кнопка фильтров 46 (Figma: Input · Select в поиске, 2408:338): рамка Form.Border,
+// скругление 14, поля 15, текст M/400; открыто или в фокусе — рамка Form.Focus.
+// Селект (components/Select) нарисован теми же значениями.
+@mixin control-box {
+	display: flex;
+	gap: 6px;
+	align-items: center;
+	width: 100%;
+	height: 46px;
+	padding: 0 15px;
+	color: palette("black-txt");
+	text-align: left;
+	background: palette("white");
+	border: 1px solid palette("form-border");
+	border-radius: vars.$radius-button;
+	transition: border-color vars.$transition-default;
+
+	// Наведение (наше): рамка Icon.Grey; фокус и «открыто» блок задаёт после миксина
+	&:hover,
+	&:focus-visible {
+		border-color: palette("icon-grey");
+	}
+
+	&:focus-visible {
+		@include field-focus;
+	}
+}
+
+// Фокус поля (Figma: Input · Focus 2408:190): рамка перекрашивается в Form.Focus, толщина та же,
+// без отдельного кольца поверх. Кольцо заменено цветом рамки, не убрано
+@mixin field-focus($color: palette("form-focus")) {
+	border-color: $color;
+	outline: none;
+}
+
+// Нижний лист на мобильном (Figma: Bottom sheet · Отдел 4786:2839, как у Modal): у нижнего края,
+// скругление сверху, тень вверх; над таб-баром и шапкой. Затемнение — sheet-backdrop.
+@mixin sheet {
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 100;
+	// vh — для браузеров без dvh (Chrome до 108)
+	max-height: calc(100vh - 40px);
+	max-height: calc(100dvh - 40px);
+	padding: 16px 10px calc(16px + env(safe-area-inset-bottom));
+	background: palette("white");
+	border: 0;
+	border-radius: vars.$radius-content-block vars.$radius-content-block 0 0;
+	box-shadow: vars.$shadow-sheet;
+	// Появление (миксин appear): выезжает снизу целиком, без прозрачности
+	--appear-shift: translateY(100%);
+	--appear-opacity: 1;
+	--appear-duration: #{vars.$duration-overlay};
+}
+
+@mixin sheet-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 99;
+	background: vars.$overlay-background;
+	backdrop-filter: blur(vars.$overlay-blur);
+}
+
+// Появление и скрытие блока, который прячется атрибутом hidden: проявление и сдвиг $shift
+// (по умолчанию — на 4px сверху), скрытие — в полтора раза быстрее. Скрытие плавное там, где
+// браузер умеет анимировать display (Chrome, Safari 17.4+, Firefox 129+); в остальных —
+// просто показать и спрятать. Нижний лист (миксин sheet) переопределяет переменные: выезжает
+// снизу целиком, без прозрачности.
+@mixin appear($shift: translateY(-4px), $duration: vars.$duration-popup) {
+	transition:
+		opacity var(--appear-duration, #{$duration}) vars.$ease-out,
+		transform var(--appear-duration, #{$duration}) vars.$ease-out,
+		display var(--appear-duration, #{$duration}) allow-discrete,
+		overlay var(--appear-duration, #{$duration}) allow-discrete;
+
+	&[hidden] {
+		opacity: var(--appear-opacity, 0);
+		transform: var(--appear-shift, #{$shift});
+		transition-duration: calc(var(--appear-duration, #{$duration}) * 0.67);
+	}
+
+	@starting-style {
+		opacity: var(--appear-opacity, 0);
+		transform: var(--appear-shift, #{$shift});
+	}
+}
+
+// То же для блока, который показывается классом (скрыт — display: none): $open — селектор
+// открытого состояния относительно блока, например «.is-open &» или «&.is-open»
+@mixin appear-when(
+	$open,
+	$display: block,
+	$shift: translateY(-4px),
+	$duration: vars.$duration-popup
+) {
+	display: none;
+	opacity: 0;
+	transform: $shift;
+	transition:
+		opacity $duration * 0.67 vars.$ease-out,
+		transform $duration * 0.67 vars.$ease-out,
+		display $duration * 0.67 allow-discrete,
+		overlay $duration * 0.67 allow-discrete;
+
+	#{$open} {
+		display: $display;
+		opacity: 1;
+		transform: none;
+		transition-duration: $duration;
+
+		@starting-style {
+			opacity: 0;
+			transform: $shift;
+		}
+	}
+}
+
+// Аватар пользователя: инициалы есть всегда, фото — поверх. Нет фото или оно не загрузилось
+// (img.is-broken) — видны инициалы. Размер кружка задаёт блок
+@mixin avatar($background) {
+	position: relative;
+	display: flex;
+	flex: none;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	color: palette("white");
+	background: $background;
+	border-radius: 50%;
+	container-type: inline-size;
+
+	img {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	// Фото загрузилось (utils/broken-images.js) — инициалы прячем: у фото с прозрачным фоном
+	// (PNG) они бы просвечивали
+	&:has(> img.is-loaded) > :not(img) {
+		visibility: hidden;
+	}
+}
+
+// Инициалы в аватаре: «ВА» — две буквы, по размеру кружка (38% ширины), где браузер умеет
+// единицы контейнера; иначе 12px
+@mixin avatar-initials {
+	@include text("s-600");
+
+	font-size: 12px;
+	line-height: 1;
+	letter-spacing: 0.02em;
+	text-transform: uppercase;
+	user-select: none;
+
+	@supports (font-size: 1cqi) {
+		font-size: 38cqi;
+	}
+}
+
+// Заготовка под картинкой: светлый фон и значок «картинка» по центру. Пока фото грузится, его нет
+// или оно не загрузилось (img.is-broken) — видна заготовка; загрузилось — закрывает её
+@mixin image-placeholder {
+	position: relative;
+	background-color: palette("skeleton");
+
+	&::before {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: clamp(24px, 14%, 48px);
+		aspect-ratio: 1;
+		pointer-events: none;
+		content: "";
+		background-color: palette("icon-grey");
+		translate: -50% -50%;
+		mask: url("@/assets/images/placeholder.svg") center / contain no-repeat;
+	}
+
+	// Фото — над заготовкой
+	img {
+		position: relative;
+	}
+
+	// Фото загрузилось (utils/broken-images.js) — ни значка, ни фона заготовки: при наведении фото
+	// прозрачнее (0.9), и они просвечивали бы; фон был бы виден и под подписью рядом с фото
+	&:has(img.is-loaded) {
+		background-color: transparent;
+	}
+
+	&:has(img.is-loaded)::before {
+		content: none;
+	}
+}

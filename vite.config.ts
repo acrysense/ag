@@ -779,6 +779,16 @@ export default defineConfig(({ mode }) => {
 					not(v: any) {
 						return !v
 					},
+					// Инициалы по имени: «Волкова Анна» → «ВА» — как на ag-site (шапка и меню сайта)
+					initials(name: any) {
+						return String(name || '')
+							.trim()
+							.split(/\s+/)
+							.slice(0, 2)
+							.map((word) => word[0] || '')
+							.join('')
+							.toUpperCase()
+					},
 				},
 
 				context: (htmlPath) => {
@@ -838,6 +848,9 @@ export default defineConfig(({ mode }) => {
 						// Демо и dev (не --mode cms): кнопка «Страницы» (pages/dev/pages-nav.js) — в шаблон
 						// для Битрикса не попадает
 						demo: mode !== 'cms',
+						// Раздел поиска в шапке, выбранный при открытии (страница списка — её раздел):
+						// "searchSection" в <page>.page.json
+						searchSection: pageCfg.searchSection || '',
 					}
 				},
 			}),

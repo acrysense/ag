@@ -1,0 +1,119 @@
+{{!--
+	Шапка сайта в ЛК — перенесена с ag-site (layouts/Header): тот же вид и поведение. Отличия: метка
+	header--site (стили не задевают старую шапку ЛК layouts/Header), модуль SiteHeader, без кнопки «Войти»
+	(в ЛК пользователь всегда вошёл), строка меню — только если есть пункты (в ЛК меню сбоку).
+	Шапка сайта (Figma: PC.HEADER.v2 — 4652:8752, 360.HEADER — 4865:1334).
+	props: id, homeUrl, homeLabel (имя ссылки-логотипа, «На главную»), logo { desktop, mobile } —
+	картинки логотипа с названием сайта (по умолчанию — из assets, те же, что в ЛК),
+	search { value } — запрос в строке поиска (окно поиска —
+	layouts/SiteSearch, настройки — site.search),
+	menu — пункты [{ text, url, current, children: [{ text, url, current }] }]; пункт с подменю без url
+	(ТЗ: «О холдинге» не кликабелен) — целиком кнопка подменю,
+	user — для вошедшего: { name, initials, avatar, url, links: [{ icon, label, url }],
+	menu: [{ label, url, icon, modal } | { divider: true }] — меню под аватаром }
+	(links — быстрые ссылки на десктопе: личный кабинет, учебный портал, CRM),
+	Кнопки входа нет.
+	Контракт — docs/contracts/header.md.
+--}}
+<header class="header header--site" data-module="SiteHeader" data-path="layouts">
+    <div class="header__top">
+        {{!--
+            Логотип с названием сайта — одна картинка, как в ЛК (те же файлы): длинная с 1280,
+            короткая (название в две строки) — уже. Ссылка на главную. Меняется через админку
+            (ТЗ: праздничные логотипы): logo { desktop, mobile }
+        --}}
+        <div class="header__brand">
+            <a class="header__logo-link" href="{{default props.homeUrl '/'}}" aria-label="{{default props.homeLabel 'На главную'}}">
+                <picture class="header__logo">
+                    <source media="(min-width: 1280px)" srcset="{{default props.logo.desktop '/assets/images/logotype-desktop.svg'}}" width="390" height="40" />
+                    <img src="{{default props.logo.mobile '/assets/images/logotype-mobile.svg'}}" width="141" height="40" alt="" />
+                </picture>
+            </a>
+        </div>
+
+        {{!-- Поиск: разделы и фильтры — общие для сайта (site.search), запрос — со страницы --}}
+        {{> layouts/SiteSearch/SiteSearch props=@root.site.search query=props.search.value section=@root.searchSection id=(default props.id 'header') class="header__search"}}
+
+        <div class="header__actions">
+            {{#if props.user}}
+                {{#if props.user.links}}
+                    <ul class="header__quick" role="list">
+                        {{#each props.user.links}}
+                            <li>
+                                <a class="header__quick-link" href="{{url}}" title="{{label}}">
+                                    <span class="visually-hidden">{{label}}</span>
+                                    {{> components/Icon/Icon name=icon class="header__quick-icon"}}
+                                </a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                {{/if}}
+                {{#*inline "headerUserInner"}}
+                    {{!-- Инициалы всегда, фото поверх: нет фото или битое — видны инициалы --}}
+                    <span class="header__avatar">
+                        <span class="header__initials" aria-hidden="true">{{default user.initials (initials user.name)}}</span>
+                        {{#if user.avatar}}<img src="{{user.avatar}}" width="30" height="30" alt="" />{{/if}}
+                    </span>
+                    <span class="header__user-name">{{user.name}}</span>
+                    {{> components/Icon/Icon name="angle-right" class="header__user-arrow"}}
+                {{/inline}}
+                {{#if props.user.menu.length}}
+                    {{!-- Меню под аватаром (кит: Dropdown menu 2725:18877). Пункт: { label, url, icon }
+                    или { divider: true }; modal — id окна, которое пункт открывает (выход) --}}
+                    <div class="header__user-menu" data-user-menu>
+                        <button class="header__user" type="button" aria-expanded="false" aria-controls="{{default props.id 'header'}}-user-menu" data-user-menu-toggle>
+                            {{> headerUserInner user=props.user}}
+                            <span class="visually-hidden">— меню профиля</span>
+                        </button>
+                        <ul class="user-menu" id="{{default props.id 'header'}}-user-menu" role="list" hidden>
+                            {{#each props.user.menu}}
+                                {{#if divider}}
+                                    <li class="user-menu__divider" aria-hidden="true"></li>
+                                {{else}}
+                                    <li>
+                                        <a class="user-menu__link" href="{{url}}"{{#if modal}} data-modal-open="{{modal}}"{{/if}}>
+                                            {{#if icon}}{{> components/Icon/Icon name=icon class="user-menu__icon"}}{{/if}}
+                                            <span>{{label}}</span>
+                                        </a>
+                                    </li>
+                                {{/if}}
+                            {{/each}}
+                        </ul>
+                    </div>
+                {{else}}
+                    {{!-- Без пунктов меню — ссылка в личный кабинет --}}
+                    <a class="header__user" href="{{props.user.url}}">{{> headerUserInner user=props.user}}</a>
+                {{/if}}
+            {{/if}}
+            <button class="header__burger" type="button" aria-expanded="false" aria-controls="main-menu" data-main-menu-open>
+                <span class="visually-hidden">Меню</span>
+                {{> components/Icon/Icon name="menu" class="header__burger-icon"}}
+            </button>
+        </div>
+    </div>
+
+    {{#if props.menu.length}}
+    <nav class="header__nav" aria-label="Основное меню">
+        <ul class="menu" role="list">
+            {{#each props.menu}}
+                <li class="menu__item" {{#if children}}data-submenu{{/if}}>
+                    {{#if url}}
+                        <a class="menu__link" href="{{url}}" {{#if current}}aria-current="page"{{/if}}>{{text}}</a>
+                    {{/if}}
+                    {{#if children}}
+                        <button class="menu__toggle{{#unless url}} menu__toggle--label{{/unless}}" type="button" aria-expanded="false" aria-controls="{{default ../props.id 'header'}}-submenu-{{@index}}" data-submenu-toggle>
+                            {{#if url}}<span class="visually-hidden">Подменю «{{text}}»</span>{{else}}<span class="menu__link">{{text}}</span>{{/if}}
+                            {{> components/Icon/Icon name="arrow-down-small" class="menu__arrow"}}
+                        </button>
+                        <ul class="menu__submenu" id="{{default ../props.id 'header'}}-submenu-{{@index}}" role="list" hidden>
+                            {{#each children}}
+                                <li><a class="menu__sublink" href="{{url}}" {{#if current}}aria-current="page"{{/if}}>{{text}}</a></li>
+                            {{/each}}
+                        </ul>
+                    {{/if}}
+                </li>
+            {{/each}}
+        </ul>
+    </nav>
+    {{/if}}
+</header>

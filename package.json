@@ -51,6 +51,7 @@
 	"dependencies": {
 		"apexcharts": "^5.15.2",
 		"inputmask": "^5.0.9",
+		"simplebar": "^6.3.3",
 		"swiper": "^12.0.1"
 	}
 }
