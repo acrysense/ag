@@ -17,8 +17,8 @@
       "_utils-CTVDHeUi.js"
     ]
   },
-  "_app-COnOasyS.js": {
-    "file": "assets/js/app-COnOasyS.js",
+  "_app-CJsnXh3I.js": {
+    "file": "assets/js/app-CJsnXh3I.js",
     "name": "app",
     "dynamicImports": [
       "components/components/Accordion/Accordion.js",
@@ -51,15 +51,15 @@
       "components/sections/visit/Visit/Visit.js"
     ],
     "css": [
-      "assets/css/app-CYwPbTDy.css"
+      "assets/css/app-CmWIrJbP.css"
     ],
     "assets": [
       "assets/images/ag-m2GDsMwR.svg"
     ]
   },
-  "_app-CYwPbTDy.css": {
-    "file": "assets/css/app-CYwPbTDy.css",
-    "src": "_app-CYwPbTDy.css"
+  "_app-CmWIrJbP.css": {
+    "file": "assets/css/app-CmWIrJbP.css",
+    "src": "_app-CmWIrJbP.css"
   },
   "_comment-limits-UxSF7hZ1.js": {
     "file": "assets/js/comment-limits-UxSF7hZ1.js",
@@ -85,11 +85,11 @@
     "file": "assets/js/skeleton-C3FtkPCK.js",
     "name": "skeleton"
   },
-  "_swiper-CefV7Hy8.js": {
-    "file": "assets/js/swiper-CefV7Hy8.js",
+  "_swiper-DIRnuIrl.js": {
+    "file": "assets/js/swiper-DIRnuIrl.js",
     "name": "swiper",
     "imports": [
-      "_app-COnOasyS.js"
+      "_app-CJsnXh3I.js"
     ],
     "dynamicImports": [
       "../node_modules/swiper/swiper.mjs",
@@ -342,13 +342,13 @@
     ]
   },
   "components/sections/news/NewsInner/NewsInner.js": {
-    "file": "assets/js/NewsInner-B3ZIWXmc.js",
+    "file": "assets/js/NewsInner-BPGiIoCT.js",
     "name": "NewsInner",
     "src": "components/sections/news/NewsInner/NewsInner.js",
     "isDynamicEntry": true,
     "imports": [
       "_scroll-lock-D4dlW757.js",
-      "_swiper-CefV7Hy8.js"
+      "_swiper-DIRnuIrl.js"
     ]
   },
   "components/sections/package/Package/Package.js": {
@@ -373,12 +373,12 @@
     "isDynamicEntry": true
   },
   "components/sections/shared/Promo/Promo.js": {
-    "file": "assets/js/Promo-C20wKOr2.js",
+    "file": "assets/js/Promo-BUFgaiK4.js",
     "name": "Promo",
     "src": "components/sections/shared/Promo/Promo.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-CefV7Hy8.js"
+      "_swiper-DIRnuIrl.js"
     ]
   },
   "components/sections/visit/Visit/Visit.js": {

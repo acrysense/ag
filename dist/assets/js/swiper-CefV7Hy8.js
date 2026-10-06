@@ -1,2 +1,0 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/js/swiper-CyELzS4p.js","assets/js/utils-CTVDHeUi.js","assets/js/modules-C5KzVm6t.js"])))=>i.map(i=>d[i]);
-import{t as e}from"./app-COnOasyS.js";var t;function n(){return t||=Promise.all([e(()=>import(`./swiper-CyELzS4p.js`),__vite__mapDeps([0,1])),e(()=>import(`./modules-C5KzVm6t.js`),__vite__mapDeps([2,1]))]).then(([{default:e},t])=>({Swiper:e,mods:t})),t}export{n as t};
