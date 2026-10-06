@@ -1,9 +1,10 @@
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
+@use '@/assets/styles/site/vars' as site;
 
 // Скелетон загрузки — один в один с ag-site (components/Skeleton): светлая заготовка на месте
 // содержимого, по ней слева направо проходит блик. Варианты: строка текста, строки
-// (.skeleton-lines), круг, картинка. Размеры круга и картинки задаёт блок. При «уменьшить
+// (.skeleton-lines), поле, круг, картинка. Размеры круга и картинки задаёт блок. При «уменьшить
 // движение» — без блика. Из JS — utils/skeleton.js
 @layer components {
     .skeleton {
@@ -29,6 +30,12 @@
     // Строка текста: высота строки, ширина — по блоку
     .skeleton--text {
         height: 12px;
+    }
+
+    // Поле формы (фильтры поиска в шапке, как на сайте)
+    .skeleton--field {
+        height: 46px;
+        border-radius: site.$radius-button;
     }
 
     .skeleton--circle {
