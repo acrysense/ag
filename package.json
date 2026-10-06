@@ -11,6 +11,7 @@
 		"fonts": "node tools/build-fonts.mjs",
 		"predev": "npm run fonts",
 		"dev": "vite",
+		"ui": "vite --open /dev/ui.html",
 		"prebuild": "npm run fonts",
 		"build": "vite build",
 		"preview": "vite preview",

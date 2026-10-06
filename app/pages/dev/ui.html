@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="{{ lang }}" data-icons="{{sprite}}">
+	<head>
+		{{> layouts/Head/Head }}
+		<meta name="robots" content="noindex, nofollow" />
+		<script type="module" src="./ui.js"></script>
+	</head>
+	<body class="ui" data-repo="https://github.com/acrysense/ag">
+		{{!--
+			Витрина компонентов: оболочка. Сами компоненты живут в canvas.html и открываются
+			здесь в iframe нужной ширины, поэтому медиазапросы работают по-настоящему.
+			Меню строится из [data-story] в canvas.html. Выбор и ширина хранятся в адресе
+			(#story=…&state=…&width=…), ссылку можно отправить.
+		--}}
+		<aside class="ui__side">
+			<p class="ui__brand">
+				Витрина
+				<span class="ui__brand-sub">Личный кабинет {{site.siteName}}</span>
+			</p>
+
+			<div class="ui__search">
+				<label class="ui__search-label" for="ui-search">Поиск компонента</label>
+				<input class="ui__search-input" id="ui-search" type="search" placeholder="Поиск" autocomplete="off" data-ui-search />
+				<kbd class="ui__search-key" aria-hidden="true">/</kbd>
+			</div>
+
+			<nav class="ui__nav" aria-label="Компоненты" data-ui-nav></nav>
+			<p class="ui__empty" data-ui-empty hidden>Ничего не найдено</p>
+		</aside>
+
+		<main class="ui__main">
+			<header class="ui__toolbar">
+				<div class="ui__heading">
+					<p class="ui__crumb" data-ui-group></p>
+					<h1 class="ui__title" data-ui-title>Загрузка…</h1>
+					<p class="ui__backend" data-ui-backend></p>
+				</div>
+
+				<div class="ui__actions">
+					<div class="ui__widths" role="group" aria-label="Ширина" data-ui-widths>
+						<button class="ui__width" type="button" aria-pressed="true" data-ui-width="360">360</button>
+						<button class="ui__width" type="button" aria-pressed="false" data-ui-width="768">768</button>
+						<button class="ui__width" type="button" aria-pressed="false" data-ui-width="1440">1440</button>
+					</div>
+					<a class="ui__button" href="#" target="_blank" rel="noopener noreferrer" data-ui-open>
+						Отдельно <span aria-hidden="true">↗</span>
+					</a>
+				</div>
+
+				<nav class="ui__states" aria-label="Состояния" data-ui-states></nav>
+			</header>
+
+			<div class="ui__stage" data-ui-stage>
+				<div class="ui__screen" data-ui-screen>
+					<iframe class="ui__frame" title="Выбранный компонент" data-ui-frame></iframe>
+				</div>
+				<p class="ui__scale" data-ui-scale hidden></p>
+			</div>
+		</main>
+	</body>
+</html>
