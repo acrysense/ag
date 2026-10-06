@@ -3,5 +3,6 @@
 		"group": "Пустые состояния и ошибки",
 		"title": "Задачи — пусто",
 		"order": 600
-	}
+	},
+	"searchSection": "crm-tasks"
 }

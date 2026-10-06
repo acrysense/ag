@@ -3,6 +3,7 @@ import '@/assets/styles/main.scss'
 import { mount, unmount } from '@/core/mount'
 import { autosize } from '@/utils/autosize'
 import { watchCheckedLabels, watchHasFallbacks } from '@/utils/has-fallback'
+import { initListFilters } from '@/utils/listFilters'
 
 // hide the initial-load overlay once styles + sprite are in and the app mounted
 function hideAppLoader() {
@@ -16,6 +17,8 @@ function hideAppLoader() {
 }
 
 function init() {
+	// Фильтры списков из поиска в шапке — до mount: слушает готовность таблицы и календаря
+	initListFilters()
 	mount(document)
 	autosize(document)
 	watchHasFallbacks()

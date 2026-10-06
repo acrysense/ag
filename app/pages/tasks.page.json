@@ -3,5 +3,6 @@
 		"group": "ERP",
 		"title": "Задачи",
 		"order": 300
-	}
+	},
+	"searchSection": "crm-tasks"
 }

@@ -848,6 +848,9 @@ export default defineConfig(({ mode }) => {
 						// Демо и dev (не --mode cms): кнопка «Страницы» (pages/dev/pages-nav.js) — в шаблон
 						// для Битрикса не попадает
 						demo: mode !== 'cms',
+						// Раздел поиска в шапке, выбранный при открытии (страница списка — её раздел):
+						// "searchSection" в <page>.page.json
+						searchSection: pageCfg.searchSection || '',
 					}
 				},
 			}),
