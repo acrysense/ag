@@ -4,8 +4,12 @@
 // сайта, как и <use href="…/sprite.svg#icon-…"> в разметке блоков.
 const SVG = 'http://www.w3.org/2000/svg'
 
-// В ЛК спрайт встроен в страницу, иконки сайта в нём — #icon-site-… (app/assets/icons/site)
-export const iconHref = (name) => `${document.documentElement.dataset.icons || ''}#icon-site-${name}`
+// Ссылка на иконку спрайта ЛК: файл из <html data-icons> (как на ag-site). Без data-icons (старая
+// разметка бэка) — ссылка внутри страницы, на спрайт, встроенный скриптом
+export const spriteHref = (id) => `${document.documentElement.dataset.icons || ''}#icon-${id}`
+
+// Иконки блоков сайта в спрайте ЛК — icon-site-… (app/assets/icons/site)
+export const iconHref = (name) => spriteHref(`site-${name}`)
 
 export function createIcon(name, className = '') {
 	const svg = document.createElementNS(SVG, 'svg')

@@ -7,6 +7,7 @@
 // "/" locally, "/ag/" on GitHub Pages, "/bitrix/templates/auth/" for cms)
 import { scoreTone } from '@/utils/scoreTone'
 import { skeleton, loadingLabel } from '@/utils/skeleton'
+import { spriteHref } from '@/utils/icon'
 
 const VISIT_HREF = import.meta.env.BASE_URL + 'visit'
 
@@ -346,7 +347,7 @@ export default async function VisitsCalendar(root) {
 							</button>`
 						)
 						.join('')
-					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || (isPastDay(date) ? '' : `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmy(date), time: hh }))}"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-plus"></use></svg>Создать визит</button>`)}</div>`
+					return `<div class="vcal__tcell" data-date="${dmy(date)}" data-hour="${hh}">${inner || (isPastDay(date) ? '' : `<button type="button" class="vcal__add" data-visit-create data-visit-prefill="${esc(JSON.stringify({ date: dmy(date), time: hh }))}"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href=spriteHref('plus')></use></svg>Создать визит</button>`)}</div>`
 				})
 				.join('')
 		}
@@ -375,12 +376,12 @@ export default async function VisitsCalendar(root) {
 			<div class="vcal__head">
 				<h2 class="vcal__title">План визитов, ${titleText()}</h2>
 				<div class="vcal__nav">
-					<button type="button" class="vcal__navbtn" data-prev aria-label="Назад"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-left"></use></svg></button>
-					<button type="button" class="vcal__navbtn" data-next aria-label="Вперёд"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="#icon-arrow-right"></use></svg></button>
+					<button type="button" class="vcal__navbtn" data-prev aria-label="Назад"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="${spriteHref('arrow-left')}"></use></svg></button>
+					<button type="button" class="vcal__navbtn" data-next aria-label="Вперёд"><svg aria-hidden="true" focusable="false" width="12" height="12"><use href="${spriteHref('arrow-right')}"></use></svg></button>
 				</div>
 			</div>
 			<div class="vcal__controls">
-				<button type="button" class="vcal__create" data-visit-create><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-plus"></use></svg>Создать визит</button>
+				<button type="button" class="vcal__create" data-visit-create><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="${spriteHref('plus')}"></use></svg>Создать визит</button>
 				<div class="vcal__views">
 					<button type="button" class="vcal__view${view === 'day' ? ' is-active' : ''}" data-view="day">День</button>
 					<button type="button" class="vcal__view${view === 'week' ? ' is-active' : ''}" data-view="week">Неделя</button>
@@ -439,8 +440,8 @@ export default async function VisitsCalendar(root) {
 		const i = bucket.indexOf(ev)
 		if (i > -1) bucket.splice(i, 1)
 	}
-	const ICON_MGR = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-manager"></use></svg>'
-	const ICON_TYPE = '<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-visit-type"></use></svg>'
+	const ICON_MGR = `<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('manager')}"></use></svg>`
+	const ICON_TYPE = `<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('visit-type')}"></use></svg>`
 
 	function openPopup(trigger, ev) {
 		closePopup(false)
@@ -475,7 +476,7 @@ export default async function VisitsCalendar(root) {
 				<div class="vcal-pop__comment vcal-pop__comment--muted">${esc(ev.comment)}</div>
 			</div>`
 			: `<div class="vcal-pop__card">
-				<div class="vcal-pop__row vcal-pop__row--ok"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-check-circle"></use></svg><b>Визит подтвержден</b></div>
+				<div class="vcal-pop__row vcal-pop__row--ok"><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('check-circle')}"></use></svg><b>Визит подтвержден</b></div>
 				<div class="vcal-pop__muted">${esc(ev.confirmedDate)}</div>
 				<div class="vcal-pop__coords">${esc(ev.coords)}</div>
 				<div class="vcal-pop__field-group">
@@ -490,7 +491,7 @@ export default async function VisitsCalendar(root) {
 			: `<div class="vcal-pop__footer"><a href="${esc(visitDetailHref(ev))}" class="btn">Подробнее</a></div>`
 
 		const closeBtn =
-			'<button type="button" class="vcal-pop__close" aria-label="Закрыть"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg></button>'
+			`<button type="button" class="vcal-pop__close" aria-label="Закрыть"><svg aria-hidden="true" focusable="false" width="16" height="16"><use href="${spriteHref('close')}"></use></svg></button>`
 		popup.innerHTML = closeBtn + head + mgr + body + footer
 		// mobile: a blurred backdrop turns the popup into a tap-to-dismiss modal
 		// (a plain positioned card is fiddly to close on touch); desktop keeps the

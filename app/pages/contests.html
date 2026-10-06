@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -14,7 +14,7 @@
 					<div class="wrapper__container">
 						<a href="/" class="wrapper__back">
 							<svg aria-hidden="true" focusable="false" width="16" height="16">
-								<use href="#icon-arrow-back-thin"></use>
+								<use href="{{@root.sprite}}#icon-arrow-back-thin"></use>
 							</svg>
 							<span>Назад</span>
 						</a>
@@ -39,14 +39,14 @@
 											<div class="beginner-end__item">
 												<span class="beginner-end__label">Начало:</span>
 												<svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
-													<use href="#icon-calendar"></use>
+													<use href="{{@root.sprite}}#icon-calendar"></use>
 												</svg>
 												<div class="beginner-end__date">10.08.2026</div>
 											</div>
 											<div class="beginner-end__item">
 												<span class="beginner-end__label">Окончание:</span>
 												<svg class="beginner-end__icon" aria-hidden="true" focusable="false" width="15" height="15">
-													<use href="#icon-calendar"></use>
+													<use href="{{@root.sprite}}#icon-calendar"></use>
 												</svg>
 												<div class="beginner-end__date">09.10.2026</div>
 											</div>
@@ -67,7 +67,7 @@
 									<div class="point-item">
 										<div class="point-item__header">
 											<svg class="point-item__icon" aria-hidden="true" focusable="false" width="30" height="30">
-												<use href="#icon-pharmacy"></use>
+												<use href="{{@root.sprite}}#icon-pharmacy"></use>
 											</svg>
 											<div class="point-item__info">
 												<h3 class="point-item__heading">Аптека №54, основное место работы</h3>

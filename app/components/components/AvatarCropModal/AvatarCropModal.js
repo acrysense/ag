@@ -1,4 +1,5 @@
 import { lockBody } from '@/utils/scroll-lock'
+import { spriteHref } from '@/utils/icon'
 
 // Длительность закрытия окна — $duration-popup в _vars.scss
 const CLOSE_MS = 200
@@ -17,7 +18,7 @@ export function openAvatarCropModal(file) {
 					<h3 class="avatar-crop-modal__title">Фотография профиля</h3>
 					<button class="avatar-crop-modal__close" type="button" aria-label="Закрыть">
 						<svg aria-hidden="true" focusable="false" width="20" height="20">
-							<use href="#icon-close"></use>
+							<use href="${spriteHref('close')}"></use>
 						</svg>
 					</button>
 				</div>

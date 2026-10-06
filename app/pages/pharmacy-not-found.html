@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -13,7 +13,7 @@
 				<div class="wrapper__main">
 					<div class="wrapper__container">
 						<a href="/pharmacies" class="wrapper__back">
-							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-arrow-back-thin"></use></svg>
+							<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="{{@root.sprite}}#icon-arrow-back-thin"></use></svg>
 							<span>Назад</span>
 						</a>
 
@@ -23,7 +23,7 @@
 						-->
 						<section class="data-panel visit-empty">
 							<span class="visit-empty__icon">
-								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="#icon-erp-pharmacies"></use></svg>
+								<svg aria-hidden="true" focusable="false" width="28" height="28"><use href="{{@root.sprite}}#icon-erp-pharmacies"></use></svg>
 							</span>
 							<h1 class="visit-empty__title">Аптека не найдена</h1>
 							<p class="visit-empty__text">Возможно, карточка аптеки была удалена или изменился её адрес. Проверьте ссылку или вернитесь к списку аптек.</p>

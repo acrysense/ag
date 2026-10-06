@@ -1,6 +1,7 @@
 import { mountDatepicker } from '@/utils/datepicker'
 import { MAX_COMMENT_LEN, limitLineBreaks } from '@/utils/comment-limits'
 import { skeleton, loadingLabel } from '@/utils/skeleton'
+import { spriteHref } from '@/utils/icon'
 
 // ---- JSON-driven task list -------------------------------------------------
 const escTask = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]))
@@ -10,7 +11,7 @@ const escTask = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;'
 function taskRowHTML(t) {
 	const done = !!t.done
 	const awaiting = done && !!t.awaitingConfirm // completed, not yet confirmed → keeps full colour + button
-	const check = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>'
+	const check = `<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="${spriteHref('check')}"></use></svg>`
 	const statusCls = done ? (awaiting ? ' task-row__status--done' : ' task-row__status--soft') : ''
 	const status = `<span class="task-row__status${statusCls}" aria-hidden="true">${done ? check : ''}</span>`
 
@@ -21,7 +22,7 @@ function taskRowHTML(t) {
 		let sub = `<span class="${doneCls}"><b>${escTask(t.completedBy)}</b> Выполнена: ${escTask(t.completedDate)}</span>`
 		if (awaiting) sub += '<button type="button" class="task-row__confirm">Подтвердить выполнение</button>'
 		if (t.verifiedBy)
-			sub += `<span class="task-row__verified"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg><b>${escTask(t.verifiedBy)}</b> Проверена: ${escTask(t.verifiedDate)}</span>`
+			sub += `<span class="task-row__verified"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${spriteHref('check')}"></use></svg><b>${escTask(t.verifiedBy)}</b> Проверена: ${escTask(t.verifiedDate)}</span>`
 		body += `<p class="task-row__subline">${sub}</p>`
 	}
 
@@ -33,7 +34,7 @@ function taskRowHTML(t) {
 	const codeAttr = assigneeCode !== '' ? ` data-assignee="${escTask(assigneeCode)}"` : ''
 	let meta = `<span class="task-row__assignee"${codeAttr}>${escTask(assigneeName)}</span><span class="task-row__date">${escTask(t.due)}</span>`
 	if (t.hidden)
-		meta += '<span class="task-row__hidden" title="Скрыта для сотрудника"><svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg></span>'
+		meta += `<span class="task-row__hidden" title="Скрыта для сотрудника"><svg aria-hidden="true" focusable="false" width="24" height="24"><use href="${spriteHref('eye-hidden')}"></use></svg></span>`
 
 	const idAttr = t.id != null && t.id !== '' ? ` data-task-id="${escTask(t.id)}"` : ''
 	// invisible filter keys — the header-search filter reads these for «Менеджер» /
@@ -310,7 +311,7 @@ export default async (root) => {
 			const inp = form.querySelector('[data-task-hide-input]')
 			btn?.classList.toggle('is-active', on)
 			btn?.setAttribute('aria-pressed', on ? 'true' : 'false')
-			btn?.querySelector('use')?.setAttribute('href', on ? '#icon-eye-slash' : '#icon-eye')
+			btn?.querySelector('use')?.setAttribute('href', on ? spriteHref('eye-slash') : spriteHref('eye'))
 			if (inp) inp.value = on ? '1' : '0'
 		}
 		const restoreHome = () => {
@@ -396,7 +397,7 @@ export default async (root) => {
 				mark = document.createElement('span')
 				mark.className = 'task-row__hidden'
 				mark.title = 'Скрыта для сотрудника'
-				mark.innerHTML = '<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="#icon-eye-hidden"></use></svg>'
+				mark.innerHTML = `<svg aria-hidden="true" focusable="false" width="24" height="24"><use href="${spriteHref('eye-hidden')}"></use></svg>`
 				tools.prepend(mark)
 			} else if (!on && mark) mark.remove()
 		}
@@ -604,7 +605,7 @@ export default async (root) => {
 		const setHidden = (on) => {
 			hideBtn.classList.toggle('is-active', on)
 			hideBtn.setAttribute('aria-pressed', on ? 'true' : 'false')
-			hideUse?.setAttribute('href', on ? '#icon-eye-slash' : '#icon-eye')
+			hideUse?.setAttribute('href', on ? spriteHref('eye-slash') : spriteHref('eye'))
 			if (hideInput) hideInput.value = on ? '1' : '0'
 		}
 		const onHide = (e) => {
@@ -748,7 +749,7 @@ export default async (root) => {
 	// clicking a completed check re-opens it into the active group. Delegated so
 	// dynamically completed rows keep working.
 	if (list) {
-		const CHECK = '<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-check"></use></svg>'
+		const CHECK = `<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="${spriteHref('check')}"></use></svg>`
 		const onStatusClick = (e) => {
 			if (readOnly) return // employee can't close/reopen tasks
 			const status = e.target.closest('.task-row__status')
@@ -801,7 +802,7 @@ export default async (root) => {
 					if (sub && data && (data.verifiedBy || data.verifiedDate) && !sub.querySelector('.task-row__verified')) {
 						const span = document.createElement('span')
 						span.className = 'task-row__verified'
-						span.innerHTML = `<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg><b>${escTask(data.verifiedBy || '')}</b> Проверена: ${escTask(data.verifiedDate || '')}`
+						span.innerHTML = `<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${spriteHref('check')}"></use></svg><b>${escTask(data.verifiedBy || '')}</b> Проверена: ${escTask(data.verifiedDate || '')}`
 						sub.appendChild(span)
 					}
 					row.dataset.confirmOrder = String(++confirmSeq) // jump to the top of the closed group
@@ -819,12 +820,12 @@ export default async (root) => {
 	// Give every task row the actions ("…") menu so it reveals on row hover.
 	const ACTIONS_HTML = `<div class="actions-menu" data-actions>
 		<button type="button" class="actions-menu__trigger" data-actions-trigger aria-haspopup="menu" aria-expanded="false" aria-label="Действия">
-			<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-three-dots"></use></svg>
+			<svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('three-dots')}"></use></svg>
 		</button>
 		<div class="actions-menu__panel" data-actions-panel role="menu" aria-hidden="true">
-			<button type="button" class="actions-menu__item" role="menuitem" data-task-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-comments"></use></svg><span>Комментировать</span></button>
-			<button type="button" class="actions-menu__item" role="menuitem" data-task-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-edit-square"></use></svg><span>Редактировать</span></button>
-			<button type="button" class="actions-menu__item" role="menuitem" data-task-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="#icon-trash"></use></svg><span>Удалить</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem" data-task-comment><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('comments')}"></use></svg><span>Комментировать</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem" data-task-edit><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('edit-square')}"></use></svg><span>Редактировать</span></button>
+			<button type="button" class="actions-menu__item" role="menuitem" data-task-delete><svg aria-hidden="true" focusable="false" width="20" height="20"><use href="${spriteHref('trash')}"></use></svg><span>Удалить</span></button>
 		</div>
 	</div>`
 	// Trailing tools (eye + "…") live in their own .task-row__tools wrapper.
@@ -954,10 +955,10 @@ export default async (root) => {
 		<textarea class="task-comment__input" data-task-comment-input rows="1" data-autosize maxlength="${MAX_COMMENT_LEN}" placeholder="Комментарий" autocomplete="off"></textarea>
 		<div class="task-comment__actions">
 			<button type="button" class="task-comment__btn task-comment__btn--save" data-task-comment-save aria-label="Сохранить">
-				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-check"></use></svg>
+				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${spriteHref('check')}"></use></svg>
 			</button>
 			<button type="button" class="task-comment__btn task-comment__btn--cancel" data-task-comment-cancel aria-label="Отмена">
-				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="#icon-close-middle"></use></svg>
+				<svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${spriteHref('close-middle')}"></use></svg>
 			</button>
 		</div>
 	</div>`

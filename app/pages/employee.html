@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}" data-icons="{{sprite}}">
 	<head>
 		{{> layouts/Head/Head }}
 		<script type="module" src="/app.js"></script>
@@ -15,7 +15,7 @@
                         <div class="wrapper__left">
                             <a href="/" class="wrapper__back">
                                 <svg aria-hidden="true" focusable="false" width="16" height="16">
-                                    <use href="#icon-arrow-back-thin"></use>
+                                    <use href="{{@root.sprite}}#icon-arrow-back-thin"></use>
                                 </svg>
                                 <span>Назад</span>
                             </a>
