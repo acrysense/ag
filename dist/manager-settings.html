@@ -170,647 +170,504 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="AG" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-CJsnXh3I.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CmWIrJbP.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-lOC5rkxm.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-BB2N62u2.css" />
 	</head>
 	<body class="bg-light manager-page">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		<div class="wrapper">
-			<header class="header" data-module="Header" data-path="layouts">
-				<div class="container">
-					<div class="header__wrapper">
-						<picture class="header__logotype">
-							<source
-								media="(min-width: 1280px)"
-								srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg"
-								width="390"
-								height="40"
-							/>
-							<img src="/bitrix/templates/auth/assets/images/logotype-mobile-BWefyXL2.svg" width="141" height="40" alt="AG" />
-						</picture>
-						<div class="filter-search" data-module="HeaderSearch" data-path="components">
-							<div class="filter-search__control">
-								<input
-									class="filter-search__input"
-									name="header-search"
-									type="text"
-									placeholder="Найти"
-									autocomplete="off"
-									data-filter-input
-									aria-label="Поиск"
+			<header class="header header--site" data-module="SiteHeader" data-path="layouts">
+				<div class="header__top">
+					<div class="header__brand">
+						<a class="header__logo-link" href="/index.html" aria-label="На главную">
+							<picture class="header__logo">
+								<source
+									media="(min-width: 1280px)"
+									srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg"
+									width="390"
+									height="40"
 								/>
-								<svg
-									class="filter-search__icon"
-									aria-hidden="true"
-									focusable="false"
-									viewBox="0 0 20 20"
-									fill="none"
-									xmlns="http://www.w3.org/2000/svg"
-								>
-									<circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.6" />
-									<path d="M17 17L13.5 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-								</svg>
-							</div>
+								<img src="/bitrix/templates/auth/assets/images/logotype-mobile-BWefyXL2.svg" width="141" height="40" alt="" />
+							</picture>
+						</a>
+					</div>
 
-							<div class="filter-search__dropdown filter-panel" data-filter-dropdown aria-hidden="true">
-								<div class="filter-panel__head">
-									<h2 class="filter-panel__title">Фильтр</h2>
-									<button type="button" class="filter-panel__close" data-filter-close aria-label="Закрыть">
-										<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-close"></use></svg>
+					<div
+						class="site-search header__search"
+						data-module="SiteSearch"
+						data-path="layouts"
+						data-suggest-url="/__mock/search-suggest"
+						data-filters-url="/__mock/search-filters"
+					>
+						<form
+							class="site-search__form"
+							action="https://acrysense.github.io/ag-site/search.html"
+							method="get"
+							role="search"
+							autocomplete="off"
+						>
+							<div class="site-search__bar">
+								<div class="site-search__field">
+									<label class="visually-hidden" for="header-q">Поиск по сайту</label>
+									<svg class="icon site-search__icon" aria-hidden="true" focusable="false">
+										<use href="#icon-site-search"></use>
+									</svg>
+									<input
+										class="site-search__input"
+										id="header-q"
+										type="search"
+										name="q"
+										value=""
+										placeholder="Начать поиск"
+										autocomplete="off"
+										enterkeyhint="search"
+										data-site-search-input
+									/>
+									<button class="site-search__chip" type="button" hidden data-site-search-chip>
+										<span data-site-search-chip-text></span>
+										<svg class="icon site-search__chip-icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-close"></use>
+										</svg>
+									</button>
+									<button class="site-search__clear" type="button" aria-label="Очистить запрос" hidden data-site-search-clear>
+										<svg class="icon site-search__clear-icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-close"></use>
+										</svg>
 									</button>
 								</div>
-								<div data-page-fields="employees">
-									<div class="filter-panel__top">
-										<div class="filter-field" data-filter-key="employee" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--list">
-												<input
-													class="filter-field__search"
-													name="filter-field-search"
-													type="text"
-													placeholder="Найти"
-													autocomplete="off"
-												/>
-												<div class="filter-field__options">
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Василевская М.В."
-															data-label="Василевская М.В."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Василевская М.В.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Волкова Ю.Г."
-															data-label="Волкова Ю.Г."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Волкова Ю.Г.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Зайцева Д.М."
-															data-label="Зайцева Д.М."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Зайцева Д.М.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Ковш Т.А."
-															data-label="Ковш Т.А."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Ковш Т.А.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Северная Т.В."
-															data-label="Северная Т.В."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Северная Т.В.</span>
-													</label>
-												</div>
-											</div>
-										</div>
-									</div>
-
-									<div class="filter-panel__grid">
-										<div class="filter-field" data-filter-key="region">
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Область">Область</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel">
-												<button type="button" class="filter-option" data-value="Минск" data-label="Минск">Минская обл.</button>
-												<button type="button" class="filter-option" data-value="Витебск" data-label="Витебск">
-													Витебская обл.
-												</button>
-												<button type="button" class="filter-option" data-value="Брест" data-label="Брест">Брестская обл.</button>
-												<button type="button" class="filter-option" data-value="Гродно" data-label="Гродно">
-													Гродненская обл.
-												</button>
-												<button type="button" class="filter-option" data-value="Могилев" data-label="Могилев">
-													Могилевска обл.
-												</button>
-											</div>
-										</div>
-
-										<div class="filter-field" data-filter-key="region" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Регион">Регион</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel">
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Минск"
-														data-label="Минск"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Минск</span>
-												</label>
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Витебск"
-														data-label="Витебск"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Витебск</span>
-												</label>
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Брест"
-														data-label="Брест"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Брест</span>
-												</label>
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Гродно"
-														data-label="Гродно"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Гродно</span>
-												</label>
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Могилев"
-														data-label="Могилев"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Могилев</span>
-												</label>
-											</div>
-										</div>
-
-										<div class="filter-field" data-filter-key="brand" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Бренд">Бренд</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel">
-												<label class="filter-option">
-													<input class="filter-option__input" name="filter-option" type="checkbox" value="ADEL" data-label="ADEL" />
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>ADEL</span>
-												</label>
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Добрыя лекі"
-														data-label="Добрыя лекі"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Добрыя лекі</span>
-												</label>
-												<label class="filter-option">
-													<input
-														class="filter-option__input"
-														name="filter-option"
-														type="checkbox"
-														value="Эконом"
-														data-label="Эконом"
-													/>
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>Эконом</span>
-												</label>
-											</div>
-										</div>
-
-										<div class="filter-field" data-filter-key="category" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Категория">Категория</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel">
-												<label class="filter-option">
-													<input class="filter-option__input" name="filter-option" type="checkbox" value="A" data-label="A" />
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>A</span>
-												</label>
-												<label class="filter-option">
-													<input class="filter-option__input" name="filter-option" type="checkbox" value="B" data-label="B" />
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>B</span>
-												</label>
-												<label class="filter-option">
-													<input class="filter-option__input" name="filter-option" type="checkbox" value="C" data-label="C" />
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>C</span>
-												</label>
-												<label class="filter-option">
-													<input class="filter-option__input" name="filter-option" type="checkbox" value="D" data-label="D" />
-													<span class="filter-option__box" aria-hidden="true"></span>
-													<span>D</span>
-												</label>
-											</div>
-										</div>
-
-										<div class="filter-field" data-filter-key="company">
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Розничная компания">Розничная компания</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel">
-												<button type="button" class="filter-option" data-value="Аптека групп" data-label="Аптека групп">
-													ООО “Аптека групп”
-												</button>
-												<button type="button" class="filter-option" data-value="Фарм" data-label="Фарм">ООО “Фарм”</button>
-											</div>
-										</div>
-
-										<div class="filter-field" data-filter-key="pharmacy" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--list">
-												<input
-													class="filter-field__search"
-													name="filter-field-search"
-													type="text"
-													placeholder="Найти"
-													autocomplete="off"
-												/>
-												<div class="filter-field__options">
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="ADEL №112"
-															data-label="ADEL №112"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>ADEL №112</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="ADEL №42"
-															data-label="Аптека ADEL №42, Минск"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Аптека ADEL №42, Минск</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="ADEL №4"
-															data-label="ADEL №4"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>ADEL №4</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="ADEL №2"
-															data-label="ADEL №2"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>ADEL №2</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="ADEL №24"
-															data-label="Аптека ADEL №24"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Аптека ADEL №24</span>
-													</label>
-												</div>
-											</div>
-										</div>
-
-										<div class="filter-field" data-filter-key="manager">
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel">
-												<button type="button" class="filter-option" data-value="Петров А.И." data-label="Петров А.И.">
-													Петров А.И.
-												</button>
-												<button type="button" class="filter-option" data-value="Полководец Т.С." data-label="Полководец Т.С.">
-													Полководец Т.С.
-												</button>
-											</div>
-										</div>
-
-										<!-- free-text input (list of values), inline — no dropdown -->
-										<div class="filter-field filter-field--inline" data-filter-key="checks" data-input>
-											<input
-												type="text"
-												class="filter-field__input"
-												name="filter-value"
-												data-filter-text
-												placeholder="Кол-во чеков"
-												autocomplete="off"
-											/>
-										</div>
-
-										<!-- numeric range (From – To), inline — no dropdown -->
-										<div class="filter-field filter-field--inline" data-filter-key="index" data-range>
-											<div class="filter-range">
-												<input
-													type="text"
-													class="filter-field__input"
-													name="filter-value"
-													data-range-from
-													placeholder="Индекс от"
-													autocomplete="off"
-													inputmode="decimal"
-												/>
-												<span class="filter-range__dash">–</span>
-												<input
-													type="text"
-													class="filter-field__input"
-													name="filter-value"
-													data-range-to
-													placeholder="до"
-													autocomplete="off"
-													inputmode="decimal"
-												/>
-											</div>
-										</div>
-
-										<!-- date range (From – To) -->
-										<div class="filter-field" data-filter-key="period" data-daterange>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Период">Период</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--calendar"></div>
-										</div>
-
-										<!-- single date -->
-										<div class="filter-field" data-filter-key="date" data-date>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--calendar"></div>
-										</div>
-									</div>
-								</div>
-
-								<div data-page-fields="tasks">
-									<div class="filter-panel__top">
-										<div class="filter-field" data-filter-key="assignee" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Сотрудник">Сотрудник</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--list">
-												<input
-													class="filter-field__search"
-													name="filter-field-search"
-													type="text"
-													placeholder="Найти"
-													autocomplete="off"
-												/>
-												<div class="filter-field__options">
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Иванов М.С."
-															data-label="Иванов М.С."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Иванов М.С.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Петров А.И."
-															data-label="Петров А.И."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Петров А.И.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Панковец В.В."
-															data-label="Панковец В.В."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Панковец В.В.</span>
-													</label>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div class="filter-panel__grid">
-										<div class="filter-field" data-filter-key="manager" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Менеджер">Менеджер</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--list">
-												<input
-													class="filter-field__search"
-													name="filter-field-search"
-													type="text"
-													placeholder="Найти"
-													autocomplete="off"
-												/>
-												<div class="filter-field__options">
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Петров А.И."
-															data-label="Петров А.И."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Петров А.И.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Сидоров И.И."
-															data-label="Сидоров И.И."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Сидоров И.И.</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Кузнецова Л.П."
-															data-label="Кузнецова Л.П."
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Кузнецова Л.П.</span>
-													</label>
-												</div>
-											</div>
-										</div>
-										<div class="filter-field" data-filter-key="pharmacy" data-multi>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Аптека">Аптека</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-caret"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--list">
-												<input
-													class="filter-field__search"
-													name="filter-field-search"
-													type="text"
-													placeholder="Найти"
-													autocomplete="off"
-												/>
-												<div class="filter-field__options">
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Эконом №8"
-															data-label="Эконом №8"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Эконом №8</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="Эконом №9"
-															data-label="Эконом №9"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>Эконом №9</span>
-													</label>
-													<label class="filter-option">
-														<input
-															class="filter-option__input"
-															name="filter-option"
-															type="checkbox"
-															value="ADEL №14"
-															data-label="ADEL №14"
-														/>
-														<span class="filter-option__box" aria-hidden="true"></span>
-														<span>ADEL №14</span>
-													</label>
-												</div>
-											</div>
-										</div>
-										<div class="filter-field filter-field--date" data-filter-key="date" data-daterange>
-											<button type="button" class="filter-field__trigger">
-												<span class="filter-field__value" data-placeholder="Дата">Дата</span>
-												<svg aria-hidden="true" focusable="false" width="16" height="16"><use href="#icon-calendar"></use></svg>
-											</button>
-											<div class="filter-field__panel filter-field__panel--calendar"></div>
-										</div>
-									</div>
-								</div>
-
-								<div class="filter-panel__actions">
-									<button type="button" class="btn btn--sm" data-filter-apply>Применить</button>
-									<button type="button" class="btn btn--sm btn--secondary" data-filter-reset>Сбросить</button>
-								</div>
-							</div>
-						</div>
-						<div class="header__inner">
-							<div class="profile-dropdown header__profile" data-module="ProfileDropdown" data-path="components">
-								<button class="profile-dropdown__trigger" type="button" aria-haspopup="menu" aria-expanded="false">
-									<span class="profile-dropdown__placeholder">ВМ</span>
-									<span>Владислава Митрофановна</span>
-									<svg aria-hidden="true" width="16" height="16">
-										<use href="#icon-caret"></use>
+								<button class="site-search__close" type="button" aria-label="Закрыть поиск" data-site-search-close>
+									<svg class="icon site-search__close-icon" aria-hidden="true" focusable="false">
+										<use href="#icon-site-close"></use>
 									</svg>
 								</button>
-								<div class="profile-dropdown__panel" role="menu">
-									<div class="profile-dropdown__wrap">
-										<a class="profile-dropdown__item" role="menuitem" tabindex="-1" href="/" data-action="">
-											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
-												<use href="#icon-settings"></use>
+							</div>
+
+							<div class="site-search__panel" id="header-panel" data-site-search-panel>
+								<div class="site-search__sections" role="radiogroup" aria-labelledby="header-sections">
+									<p class="site-search__legend" id="header-sections">Искать в разделе</p>
+									<div class="site-search__section-list">
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="directory"
+												checked
+												data-label="Справочник"
+												data-where="в Справочнике"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-profile"></use>
 											</svg>
-											<span class="profile-dropdown__text">Настройки</span>
-										</a>
-										<div class="profile-dropdown__sep" role="none"></div>
-										<button class="profile-dropdown__item" role="menuitem" tabindex="-1" type="button" data-action="logout">
-											<svg class="profile-dropdown__icon" aria-hidden="true" width="20" height="20">
-												<use href="#icon-exit"></use>
+
+											<span>Справочник</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="news"
+												data-label="Новости"
+												data-where="в Новостях"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-news"></use>
 											</svg>
-											<span class="profile-dropdown__text">Выход</span>
+
+											<span>Новости</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="documents"
+												data-label="Документы"
+												data-where="в Документах"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-directory"></use>
+											</svg>
+
+											<span>Документы</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="vacancies"
+												data-label="Вакансии"
+												data-where="в Вакансиях"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-case"></use>
+											</svg>
+
+											<span>Вакансии</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-pharmacies"
+												data-label="Аптеки"
+												data-where="в Аптеках"
+												data-action="/pharmacies.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-pharmacy"></use>
+											</svg>
+
+											<span>Аптеки</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-managers"
+												data-label="Менеджеры"
+												data-where="в Менеджерах"
+												data-action="/managers.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-manager"></use>
+											</svg>
+
+											<span>Менеджеры</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-employees"
+												data-label="Сотрудники аптек"
+												data-where="в Сотрудниках аптек"
+												data-action="/employees.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-profile"></use>
+											</svg>
+
+											<span>Сотрудники аптек</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-visits"
+												data-label="Визиты"
+												data-where="в Визитах"
+												data-action="/visits.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-calendar"></use>
+											</svg>
+
+											<span>Визиты</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-tasks"
+												data-label="Задачи"
+												data-where="в Задачах"
+												data-action="/tasks.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-tasks"></use>
+											</svg>
+
+											<span>Задачи</span>
+										</label>
+									</div>
+								</div>
+								<div class="site-search__content">
+									<div class="site-search__filters">
+										<div class="site-search__filters-head">
+											<p class="site-search__filters-title">
+												Фильтры ·
+												<span data-site-search-section-label>Справочник</span>
+											</p>
+											<button class="site-search__reset" type="button" data-site-search-reset>Сбросить все</button>
+										</div>
+										<button class="site-search__summary" type="button" aria-expanded="false" data-site-search-summary>
+											<span class="site-search__summary-text" data-site-search-summary-text></span>
+											<svg class="icon site-search__summary-icon" aria-hidden="true" focusable="false">
+												<use href="#icon-site-chevron-down"></use>
+											</svg>
 										</button>
-										<button class="profile-dropdown__close" aria-label="Закрыть">
-											<svg aria-hidden="true" focusable="false" width="16" height="16">
-												<use href="#icon-close"></use>
-											</svg>
-										</button>
+										<div class="site-search__filter-list" data-site-search-filter-list>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти юр. лицо"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Юр. лицо">
+															Юр. лицо
+														</span>
+														<select class="select__control" name="company[]" multiple>
+															<option value="1">ООО «Адель Фарм»</option>
+															<option value="2">ООО «Аптека групп»</option>
+															<option value="3">ООО «Добрыя лекі»</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти отдел"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Отдел">Отдел</span>
+														<select class="select__control" name="department[]" multiple>
+															<option value="1">Отдел маркетинга</option>
+															<option value="2">Отдел продаж</option>
+															<option value="3">Бухгалтерия</option>
+															<option value="4">Отдел кадров</option>
+															<option value="5">IT-отдел</option>
+															<option value="6">Логистика</option>
+															<option value="7">Склад</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти должность"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Должность">
+															Должность
+														</span>
+														<select class="select__control" name="position[]" multiple>
+															<option value="1">Провизор</option>
+															<option value="2">Фармацевт</option>
+															<option value="3">Менеджер по закупкам</option>
+															<option value="4">Маркетолог</option>
+															<option value="5">Специалист по продажам</option>
+															<option value="6">Руководитель направления</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти город"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Город">Город</span>
+														<select class="select__control" name="city[]" multiple>
+															<option value="1">Минск</option>
+															<option value="2">Гродно</option>
+															<option value="3">Брест</option>
+															<option value="4">Гомель</option>
+															<option value="5">Витебск</option>
+															<option value="6">Могилёв</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="site-search__results" hidden data-site-search-results>
+										<p class="site-search__info" data-site-search-info></p>
+										<ul
+											class="site-search__list"
+											role="listbox"
+											id="header-list"
+											aria-label="Быстрые результаты"
+											data-site-search-list
+										></ul>
+										<div class="site-search__empty" hidden data-site-search-empty>
+											<span class="site-search__empty-icon">
+												<svg class="icon site-search__empty-glyph" aria-hidden="true" focusable="false">
+													<use href="#icon-site-search"></use>
+												</svg>
+											</span>
+											<p class="site-search__empty-title" data-site-search-empty-title></p>
+											<p class="site-search__empty-text">
+												Проверьте раскладку клавиатуры и опечатки, попробуйте сократить запрос, сбросить фильтры или выбрать другой
+												раздел
+												<span class="site-search__where site-search__where--side">слева</span>
+												<span class="site-search__where site-search__where--top">выше</span>
+												.
+											</p>
+											<button class="btn btn--general btn--m site-search__empty-reset" type="button" data-site-search-reset>
+												Сбросить фильтры
+											</button>
+										</div>
+										<div class="site-search__footer" data-site-search-footer>
+											<button class="btn btn--general btn--m site-search__all" type="submit" data-site-search-all>
+												Все результаты
+											</button>
+										</div>
+									</div>
+									<div class="site-search__footer site-search__footer--apply" hidden data-site-search-apply>
+										<button class="btn btn--general btn--m site-search__all" type="submit">Найти</button>
 									</div>
 								</div>
 							</div>
-							<button class="header__hamburger" aria-label="Меню">
-								<svg aria-hidden="true" focusable="false" width="30" height="21">
-									<use href="#icon-hamburger"></use>
+						</form>
+					</div>
+
+					<div class="header__actions">
+						<ul class="header__quick" role="list">
+							<li>
+								<a class="header__quick-link" href="/index.html" title="Личный кабинет">
+									<span class="visually-hidden">Личный кабинет</span>
+									<svg class="icon header__quick-icon" aria-hidden="true" focusable="false">
+										<use href="#icon-site-profile"></use>
+									</svg>
+								</a>
+							</li>
+							<li>
+								<a class="header__quick-link" href="#" title="Учебный портал">
+									<span class="visually-hidden">Учебный портал</span>
+									<svg class="icon header__quick-icon" aria-hidden="true" focusable="false">
+										<use href="#icon-site-edu"></use>
+									</svg>
+								</a>
+							</li>
+							<li>
+								<a class="header__quick-link" href="/pharmacies.html" title="CRM">
+									<span class="visually-hidden">CRM</span>
+									<svg class="icon header__quick-icon" aria-hidden="true" focusable="false">
+										<use href="#icon-site-crm"></use>
+									</svg>
+								</a>
+							</li>
+						</ul>
+						<div class="header__user-menu" data-user-menu>
+							<button
+								class="header__user"
+								type="button"
+								aria-expanded="false"
+								aria-controls="header-user-menu"
+								data-user-menu-toggle
+							>
+								<span class="header__avatar">
+									<span class="header__initials" aria-hidden="true">ВМ</span>
+								</span>
+								<span class="header__user-name">Владислава Митрофановна</span>
+								<svg class="icon header__user-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-angle-right"></use>
 								</svg>
+								<span class="visually-hidden">— меню профиля</span>
 							</button>
+							<ul class="user-menu" id="header-user-menu" role="list" hidden>
+								<li>
+									<a class="user-menu__link" href="/index.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-profile"></use>
+										</svg>
+
+										<span>Моя страница</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="#">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-edu"></use></svg>
+
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/coefficient.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-multiplier"></use>
+										</svg>
+
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/package.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-box"></use></svg>
+
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/motivation.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-motivation"></use>
+										</svg>
+
+										<span>Мотивация</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/contests.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-apple"></use>
+										</svg>
+
+										<span>Конкурсы</span>
+									</a>
+								</li>
+								<li class="user-menu__divider" aria-hidden="true"></li>
+								<li>
+									<a class="user-menu__link" href="/edit.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-settings"></use>
+										</svg>
+
+										<span>Настройки</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/login.html" data-modal-open="main-menu-logout">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="#icon-site-exit"></use>
+										</svg>
+
+										<span>Выйти</span>
+									</a>
+								</li>
+							</ul>
 						</div>
+						<button class="header__burger" type="button" aria-expanded="false" aria-controls="main-menu" data-main-menu-open>
+							<span class="visually-hidden">Меню</span>
+							<svg class="icon header__burger-icon" aria-hidden="true" focusable="false">
+								<use href="#icon-site-menu"></use>
+							</svg>
+						</button>
 					</div>
 				</div>
 			</header>
@@ -1231,5 +1088,373 @@
 
 			<div class="toasts" data-module="Toasts" data-path="components" aria-live="polite" aria-atomic="false"></div>
 		</div>
+		<dialog class="main-menu" id="main-menu" aria-label="Меню" data-module="MainMenu" data-path="layouts">
+			<div class="main-menu__header">
+				<h2 class="main-menu__title">Меню</h2>
+				<button class="main-menu__close" type="button" data-main-menu-close>
+					<span class="visually-hidden">Закрыть меню</span>
+					<svg class="icon main-menu__close-icon" aria-hidden="true" focusable="false">
+						<use href="#icon-site-close"></use>
+					</svg>
+				</button>
+			</div>
+
+			<div class="main-menu__content">
+				<div class="main-menu__profile">
+					<span class="main-menu__avatar"><span class="main-menu__initials" aria-hidden="true">ВМ</span></span>
+					<div class="main-menu__profile-text">
+						<p class="main-menu__name">Владислава Митрофановна</p>
+						<p class="main-menu__role">Заведующая аптекой</p>
+						<a class="main-menu__profile-link" href="/index.html">Моя страница</a>
+					</div>
+					<button class="main-menu__logout" type="button" data-modal-open="main-menu-logout">
+						<span class="visually-hidden">Выйти из аккаунта</span>
+						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-exit"></use></svg>
+					</button>
+				</div>
+
+				<p class="main-menu__label">CRM</p>
+				<div class="main-menu__card">
+					<button
+						class="main-menu__group"
+						type="button"
+						aria-expanded="true"
+						aria-controls="main-menu-group-0"
+						data-main-menu-group="crm"
+					>
+						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-case"></use></svg>
+						<span class="main-menu__group-text">
+							<span class="main-menu__group-title">CRM</span>
+							<span class="main-menu__group-meta">6 разделов</span>
+						</span>
+						<svg class="icon main-menu__group-arrow" aria-hidden="true" focusable="false">
+							<use href="#icon-site-chevron-up"></use>
+						</svg>
+					</button>
+					<ul class="main-menu__list" id="main-menu-group-0" role="list">
+						<li>
+							<a class="main-menu__row" href="#">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-home"></use></svg>
+								<span class="main-menu__row-text">Дашборд</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/pharmacies.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-pharmacy"></use>
+								</svg>
+								<span class="main-menu__row-text">Аптеки</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/managers.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-manager"></use>
+								</svg>
+								<span class="main-menu__row-text">Менеджеры</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/employees.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-profile"></use>
+								</svg>
+								<span class="main-menu__row-text">Сотрудники</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/visits.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-calendar"></use>
+								</svg>
+								<span class="main-menu__row-text">Визиты</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/tasks.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-tasks"></use></svg>
+								<span class="main-menu__row-text">Задачи</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<p class="main-menu__label">Личный кабинет</p>
+				<div class="main-menu__card">
+					<button
+						class="main-menu__group"
+						type="button"
+						aria-expanded="true"
+						aria-controls="main-menu-group-1"
+						data-main-menu-group="cabinet"
+					>
+						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-profile"></use></svg>
+						<span class="main-menu__group-text">
+							<span class="main-menu__group-title">Личный кабинет</span>
+							<span class="main-menu__group-meta">5 разделов</span>
+						</span>
+						<svg class="icon main-menu__group-arrow" aria-hidden="true" focusable="false">
+							<use href="#icon-site-chevron-up"></use>
+						</svg>
+					</button>
+					<ul class="main-menu__list" id="main-menu-group-1" role="list">
+						<li>
+							<a class="main-menu__row" href="#">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-edu"></use></svg>
+								<span class="main-menu__row-text">Учебный портал</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/coefficient.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-multiplier"></use>
+								</svg>
+								<span class="main-menu__row-text">Коэффициент</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/package.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-box"></use></svg>
+								<span class="main-menu__row-text">Пакеты</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/motivation.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-motivation"></use>
+								</svg>
+								<span class="main-menu__row-text">Мотивация</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/contests.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-apple"></use></svg>
+								<span class="main-menu__row-text">Конкурсы</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<p class="main-menu__label">Портал</p>
+				<ul class="main-menu__tiles" role="list">
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-home"></use></svg>
+							</span>
+							<span class="main-menu__tile-text">Главная</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-news"></use></svg>
+							</span>
+							<span class="main-menu__tile-text">Новости</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-directory"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Справочник сотрудников</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-wiki"></use></svg>
+							</span>
+							<span class="main-menu__tile-text">База знаний</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false"><use href="#icon-site-case"></use></svg>
+							</span>
+							<span class="main-menu__tile-text">Вакансии</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="#icon-site-gallery"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Галерея</span>
+						</a>
+					</li>
+				</ul>
+
+				<p class="main-menu__label">Присоединяйтесь</p>
+				<ul class="main-menu__card main-menu__list" role="list">
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Гипермаркет Аптечка+
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Аптеки ADEL
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Аптеки Добрыя лекi
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Клуб FeelinGood
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<dialog
+				class="modal modal--s modal--confirm"
+				id="main-menu-logout"
+				aria-labelledby="main-menu-logout-title"
+				aria-describedby="main-menu-logout-text"
+				data-module="Modal"
+				data-path="components"
+			>
+				<div class="modal__panel">
+					<div class="modal__header">
+						<h2 class="modal__title" id="main-menu-logout-title">Выйти из аккаунта?</h2>
+					</div>
+					<div class="modal__body">
+						<div class="modal__content">
+							<p class="modal__text" id="main-menu-logout-text">
+								Чтобы снова открыть портал, понадобится войти по логину и паролю.
+							</p>
+							<div class="modal__actions">
+								<a class="btn btn--error btn--l" href="/login.html"><span class="btn__text">Выйти</span></a>
+								<button class="btn btn--light btn--l" type="button" autofocus="" data-modal-close="">
+									<span class="btn__text">Отмена</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</dialog>
+		</dialog>
+		<nav class="tab-bar" aria-label="Быстрая навигация">
+			<ul class="tab-bar__list" role="list">
+				<li class="tab-bar__cell">
+					<button class="tab-bar__item" type="button" aria-controls="main-menu" aria-expanded="false" data-main-menu-open>
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false"><use href="#icon-site-menu"></use></svg>
+						<span class="tab-bar__label">Меню</span>
+					</button>
+				</li>
+				<li class="tab-bar__cell">
+					<a class="tab-bar__item" href="/index.html">
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false"><use href="#icon-site-profile"></use></svg>
+						<span class="tab-bar__label">Кабинет</span>
+					</a>
+				</li>
+				<li class="tab-bar__cell">
+					<a class="tab-bar__item" href="#">
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false"><use href="#icon-site-news"></use></svg>
+						<span class="tab-bar__label">Новости</span>
+					</a>
+				</li>
+				<li class="tab-bar__cell">
+					<a class="tab-bar__item" href="#">
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false"><use href="#icon-site-edu"></use></svg>
+						<span class="tab-bar__label">Обучение</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
 	</body>
 </html>
