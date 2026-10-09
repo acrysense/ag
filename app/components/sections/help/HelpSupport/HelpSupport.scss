@@ -1,0 +1,35 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Карточка — как «Новое в базе знаний» (help-aside-card): текст M/400 Dark-grey, кнопка General M
+// во всю ширину, «Или позвоните: …» S/400 Dark-grey.
+@layer components {
+	.help-support__text {
+		@include text("m-400");
+
+		margin: 0;
+		color: palette("dark-grey-txt");
+	}
+
+	.help-support__button {
+		width: 100%;
+	}
+
+	.help-support__phone {
+		@include text("s-400");
+
+		margin: 0;
+		color: palette("dark-grey-txt");
+	}
+
+	.help-support__phone-link {
+		color: inherit;
+		white-space: nowrap;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-txt");
+		}
+	}
+}

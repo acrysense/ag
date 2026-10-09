@@ -1,0 +1,149 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Белая карточка, поля 20, скругление 20, рамка и тень блока, всё через 20: заголовок H1 и через
+// 4 «N статей» S/400 Dark-grey; описание M/400; статьи через 5 — строка с чертой Block.Border снизу,
+// поля 10: плитка 36 (BG.Info, скругление 10, значок документа 16), через 10 название L/400 и
+// пояснение M/400 Dark-grey, справа стрелка 14 (50%). Наведение: фон BG.Info, плитка белая,
+// название Main Blue, стрелка 100%. До 1024 — белый блок во всю ширину, поля 20/10.
+@layer components {
+	.help-section {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		min-width: 0;
+		padding: 20px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			padding: 20px;
+			border: 1px solid palette("block-border");
+			border-radius: $radius-content-block;
+			box-shadow: $shadow-content-block;
+		}
+	}
+
+	.help-section__head {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.help-section__title {
+		@include text("h1-360");
+
+		margin: 0;
+		color: palette("black-h");
+
+		@include up(desktop) {
+			@include text("h1");
+		}
+	}
+
+	.help-section__count {
+		@include text("s-400");
+
+		margin: 0;
+		color: palette("dark-grey-txt");
+	}
+
+	.help-section__text,
+	.help-section__empty {
+		@include text("m-400");
+
+		margin: 0;
+		color: palette("black-txt");
+	}
+
+	.help-section__empty {
+		color: palette("dark-grey-txt");
+	}
+
+	.help-section__list {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.help-article {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		padding: 10px;
+		color: palette("black-txt");
+		border-bottom: 1px solid palette("block-border");
+		transition: background-color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			background: palette("bg-info");
+		}
+
+		@include down(desktop) {
+			padding-inline: 0;
+		}
+	}
+
+	.help-article__icon {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 36px;
+		height: 36px;
+		background: palette("bg-info");
+		border-radius: $radius-inner-block;
+		transition: background-color $transition-default;
+	}
+
+	.help-article:hover .help-article__icon,
+	.help-article:focus-visible .help-article__icon {
+		background: palette("white");
+	}
+
+	.help-article__glyph {
+		width: 16px;
+		height: 16px;
+	}
+
+	.help-article__body {
+		display: flex;
+		flex: 1 1 auto;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.help-article__title {
+		@include text("l-400");
+
+		transition: color $transition-default;
+	}
+
+	.help-article:hover .help-article__title,
+	.help-article:focus-visible .help-article__title {
+		color: palette("main-blue");
+	}
+
+	.help-article__text {
+		@include text("m-400");
+
+		color: palette("dark-grey-txt");
+	}
+
+	.help-article__chevron {
+		flex: none;
+		width: 14px;
+		height: 14px;
+		opacity: 0.5;
+		transition: opacity $transition-default;
+	}
+
+	.help-article:hover .help-article__chevron,
+	.help-article:focus-visible .help-article__chevron {
+		opacity: 1;
+	}
+}

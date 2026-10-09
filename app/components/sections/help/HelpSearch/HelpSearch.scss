@@ -1,0 +1,214 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Поле — до 760×46, лупа 16, рамка Form.Border (наведение Icon.Grey, фокус Form.Focus), скругление
+// 14, справа × при непустом поле. Подсказки — под полем через 4: белое окно, рамка Block.Border,
+// скругление 20, тень Dropdown, поля 16, пункты через 6: превью 40 (статья — BG.Blue, вопрос —
+// BG.Main, скругление 8, значок 16), название M/400 (совпадение — Main Blue), мета S/400 Dark-grey;
+// внизу через 8 — «Все результаты в Помощи · N» (General M во всю ширину).
+@layer components {
+	.help-search {
+		position: relative;
+		width: 100%;
+		max-width: 760px;
+	}
+
+	.help-search__field {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		height: 46px;
+		padding: 0 12px 0 16px;
+		background: palette("white");
+		border: 1px solid palette("form-border");
+		border-radius: $radius-button;
+		transition: border-color $transition-default;
+
+		&:hover {
+			border-color: palette("icon-grey");
+		}
+
+		&:focus-within {
+			border-color: palette("form-focus");
+		}
+	}
+
+	.help-search__icon {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		color: palette("black-txt");
+	}
+
+	.help-search__input {
+		@include text("l-400");
+
+		flex: 1 1 auto;
+		min-width: 0;
+		height: 100%;
+		padding: 0;
+		color: palette("black-txt");
+		background: none;
+		border: 0;
+		outline: none;
+
+		&::placeholder {
+			color: palette("dark-grey-txt");
+			opacity: 1;
+		}
+
+		&::-webkit-search-cancel-button,
+		&::-webkit-search-decoration {
+			appearance: none;
+		}
+
+		@include up(desktop) {
+			@include text("m-400");
+		}
+	}
+
+	.help-search__clear {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		padding: 0;
+		color: palette("black-txt");
+		cursor: pointer;
+		background: none;
+		border: 0;
+		border-radius: 50%;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("main-blue");
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.help-search__clear-icon {
+		width: 14px;
+		height: 14px;
+	}
+
+	.help-search__panel {
+		position: absolute;
+		top: calc(100% + 4px);
+		right: 0;
+		left: 0;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		padding: 16px;
+		background: palette("white");
+		border: 1px solid palette("block-border");
+		border-radius: $radius-content-block;
+		box-shadow: $shadow-dropdown;
+
+		&[hidden] {
+			display: none;
+		}
+
+		@include down(tablet) {
+			padding: 10px;
+		}
+	}
+
+	.help-search__list {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	.help-search__item {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		padding: 8px 10px;
+		color: palette("black-txt");
+		border-radius: $radius-inner-block;
+		transition: background-color $transition-default;
+
+		&:hover,
+		&.is-active {
+			background: palette("bg-info");
+		}
+	}
+
+	.help-search__preview {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 40px;
+		height: 40px;
+		background: palette("bg-blue");
+		border-radius: 8px;
+	}
+
+	.help-search__preview--question {
+		background: palette("bg-main");
+	}
+
+	.help-search__preview-icon {
+		width: 16px;
+		height: 16px;
+	}
+
+	.help-search__text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.help-search__title {
+		@include text("m-400");
+
+		mark {
+			color: palette("main-blue");
+			background: none;
+		}
+	}
+
+	.help-search__meta {
+		@include text("s-400");
+
+		color: palette("dark-grey-txt");
+	}
+
+	.help-search__empty {
+		@include text("m-400");
+
+		margin: 0;
+		padding: 8px 10px;
+		color: palette("dark-grey-txt");
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.help-search__all {
+		width: 100%;
+		margin-top: 8px;
+
+		&[hidden] {
+			display: none;
+		}
+	}
+}

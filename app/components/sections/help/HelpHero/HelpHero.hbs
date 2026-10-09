@@ -1,0 +1,18 @@
+{{!--
+	Шапка «Помощи»: заголовок, описание, поиск по Помощи и «Часто ищут».
+	props: id, title, text, search (HelpSearch), popular { label, items [{ text, url }] } — ссылки на
+	результаты поиска. Контракт — docs/bitrix/HELP.md.
+--}}
+<section class="help-hero" aria-labelledby="{{default props.id 'help-hero'}}-title">
+    <h1 class="help-hero__title" id="{{default props.id 'help-hero'}}-title">{{default props.title "Помощь"}}</h1>
+    {{#if props.text}}<p class="help-hero__text">{{props.text}}</p>{{/if}}
+    {{#if props.search}}{{> sections/help/HelpSearch/HelpSearch props=props.search}}{{/if}}
+    {{#if props.popular.items.length}}
+        <div class="help-hero__popular">
+            <span class="help-hero__popular-label">{{default props.popular.label "Часто ищут:"}}</span>
+            <ul class="help-hero__pills" role="list">
+                {{#each props.popular.items}}<li><a class="help-hero__pill" href="{{url}}">{{text}}</a></li>{{/each}}
+            </ul>
+        </div>
+    {{/if}}
+</section>

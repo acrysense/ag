@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="{{ lang }}" data-icons="{{sprite}}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/SiteHeader/SiteHeader props=site.header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__wide">
+						<div class="help-page">
+							{{> components/Breadcrumbs/Breadcrumbs props=(obj items=data.breadcrumbs class="help-page__crumbs") }}
+							<div class="help-page__layout">
+								{{> sections/help/HelpNav/HelpNav props=data.nav }}
+								<div class="help-page__main">
+									{{> sections/help/HelpSection/HelpSection props=data.section }}
+									{{> sections/help/HelpFaq/HelpFaq props=data.faq }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+		{{!-- Мобильное меню и нижняя панель — вне .wrapper: открытое меню делает .wrapper недоступным (inert) --}}
+		{{> layouts/MainMenu/MainMenu props=site.mainMenu }}
+		{{> layouts/TabBar/TabBar props=site.tabBar }}
+	</body>
+</html>

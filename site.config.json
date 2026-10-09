@@ -145,7 +145,7 @@
 				"label": "CRM",
 				"title": "CRM",
 				"icon": "case",
-				"meta": "6 разделов",
+				"meta": "7 разделов",
 				"expanded": true,
 				"items": [
 					{
@@ -177,6 +177,11 @@
 						"icon": "tasks",
 						"text": "Задачи",
 						"url": "/tasks.html"
+					},
+					{
+						"icon": "help",
+						"text": "Помощь",
+						"url": "/help.html"
 					}
 				]
 			},

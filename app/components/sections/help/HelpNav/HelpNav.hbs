@@ -1,0 +1,35 @@
+{{!--
+	Навигация по Помощи: разделы, у текущего — его статьи. Бэк выводит статьи только текущего раздела;
+	остальные разделы — ссылки. С 1280 — карточка слева, до 1280 — свёрнутая строка «Разделы помощи»
+	над содержимым (details; скрипт HelpNav.js открывает её с 1280 и сворачивает на узких).
+	props: id, title («Помощь по CRM»), summary (подпись свёрнутой строки), items [{ title, url,
+	current (раздел открыт), pages [{ title, url, current }] }].
+--}}
+{{#if props.items.length}}
+    <details class="help-nav" open data-module="HelpNav" data-path="sections/help">
+        <summary class="help-nav__summary">
+            <span class="help-nav__summary-text">{{default props.summary "Разделы помощи"}}</span>
+            {{> components/Icon/Icon name="chevron-down" class="help-nav__summary-icon"}}
+        </summary>
+        <nav class="help-nav__body" aria-labelledby="{{default props.id 'help-nav'}}-title">
+            <p class="help-nav__title" id="{{default props.id 'help-nav'}}-title">{{default props.title "Помощь"}}</p>
+            <ul class="help-nav__list" role="list">
+                {{#each props.items}}
+                    <li class="help-nav__group">
+                        <a class="help-nav__link help-nav__link--group{{#if current}} is-open{{/if}}" href="{{url}}">
+                            {{> components/Icon/Icon name="chevron-right" class="help-nav__chevron"}}
+                            <span class="help-nav__text">{{title}}</span>
+                        </a>
+                        {{#if (and current pages.length)}}
+                            <ul class="help-nav__pages" role="list">
+                                {{#each pages}}
+                                    <li><a class="help-nav__link help-nav__link--page" href="{{url}}"{{#if current}} aria-current="page"{{/if}}><span class="help-nav__text">{{title}}</span></a></li>
+                                {{/each}}
+                            </ul>
+                        {{/if}}
+                    </li>
+                {{/each}}
+            </ul>
+        </nav>
+    </details>
+{{/if}}

@@ -1,0 +1,243 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+@use "../HelpQuestions/mixins" as questions;
+
+// Белая карточка, поля 20, скругление 20, рамка и тень блока. Вид — по ширине самого блока:
+// от 600 широкий — плитка 40 (BG.Info, скругление 12, значок 20), через 12 заголовок H3 и подпись
+// S/400 Dark-grey, справа «Все статьи →» M/400 Main Blue; через 10 вопросы (L/400, поля 20) и
+// «Не нашли ответ? Написать в поддержку» M/400. Уже 600 — узкий: плитка 32 (скругление 10, значок
+// 18), заголовок H4 без подписи, вопросы компактные (M/400, поля 10), всё через 6, внизу «Все
+// статьи →». Свёрнутый — только шапка: число вопросов (BG.Info, S/400 Dark-grey) и стрелка вниз.
+// До 1024 — белый блок во всю ширину, поля 20/10.
+@layer components {
+	.help-inline {
+		container: help-inline / inline-size;
+		min-width: 0;
+		padding: 20px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			padding: 20px;
+			border: 1px solid palette("block-border");
+			border-radius: $radius-content-block;
+			box-shadow: $shadow-content-block;
+		}
+	}
+
+	// Шапка «растворена» в сетке: в узком виде «Все статьи» уходит вниз под вопросы
+	.help-inline__inner {
+		display: grid;
+		grid-template-areas:
+			"tile titles count toggle"
+			"body body body body"
+			"all all all all";
+		grid-template-columns: auto minmax(0, 1fr) auto auto;
+		gap: 6px 12px;
+		align-items: center;
+
+		@container help-inline (min-width: 600px) {
+			grid-template-areas:
+				"tile titles all count toggle"
+				"body body body body body";
+			grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+			row-gap: 10px;
+		}
+	}
+
+	.help-inline__head {
+		display: contents;
+	}
+
+	.help-inline__tile {
+		display: flex;
+		grid-area: tile;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		color: palette("black-txt");
+		background: palette("bg-info");
+		border-radius: $radius-inner-block;
+
+		@container help-inline (min-width: 600px) {
+			width: 40px;
+			height: 40px;
+			border-radius: 12px;
+		}
+	}
+
+	.help-inline__icon {
+		width: 18px;
+		height: 18px;
+
+		@container help-inline (min-width: 600px) {
+			width: 20px;
+			height: 20px;
+		}
+	}
+
+	.help-inline__titles {
+		display: flex;
+		flex-direction: column;
+		grid-area: titles;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.help-inline__title {
+		@include text("h4");
+
+		margin: 0;
+		color: palette("black-txt");
+
+		@container help-inline (min-width: 600px) {
+			@include text("h3");
+		}
+	}
+
+	.help-inline__subtitle {
+		@include text("s-400");
+
+		display: none;
+		margin: 0;
+		color: palette("dark-grey-txt");
+
+		@container help-inline (min-width: 600px) {
+			display: block;
+		}
+	}
+
+	.help-inline__all {
+		@include text("m-400");
+
+		grid-area: all;
+		justify-self: start;
+		padding-top: 4px;
+		color: palette("main-blue");
+		white-space: nowrap;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+
+		@container help-inline (min-width: 600px) {
+			padding-top: 0;
+		}
+	}
+
+	.help-inline__count {
+		@include text("s-400");
+
+		display: none;
+		grid-area: count;
+		padding: 2px 8px;
+		color: palette("dark-grey-txt");
+		background: palette("bg-info");
+		border-radius: $radius-inner-block;
+	}
+
+	.help-inline__toggle {
+		display: flex;
+		grid-area: toggle;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		margin-right: -6px;
+		padding: 0;
+		color: palette("black-txt");
+		cursor: pointer;
+		background: none;
+		border: 0;
+		border-radius: 50%;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("main-blue");
+		}
+	}
+
+	.help-inline__toggle-icon {
+		width: 16px;
+		height: 16px;
+		transition: transform $transition-default;
+	}
+
+	.help-inline__body {
+		display: flex;
+		flex-direction: column;
+		grid-area: body;
+		gap: 10px;
+		min-width: 0;
+
+		@container help-inline (max-width: 599.98px) {
+			gap: 0;
+
+			@include questions.compact;
+		}
+	}
+
+	.help-inline__support {
+		@include text("m-400");
+
+		margin: 0;
+		padding-top: 6px;
+		color: palette("dark-grey-txt");
+
+		@container help-inline (max-width: 599.98px) {
+			display: none;
+		}
+	}
+
+	.help-inline__support-link {
+		color: palette("main-blue");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+	}
+
+	// Свёрнут: только шапка с числом вопросов
+	.help-inline.is-minimized {
+		.help-inline__inner {
+			row-gap: 0;
+		}
+
+		.help-inline__body,
+		.help-inline__all {
+			display: none;
+		}
+
+		.help-inline__count {
+			display: block;
+		}
+
+		.help-inline__toggle-icon {
+			transform: rotate(180deg);
+		}
+	}
+}
+
+// На странице раздела (wrapper__narrow--aside): с 1600 — справа, вровень с карточкой списка (под
+// вкладками 40 + 10); уже — под списком через 10, до 1024 — отделён серой полосой 10
+@layer components {
+	.wrapper__narrow--aside > .help-inline {
+		margin-top: 10px;
+
+		@include down(desktop) {
+			margin-top: 0;
+			border-top: 10px solid palette("bg-main");
+		}
+
+		@media (min-width: 1600px) {
+			grid-row: 1 / 3;
+			grid-column: 2;
+			margin-top: 50px;
+		}
+	}
+}

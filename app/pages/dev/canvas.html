@@ -247,6 +247,45 @@
 				{{/state}}
 			{{/story}}
 
+			{{#> story id="help-hero" group="Помощь" title="Шапка и поиск" backend='app/components/sections/help/HelpHero/ — заголовок, поиск по Помощи (GET-форма + подсказки JSON), «Часто ищут»; docs/bitrix/HELP.md'}}
+				{{#> state label="Обычное" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.hero}}</div>{{/state}}
+				{{#> state label="Без поиска и «Часто ищут»" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.heroPlain}}</div>{{/state}}
+				{{#> state label="Подсказки: загрузка, ничего не найдено, ошибка" note="Наберите в поле «задача», «визит» или «xyz»: подсказки через 300 мс; ошибка сервера — окно не открывается, Enter ведёт на страницу результатов"}}{{/state}}
+			{{/story}}
+
+			{{#> story id="help-categories" group="Помощь" title="Разделы" backend='app/components/sections/help/HelpCategories/ — разделы Помощи: значок, число статей, описание, до 3 статей'}}
+				{{#> state label="Девять разделов" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpCategories/HelpCategories props=data.categories}}</div>{{/state}}
+				{{#> state label="Один раздел" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpCategories/HelpCategories props=data.categoriesOne}}</div>{{/state}}
+				{{#> state label="Нет разделов" note="Блок не выводится"}}{{/state}}
+			{{/story}}
+
+			{{#> story id="help-faq" group="Помощь" title="Частые вопросы" backend='app/components/sections/help/HelpFaq/ — вопросы раскрываются без скрипта (details)'}}
+				{{#> state label="Первый открыт" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpFaq/HelpFaq props=data.faq}}</div>{{/state}}
+				{{#> state label="Нет вопросов" note="Блок не выводится"}}{{/state}}
+			{{/story}}
+
+			{{#> story id="help-aside" group="Помощь" title="Новое и поддержка" backend='app/components/sections/help/HelpUpdates/, HelpSupport/'}}
+				{{#> state label="Обычное" bg="page"}}<div class="wrapper__wide"><div class="help-page__side">{{> sections/help/HelpUpdates/HelpUpdates props=data.updates}}{{> sections/help/HelpSupport/HelpSupport props=data.support}}</div></div>{{/state}}
+				{{#> state label="Без телефона" bg="page"}}<div class="wrapper__wide"><div class="help-page__side">{{> sections/help/HelpSupport/HelpSupport props=data.supportPlain}}</div></div>{{/state}}
+			{{/story}}
+
+			{{#> story id="help-nav" group="Помощь" title="Навигация по разделам" backend='app/components/sections/help/HelpNav/ — у текущего раздела его статьи; до 1280 — свёрнутая строка'}}
+				{{#> state label="Открыт раздел «Задачи»" bg="page"}}<div class="wrapper__wide"><div class="story-col story-col--320">{{> sections/help/HelpNav/HelpNav props=data.nav}}</div></div>{{/state}}
+			{{/story}}
+
+			{{#> story id="help-section" group="Помощь" title="Раздел и статьи" backend='app/components/sections/help/HelpSection/'}}
+				{{#> state label="Статьи" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpSection/HelpSection props=data.section}}</div>{{/state}}
+				{{#> state label="Пусто" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpSection/HelpSection props=data.sectionEmpty}}</div>{{/state}}
+			{{/story}}
+
+			{{#> story id="help-inline" group="Помощь" title="Вопросы по странице" backend='app/components/sections/help/HelpInline/ — вид по ширине блока (уже 600 — узкий), стрелка сворачивает блок'}}
+				{{#> state label="Широкий" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpInline/HelpInline props=data.inline}}</div>{{/state}}
+				{{#> state label="Узкий (колонка 350)" bg="page"}}<div class="wrapper__wide"><div class="story-col story-col--350">{{> sections/help/HelpInline/HelpInline props=data.inlineNarrow}}</div></div>{{/state}}
+				{{#> state label="Длинный вопрос и ответ" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpInline/HelpInline props=data.inlineLong}}</div>{{/state}}
+				{{#> state label="Один вопрос" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpInline/HelpInline props=data.inlineOne}}</div>{{/state}}
+				{{#> state label="Свёрнут" note="Нажмите стрелку в любом блоке выше: останется шапка с числом вопросов"}}{{/state}}
+			{{/story}}
+
 			{{#> story id="coefficient" group="Кабинет" title="Коэффициент" backend='app/components/sections/coefficient/Coefficient/'}}
 				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/coefficient/Coefficient/Coefficient}}{{/page}}{{/state}}
 				{{#> state label="Пусто" bg="page"}}{{#> page}}{{> sections/coefficient/Coefficient/Coefficient coefficient=(obj empty=true)}}{{/page}}{{/state}}

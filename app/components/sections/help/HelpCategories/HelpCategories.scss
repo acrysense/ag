@@ -1,0 +1,169 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// «Разделы» — H2, через 20 карточки по 3 в ряд через 20 (от 1440; 768–1439 — по 2, на телефоне
+// по одной). Карточка: белая, поля 24, скругление 20, рамка и тень блока, всё через 16: плитка 44
+// (BG.Info, скругление 12, значок 22) и через 14 название H4 и «N статей» S/400 Dark-grey; описание
+// M/400 Dark-grey; статьи через 8 — M/400 Main Blue; «Все статьи раздела ›» M/500 Black.TXT.
+// До 1024 карточки внутри белого блока во всю ширину (поля 20/10, через 10), без тени.
+@layer components {
+	.help-categories {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		min-width: 0;
+		padding: 20px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			gap: 20px;
+			padding: 0;
+			background: none;
+		}
+	}
+
+	.help-categories__title {
+		@include text("h3-360");
+
+		margin: 0;
+		color: palette("black-txt");
+
+		@include up(desktop) {
+			@include text("h2");
+		}
+	}
+
+	.help-categories__list {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 10px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		@include up(tablet) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		@include up(desktop) {
+			gap: 20px;
+		}
+
+		@media (min-width: 1440px) {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
+
+	.help-card {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		align-items: flex-start;
+		min-width: 0;
+		padding: 20px;
+		background: palette("white");
+		border: 1px solid palette("block-border");
+		border-radius: $radius-content-block;
+
+		@include up(desktop) {
+			padding: 24px;
+			box-shadow: $shadow-content-block;
+		}
+	}
+
+	.help-card__head {
+		display: flex;
+		gap: 14px;
+		align-items: center;
+		min-width: 0;
+	}
+
+	.help-card__tile {
+		display: flex;
+		flex: none;
+		align-items: center;
+		justify-content: center;
+		width: 44px;
+		height: 44px;
+		color: palette("black-txt");
+		background: palette("bg-info");
+		border-radius: 12px;
+	}
+
+	.help-card__icon {
+		width: 22px;
+		height: 22px;
+	}
+
+	.help-card__titles {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+	}
+
+	.help-card__title {
+		@include text("h4");
+
+		margin: 0;
+		color: palette("black-txt");
+	}
+
+	.help-card__count {
+		@include text("s-400");
+
+		margin: 0;
+		color: palette("dark-grey-txt");
+	}
+
+	.help-card__text {
+		@include text("m-400");
+
+		margin: 0;
+		color: palette("dark-grey-txt");
+	}
+
+	.help-card__links {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.help-card__link {
+		@include text("m-400");
+
+		color: palette("main-blue");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+	}
+
+	// Карточка выше соседей не растягивает «Все статьи раздела» — она прижата к низу
+	.help-card__more {
+		@include text("m-500");
+
+		display: inline-flex;
+		gap: 6px;
+		align-items: center;
+		margin-top: auto;
+		color: palette("black-txt");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-txt");
+		}
+	}
+
+	.help-card__more-icon {
+		flex: none;
+		width: 14px;
+		height: 14px;
+	}
+}

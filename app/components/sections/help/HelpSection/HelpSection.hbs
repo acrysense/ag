@@ -1,0 +1,29 @@
+{{!--
+	Раздел Помощи: заголовок, число статей, описание и статьи раздела.
+	props: id, title, countText («14 статей»), text, items [{ title, text, url }], emptyText.
+--}}
+<section class="help-section" aria-labelledby="{{default props.id 'help-section'}}-title">
+    <div class="help-section__head">
+        <h1 class="help-section__title" id="{{default props.id 'help-section'}}-title">{{props.title}}</h1>
+        {{#if props.countText}}<p class="help-section__count">{{props.countText}}</p>{{/if}}
+    </div>
+    {{#if props.text}}<p class="help-section__text">{{props.text}}</p>{{/if}}
+    {{#if props.items.length}}
+        <ul class="help-section__list" role="list">
+            {{#each props.items}}
+                <li>
+                    <a class="help-article" href="{{url}}">
+                        <span class="help-article__icon">{{> components/Icon/Icon name="document" class="help-article__glyph"}}</span>
+                        <span class="help-article__body">
+                            <span class="help-article__title">{{title}}</span>
+                            {{#if text}}<span class="help-article__text">{{text}}</span>{{/if}}
+                        </span>
+                        {{> components/Icon/Icon name="chevron-right" class="help-article__chevron"}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p class="help-section__empty">{{default props.emptyText "В этом разделе пока нет статей."}}</p>
+    {{/if}}
+</section>

@@ -1,0 +1,85 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Белая карточка, поля 40, скругление 20, рамка и тень блока, всё через 20: заголовок H0
+// Black.TXT, описание L/400 Dark-grey, поле поиска, «Часто ищут:» M/400 Dark-grey и «таблетки»
+// через 8 (BG.Info, поля 4/12, скругление 14, S/400 Main Blue). До 1024 — белый блок во всю
+// ширину, поля 20/10, заголовок H1, описание M/400.
+@layer components {
+	.help-hero {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		align-items: flex-start;
+		min-width: 0;
+		padding: 20px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			gap: 20px;
+			padding: 40px;
+			border: 1px solid palette("block-border");
+			border-radius: $radius-content-block;
+			box-shadow: $shadow-content-block;
+		}
+	}
+
+	.help-hero__title {
+		@include text("h1-360");
+
+		margin: 0;
+		color: palette("black-txt");
+
+		@include up(desktop) {
+			@include text("h0");
+		}
+	}
+
+	.help-hero__text {
+		@include text("m-400");
+
+		max-width: 804px;
+		margin: 0;
+		color: palette("dark-grey-txt");
+
+		@include up(desktop) {
+			@include text("l-400");
+		}
+	}
+
+	.help-hero__popular {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		align-items: center;
+	}
+
+	.help-hero__popular-label {
+		@include text("m-400");
+
+		color: palette("dark-grey-txt");
+	}
+
+	.help-hero__pills {
+		display: contents;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.help-hero__pill {
+		@include text("s-400");
+
+		display: block;
+		padding: 4px 12px;
+		color: palette("main-blue");
+		background: palette("bg-info");
+		border-radius: $radius-button;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+	}
+}

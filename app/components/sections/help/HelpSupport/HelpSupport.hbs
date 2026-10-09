@@ -1,0 +1,10 @@
+{{!--
+	«Не нашли ответ?» — обращение в поддержку.
+	props: id, title, text, button { text, url }, phone { label («Или позвоните:»), text, tel }.
+--}}
+<section class="help-aside-card help-support" aria-labelledby="{{default props.id 'help-support'}}-title">
+    <h2 class="help-aside-card__title" id="{{default props.id 'help-support'}}-title">{{default props.title "Не нашли ответ?"}}</h2>
+    {{#if props.text}}<p class="help-support__text">{{props.text}}</p>{{/if}}
+    {{#if props.button.url}}<a class="btn btn--general btn--m help-support__button" href="{{props.button.url}}">{{default props.button.text "Написать в поддержку"}}</a>{{/if}}
+    {{#if props.phone.text}}<p class="help-support__phone">{{default props.phone.label "Или позвоните:"}} <a class="help-support__phone-link" href="tel:{{props.phone.tel}}">{{props.phone.text}}</a></p>{{/if}}
+</section>

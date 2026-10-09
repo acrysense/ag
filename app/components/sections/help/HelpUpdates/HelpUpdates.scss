@@ -1,0 +1,64 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Карточки справа на главной Помощи («Новое в базе знаний», «Не нашли ответ?»): белые, поля 30,
+// скругление 20, рамка и тень блока, всё через 16, заголовок H3. До 1024 — белый блок во всю
+// ширину, поля 20/10. Обновления: дата S/400 Dark-grey, через 2 — название M/400 Main Blue.
+@layer components {
+	.help-aside-card {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		align-items: flex-start;
+		min-width: 0;
+		padding: 20px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			padding: 30px;
+			border: 1px solid palette("block-border");
+			border-radius: $radius-content-block;
+			box-shadow: $shadow-content-block;
+		}
+	}
+
+	.help-aside-card__title {
+		@include text("h3");
+
+		margin: 0;
+		color: palette("black-txt");
+	}
+
+	.help-updates__list {
+		display: flex;
+		flex-direction: column;
+		gap: 16px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.help-updates__item {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+	}
+
+	.help-updates__date {
+		@include text("s-400");
+
+		color: palette("dark-grey-txt");
+	}
+
+	.help-updates__link {
+		@include text("m-400");
+
+		color: palette("main-blue");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+	}
+}

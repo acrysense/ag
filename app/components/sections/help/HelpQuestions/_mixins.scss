@@ -1,0 +1,25 @@
+@use "@/assets/styles/site/mixins" as *;
+
+// Компактные вопросы: вопрос M/400 и стрелка 14, поля 10 (открытый — сверху 20), ответ 14/20.
+// Класс help-questions--s и узкий блок «Вопросы по странице» (по ширине контейнера).
+@mixin compact {
+	.help-questions__summary {
+		@include text("m-400");
+
+		padding: 10px 0;
+	}
+
+	.help-questions__item[open] > .help-questions__summary {
+		padding-top: 20px;
+	}
+
+	.help-questions__chevron {
+		width: 14px;
+		height: 14px;
+		margin-top: 4px;
+	}
+
+	.help-questions__text {
+		@include text("m-400-360");
+	}
+}

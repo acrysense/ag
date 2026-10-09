@@ -1,0 +1,21 @@
+{{!--
+	Вопросы с ответами — раскрываются по одному (details, без скрипта; открыт может быть любой).
+	props: items [{ question, answer, url, linkText, open }], linkText (подпись ссылки по умолчанию),
+	size («s» — компактный: вопрос 14/22, поля 10). Ответ — простой текст; url — статья целиком.
+--}}
+{{#if props.items.length}}
+    <div class="help-questions{{#if (eq props.size 's')}} help-questions--s{{/if}}">
+        {{#each props.items}}
+            <details class="help-questions__item"{{#if open}} open{{/if}}>
+                <summary class="help-questions__summary">
+                    <span class="help-questions__question">{{question}}</span>
+                    {{> components/Icon/Icon name="chevron-down" class="help-questions__chevron"}}
+                </summary>
+                <div class="help-questions__answer">
+                    {{#if answer}}<p class="help-questions__text">{{answer}}</p>{{/if}}
+                    {{#if url}}<a class="help-questions__link" href="{{url}}">{{default linkText (default ../props.linkText "Читать статью полностью")}} →</a>{{/if}}
+                </div>
+            </details>
+        {{/each}}
+    </div>
+{{/if}}

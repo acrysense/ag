@@ -133,6 +133,22 @@
 				max-width: none;
 			}
 		}
+		// tasks + «Вопросы по странице» (sections/help/HelpInline): с 1600 блок — колонка 350 справа
+		// от списка (до 1080) через 10; уже — под списком. Без модификатора — обычный __narrow.
+		&__narrow--aside {
+			@media (min-width: 1600px) {
+				display: grid;
+				grid-template-rows: auto 1fr;
+				grid-template-columns: minmax(0, 1080px) 350px;
+				column-gap: 10px;
+				align-items: start;
+				max-width: 1570px;
+
+				> * {
+					grid-column: 1;
+				}
+			}
+		}
 		// centred single-column container (manager): 1230 content + 60px side
 		// gutters → 1350 outer
 		&__mid {
