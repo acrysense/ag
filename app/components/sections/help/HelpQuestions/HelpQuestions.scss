@@ -14,6 +14,25 @@
 		border-bottom: 0;
 	}
 
+	// Ответ плавно раскрывается по высоте — где браузер умеет (::details-content, interpolate-size),
+	// иначе открывается сразу; как раскрывающиеся блоки на ag-site
+	.help-questions__item {
+		interpolate-size: allow-keywords;
+	}
+
+	.help-questions__item::details-content {
+		display: flow-root;
+		height: 0;
+		overflow: clip;
+		transition:
+			height $transition-default,
+			content-visibility $transition-default allow-discrete;
+	}
+
+	.help-questions__item[open]::details-content {
+		height: auto;
+	}
+
 	.help-questions__summary {
 		@include text("l-400");
 
