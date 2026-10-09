@@ -57,6 +57,7 @@
 		color: palette("black-txt");
 		list-style: none;
 		cursor: pointer;
+		outline: none;
 		transition: color $transition-default;
 
 		&::-webkit-details-marker {

@@ -7,7 +7,7 @@
 // S/400 Dark-grey, справа «Все статьи →» M/400 Main Blue; через 10 вопросы (L/400, поля 20) и
 // «Не нашли ответ? Написать в поддержку» M/400. Уже 600 — узкий: плитка 32 (скругление 10, значок
 // 18), заголовок H4 без подписи, вопросы компактные (M/400, поля 10), всё через 6, внизу «Все
-// статьи →». Свёрнутый — только шапка: число вопросов (BG.Info, S/400 Dark-grey) и стрелка вниз.
+// статьи →».
 // До 1024 — белый блок во всю ширину, поля 20/10.
 @layer components {
 	.help-inline {
@@ -28,18 +28,18 @@
 	.help-inline__inner {
 		display: grid;
 		grid-template-areas:
-			"tile titles count toggle"
-			"body body body body"
-			"all all all all";
-		grid-template-columns: auto minmax(0, 1fr) auto auto;
+			"tile titles"
+			"body body"
+			"all all";
+		grid-template-columns: auto minmax(0, 1fr);
 		gap: 6px 12px;
 		align-items: center;
 
 		@container help-inline (min-width: 600px) {
 			grid-template-areas:
-				"tile titles all count toggle"
-				"body body body body body";
-			grid-template-columns: auto minmax(0, 1fr) auto auto auto;
+				"tile titles all"
+				"body body body";
+			grid-template-columns: auto minmax(0, 1fr) auto;
 			row-gap: 10px;
 		}
 	}
@@ -127,44 +127,8 @@
 		}
 	}
 
-	.help-inline__count {
-		@include text("s-400");
 
-		display: none;
-		grid-area: count;
-		padding: 2px 8px;
-		color: palette("dark-grey-txt");
-		background: palette("bg-info");
-		border-radius: $radius-inner-block;
-	}
 
-	.help-inline__toggle {
-		display: flex;
-		grid-area: toggle;
-		align-items: center;
-		justify-content: center;
-		width: 28px;
-		height: 28px;
-		margin-right: -6px;
-		padding: 0;
-		color: palette("black-txt");
-		cursor: pointer;
-		background: none;
-		border: 0;
-		border-radius: 50%;
-		transition: color $transition-default;
-
-		&:hover,
-		&:focus-visible {
-			color: palette("main-blue");
-		}
-	}
-
-	.help-inline__toggle-icon {
-		width: 16px;
-		height: 16px;
-		transition: transform $transition-default;
-	}
 
 	.help-inline__body {
 		display: flex;
@@ -202,25 +166,6 @@
 		}
 	}
 
-	// Свёрнут: только шапка с числом вопросов
-	.help-inline.is-minimized {
-		.help-inline__inner {
-			row-gap: 0;
-		}
-
-		.help-inline__body,
-		.help-inline__all {
-			display: none;
-		}
-
-		.help-inline__count {
-			display: block;
-		}
-
-		.help-inline__toggle-icon {
-			transform: rotate(180deg);
-		}
-	}
 }
 
 // На странице раздела (wrapper__narrow--aside): с 1600 — справа, вровень с карточкой списка (под

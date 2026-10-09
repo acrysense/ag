@@ -289,12 +289,11 @@
 				{{#> state label="Пусто" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpSection/HelpSection props=data.sectionEmpty}}</div>{{/state}}
 			{{/story}}
 
-			{{#> story id="help-inline" group="Помощь" title="Вопросы по странице" backend='app/components/sections/help/HelpInline/ — вид по ширине блока (уже 600 — узкий), стрелка сворачивает блок'}}
+			{{#> story id="help-inline" group="Помощь" title="Вопросы по странице" backend='app/components/sections/help/HelpInline/ — вид по ширине блока (уже 600 — узкий)'}}
 				{{#> state label="Широкий" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpInline/HelpInline props=data.inline}}</div>{{/state}}
 				{{#> state label="Узкий (колонка 350)" bg="page"}}<div class="wrapper__wide"><div class="story-col story-col--350">{{> sections/help/HelpInline/HelpInline props=data.inlineNarrow}}</div></div>{{/state}}
 				{{#> state label="Длинный вопрос и ответ" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpInline/HelpInline props=data.inlineLong}}</div>{{/state}}
 				{{#> state label="Один вопрос" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpInline/HelpInline props=data.inlineOne}}</div>{{/state}}
-				{{#> state label="Свёрнут" note="Нажмите стрелку в любом блоке выше: останется шапка с числом вопросов"}}{{/state}}
 			{{/story}}
 
 			{{#> story id="coefficient" group="Кабинет" title="Коэффициент" backend='app/components/sections/coefficient/Coefficient/'}}
