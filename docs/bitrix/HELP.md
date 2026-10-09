@@ -44,8 +44,7 @@
 
 ## Вопросы по странице
 
-Блок `HelpInline` на странице раздела CRM. У каждого раздела свой `id` (`help-tasks`,
-`help-visits`…). Поля: заголовок, подпись, вопросы (как у HelpFaq), ссылки «Все статьи» и
+Блок `HelpInline` на странице раздела CRM. Поля: заголовок, подпись, вопросы (как у HelpFaq), ссылки «Все статьи» и
 «Написать в поддержку».
 
 На странице задач — после вкладок, у обёртки добавить класс `wrapper__narrow--aside`:
@@ -53,7 +52,7 @@
 ```html
 <div class="wrapper__narrow wrapper__narrow--aside">
   <!-- вкладки задач, как сейчас -->
-  <section class="help-inline" id="help-tasks" data-module="HelpInline" data-path="sections/help">…</section>
+  <section class="help-inline" aria-labelledby="help-tasks-title">…</section>
 </div>
 ```
 

@@ -44,12 +44,17 @@
 		color: palette("black-txt");
 		list-style: none;
 		cursor: pointer;
-		transition: color $transition-default;
+		outline: none;
+		// Поля меняются вместе с высотой ответа — иначе при открытии строка прыгает
+		transition:
+			color $transition-default,
+			padding $transition-default;
 
 		&::-webkit-details-marker {
 			display: none;
 		}
 
+		// С клавиатуры — как наведение, без рамки
 		&:hover,
 		&:focus-visible {
 			color: palette("blue-txt");
