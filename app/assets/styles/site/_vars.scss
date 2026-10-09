@@ -13,7 +13,8 @@ $font-base:
 // Пока RF Rufo грузится — системный узкий шрифт (Mac, iPhone, Android): обычный Arial почти вдвое
 // шире, название в шапке и заголовки перестраивались бы
 $font-heading:
-	"RF Rufo", "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", sans-serif-condensed,
+	// В ЛК файлы шрифта подключены под именем «RFRufo» (base/_fonts.generated.scss)
+	"RFRufo", "RF Rufo", "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", sans-serif-condensed,
 	Arial, sans-serif;
 
 // colors

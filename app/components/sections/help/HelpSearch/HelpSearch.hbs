@@ -1,0 +1,24 @@
+{{!--
+	Поиск по Помощи: обычная форма GET на страницу результатов общего поиска (раздел «Помощь»), без
+	скрипта тоже работает. Скрипт (HelpSearch.js) показывает подсказки: со 2-го символа, через 300 мс,
+	до 5 штук, ↑↓ и Enter; «Все результаты в Помощи · N» — отправка формы.
+	props: id, action (страница результатов), name («q»), value, placeholder, label,
+	hidden [{ name, value }] (раздел «Помощь», где: CRM или ЛК), suggestUrl (подсказки, JSON —
+	docs/bitrix/HELP.md), allText («Все результаты в Помощи»), emptyText.
+--}}
+<form class="help-search" action="{{props.action}}" method="get" role="search" data-module="HelpSearch" data-path="sections/help"{{#if props.suggestUrl}} data-suggest-url="{{props.suggestUrl}}"{{/if}} data-all-text="{{default props.allText 'Все результаты в Помощи'}}" data-empty-text="{{default props.emptyText 'В Помощи пока нет ответа на этот вопрос'}}">
+    {{#each props.hidden}}<input type="hidden" name="{{name}}" value="{{value}}" />{{/each}}
+    <label class="visually-hidden" for="{{default props.id 'help-search'}}-input">{{default props.label "Поиск по Помощи"}}</label>
+    <div class="help-search__field">
+        {{> components/Icon/Icon name="search" class="help-search__icon"}}
+        <input class="help-search__input" id="{{default props.id 'help-search'}}-input" type="search" name="{{default props.name 'q'}}"{{#if props.value}} value="{{props.value}}"{{/if}} placeholder="{{default props.placeholder 'Поиск по Помощи'}}" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="{{default props.id 'help-search'}}-list" data-help-search-input />
+        <button class="help-search__clear" type="button" aria-label="Очистить поиск" data-help-search-clear{{#unless props.value}} hidden{{/unless}}>
+            {{> components/Icon/Icon name="close" class="help-search__clear-icon"}}
+        </button>
+    </div>
+    <div class="help-search__panel" data-help-search-panel hidden>
+        <ul class="help-search__list" id="{{default props.id 'help-search'}}-list" role="listbox" aria-label="Подсказки" data-help-search-list></ul>
+        <p class="help-search__empty" data-help-search-empty hidden></p>
+        <button class="btn btn--general btn--m help-search__all" type="submit" data-help-search-all>{{default props.allText "Все результаты в Помощи"}}</button>
+    </div>
+</form>

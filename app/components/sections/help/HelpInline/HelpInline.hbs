@@ -1,0 +1,34 @@
+{{!--
+	«Вопросы по странице» — ответы из Помощи прямо в разделе CRM или ЛК (на странице задач и т. п.).
+	Вид — по ширине блока: в боковой колонке узкий (заголовок H4, вопросы 14/22, внизу «Все статьи»),
+	под списком — широкий (заголовок H3 с подписью, «Все статьи» справа в шапке, внизу «Не нашли
+	ответ? Написать в поддержку»). Кнопка-стрелка сворачивает блок до шапки с числом вопросов;
+	выбор запоминается в браузере (HelpInline.js, ключ — id).
+	props: id, title, subtitle, items (как у HelpQuestions), linkText («Подробнее в разделе
+	«Помощь»»), all { text, url }, support { text, linkText, url }.
+--}}
+{{#if props.items.length}}
+    <section class="help-inline" id="{{default props.id 'help-inline'}}" aria-labelledby="{{default props.id 'help-inline'}}-title" data-module="HelpInline" data-path="sections/help">
+        <div class="help-inline__inner">
+            <div class="help-inline__head">
+                <span class="help-inline__tile">{{> components/Icon/Icon name="help" class="help-inline__icon"}}</span>
+                <div class="help-inline__titles">
+                    <h2 class="help-inline__title" id="{{default props.id 'help-inline'}}-title">{{default props.title "Вопросы по странице"}}</h2>
+                    {{#if props.subtitle}}<p class="help-inline__subtitle">{{props.subtitle}}</p>{{/if}}
+                </div>
+                {{#if props.all.url}}<a class="help-inline__all" href="{{props.all.url}}">{{default props.all.text "Все статьи"}} →</a>{{/if}}
+                <span class="help-inline__count" aria-hidden="true">{{props.items.length}}</span>
+                <button class="help-inline__toggle" type="button" aria-expanded="true" aria-controls="{{default props.id 'help-inline'}}-body" data-help-inline-toggle>
+                    <span class="visually-hidden" data-help-inline-label>Свернуть вопросы</span>
+                    {{> components/Icon/Icon name="chevron-up" class="help-inline__toggle-icon"}}
+                </button>
+            </div>
+            <div class="help-inline__body" id="{{default props.id 'help-inline'}}-body">
+                {{> sections/help/HelpQuestions/HelpQuestions props=(obj items=props.items linkText=(default props.linkText "Подробнее в разделе «Помощь»"))}}
+                {{#if props.support.url}}
+                    <p class="help-inline__support">{{default props.support.text "Не нашли ответ?"}} <a class="help-inline__support-link" href="{{props.support.url}}">{{default props.support.linkText "Написать в поддержку"}}</a></p>
+                {{/if}}
+            </div>
+        </div>
+    </section>
+{{/if}}

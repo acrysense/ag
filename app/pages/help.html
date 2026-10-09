@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="{{ lang }}" data-icons="{{sprite}}">
+	<head>
+		{{> layouts/Head/Head }}
+		<script type="module" src="/app.js"></script>
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			{{> layouts/SiteHeader/SiteHeader props=site.header }}
+			<main class="wrapper__content">
+				{{> layouts/Sidebar/Sidebar }}
+				<div class="wrapper__main">
+					<div class="wrapper__wide">
+						<div class="help-page">
+							{{> components/Breadcrumbs/Breadcrumbs props=(obj items=data.breadcrumbs class="help-page__crumbs") }}
+							{{> sections/help/HelpHero/HelpHero props=data.hero }}
+							{{> sections/help/HelpCategories/HelpCategories props=data.categories }}
+							<div class="help-page__row">
+								{{> sections/help/HelpFaq/HelpFaq props=data.faq }}
+								<div class="help-page__side">
+									{{> sections/help/HelpUpdates/HelpUpdates props=data.updates }}
+									{{> sections/help/HelpSupport/HelpSupport props=data.support }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			{{> layouts/Footer/Footer }}
+		</div>
+		{{!-- Мобильное меню и нижняя панель — вне .wrapper: открытое меню делает .wrapper недоступным (inert) --}}
+		{{> layouts/MainMenu/MainMenu props=site.mainMenu }}
+		{{> layouts/TabBar/TabBar props=site.tabBar }}
+	</body>
+</html>

@@ -1,0 +1,152 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// С 1280: белая карточка слева, поля 20, скругление 20, рамка и тень блока; заголовок H4, через 10 —
+// пункты через 2: строка 36 (поля 7/8/7/6, скругление 10), стрелка 14 и через 8 название M/400
+// Black.TXT. Открытый раздел — название жирнее, стрелка вниз; статьи раздела — с отступом 28,
+// текущая — BG.Info и Blue.TXT. До 1280 — свёрнутая строка «Разделы помощи ⌄» над разделом (по
+// нажатию — список): 1024–1279 — карточкой, до 1024 — белым блоком во всю ширину (поля 16/10).
+@layer components {
+	.help-nav {
+		min-width: 0;
+		background: palette("white");
+
+		@include up(desktop) {
+			border: 1px solid palette("block-border");
+			border-radius: $radius-content-block;
+			box-shadow: $shadow-content-block;
+		}
+
+		@include up(wide) {
+			padding: 20px;
+		}
+	}
+
+	.help-nav__summary {
+		@include text("m-500");
+
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		justify-content: space-between;
+		padding: 16px 10px;
+		color: palette("black-txt");
+		list-style: none;
+		cursor: pointer;
+		transition: color $transition-default;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-txt");
+		}
+
+		@include up(desktop) {
+			padding-inline: 20px;
+		}
+
+		@include up(wide) {
+			display: none;
+		}
+	}
+
+	.help-nav__summary-icon {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		transition: transform $transition-default;
+	}
+
+	.help-nav[open] .help-nav__summary-icon {
+		transform: rotate(180deg);
+	}
+
+	.help-nav__body {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 0 10px 16px;
+
+		@include up(desktop) {
+			padding-inline: 20px;
+		}
+
+		@include up(wide) {
+			padding: 0;
+		}
+	}
+
+	.help-nav__title {
+		@include text("h4");
+
+		margin: 0;
+		color: palette("black-txt");
+
+		@include down(wide) {
+			display: none;
+		}
+	}
+
+	.help-nav__list,
+	.help-nav__pages {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.help-nav__pages {
+		margin-top: 2px;
+	}
+
+	.help-nav__link {
+		@include text("m-400");
+
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		min-height: 36px;
+		padding: 7px 8px 7px 6px;
+		color: palette("black-txt");
+		border-radius: $radius-inner-block;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-txt");
+		}
+	}
+
+	.help-nav__link--group.is-open {
+		@include text("m-500");
+	}
+
+	.help-nav__link--page {
+		padding-left: 28px;
+	}
+
+	.help-nav__link--page[aria-current] {
+		color: palette("blue-txt");
+		background: palette("bg-info");
+	}
+
+	.help-nav__chevron {
+		flex: none;
+		width: 14px;
+		height: 14px;
+		transition: transform $transition-default;
+	}
+
+	.help-nav__link--group.is-open .help-nav__chevron {
+		transform: rotate(90deg);
+	}
+
+	.help-nav__text {
+		min-width: 0;
+	}
+}

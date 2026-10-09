@@ -319,3 +319,12 @@ $token-color-names: ();
 	max-width: 700px;
 	padding-block: 16px;
 }
+
+// Блок в боковой колонке страницы (навигация Помощи 320, «Вопросы по странице» 350)
+.story-col--320 {
+	max-width: 320px;
+}
+
+.story-col--350 {
+	max-width: 350px;
+}

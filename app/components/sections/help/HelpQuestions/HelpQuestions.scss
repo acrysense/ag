@@ -1,0 +1,92 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+@use "./mixins" as *;
+
+// Вопрос — строка с чертой Block.Border снизу, поля 20 (компактный — 10): текст L/400 и стрелка 16
+// (компактный — M/400 и 14). Открытый: вопрос жирнее (обводкой — строка не меняет ширину и не
+// переносится иначе), стрелка вверх, через 10 ответ M/400 (компактный — 14/20) и ссылка Main Blue.
+@layer components {
+	.help-questions__item {
+		border-bottom: 1px solid palette("block-border");
+	}
+
+	.help-questions__item:last-child {
+		border-bottom: 0;
+	}
+
+	.help-questions__summary {
+		@include text("l-400");
+
+		display: flex;
+		gap: 16px;
+		align-items: flex-start;
+		justify-content: space-between;
+		padding: 20px 0;
+		color: palette("black-txt");
+		list-style: none;
+		cursor: pointer;
+		transition: color $transition-default;
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-txt");
+		}
+	}
+
+	.help-questions__item[open] > .help-questions__summary {
+		padding-bottom: 10px;
+		-webkit-text-stroke: 0.6px currentColor;
+	}
+
+	.help-questions__question {
+		min-width: 0;
+	}
+
+	.help-questions__chevron {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		margin-top: 4px;
+		transition: transform $transition-default;
+	}
+
+	.help-questions__item[open] .help-questions__chevron {
+		transform: rotate(180deg);
+	}
+
+	.help-questions__answer {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		align-items: flex-start;
+		padding-bottom: 20px;
+	}
+
+	.help-questions__text {
+		@include text("m-400");
+
+		margin: 0;
+		color: palette("black-txt");
+	}
+
+	.help-questions__link {
+		@include text("m-400");
+
+		color: palette("main-blue");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+	}
+
+	// Компактный (узкий блок «Вопросы по странице»)
+	.help-questions--s {
+		@include compact;
+	}
+}

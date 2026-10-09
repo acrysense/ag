@@ -1,0 +1,88 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Страницы Помощи (help.html, help-section.html) — внутри wrapper__wide (до 1450, поля 60 → 20).
+// С 1024: крошки, через 20 — блоки через 20. Главная: внизу «Частые вопросы» на 2/3 и справа
+// «Новое в базе знаний» и «Не нашли ответ?» через 20 (от 1440; уже — вопросы во всю ширину,
+// карточки под ними по 2 в ряд). Раздел: с 1280 навигация 320 слева, справа раздел и вопросы
+// через 10. До 1024: серый фон, белые блоки во всю ширину через 10, крошки — на белом над первым.
+@layer components {
+	.help-page {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		min-width: 0;
+		background: palette("bg-main");
+
+		@include up(desktop) {
+			gap: 20px;
+			background: none;
+		}
+	}
+
+	.help-page__crumbs {
+		@include down(desktop) {
+			margin-bottom: -10px;
+			padding: 20px 10px 0;
+			background: palette("white");
+		}
+	}
+
+	.help-page__row {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 10px;
+
+		@include up(desktop) {
+			gap: 20px;
+		}
+
+		// Колонки — как у карточек разделов: вопросы на две, справа одна
+		@media (min-width: 1440px) {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+
+			> .help-faq {
+				grid-column: span 2;
+			}
+		}
+	}
+
+	.help-page__side {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr);
+		gap: 10px;
+		align-items: start;
+
+		@include up(desktop) {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 20px;
+		}
+
+		@media (min-width: 1440px) {
+			grid-template-columns: minmax(0, 1fr);
+		}
+	}
+
+	.help-page__layout {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		@include up(desktop) {
+			gap: 20px;
+		}
+
+		@include up(wide) {
+			display: grid;
+			grid-template-columns: 320px minmax(0, 1fr);
+			align-items: start;
+		}
+	}
+
+	.help-page__main {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		min-width: 0;
+	}
+}

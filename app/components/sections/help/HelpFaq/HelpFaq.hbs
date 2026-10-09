@@ -1,0 +1,10 @@
+{{!--
+	«Частые вопросы» — белая карточка с вопросами (HelpQuestions).
+	props: id, title, items (как у HelpQuestions), linkText. Нет вопросов — блока нет.
+--}}
+{{#if props.items.length}}
+    <section class="help-faq{{#if props.class}} {{props.class}}{{/if}}" aria-labelledby="{{default props.id 'help-faq'}}-title">
+        <h2 class="help-faq__title" id="{{default props.id 'help-faq'}}-title">{{default props.title "Частые вопросы"}}</h2>
+        {{> sections/help/HelpQuestions/HelpQuestions props=(obj items=props.items linkText=props.linkText)}}
+    </section>
+{{/if}}

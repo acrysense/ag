@@ -1,0 +1,33 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Белая карточка, поля 30, скругление 20, рамка и тень блока; заголовок H2, через 10 — вопросы.
+// До 1024 — белый блок во всю ширину, поля 20/10, заголовок 22.
+@layer components {
+	.help-faq {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		min-width: 0;
+		padding: 20px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			padding: 30px;
+			border: 1px solid palette("block-border");
+			border-radius: $radius-content-block;
+			box-shadow: $shadow-content-block;
+		}
+	}
+
+	.help-faq__title {
+		@include text("h3-360");
+
+		margin: 0;
+		color: palette("black-txt");
+
+		@include up(desktop) {
+			@include text("h2");
+		}
+	}
+}

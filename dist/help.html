@@ -1,0 +1,1836 @@
+<!doctype html>
+<html lang="ru" data-icons="/bitrix/templates/auth/assets/icons/sprite.svg">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<title>Помощь — CRM</title>
+
+		<!-- initial-load overlay: critical inline styles so it shows before the bundle
+		     loads and hides the FOUC (sprite injection / style application) -->
+		<style>
+			.app-loader {
+				position: fixed;
+				inset: 0;
+				z-index: 99999;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				background: #eaeef2;
+				transition:
+					opacity 0.4s ease,
+					visibility 0s linear 0.4s;
+			}
+			.app-loader.is-hidden {
+				opacity: 0;
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.app-loader__spinner {
+				width: 44px;
+				height: 44px;
+				border-radius: 50%;
+				border: 3px solid #dfe7f1;
+				border-top-color: #0081ff;
+				animation: app-loader-spin 0.7s linear infinite;
+			}
+			@keyframes app-loader-spin {
+				to {
+					transform: rotate(360deg);
+				}
+			}
+			@media (prefers-reduced-motion: reduce) {
+				.app-loader__spinner {
+					animation-duration: 1.6s;
+				}
+			}
+			@layer critical,reset,vendor,base,layout,components,utilities;
+			@layer critical {
+				.header__wrapper {
+					display: flex;
+					justify-content: space-between;
+					width: 100%;
+				}
+				.header__inner {
+					display: flex;
+					align-items: center;
+				}
+				.filter-search {
+					display: none;
+				}
+				body[data-header-search] .filter-search {
+					flex: 0 0 auto;
+					align-self: center;
+					width: max(266.6666666667px, 26.0416666667vw);
+					margin-left: max(32px, 3.125vw);
+					margin-right: auto;
+				}
+				@media (min-width: 1024px) {
+					body[data-header-search] .filter-search {
+						display: block;
+					}
+				}
+				@media (min-width: 1024px) {
+					body[data-header-search] .filter-search {
+						flex: 0 1 500px;
+						width: auto;
+						min-width: 200px;
+						margin-left: clamp(20px, 3.125vw, 60px);
+					}
+				}
+				@media (max-width: 1023.98px) {
+					body[data-header-search] .filter-search {
+						display: block;
+						order: 10;
+						flex: 0 0 100%;
+						width: 100%;
+						margin-inline: 0;
+					}
+					body[data-header-search] .header__wrapper {
+						flex-wrap: wrap;
+					}
+				}
+				.filter-search__dropdown {
+					position: absolute;
+					top: calc(100% + 10px);
+					left: 0;
+					z-index: 60;
+				}
+				.filter-search:not(.is-open) .filter-search__dropdown {
+					visibility: hidden;
+					opacity: 0;
+				}
+				.filter-search__control {
+					position: relative;
+				}
+				.filter-search__icon {
+					position: absolute;
+					top: 50%;
+					right: 12px;
+					transform: translateY(-50%);
+					width: 16px;
+					height: 16px;
+				}
+				.profile-dropdown {
+					position: relative;
+				}
+				.profile-dropdown__panel {
+					position: absolute;
+					top: calc(100% + 8px);
+					right: 0;
+				}
+				.profile-dropdown:not(.is-open) .profile-dropdown__panel {
+					opacity: 0;
+					pointer-events: none;
+					visibility: hidden;
+				}
+				@media (max-width: 1023.98px) {
+					.profile-dropdown__panel {
+						position: fixed;
+						inset: 0 auto 0 0;
+					}
+				}
+			}
+		</style>
+		<script>
+			window.addEventListener("load", function () {
+				var l = document.querySelector("[data-app-loader]");
+				if (l) {
+					l.classList.add("is-hidden");
+					setTimeout(function () {
+						l.parentNode && l.remove();
+					}, 500);
+				}
+			});
+		</script>
+
+		<meta name="description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<link
+			rel="preload"
+			href="/bitrix/templates/auth/fonts/Inter/Inter-Var-main.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin="anonymous"
+		/>
+
+		<link rel="icon" type="image/png" href="/bitrix/templates/auth/favicon/favicon-96x96.png" sizes="96x96" />
+		<link rel="icon" type="image/svg+xml" href="/bitrix/templates/auth/favicon/favicon.svg" />
+		<link rel="shortcut icon" href="/bitrix/templates/auth/favicon/favicon.ico" />
+		<link rel="apple-touch-icon" sizes="180x180" href="/bitrix/templates/auth/favicon/apple-touch-icon.png" />
+		<link rel="manifest" href="/bitrix/templates/auth/favicon/site.webmanifest" />
+
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="ru_RU" />
+		<meta property="og:site_name" content="AG" />
+		<meta property="og:title" content="Помощь — CRM" />
+		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="Помощь — CRM" />
+		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-DE6HRAZQ.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CS2lTTCj.css" />
+	</head>
+	<body class="bg-light">
+		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
+		<div class="wrapper">
+			<header class="header header--site" data-module="SiteHeader" data-path="layouts">
+				<div class="header__top">
+					<div class="header__brand">
+						<a class="header__logo-link" href="/index.html" aria-label="На главную">
+							<picture class="header__logo">
+								<source
+									media="(min-width: 1280px)"
+									srcset="/bitrix/templates/auth/assets/images/logotype-desktop-BIC32Kew.svg"
+									width="390"
+									height="40"
+								/>
+								<img src="/bitrix/templates/auth/assets/images/logotype-mobile-CBQ8SUot.svg" width="190" height="40" alt="" />
+							</picture>
+						</a>
+					</div>
+
+					<div
+						class="site-search header__search"
+						data-module="SiteSearch"
+						data-path="layouts"
+						data-suggest-url="/__mock/search-suggest"
+						data-filters-url="/__mock/search-filters"
+					>
+						<form
+							class="site-search__form"
+							action="https://acrysense.github.io/ag-site/search.html"
+							method="get"
+							role="search"
+							autocomplete="off"
+						>
+							<div class="site-search__bar">
+								<div class="site-search__field">
+									<label class="visually-hidden" for="header-q">Поиск по сайту</label>
+									<svg class="icon site-search__icon" aria-hidden="true" focusable="false">
+										<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-search"></use>
+									</svg>
+									<input
+										class="site-search__input"
+										id="header-q"
+										type="search"
+										name="q"
+										value=""
+										placeholder="Начать поиск"
+										autocomplete="off"
+										enterkeyhint="search"
+										data-site-search-input
+									/>
+									<button class="site-search__chip" type="button" hidden data-site-search-chip>
+										<span data-site-search-chip-text></span>
+										<svg class="icon site-search__chip-icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-close"></use>
+										</svg>
+									</button>
+									<button class="site-search__clear" type="button" aria-label="Очистить запрос" hidden data-site-search-clear>
+										<svg class="icon site-search__clear-icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-close"></use>
+										</svg>
+									</button>
+								</div>
+								<button class="site-search__close" type="button" aria-label="Закрыть поиск" data-site-search-close>
+									<svg class="icon site-search__close-icon" aria-hidden="true" focusable="false">
+										<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-close"></use>
+									</svg>
+								</button>
+							</div>
+
+							<div class="site-search__panel" id="header-panel" data-site-search-panel>
+								<div class="site-search__sections" role="radiogroup" aria-labelledby="header-sections">
+									<p class="site-search__legend" id="header-sections">Искать в разделе</p>
+									<div class="site-search__section-list">
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="directory"
+												checked
+												data-label="Справочник"
+												data-where="в Справочнике"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+											</svg>
+
+											<span>Справочник</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="news"
+												data-label="Новости"
+												data-where="в Новостях"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-news"></use>
+											</svg>
+
+											<span>Новости</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="documents"
+												data-label="Документы"
+												data-where="в Документах"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-directory"></use>
+											</svg>
+
+											<span>Документы</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="vacancies"
+												data-label="Вакансии"
+												data-where="в Вакансиях"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-case"></use>
+											</svg>
+
+											<span>Вакансии</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-pharmacies"
+												data-label="Аптеки"
+												data-where="в Аптеках"
+												data-action="/pharmacies.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-pharmacy"></use>
+											</svg>
+
+											<span>Аптеки</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-managers"
+												data-label="Менеджеры"
+												data-where="в Менеджерах"
+												data-action="/managers.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-manager"></use>
+											</svg>
+
+											<span>Менеджеры</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-employees"
+												data-label="Сотрудники аптек"
+												data-where="в Сотрудниках аптек"
+												data-action="/employees.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+											</svg>
+
+											<span>Сотрудники аптек</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-visits"
+												data-label="Визиты"
+												data-where="в Визитах"
+												data-action="/visits.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-calendar"></use>
+											</svg>
+
+											<span>Визиты</span>
+										</label>
+										<label class="site-search__section">
+											<input
+												class="site-search__radio"
+												type="radio"
+												name="section"
+												value="crm-tasks"
+												data-label="Задачи"
+												data-where="в Задачах"
+												data-action="/tasks.html"
+											/>
+											<svg class="icon site-search__section-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-tasks"></use>
+											</svg>
+
+											<span>Задачи</span>
+										</label>
+									</div>
+								</div>
+								<div class="site-search__content">
+									<div class="site-search__filters">
+										<div class="site-search__filters-head">
+											<p class="site-search__filters-title">
+												Фильтры ·
+												<span data-site-search-section-label>Справочник</span>
+											</p>
+											<button class="site-search__reset" type="button" data-site-search-reset>Сбросить все</button>
+										</div>
+										<button class="site-search__summary" type="button" aria-expanded="false" data-site-search-summary>
+											<span class="site-search__summary-text" data-site-search-summary-text></span>
+											<svg class="icon site-search__summary-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+											</svg>
+										</button>
+										<div class="site-search__filter-list" data-site-search-filter-list>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти юр. лицо"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Юр. лицо">
+															Юр. лицо
+														</span>
+														<select class="select__control" name="company[]" multiple>
+															<option value="1">ООО «Адель Фарм»</option>
+															<option value="2">ООО «Аптека групп»</option>
+															<option value="3">ООО «Добрыя лекі»</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти отдел"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Отдел">Отдел</span>
+														<select class="select__control" name="department[]" multiple>
+															<option value="1">Отдел маркетинга</option>
+															<option value="2">Отдел продаж</option>
+															<option value="3">Бухгалтерия</option>
+															<option value="4">Отдел кадров</option>
+															<option value="5">IT-отдел</option>
+															<option value="6">Логистика</option>
+															<option value="7">Склад</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти должность"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Должность">
+															Должность
+														</span>
+														<select class="select__control" name="position[]" multiple>
+															<option value="1">Провизор</option>
+															<option value="2">Фармацевт</option>
+															<option value="3">Менеджер по закупкам</option>
+															<option value="4">Маркетолог</option>
+															<option value="5">Специалист по продажам</option>
+															<option value="6">Руководитель направления</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+											<div class="search-filter">
+												<div
+													class="select"
+													data-module="Select"
+													data-path="components"
+													data-select-search
+													data-select-search-placeholder="Найти город"
+												>
+													<label class="select__field">
+														<span class="select__value" aria-hidden="true" data-select-value data-placeholder="Город">Город</span>
+														<select class="select__control" name="city[]" multiple>
+															<option value="1">Минск</option>
+															<option value="2">Гродно</option>
+															<option value="3">Брест</option>
+															<option value="4">Гомель</option>
+															<option value="5">Витебск</option>
+															<option value="6">Могилёв</option>
+														</select>
+														<svg class="icon select__icon" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+														</svg>
+													</label>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="site-search__results" hidden data-site-search-results>
+										<p class="site-search__info" data-site-search-info></p>
+										<ul
+											class="site-search__list"
+											role="listbox"
+											id="header-list"
+											aria-label="Быстрые результаты"
+											data-site-search-list
+										></ul>
+										<div class="site-search__empty" hidden data-site-search-empty>
+											<span class="site-search__empty-icon">
+												<svg class="icon site-search__empty-glyph" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-search"></use>
+												</svg>
+											</span>
+											<p class="site-search__empty-title" data-site-search-empty-title></p>
+											<p class="site-search__empty-text">
+												Проверьте раскладку клавиатуры и опечатки, попробуйте сократить запрос, сбросить фильтры или выбрать другой
+												раздел
+												<span class="site-search__where site-search__where--side">слева</span>
+												<span class="site-search__where site-search__where--top">выше</span>
+												.
+											</p>
+											<button class="btn btn--general btn--m site-search__empty-reset" type="button" data-site-search-reset>
+												Сбросить фильтры
+											</button>
+										</div>
+										<div class="site-search__footer" data-site-search-footer>
+											<button class="btn btn--general btn--m site-search__all" type="submit" data-site-search-all>
+												Все результаты
+											</button>
+										</div>
+									</div>
+									<div class="site-search__footer site-search__footer--apply" hidden data-site-search-apply>
+										<button class="btn btn--general btn--m site-search__all" type="submit">Найти</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+
+					<div class="header__actions">
+						<ul class="header__quick" role="list">
+							<li>
+								<a class="header__quick-link" href="/index.html" title="Личный кабинет">
+									<span class="visually-hidden">Личный кабинет</span>
+									<svg class="icon header__quick-icon" aria-hidden="true" focusable="false">
+										<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+									</svg>
+								</a>
+							</li>
+							<li>
+								<a class="header__quick-link" href="#" title="Учебный портал">
+									<span class="visually-hidden">Учебный портал</span>
+									<svg class="icon header__quick-icon" aria-hidden="true" focusable="false">
+										<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-edu"></use>
+									</svg>
+								</a>
+							</li>
+							<li>
+								<a class="header__quick-link" href="/pharmacies.html" title="CRM">
+									<span class="visually-hidden">CRM</span>
+									<svg class="icon header__quick-icon" aria-hidden="true" focusable="false">
+										<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-crm"></use>
+									</svg>
+								</a>
+							</li>
+						</ul>
+						<div class="header__user-menu" data-user-menu>
+							<button
+								class="header__user"
+								type="button"
+								aria-expanded="false"
+								aria-controls="header-user-menu"
+								data-user-menu-toggle
+							>
+								<span class="header__avatar">
+									<span class="header__initials" aria-hidden="true">ВМ</span>
+								</span>
+								<span class="header__user-name">Владислава Митрофановна</span>
+								<svg class="icon header__user-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-angle-right"></use>
+								</svg>
+								<span class="visually-hidden">— меню профиля</span>
+							</button>
+							<ul class="user-menu" id="header-user-menu" role="list" hidden>
+								<li>
+									<a class="user-menu__link" href="/index.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+										</svg>
+
+										<span>Моя страница</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="#">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-edu"></use>
+										</svg>
+
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/coefficient.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-multiplier"></use>
+										</svg>
+
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/package.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-box"></use>
+										</svg>
+
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/motivation.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-motivation"></use>
+										</svg>
+
+										<span>Мотивация</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/contests.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-apple"></use>
+										</svg>
+
+										<span>Конкурсы</span>
+									</a>
+								</li>
+								<li class="user-menu__divider" aria-hidden="true"></li>
+								<li>
+									<a class="user-menu__link" href="/edit.html">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-settings"></use>
+										</svg>
+
+										<span>Настройки</span>
+									</a>
+								</li>
+								<li>
+									<a class="user-menu__link" href="/login.html" data-modal-open="main-menu-logout">
+										<svg class="icon user-menu__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-exit"></use>
+										</svg>
+
+										<span>Выйти</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<button class="header__burger" type="button" aria-expanded="false" aria-controls="main-menu" data-main-menu-open>
+							<span class="visually-hidden">Меню</span>
+							<svg class="icon header__burger-icon" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-menu"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+			</header>
+			<main class="wrapper__content">
+				<div class="sidebar" data-module="Sidebar" data-path="layouts">
+					<button
+						type="button"
+						class="sidebar__collapse"
+						data-sidebar-collapse
+						aria-label="Свернуть меню"
+						aria-expanded="true"
+					>
+						<svg aria-hidden="true" focusable="false" width="20" height="20">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-sidebar-toggle"></use>
+						</svg>
+					</button>
+					<div class="sidebar__wrap">
+						<div class="sidebar__section">
+							<span class="sidebar__label">ERP</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-dashboard"></use>
+										</svg>
+										<span>Дашборд</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/pharmacies" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-pharmacies"></use>
+										</svg>
+										<span>Аптеки</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/managers" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-managers"></use>
+										</svg>
+										<span>Менеджеры</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/employees" class="sidebar__link is--active">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-employees"></use>
+										</svg>
+										<span>Сотрудники</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/visits" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-visits"></use>
+										</svg>
+										<span>Визиты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/tasks" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-tasks"></use>
+										</svg>
+										<span>Задачи</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/help" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-help"></use>
+										</svg>
+										<span>Помощь</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ЛИЧНЫЙ КАБИНЕТ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="/" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-user"></use>
+										</svg>
+										<span>Моя страница</span>
+										<span class="sidebar__badge" data-sidebar-badge>12</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-education-portal"></use>
+										</svg>
+										<span>Учебный портал</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/coefficient" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-coefficient"></use>
+										</svg>
+										<span>Коэффициент</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/package" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-package"></use>
+										</svg>
+										<span>Пакеты</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/motivation" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-motivation"></use>
+										</svg>
+										<span>Мотивация</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="/contests" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-contests"></use>
+										</svg>
+										<span>Конкурсы</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПОРТАЛ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-home"></use>
+										</svg>
+										<span>Главная</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-news"></use>
+										</svg>
+										<span>Новости</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-gallery"></use>
+										</svg>
+										<span>Галерея</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-data"></use>
+										</svg>
+										<span>База знаний</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ХОЛДИНГ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-directory"></use>
+										</svg>
+										<span>Справочник</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-vacancy"></use>
+										</svg>
+										<span>Вакансии</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__section">
+							<span class="sidebar__label">ПРИСОЕДИНЯЙТЕСЬ</span>
+							<ul class="sidebar__list">
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg" width="20" height="20" alt="Аптечка+" />
+										<span>Гипермаркет Аптечка+</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="ADEL"
+										/>
+										<span>Аптеки ADEL</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+											width="20"
+											height="20"
+											alt="Добрыя лекi+"
+										/>
+										<span>Аптек Добрыя лекi</span>
+									</a>
+								</li>
+								<li class="sidebar__item">
+									<a href="#" class="sidebar__link">
+										<img
+											src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+											width="20"
+											height="20"
+											alt="FeelinGood"
+										/>
+										<span>Клуб FeelinGood</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+						<div class="sidebar__banr"></div>
+						<div class="sidebar__banr"></div>
+						<button class="sidebar__close" aria-label="Закрыть">
+							<svg aria-hidden="true" focusable="false" width="16" height="16">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-close"></use>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="wrapper__main">
+					<div class="wrapper__wide">
+						<div class="help-page">
+							<nav class="breadcrumbs help-page__crumbs" aria-label="Хлебные крошки">
+								<ol class="breadcrumbs__list">
+									<li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/pharmacies.html">CRM</a></li>
+									<li class="breadcrumbs__item"><span class="breadcrumbs__current" aria-current="page">Помощь</span></li>
+								</ol>
+							</nav>
+							<section class="help-hero" aria-labelledby="help-hero-title">
+								<h1 class="help-hero__title" id="help-hero-title">Помощь</h1>
+								<p class="help-hero__text">
+									Инструкции и ответы на частые вопросы по работе с аптеками, сотрудниками, визитами и задачами.
+								</p>
+								<form
+									class="help-search"
+									action="https://acrysense.github.io/ag-site/search.html"
+									method="get"
+									role="search"
+									data-module="HelpSearch"
+									data-path="sections/help"
+									data-suggest-url="/__mock/help-suggest"
+									data-all-text="Все результаты в Помощи"
+									data-empty-text="В Помощи пока нет ответа на этот вопрос"
+								>
+									<input type="hidden" name="section" value="help" />
+									<input type="hidden" name="where" value="crm" />
+									<label class="visually-hidden" for="help-search-input">Поиск по Помощи</label>
+									<div class="help-search__field">
+										<svg class="icon help-search__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-search"></use>
+										</svg>
+										<input
+											class="help-search__input"
+											id="help-search-input"
+											type="search"
+											name="q"
+											placeholder="Поиск по Помощи"
+											autocomplete="off"
+											enterkeyhint="search"
+											role="combobox"
+											aria-autocomplete="list"
+											aria-expanded="false"
+											aria-controls="help-search-list"
+											data-help-search-input
+										/>
+										<button class="help-search__clear" type="button" aria-label="Очистить поиск" data-help-search-clear hidden>
+											<svg class="icon help-search__clear-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-close"></use>
+											</svg>
+										</button>
+									</div>
+									<div class="help-search__panel" data-help-search-panel hidden>
+										<ul
+											class="help-search__list"
+											id="help-search-list"
+											role="listbox"
+											aria-label="Подсказки"
+											data-help-search-list
+										></ul>
+										<p class="help-search__empty" data-help-search-empty hidden></p>
+										<button class="btn btn--general btn--m help-search__all" type="submit" data-help-search-all>
+											Все результаты в Помощи
+										</button>
+									</div>
+								</form>
+
+								<div class="help-hero__popular">
+									<span class="help-hero__popular-label">Часто ищут:</span>
+									<ul class="help-hero__pills" role="list">
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D1%83"
+											>
+												создать задачу
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D0%BE%D1%82%D1%87%D1%91%D1%82%20%D0%BF%D0%BE%20%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%83"
+											>
+												отчёт по визиту
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D1%8D%D0%BA%D1%81%D0%BF%D0%BE%D1%80%D1%82%20%D0%B2%20Excel"
+											>
+												экспорт в Excel
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D0%BF%D1%80%D0%B0%D0%B2%D0%B0%20%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0"
+											>
+												права доступа
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4%20%D1%81%D0%BE%D1%82%D1%80%D1%83%D0%B4%D0%BD%D0%B8%D0%BA%D0%B0"
+											>
+												перевод сотрудника
+											</a>
+										</li>
+									</ul>
+								</div>
+							</section>
+							<section class="help-categories" aria-labelledby="help-categories-title">
+								<h2 class="help-categories__title" id="help-categories-title">Разделы</h2>
+								<ul class="help-categories__list" role="list">
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-home"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Начало работы</h3>
+												<p class="help-card__count">6 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Вход в CRM, обзор интерфейса, навигация и первые шаги для новых пользователей.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Как войти в CRM</a></li>
+											<li><a class="help-card__link" href="#">Обзор интерфейса</a></li>
+											<li><a class="help-card__link" href="#">Роли и права пользователей</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Начало работы»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-dashboard"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Дашборд</h3>
+												<p class="help-card__count">5 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Ключевые показатели сети, графики продаж и настройка виджетов.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Как читать показатели дашборда</a></li>
+											<li><a class="help-card__link" href="#">Настроить период и фильтры</a></li>
+											<li><a class="help-card__link" href="#">Сравнить аптеки между собой</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Дашборд»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-pharmacies"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Аптеки</h3>
+												<p class="help-card__count">9 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Карточка аптеки, категории, персонал, показатели и история изменений.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Найти аптеку в списке</a></li>
+											<li><a class="help-card__link" href="#">Карточка аптеки: что в ней есть</a></li>
+											<li><a class="help-card__link" href="#">Изменить категорию аптеки</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Аптеки»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-managers"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Менеджеры</h3>
+												<p class="help-card__count">7 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Закрепление аптек за менеджерами, нагрузка и показатели работы.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Закрепить аптеку за менеджером</a></li>
+											<li><a class="help-card__link" href="#">Посмотреть визиты менеджера</a></li>
+											<li><a class="help-card__link" href="#">Передать аптеки другому менеджеру</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Менеджеры»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-employees"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Сотрудники</h3>
+												<p class="help-card__count">11 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Список сотрудников, карточка, перевод между аптеками и увольнение.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Добавить сотрудника</a></li>
+											<li><a class="help-card__link" href="#">Перевести сотрудника в другую аптеку</a></li>
+											<li><a class="help-card__link" href="#">Фильтры в списке сотрудников</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Сотрудники»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-visits"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Визиты</h3>
+												<p class="help-card__count">8 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Планирование визитов в аптеки, чек-листы и отчёты по итогам.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Запланировать визит</a></li>
+											<li><a class="help-card__link" href="#">Заполнить чек-лист визита</a></li>
+											<li><a class="help-card__link" href="#">Отчёт по визиту</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Визиты»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-tasks"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Задачи</h3>
+												<p class="help-card__count">14 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Создание, назначение и контроль выполнения задач для себя и сотрудников.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Создать задачу</a></li>
+											<li><a class="help-card__link" href="#">Назначить задачу сотруднику</a></li>
+											<li><a class="help-card__link" href="#">Подтвердить выполнение</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Задачи»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-download"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Отчёты и экспорт</h3>
+												<p class="help-card__count">6 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Выгрузка данных в Excel, архивы и сохранённые наборы фильтров.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Экспорт в Excel</a></li>
+											<li><a class="help-card__link" href="#">Архив задач и визитов</a></li>
+											<li><a class="help-card__link" href="#">Сохранить набор фильтров</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Отчёты и экспорт»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-settings"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Доступ и настройки</h3>
+												<p class="help-card__count">4 статьи</p>
+											</div>
+										</div>
+										<p class="help-card__text">Права доступа к разделам, уведомления и персональные настройки.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Запросить доступ к разделу</a></li>
+											<li><a class="help-card__link" href="#">Настроить уведомления</a></li>
+											<li><a class="help-card__link" href="#">Сменить пароль</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Доступ и настройки»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+								</ul>
+							</section>
+							<div class="help-page__row">
+								<section class="help-faq" aria-labelledby="help-faq-title">
+									<h2 class="help-faq__title" id="help-faq-title">Частые вопросы</h2>
+									<div class="help-questions">
+										<details class="help-questions__item" open>
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как назначить задачу сразу нескольким сотрудникам?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Откройте раздел «Задачи сотрудников», нажмите «Создать задачу» и в поле «Ответственный» выберите нескольких
+													сотрудников. Каждый получит свою копию задачи.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Почему я не вижу некоторые аптеки в списке?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													В списке только аптеки, к которым у вас есть доступ, и только те, что подходят под выбранные фильтры.
+													Сбросьте фильтры или запросите доступ у руководителя.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как выгрузить список сотрудников в Excel?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													В разделе «Сотрудники» настройте фильтры и нажмите «Экспорт в Excel» над таблицей — выгрузятся строки,
+													которые видны с этими фильтрами.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Можно ли отредактировать визит после отправки отчёта?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													После отправки отчёт закрыт для правки. Если нужно исправить данные, напишите менеджеру — он вернёт визит
+													на доработку.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Кто подтверждает выполнение задачи?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Задачу подтверждает тот, кто её поставил. До подтверждения она в статусе «Ждёт подтверждения».
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как сменить закреплённого менеджера у аптеки?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Откройте карточку аптеки, в блоке «Менеджер» нажмите «Изменить» и выберите нового менеджера. Прежний увидит
+													изменение в истории.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+									</div>
+								</section>
+								<div class="help-page__side">
+									<section class="help-aside-card help-updates" aria-labelledby="help-updates-title">
+										<h2 class="help-aside-card__title" id="help-updates-title">Новое в базе знаний</h2>
+										<ul class="help-updates__list" role="list">
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-09-18">18 сентября</time>
+												<a class="help-updates__link" href="#">Подтверждение выполнения задач</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-09-10">10 сентября</time>
+												<a class="help-updates__link" href="#">Новые фильтры в списке аптек</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-09-02">2 сентября</time>
+												<a class="help-updates__link" href="#">Чек-листы визитов: обновлённая форма</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-08-28">28 августа</time>
+												<a class="help-updates__link" href="#">Отчёт по визиту: что изменилось</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-08-21">21 августа</time>
+												<a class="help-updates__link" href="#">Архив задач и визитов</a>
+											</li>
+										</ul>
+									</section>
+									<section class="help-aside-card help-support" aria-labelledby="help-support-title">
+										<h2 class="help-aside-card__title" id="help-support-title">Не нашли ответ?</h2>
+										<p class="help-support__text">
+											Напишите в поддержку — ответим в течение рабочего дня. К обращению можно приложить скриншот.
+										</p>
+										<a class="btn btn--general btn--m help-support__button" href="mailto:support@phg.by">Написать в поддержку</a>
+										<p class="help-support__phone">
+											Или позвоните:
+											<a class="help-support__phone-link" href="tel:+375173947034">+375 (17) 394-70-34</a>
+										</p>
+									</section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<footer class="footer" data-path="layouts">
+				<div class="container">
+					<div class="footer__wrapper">
+						<p class="footer__copyright">© 2014-2026 «Аптека групп». Все права защищены.</p>
+						<ul class="footer__links" role="list">
+							<li><a class="footer__link" href="#">Обработка cookie-файлов</a></li>
+							<li><a class="footer__link" href="#">Согласие на обработку персональных данных</a></li>
+							<li><a class="footer__link" href="#">Политика конфиденциальности</a></li>
+							<li><a class="footer__link" href="#">Пользовательское соглашение</a></li>
+						</ul>
+					</div>
+				</div>
+			</footer>
+
+			<div class="toasts" data-module="Toasts" data-path="components" aria-live="polite" aria-atomic="false"></div>
+		</div>
+		<dialog class="main-menu" id="main-menu" aria-label="Меню" data-module="MainMenu" data-path="layouts">
+			<div class="main-menu__header">
+				<h2 class="main-menu__title">Меню</h2>
+				<button class="main-menu__close" type="button" data-main-menu-close>
+					<span class="visually-hidden">Закрыть меню</span>
+					<svg class="icon main-menu__close-icon" aria-hidden="true" focusable="false">
+						<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-close"></use>
+					</svg>
+				</button>
+			</div>
+
+			<div class="main-menu__content">
+				<div class="main-menu__profile">
+					<span class="main-menu__avatar"><span class="main-menu__initials" aria-hidden="true">ВМ</span></span>
+					<div class="main-menu__profile-text">
+						<p class="main-menu__name">Владислава Митрофановна</p>
+						<p class="main-menu__role">Заведующая аптекой</p>
+						<a class="main-menu__profile-link" href="/index.html">Моя страница</a>
+					</div>
+					<button class="main-menu__logout" type="button" data-modal-open="main-menu-logout">
+						<span class="visually-hidden">Выйти из аккаунта</span>
+						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-exit"></use>
+						</svg>
+					</button>
+				</div>
+
+				<p class="main-menu__label">CRM</p>
+				<div class="main-menu__card">
+					<button
+						class="main-menu__group"
+						type="button"
+						aria-expanded="true"
+						aria-controls="main-menu-group-0"
+						data-main-menu-group="crm"
+					>
+						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-case"></use>
+						</svg>
+						<span class="main-menu__group-text">
+							<span class="main-menu__group-title">CRM</span>
+							<span class="main-menu__group-meta">7 разделов</span>
+						</span>
+						<svg class="icon main-menu__group-arrow" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-up"></use>
+						</svg>
+					</button>
+					<ul class="main-menu__list" id="main-menu-group-0" role="list">
+						<li>
+							<a class="main-menu__row" href="#">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-home"></use>
+								</svg>
+								<span class="main-menu__row-text">Дашборд</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/pharmacies.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-pharmacy"></use>
+								</svg>
+								<span class="main-menu__row-text">Аптеки</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/managers.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-manager"></use>
+								</svg>
+								<span class="main-menu__row-text">Менеджеры</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/employees.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+								</svg>
+								<span class="main-menu__row-text">Сотрудники</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/visits.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-calendar"></use>
+								</svg>
+								<span class="main-menu__row-text">Визиты</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/tasks.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-tasks"></use>
+								</svg>
+								<span class="main-menu__row-text">Задачи</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/help.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-help"></use>
+								</svg>
+								<span class="main-menu__row-text">Помощь</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+				<p class="main-menu__label">Личный кабинет</p>
+				<div class="main-menu__card">
+					<button
+						class="main-menu__group"
+						type="button"
+						aria-expanded="true"
+						aria-controls="main-menu-group-1"
+						data-main-menu-group="cabinet"
+					>
+						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+						</svg>
+						<span class="main-menu__group-text">
+							<span class="main-menu__group-title">Личный кабинет</span>
+							<span class="main-menu__group-meta">5 разделов</span>
+						</span>
+						<svg class="icon main-menu__group-arrow" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-up"></use>
+						</svg>
+					</button>
+					<ul class="main-menu__list" id="main-menu-group-1" role="list">
+						<li>
+							<a class="main-menu__row" href="#">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-edu"></use>
+								</svg>
+								<span class="main-menu__row-text">Учебный портал</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/coefficient.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-multiplier"></use>
+								</svg>
+								<span class="main-menu__row-text">Коэффициент</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/package.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-box"></use>
+								</svg>
+								<span class="main-menu__row-text">Пакеты</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/motivation.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-motivation"></use>
+								</svg>
+								<span class="main-menu__row-text">Мотивация</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/contests.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-apple"></use>
+								</svg>
+								<span class="main-menu__row-text">Конкурсы</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<p class="main-menu__label">Портал</p>
+				<ul class="main-menu__tiles" role="list">
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-home"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Главная</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-news"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Новости</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-directory"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Справочник сотрудников</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-wiki"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">База знаний</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-case"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Вакансии</span>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__tile" href="#">
+							<span class="main-menu__tile-icon">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-gallery"></use>
+								</svg>
+							</span>
+							<span class="main-menu__tile-text">Галерея</span>
+						</a>
+					</li>
+				</ul>
+
+				<p class="main-menu__label">Присоединяйтесь</p>
+				<ul class="main-menu__card main-menu__list" role="list">
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="/bitrix/templates/auth/assets/images/apte4ka-DhfwlFyM.svg"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Гипермаркет Аптечка+
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3189)'%3e%3cpath%20d='M1.48128%209.5008C0.847844%208.15467%200.50707%206.68558%200.482144%205.19352C0.459017%204.53596%200.563812%203.88023%200.790521%203.26395C1.01723%202.64766%201.36139%202.08296%201.80325%201.60223C2.24511%201.12151%202.77599%200.73422%203.36541%200.462591C3.95483%200.190962%204.5912%200.0403385%205.23801%200.0193611C6.10826%20-0.0642825%206.98287%200.124392%207.74474%200.560122C8.50661%200.995852%209.11937%201.65784%209.50098%202.45745V9.43308L1.48128%209.5008Z'%20fill='%23D3D8DE'/%3e%3cpath%20d='M9.50028%2020C6.614%2017.1479%204.08991%2013.9399%201.98682%2010.4508H9.50028V20Z'%20fill='%23ADB4C1'/%3e%3cpath%20d='M18.0272%2010.4508C15.9154%2013.9338%2013.3922%2017.1407%2010.5137%2020V10.4508H18.0272Z'%20fill='black'/%3e%3cpath%20d='M10.5%202.45859C10.8831%201.66021%2011.4961%200.999327%2012.2576%200.563815C13.0191%200.128302%2013.893%20-0.0612027%2014.763%200.0205003C15.4068%200.0397765%2016.0407%200.187884%2016.6282%200.456357C17.2158%200.724831%2017.7455%201.10841%2018.1872%201.58516C18.6289%202.06191%2018.9738%202.62249%2019.2023%203.23486C19.4308%203.84723%2019.5384%204.49937%2019.5188%205.15402C19.4901%206.63691%2019.1494%208.09636%2018.5197%209.43422H10.5266L10.5%202.45859Z'%20fill='%23737F8C'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3189'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Аптеки ADEL
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="data:image/svg+xml,%3csvg%20width='20'%20height='20'%20viewBox='0%200%2020%2020'%20fill='none'%20xmlns='http://www.w3.org/2000/svg'%3e%3cg%20clip-path='url(%23clip0_4411_3198)'%3e%3cpath%20fill-rule='evenodd'%20clip-rule='evenodd'%20d='M9.4621%200.0139718C14.9767%20-0.283389%2019.6881%203.94657%2019.9855%209.4612C20.2825%2014.9758%2016.0525%2019.6872%2010.5379%2019.9842C8.93605%2020.0706%207.40252%2019.7743%206.02474%2019.1764L6.02581%2019.1778C3.91419%2018.2546%201.97072%2019.244%200%2019.9871L2.34667%2016.435C0.995805%2014.8318%200.13629%2012.7916%200.014868%2010.537C-0.282493%205.02238%203.94747%200.310979%209.4621%200.0139718Z'%20fill='%23737F8C'/%3e%3cpath%20d='M9.97384%2017.15L9.9434%2017.1823C9.93313%2017.1932%209.92074%2017.2024%209.90941%2017.2123L10.063%2017.1989C10.0446%2017.1964%2010.0266%2017.1904%209.97384%2017.15ZM10.1045%207.93397C9.87649%207.54032%209.61134%207.16897%209.33699%206.81462C8.7805%206.09494%208.13799%205.41136%207.3776%204.95965C6.59384%204.49379%205.69149%204.33343%204.861%204.7561C4.19194%205.09594%203.60678%205.74023%203.37349%206.51797C2.91966%208.03238%203.67722%209.68061%204.40257%2010.9309C5.30598%2012.4875%206.45578%2013.8702%207.65336%2015.1574C8.12348%2015.6629%208.60598%2016.1553%209.09981%2016.6325C9.34868%2016.8729%209.59612%2017.1253%209.86127%2017.3447C9.8726%2017.3543%209.88357%2017.3649%209.8949%2017.3752C9.94871%2017.4226%2010.0471%2017.4003%2010.096%2017.3575C10.741%2016.7879%2011.3544%2016.1723%2011.9541%2015.5464C13.1599%2014.2879%2014.3153%2012.9417%2015.2697%2011.4396C15.7264%2010.721%2016.1451%209.95921%2016.4337%209.13864C16.6744%208.45329%2016.8298%207.70847%2016.7374%206.9718C16.6461%206.24326%2016.2825%205.61633%2015.7664%205.1586C15.0258%204.50158%2014.0909%204.34263%2013.1995%204.69698C12.3623%205.02975%2011.6539%205.68146%2011.0479%206.38345C10.6411%206.85427%2010.2666%207.36509%209.94057%207.90707C9.97597%207.93645%2010.0099%207.95238%2010.0429%207.95238C10.0634%207.95238%2010.0839%207.94601%2010.1045%207.93397Z'%20fill='%23FEFEFE'/%3e%3c/g%3e%3cdefs%3e%3cclipPath%20id='clip0_4411_3198'%3e%3crect%20width='20'%20height='20'%20fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Аптеки Добрыя лекi
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="#" target="_blank" rel="noopener noreferrer">
+							<img
+								class="main-menu__logo"
+								src="/bitrix/templates/auth/assets/images/feelingood-BdxIBbCS.svg"
+								width="20"
+								height="20"
+								alt=""
+							/>
+							<span class="main-menu__row-text">
+								Клуб FeelinGood
+								<span class="visually-hidden">(откроется в новой вкладке)</span>
+							</span>
+							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-external-link"></use>
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</div>
+
+			<dialog
+				class="modal modal--s modal--confirm"
+				id="main-menu-logout"
+				aria-labelledby="main-menu-logout-title"
+				aria-describedby="main-menu-logout-text"
+				data-module="Modal"
+				data-path="components"
+			>
+				<div class="modal__panel">
+					<div class="modal__header">
+						<h2 class="modal__title" id="main-menu-logout-title">Выйти из аккаунта?</h2>
+					</div>
+					<div class="modal__body">
+						<div class="modal__content">
+							<p class="modal__text" id="main-menu-logout-text">
+								Чтобы снова открыть портал, понадобится войти по логину и паролю.
+							</p>
+							<div class="modal__actions">
+								<a class="btn btn--error btn--l" href="/login.html"><span class="btn__text">Выйти</span></a>
+								<button class="btn btn--light btn--l" type="button" autofocus="" data-modal-close="">
+									<span class="btn__text">Отмена</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</dialog>
+		</dialog>
+		<nav class="tab-bar" aria-label="Быстрая навигация">
+			<ul class="tab-bar__list" role="list">
+				<li class="tab-bar__cell">
+					<button class="tab-bar__item" type="button" aria-controls="main-menu" aria-expanded="false" data-main-menu-open>
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-menu"></use>
+						</svg>
+						<span class="tab-bar__label">Меню</span>
+					</button>
+				</li>
+				<li class="tab-bar__cell">
+					<a class="tab-bar__item" href="/index.html">
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-profile"></use>
+						</svg>
+						<span class="tab-bar__label">Кабинет</span>
+					</a>
+				</li>
+				<li class="tab-bar__cell">
+					<a class="tab-bar__item" href="#">
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-news"></use>
+						</svg>
+						<span class="tab-bar__label">Новости</span>
+					</a>
+				</li>
+				<li class="tab-bar__cell">
+					<a class="tab-bar__item" href="#">
+						<svg class="icon tab-bar__icon" aria-hidden="true" focusable="false">
+							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-edu"></use>
+						</svg>
+						<span class="tab-bar__label">Обучение</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</body>
+</html>

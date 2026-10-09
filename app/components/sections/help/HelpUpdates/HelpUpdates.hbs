@@ -1,0 +1,17 @@
+{{!--
+	«Новое в базе знаний» — последние обновлённые статьи.
+	props: id, title, items [{ date (2026-09-18), dateText («18 сентября»), title, url }].
+--}}
+{{#if props.items.length}}
+    <section class="help-aside-card help-updates" aria-labelledby="{{default props.id 'help-updates'}}-title">
+        <h2 class="help-aside-card__title" id="{{default props.id 'help-updates'}}-title">{{default props.title "Новое в базе знаний"}}</h2>
+        <ul class="help-updates__list" role="list">
+            {{#each props.items}}
+                <li class="help-updates__item">
+                    {{#if dateText}}<time class="help-updates__date" datetime="{{date}}">{{dateText}}</time>{{/if}}
+                    <a class="help-updates__link" href="{{url}}">{{title}}</a>
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+{{/if}}

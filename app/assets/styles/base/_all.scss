@@ -61,3 +61,17 @@
 @forward '@/components/layouts/SiteHeader/SiteHeader';
 @forward '@/components/layouts/MainMenu/MainMenu';
 @forward '@/components/layouts/TabBar/TabBar';
+
+// Помощь (sections/help): стили сайта (assets/styles/site), крошки — с ag-site
+@forward '@/components/components/Breadcrumbs/Breadcrumbs';
+@forward '@/components/sections/help/HelpPage/HelpPage';
+@forward '@/components/sections/help/HelpQuestions/HelpQuestions';
+@forward '@/components/sections/help/HelpFaq/HelpFaq';
+@forward '@/components/sections/help/HelpSearch/HelpSearch';
+@forward '@/components/sections/help/HelpHero/HelpHero';
+@forward '@/components/sections/help/HelpCategories/HelpCategories';
+@forward '@/components/sections/help/HelpUpdates/HelpUpdates';
+@forward '@/components/sections/help/HelpSupport/HelpSupport';
+@forward '@/components/sections/help/HelpNav/HelpNav';
+@forward '@/components/sections/help/HelpSection/HelpSection';
+@forward '@/components/sections/help/HelpInline/HelpInline';

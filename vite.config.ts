@@ -897,6 +897,8 @@ export default defineConfig(({ mode }) => {
 						// Раздел поиска в шапке, выбранный при открытии (страница списка — её раздел):
 						// "searchSection" в <page>.page.json
 						searchSection: pageCfg.searchSection || '',
+						// Данные блоков страницы: "data" в <page>.page.json (как на ag-site)
+						data: pageCfg.data || {},
 						// Файл спрайта иконок: <use href="{{@root.sprite}}#icon-…">, <html data-icons>
 						sprite: withBase(`/${SPRITE_FILE}`),
 					}
