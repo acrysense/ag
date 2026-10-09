@@ -1,117 +1,166 @@
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
 
+// Плашка-объявление над шапкой, во всю ширину. «Инфо» (по умолчанию) — фон #E6F2FF и значок Main
+// Blue; «Важно» (--warning) и «Критично» (--critical) — свой фон, значок и полоса 4 слева. Значок —
+// круг 24 с «!» (Inter Bold 14, белый) — рисуется стилями, поэтому есть и у старой разметки бэка.
+// С 1024: в строку, поля 12/40, через 12: значок, текст M/400 Black.TXT (подпись «Важно:» — Bold),
+// через 8 «Подробнее →» Main Blue, справа крестик 14 Dark-grey. До 1024: поля 12/10, через 10,
+// значок 22 (13), текст 14/20, «Подробнее →» Bold отдельной строкой через 4, крестик сверху справа.
 @layer components {
 	.top-notice {
 		--h: 0px;
+		--notice-accent: #{palette("main-blue")};
 		position: relative;
 		z-index: 1000;
 		overflow: hidden;
 		width: 100%;
-        color: $color-white;
-		background: $color-black;
+		color: palette("black-txt");
+		background: palette("notice-info-bg");
 		max-height: var(--h);
 		opacity: 1;
 		transition: max-height $transition-default, opacity $transition-default;
 
 		&.is-hidden { max-height: 0 !important; opacity: 0; pointer-events: none; }
+	}
 
-		&__container {
+	.top-notice--warning {
+		--notice-accent: #{palette("notice-warning")};
+		background: palette("notice-warning-bg");
+		border-left: 4px solid var(--notice-accent);
+	}
+
+	.top-notice--critical {
+		--notice-accent: #{palette("notice-critical")};
+		background: palette("notice-critical-bg");
+		border-left: 4px solid var(--notice-accent);
+	}
+
+	.top-notice__container {
+		display: grid;
+		grid-template-columns: 22px minmax(0, 1fr) auto;
+		gap: 4px 10px;
+		align-items: start;
+		padding: 12px 10px;
+
+		// Значок «!» — без отдельного элемента, чтобы был и в старой разметке
+		&::before {
 			display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            @include prop-vw(gap, 20, xl);
-            @include prop-vw(padding-block, 18, xl);
-            @include prop-vw(padding-inline, 30, xl);
-
-            @include only(desktop) {
-                @include prop-vw(gap, 20, lg);
-                @include prop-vw(padding-block, 18, lg);
-                @include prop-vw(padding-inline, 30, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(gap, 10, sm);
-                @include prop-vw(padding, 10, sm);
-            }
-		}
-
-		&__text {
-            display: block;
-            width: fit-content;
-            @include prop-vw(font-size, 16, xl);
-            font-weight: normal;
-            line-height: 1.5;
-            a {
-                display: inline;
-                color: $color-blue;
-                &:hover {
-                    color: $color-blue;
-                }
-
-                @media screen and (hover: hover) {
-                    &:hover {
-                        color: $color-blue-hover;
-                    }
-                }
-            }
-
-            @include only(desktop) {
-                @include prop-vw(font-size, 16, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(font-size, 14, sm);
-            }
-        }
-
-		&__close {
-			display: flex;
+			grid-row: 1;
+			grid-column: 1;
 			align-items: center;
 			justify-content: center;
-            padding: 0;
-            @include prop-vw(min-width, 24, xl);
-            @include prop-vw(width, 24, xl);
-            @include prop-vw(height, 24, xl);
-            font-size: 0;
-			background: transparent;
-			border: 0;
-            border-radius: 0;
-            &:focus {
-                outline: none;
-            }
-            & > svg {
-                @include prop-vw(min-width, 16, xl);
-                @include prop-vw(width, 16, xl);
-                @include prop-vw(height, 16, xl);
-                color: $color-white;
-            }
+			width: 22px;
+			height: 22px;
+			font-family: $font-base;
+			font-size: 13px;
+			font-weight: 700;
+			line-height: 1;
+			color: palette("white");
+			content: "!";
+			content: "!" / "";
+			background: var(--notice-accent);
+			border-radius: 50%;
+		}
 
-            @media screen and (hover: hover) {
-                &:hover {
-                    & > svg {
-                        color: $color-blue;
-                    }
-                }
-            }
-            @include only(desktop) {
-                @include prop-vw(min-width, 24, lg);
-                @include prop-vw(width, 24, lg);
-                @include prop-vw(height, 24, lg);
-                & > svg {
-                    @include prop-vw(min-width, 16, lg);
-                    @include prop-vw(width, 16, lg);
-                    @include prop-vw(height, 16, lg);
-                }
-            }
-            @include only(mobile) {
-                @include prop-vw(min-width, 24, sm);
-                @include prop-vw(width, 24, sm);
-                @include prop-vw(height, 24, sm);
-                & > svg {
-                    @include prop-vw(min-width, 16, sm);
-                    @include prop-vw(width, 16, sm);
-                    @include prop-vw(height, 16, sm);
-                }
-            }
+		@include up(desktop) {
+			display: flex;
+			gap: 12px;
+			align-items: center;
+			padding: 12px 40px;
+
+			&::before {
+				flex: none;
+				width: 24px;
+				height: 24px;
+				font-size: 14px;
+			}
+		}
+	}
+
+	.top-notice__text {
+		grid-row: 1;
+		grid-column: 2;
+		min-width: 0;
+		margin: 0;
+		font-size: 14px;
+		font-weight: 400;
+		line-height: 20px;
+
+		@include up(desktop) {
+			flex: 0 1 auto;
+			line-height: 22px;
+		}
+
+		// Ссылка внутри текста — старая разметка бэка
+		a {
+			color: palette("main-blue");
+			transition: color $transition-default;
+
+			&:hover,
+			&:focus-visible {
+				color: palette("blue-hover");
+			}
+		}
+	}
+
+	.top-notice__label {
+		font-weight: 700;
+	}
+
+	.top-notice__link {
+		grid-row: 2;
+		grid-column: 2;
+		justify-self: start;
+		font-size: 14px;
+		font-weight: 700;
+		line-height: 22px;
+		color: palette("main-blue");
+		white-space: nowrap;
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("blue-hover");
+		}
+
+		@include up(desktop) {
+			flex: none;
+			margin-left: -4px;
+			font-weight: 400;
+		}
+	}
+
+	.top-notice__close {
+		display: flex;
+		grid-row: 1;
+		grid-column: 3;
+		align-items: center;
+		justify-content: center;
+		width: 24px;
+		height: 24px;
+		margin: -5px -5px 0;
+		padding: 0;
+		color: palette("dark-grey-txt");
+		cursor: pointer;
+		background: transparent;
+		border: 0;
+		border-radius: 50%;
+		transition: color $transition-default;
+
+		& > svg {
+			width: 14px;
+			height: 14px;
+		}
+
+		&:hover,
+		&:focus-visible {
+			color: palette("main-blue");
+		}
+
+		@include up(desktop) {
+			flex: none;
+			margin: 0 -5px 0 auto;
 		}
 	}
 }

@@ -1,4 +1,10 @@
-<div class="top-notice{{#if props.class}} {{props.class}}{{/if}}"
+{{!--
+	Плашка-объявление над шапкой. Закрытая не показывается до конца дня; новый key — показывается снова.
+	props: key, type («warning» — важно, «critical» — критично; без type — инфо), label («Важно:» —
+	жирная подпись перед текстом), text или html (старая разметка: текст со ссылкой внутри), link
+	{ url, text («Подробнее») }, class. Значок «!» рисуется стилями.
+--}}
+<div class="top-notice{{#if props.type}} top-notice--{{props.type}}{{/if}}{{#if props.class}} {{props.class}}{{/if}}"
 	data-module="TopNotice"
 	data-path="components"
 	data-key="{{default props.key 'global'}}"
@@ -7,12 +13,9 @@
 >
 	<div class="top-notice__container">
 		<p class="top-notice__text">
-			{{#if props.html}}
-				{{{props.html}}}
-			{{else}}
-				{{default props.text ''}}
-			{{/if}}
+			{{#if props.label}}<b class="top-notice__label">{{props.label}}</b> {{/if}}{{#if props.html}}{{{props.html}}}{{else}}{{default props.text ''}}{{/if}}
 		</p>
+		{{#if props.link.url}}<a class="top-notice__link" href="{{props.link.url}}">{{default props.link.text "Подробнее"}} →</a>{{/if}}
 		<button class="top-notice__close" type="button" aria-label="Закрыть">
 			<svg aria-hidden="true" focusable="false" width="16" height="16">
 				<use href="{{@root.sprite}}#icon-close"></use>
