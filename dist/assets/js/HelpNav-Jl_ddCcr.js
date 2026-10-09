@@ -1,0 +1,1 @@
+function e(e){let t=window.matchMedia(`(min-width: 1280px)`),n=()=>{e.open=t.matches};return n(),t.addEventListener(`change`,n),()=>t.removeEventListener(`change`,n)}export{e as default};

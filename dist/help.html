@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="format-detection" content="telephone=no" />
 
-		<title>AG</title>
+		<title>Помощь — CRM</title>
 
 		<!-- initial-load overlay: critical inline styles so it shows before the bundle
 		     loads and hides the FOUC (sprite injection / style application) -->
@@ -164,16 +164,16 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:locale" content="ru_RU" />
 		<meta property="og:site_name" content="AG" />
-		<meta property="og:title" content="AG" />
+		<meta property="og:title" content="Помощь — CRM" />
 		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
 
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:title" content="Помощь — CRM" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
 		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-DE6HRAZQ.js"></script>
 		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CS2lTTCj.css" />
 	</head>
-	<body class="bg-light tasks-page">
+	<body class="bg-light">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		<div class="wrapper">
 			<header class="header header--site" data-module="SiteHeader" data-path="layouts">
@@ -916,34 +916,492 @@
 					</div>
 				</div>
 				<div class="wrapper__main">
-					<div class="wrapper__container">
-						<a href="/tasks" class="wrapper__back">
-							<svg aria-hidden="true" focusable="false" width="16" height="16">
-								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-arrow-back-thin"></use>
-							</svg>
-							<span>Назад</span>
-						</a>
+					<div class="wrapper__wide">
+						<div class="help-page">
+							<nav class="breadcrumbs help-page__crumbs" aria-label="Хлебные крошки">
+								<ol class="breadcrumbs__list">
+									<li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/pharmacies.html">CRM</a></li>
+									<li class="breadcrumbs__item"><span class="breadcrumbs__current" aria-current="page">Помощь</span></li>
+								</ol>
+							</nav>
+							<section class="help-hero" aria-labelledby="help-hero-title">
+								<h1 class="help-hero__title" id="help-hero-title">Помощь</h1>
+								<p class="help-hero__text">
+									Инструкции и ответы на частые вопросы по работе с аптеками, сотрудниками, визитами и задачами.
+								</p>
+								<form
+									class="help-search"
+									action="https://acrysense.github.io/ag-site/search.html"
+									method="get"
+									role="search"
+									data-module="HelpSearch"
+									data-path="sections/help"
+									data-suggest-url="/__mock/help-suggest"
+									data-all-text="Все результаты в Помощи"
+									data-empty-text="В Помощи пока нет ответа на этот вопрос"
+								>
+									<input type="hidden" name="section" value="help" />
+									<input type="hidden" name="where" value="crm" />
+									<label class="visually-hidden" for="help-search-input">Поиск по Помощи</label>
+									<div class="help-search__field">
+										<svg class="icon help-search__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-search"></use>
+										</svg>
+										<input
+											class="help-search__input"
+											id="help-search-input"
+											type="search"
+											name="q"
+											placeholder="Поиск по Помощи"
+											autocomplete="off"
+											enterkeyhint="search"
+											role="combobox"
+											aria-autocomplete="list"
+											aria-expanded="false"
+											aria-controls="help-search-list"
+											data-help-search-input
+										/>
+										<button class="help-search__clear" type="button" aria-label="Очистить поиск" data-help-search-clear hidden>
+											<svg class="icon help-search__clear-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-close"></use>
+											</svg>
+										</button>
+									</div>
+									<div class="help-search__panel" data-help-search-panel hidden>
+										<ul
+											class="help-search__list"
+											id="help-search-list"
+											role="listbox"
+											aria-label="Подсказки"
+											data-help-search-list
+										></ul>
+										<p class="help-search__empty" data-help-search-empty hidden></p>
+										<button class="btn btn--general btn--m help-search__all" type="submit" data-help-search-all>
+											Все результаты в Помощи
+										</button>
+									</div>
+								</form>
 
-						<!--
-							Профильная заглушка «Задача не найдена» (референс для бэка):
-							тот же блок .visit-empty, что и у «Визит не найден» — меняются
-							только иконка (#icon-erp-tasks) и тексты/ссылки.
-						-->
-						<section class="data-panel visit-empty">
-							<span class="visit-empty__icon">
-								<svg aria-hidden="true" focusable="false" width="28" height="28">
-									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-task-check"></use>
-								</svg>
-							</span>
-							<h1 class="visit-empty__title">Задача не найдена</h1>
-							<p class="visit-empty__text">
-								Возможно, задача была удалена или изменился её адрес. Проверьте ссылку или вернитесь к списку задач.
-							</p>
-							<div class="visit-empty__actions">
-								<a href="/tasks" class="btn">К списку задач</a>
-								<a href="/" class="btn btn--secondary">На главную</a>
+								<div class="help-hero__popular">
+									<span class="help-hero__popular-label">Часто ищут:</span>
+									<ul class="help-hero__pills" role="list">
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D1%81%D0%BE%D0%B7%D0%B4%D0%B0%D1%82%D1%8C%20%D0%B7%D0%B0%D0%B4%D0%B0%D1%87%D1%83"
+											>
+												создать задачу
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D0%BE%D1%82%D1%87%D1%91%D1%82%20%D0%BF%D0%BE%20%D0%B2%D0%B8%D0%B7%D0%B8%D1%82%D1%83"
+											>
+												отчёт по визиту
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D1%8D%D0%BA%D1%81%D0%BF%D0%BE%D1%80%D1%82%20%D0%B2%20Excel"
+											>
+												экспорт в Excel
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D0%BF%D1%80%D0%B0%D0%B2%D0%B0%20%D0%B4%D0%BE%D1%81%D1%82%D1%83%D0%BF%D0%B0"
+											>
+												права доступа
+											</a>
+										</li>
+										<li>
+											<a
+												class="help-hero__pill"
+												href="https://acrysense.github.io/ag-site/search.html?section&#x3D;help&amp;where&#x3D;crm&amp;q&#x3D;%D0%BF%D0%B5%D1%80%D0%B5%D0%B2%D0%BE%D0%B4%20%D1%81%D0%BE%D1%82%D1%80%D1%83%D0%B4%D0%BD%D0%B8%D0%BA%D0%B0"
+											>
+												перевод сотрудника
+											</a>
+										</li>
+									</ul>
+								</div>
+							</section>
+							<section class="help-categories" aria-labelledby="help-categories-title">
+								<h2 class="help-categories__title" id="help-categories-title">Разделы</h2>
+								<ul class="help-categories__list" role="list">
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-home"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Начало работы</h3>
+												<p class="help-card__count">6 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Вход в CRM, обзор интерфейса, навигация и первые шаги для новых пользователей.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Как войти в CRM</a></li>
+											<li><a class="help-card__link" href="#">Обзор интерфейса</a></li>
+											<li><a class="help-card__link" href="#">Роли и права пользователей</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Начало работы»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-dashboard"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Дашборд</h3>
+												<p class="help-card__count">5 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Ключевые показатели сети, графики продаж и настройка виджетов.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Как читать показатели дашборда</a></li>
+											<li><a class="help-card__link" href="#">Настроить период и фильтры</a></li>
+											<li><a class="help-card__link" href="#">Сравнить аптеки между собой</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Дашборд»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-pharmacies"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Аптеки</h3>
+												<p class="help-card__count">9 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Карточка аптеки, категории, персонал, показатели и история изменений.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Найти аптеку в списке</a></li>
+											<li><a class="help-card__link" href="#">Карточка аптеки: что в ней есть</a></li>
+											<li><a class="help-card__link" href="#">Изменить категорию аптеки</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Аптеки»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-managers"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Менеджеры</h3>
+												<p class="help-card__count">7 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Закрепление аптек за менеджерами, нагрузка и показатели работы.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Закрепить аптеку за менеджером</a></li>
+											<li><a class="help-card__link" href="#">Посмотреть визиты менеджера</a></li>
+											<li><a class="help-card__link" href="#">Передать аптеки другому менеджеру</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Менеджеры»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-employees"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Сотрудники</h3>
+												<p class="help-card__count">11 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Список сотрудников, карточка, перевод между аптеками и увольнение.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Добавить сотрудника</a></li>
+											<li><a class="help-card__link" href="#">Перевести сотрудника в другую аптеку</a></li>
+											<li><a class="help-card__link" href="#">Фильтры в списке сотрудников</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Сотрудники»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-visits"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Визиты</h3>
+												<p class="help-card__count">8 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Планирование визитов в аптеки, чек-листы и отчёты по итогам.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Запланировать визит</a></li>
+											<li><a class="help-card__link" href="#">Заполнить чек-лист визита</a></li>
+											<li><a class="help-card__link" href="#">Отчёт по визиту</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Визиты»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-erp-tasks"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Задачи</h3>
+												<p class="help-card__count">14 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Создание, назначение и контроль выполнения задач для себя и сотрудников.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Создать задачу</a></li>
+											<li><a class="help-card__link" href="#">Назначить задачу сотруднику</a></li>
+											<li><a class="help-card__link" href="#">Подтвердить выполнение</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Задачи»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-download"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Отчёты и экспорт</h3>
+												<p class="help-card__count">6 статей</p>
+											</div>
+										</div>
+										<p class="help-card__text">Выгрузка данных в Excel, архивы и сохранённые наборы фильтров.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Экспорт в Excel</a></li>
+											<li><a class="help-card__link" href="#">Архив задач и визитов</a></li>
+											<li><a class="help-card__link" href="#">Сохранить набор фильтров</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Отчёты и экспорт»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+									<li class="help-card">
+										<div class="help-card__head">
+											<span class="help-card__tile">
+												<svg class="help-card__icon" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-settings"></use>
+												</svg>
+											</span>
+											<div class="help-card__titles">
+												<h3 class="help-card__title">Доступ и настройки</h3>
+												<p class="help-card__count">4 статьи</p>
+											</div>
+										</div>
+										<p class="help-card__text">Права доступа к разделам, уведомления и персональные настройки.</p>
+										<ul class="help-card__links" role="list">
+											<li><a class="help-card__link" href="#">Запросить доступ к разделу</a></li>
+											<li><a class="help-card__link" href="#">Настроить уведомления</a></li>
+											<li><a class="help-card__link" href="#">Сменить пароль</a></li>
+										</ul>
+										<a class="help-card__more" href="/help-section.html">
+											Все статьи раздела
+											<span class="visually-hidden">«Доступ и настройки»</span>
+											<svg class="icon help-card__more-icon" aria-hidden="true" focusable="false">
+												<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+											</svg>
+										</a>
+									</li>
+								</ul>
+							</section>
+							<div class="help-page__row">
+								<section class="help-faq" aria-labelledby="help-faq-title">
+									<h2 class="help-faq__title" id="help-faq-title">Частые вопросы</h2>
+									<div class="help-questions">
+										<details class="help-questions__item" open>
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как назначить задачу сразу нескольким сотрудникам?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Откройте раздел «Задачи сотрудников», нажмите «Создать задачу» и в поле «Ответственный» выберите нескольких
+													сотрудников. Каждый получит свою копию задачи.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Почему я не вижу некоторые аптеки в списке?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													В списке только аптеки, к которым у вас есть доступ, и только те, что подходят под выбранные фильтры.
+													Сбросьте фильтры или запросите доступ у руководителя.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как выгрузить список сотрудников в Excel?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													В разделе «Сотрудники» настройте фильтры и нажмите «Экспорт в Excel» над таблицей — выгрузятся строки,
+													которые видны с этими фильтрами.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Можно ли отредактировать визит после отправки отчёта?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													После отправки отчёт закрыт для правки. Если нужно исправить данные, напишите менеджеру — он вернёт визит
+													на доработку.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Кто подтверждает выполнение задачи?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Задачу подтверждает тот, кто её поставил. До подтверждения она в статусе «Ждёт подтверждения».
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как сменить закреплённого менеджера у аптеки?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Откройте карточку аптеки, в блоке «Менеджер» нажмите «Изменить» и выберите нового менеджера. Прежний увидит
+													изменение в истории.
+												</p>
+												<a class="help-questions__link" href="#">Читать статью полностью →</a>
+											</div>
+										</details>
+									</div>
+								</section>
+								<div class="help-page__side">
+									<section class="help-aside-card help-updates" aria-labelledby="help-updates-title">
+										<h2 class="help-aside-card__title" id="help-updates-title">Новое в базе знаний</h2>
+										<ul class="help-updates__list" role="list">
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-09-18">18 сентября</time>
+												<a class="help-updates__link" href="#">Подтверждение выполнения задач</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-09-10">10 сентября</time>
+												<a class="help-updates__link" href="#">Новые фильтры в списке аптек</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-09-02">2 сентября</time>
+												<a class="help-updates__link" href="#">Чек-листы визитов: обновлённая форма</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-08-28">28 августа</time>
+												<a class="help-updates__link" href="#">Отчёт по визиту: что изменилось</a>
+											</li>
+											<li class="help-updates__item">
+												<time class="help-updates__date" datetime="2026-08-21">21 августа</time>
+												<a class="help-updates__link" href="#">Архив задач и визитов</a>
+											</li>
+										</ul>
+									</section>
+									<section class="help-aside-card help-support" aria-labelledby="help-support-title">
+										<h2 class="help-aside-card__title" id="help-support-title">Не нашли ответ?</h2>
+										<p class="help-support__text">
+											Напишите в поддержку — ответим в течение рабочего дня. К обращению можно приложить скриншот.
+										</p>
+										<a class="btn btn--general btn--m help-support__button" href="mailto:support@phg.by">Написать в поддержку</a>
+										<p class="help-support__phone">
+											Или позвоните:
+											<a class="help-support__phone-link" href="tel:+375173947034">+375 (17) 394-70-34</a>
+										</p>
+									</section>
+								</div>
 							</div>
-						</section>
+						</div>
 					</div>
 				</div>
 			</main>

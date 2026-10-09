@@ -170,8 +170,8 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="AG" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-jYEERMVj.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-BMwAI309.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-DE6HRAZQ.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CS2lTTCj.css" />
 	</head>
 	<body class="bg-light tasks-page" data-header-search>
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
@@ -732,6 +732,14 @@
 										<span>Задачи</span>
 									</a>
 								</li>
+								<li class="sidebar__item">
+									<a href="/help" class="sidebar__link">
+										<svg aria-hidden="true" focusable="false" width="20" height="20">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-help"></use>
+										</svg>
+										<span>Помощь</span>
+									</a>
+								</li>
 							</ul>
 						</div>
 						<div class="sidebar__section">
@@ -900,7 +908,7 @@
 					</div>
 				</div>
 				<div class="wrapper__main">
-					<div class="wrapper__narrow">
+					<div class="wrapper__narrow wrapper__narrow--aside">
 						<div class="filter-chips tasks-page__chips" data-filter-chips hidden>
 							<div class="filter-chips__list" data-filter-chips-list></div>
 							<button type="button" class="filter-chips__reset" data-filter-reset-all>Сбросить все</button>
@@ -1461,6 +1469,122 @@
 								</section>
 							</div>
 						</div>
+
+						<section
+							class="help-inline"
+							id="help-tasks"
+							aria-labelledby="help-tasks-title"
+							data-module="HelpInline"
+							data-path="sections/help"
+						>
+							<div class="help-inline__inner">
+								<div class="help-inline__head">
+									<span class="help-inline__tile">
+										<svg class="icon help-inline__icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-help"></use>
+										</svg>
+									</span>
+									<div class="help-inline__titles">
+										<h2 class="help-inline__title" id="help-tasks-title">Вопросы по странице</h2>
+										<p class="help-inline__subtitle">Быстрые ответы по разделу</p>
+									</div>
+									<a class="help-inline__all" href="/help-section.html">Все статьи →</a>
+									<span class="help-inline__count" aria-hidden="true">5</span>
+									<button
+										class="help-inline__toggle"
+										type="button"
+										aria-expanded="true"
+										aria-controls="help-tasks-body"
+										data-help-inline-toggle
+									>
+										<span class="visually-hidden" data-help-inline-label>Свернуть вопросы</span>
+										<svg class="icon help-inline__toggle-icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-up"></use>
+										</svg>
+									</button>
+								</div>
+								<div class="help-inline__body" id="help-tasks-body">
+									<div class="help-questions">
+										<details class="help-questions__item" open>
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как назначить задачу нескольким сотрудникам?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													В блоке «Задачи сотрудников» нажмите «Создать задачу» и в поле «Ответственный» выберите нескольких
+													сотрудников — каждый получит свою копию задачи.
+												</p>
+												<a class="help-questions__link" href="/help-section.html">Подробнее в разделе «Помощь» →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как скрыть задачу от сотрудника до определённой даты?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													При создании задачи включите «Скрыть до» и выберите дату — до неё сотрудник задачу не увидит.
+												</p>
+												<a class="help-questions__link" href="/help-section.html">Подробнее в разделе «Помощь» →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Кто подтверждает выполнение задачи?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Тот, кто поставил задачу. До подтверждения она в статусе «Ждёт подтверждения».
+												</p>
+												<a class="help-questions__link" href="/help-section.html">Подробнее в разделе «Помощь» →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Где найти завершённые и старые задачи?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													В «Архиве задач» — ссылка над списком. Там задачи старше 30 дней и снятые с контроля.
+												</p>
+												<a class="help-questions__link" href="/help-section.html">Подробнее в разделе «Помощь» →</a>
+											</div>
+										</details>
+										<details class="help-questions__item">
+											<summary class="help-questions__summary">
+												<span class="help-questions__question">Как выгрузить задачи в Excel?</span>
+												<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+													<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+												</svg>
+											</summary>
+											<div class="help-questions__answer">
+												<p class="help-questions__text">
+													Настройте фильтры и нажмите «Экспорт в Excel» над списком — выгрузятся задачи, которые видны с этими
+													фильтрами.
+												</p>
+												<a class="help-questions__link" href="/help-section.html">Подробнее в разделе «Помощь» →</a>
+											</div>
+										</details>
+									</div>
+									<p class="help-inline__support">
+										Не нашли ответ?
+										<a class="help-inline__support-link" href="/help.html">Написать в поддержку</a>
+									</p>
+								</div>
+							</div>
+						</section>
 					</div>
 				</div>
 			</main>
@@ -1521,7 +1645,7 @@
 						</svg>
 						<span class="main-menu__group-text">
 							<span class="main-menu__group-title">CRM</span>
-							<span class="main-menu__group-meta">6 разделов</span>
+							<span class="main-menu__group-meta">7 разделов</span>
 						</span>
 						<svg class="icon main-menu__group-arrow" aria-hidden="true" focusable="false">
 							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-up"></use>
@@ -1589,6 +1713,17 @@
 									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-tasks"></use>
 								</svg>
 								<span class="main-menu__row-text">Задачи</span>
+								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+								</svg>
+							</a>
+						</li>
+						<li>
+							<a class="main-menu__row" href="/help.html">
+								<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-help"></use>
+								</svg>
+								<span class="main-menu__row-text">Помощь</span>
 								<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
 									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
 								</svg>

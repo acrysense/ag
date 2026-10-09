@@ -5,7 +5,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 		<meta name="format-detection" content="telephone=no" />
 
-		<title>AG</title>
+		<title>Задачи — Помощь — CRM</title>
 
 		<!-- initial-load overlay: critical inline styles so it shows before the bundle
 		     loads and hides the FOUC (sprite injection / style application) -->
@@ -164,16 +164,16 @@
 		<meta property="og:type" content="website" />
 		<meta property="og:locale" content="ru_RU" />
 		<meta property="og:site_name" content="AG" />
-		<meta property="og:title" content="AG" />
+		<meta property="og:title" content="Задачи — Помощь — CRM" />
 		<meta property="og:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
 
 		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="AG" />
+		<meta name="twitter:title" content="Задачи — Помощь — CRM" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
 		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-DE6HRAZQ.js"></script>
 		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CS2lTTCj.css" />
 	</head>
-	<body class="bg-light tasks-page">
+	<body class="bg-light">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		<div class="wrapper">
 			<header class="header header--site" data-module="SiteHeader" data-path="layouts">
@@ -916,34 +916,512 @@
 					</div>
 				</div>
 				<div class="wrapper__main">
-					<div class="wrapper__container">
-						<a href="/tasks" class="wrapper__back">
-							<svg aria-hidden="true" focusable="false" width="16" height="16">
-								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-arrow-back-thin"></use>
-							</svg>
-							<span>Назад</span>
-						</a>
-
-						<!--
-							Профильная заглушка «Задача не найдена» (референс для бэка):
-							тот же блок .visit-empty, что и у «Визит не найден» — меняются
-							только иконка (#icon-erp-tasks) и тексты/ссылки.
-						-->
-						<section class="data-panel visit-empty">
-							<span class="visit-empty__icon">
-								<svg aria-hidden="true" focusable="false" width="28" height="28">
-									<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-task-check"></use>
-								</svg>
-							</span>
-							<h1 class="visit-empty__title">Задача не найдена</h1>
-							<p class="visit-empty__text">
-								Возможно, задача была удалена или изменился её адрес. Проверьте ссылку или вернитесь к списку задач.
-							</p>
-							<div class="visit-empty__actions">
-								<a href="/tasks" class="btn">К списку задач</a>
-								<a href="/" class="btn btn--secondary">На главную</a>
+					<div class="wrapper__wide">
+						<div class="help-page">
+							<nav class="breadcrumbs help-page__crumbs" aria-label="Хлебные крошки">
+								<ol class="breadcrumbs__list">
+									<li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/pharmacies.html">CRM</a></li>
+									<li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/help.html">Помощь</a></li>
+									<li class="breadcrumbs__item"><span class="breadcrumbs__current" aria-current="page">Задачи</span></li>
+								</ol>
+							</nav>
+							<div class="help-page__layout">
+								<details class="help-nav" open data-module="HelpNav" data-path="sections/help">
+									<summary class="help-nav__summary">
+										<span class="help-nav__summary-text">Разделы помощи</span>
+										<svg class="icon help-nav__summary-icon" aria-hidden="true" focusable="false">
+											<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+										</svg>
+									</summary>
+									<nav class="help-nav__body" aria-labelledby="help-nav-title">
+										<p class="help-nav__title" id="help-nav-title">Помощь по CRM</p>
+										<ul class="help-nav__list" role="list">
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Начало работы</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Дашборд</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Аптеки</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Менеджеры</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Сотрудники</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Визиты</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group is-open" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Задачи</span>
+												</a>
+												<ul class="help-nav__pages" role="list">
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="/help-section.html" aria-current="page">
+															<span class="help-nav__text">Обзор раздела</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Создать задачу</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Назначить задачу сотруднику</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Задача нескольким сотрудникам</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Скрыть задачу до срока</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Шаблоны задач</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Статусы задачи</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Подтвердить выполнение</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Комментарии к задаче</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Просроченные задачи</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Уведомления по задачам</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Архив задач</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Экспорт задач в Excel</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Фильтры в списке задач</span>
+														</a>
+													</li>
+													<li>
+														<a class="help-nav__link help-nav__link--page" href="#">
+															<span class="help-nav__text">Права доступа к задачам</span>
+														</a>
+													</li>
+												</ul>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Отчёты и экспорт</span>
+												</a>
+											</li>
+											<li class="help-nav__group">
+												<a class="help-nav__link help-nav__link--group" href="/help-section.html">
+													<svg class="icon help-nav__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+													<span class="help-nav__text">Доступ и настройки</span>
+												</a>
+											</li>
+										</ul>
+									</nav>
+								</details>
+								<div class="help-page__main">
+									<section class="help-section" aria-labelledby="help-section-title">
+										<div class="help-section__head">
+											<h1 class="help-section__title" id="help-section-title">Задачи</h1>
+											<p class="help-section__count">14 статей</p>
+										</div>
+										<p class="help-section__text">
+											Создание, назначение и контроль выполнения задач для себя и сотрудников: от постановки задачи до
+											подтверждения и архива.
+										</p>
+										<ul class="help-section__list" role="list">
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Создать задачу</span>
+														<span class="help-article__text">Как поставить задачу себе и указать срок</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Назначить задачу сотруднику</span>
+														<span class="help-article__text">Выбор ответственного, копии задачи и уведомления</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Задача нескольким сотрудникам</span>
+														<span class="help-article__text">Как назначить одну задачу сразу нескольким людям</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Скрыть задачу до срока</span>
+														<span class="help-article__text">Когда сотрудник увидит отложенную задачу</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Шаблоны задач</span>
+														<span class="help-article__text">Повторяющиеся задачи для аптек по шаблону</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Статусы задачи</span>
+														<span class="help-article__text">Новая, просрочена, выполнена, проверена — что они значат</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Подтвердить выполнение</span>
+														<span class="help-article__text">Проверка результата и отметка «Проверена»</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Комментарии к задаче</span>
+														<span class="help-article__text">Обсуждение задачи с исполнителем</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Просроченные задачи</span>
+														<span class="help-article__text">Что происходит после срока и как его продлить</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Уведомления по задачам</span>
+														<span class="help-article__text">Какие уведомления приходят и как их настроить</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Архив задач</span>
+														<span class="help-article__text">Где найти завершённые и старые задачи</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Экспорт задач в Excel</span>
+														<span class="help-article__text">Выгрузка списка задач с учётом фильтров</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Фильтры в списке задач</span>
+														<span class="help-article__text">Поиск задач по сотруднику, сроку и статусу</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+											<li>
+												<a class="help-article" href="#">
+													<span class="help-article__icon">
+														<svg class="icon help-article__glyph" aria-hidden="true" focusable="false">
+															<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-document"></use>
+														</svg>
+													</span>
+													<span class="help-article__body">
+														<span class="help-article__title">Права доступа к задачам</span>
+														<span class="help-article__text">Кто может создавать, видеть и подтверждать задачи</span>
+													</span>
+													<svg class="icon help-article__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
+													</svg>
+												</a>
+											</li>
+										</ul>
+									</section>
+									<section class="help-faq" aria-labelledby="help-faq-title">
+										<h2 class="help-faq__title" id="help-faq-title">Частые вопросы</h2>
+										<div class="help-questions">
+											<details class="help-questions__item" open>
+												<summary class="help-questions__summary">
+													<span class="help-questions__question">Как назначить задачу сразу нескольким сотрудникам?</span>
+													<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+													</svg>
+												</summary>
+												<div class="help-questions__answer">
+													<p class="help-questions__text">
+														Откройте раздел «Задачи сотрудников», нажмите «Создать задачу» и в поле «Ответственный» выберите
+														нескольких сотрудников. Каждый получит свою копию задачи.
+													</p>
+													<a class="help-questions__link" href="#">Читать статью полностью →</a>
+												</div>
+											</details>
+											<details class="help-questions__item">
+												<summary class="help-questions__summary">
+													<span class="help-questions__question">Почему я не вижу некоторые аптеки в списке?</span>
+													<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+													</svg>
+												</summary>
+												<div class="help-questions__answer">
+													<p class="help-questions__text">
+														В списке только аптеки, к которым у вас есть доступ, и только те, что подходят под выбранные фильтры.
+														Сбросьте фильтры или запросите доступ у руководителя.
+													</p>
+													<a class="help-questions__link" href="#">Читать статью полностью →</a>
+												</div>
+											</details>
+											<details class="help-questions__item">
+												<summary class="help-questions__summary">
+													<span class="help-questions__question">Как выгрузить список сотрудников в Excel?</span>
+													<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+													</svg>
+												</summary>
+												<div class="help-questions__answer">
+													<p class="help-questions__text">
+														В разделе «Сотрудники» настройте фильтры и нажмите «Экспорт в Excel» над таблицей — выгрузятся строки,
+														которые видны с этими фильтрами.
+													</p>
+													<a class="help-questions__link" href="#">Читать статью полностью →</a>
+												</div>
+											</details>
+											<details class="help-questions__item">
+												<summary class="help-questions__summary">
+													<span class="help-questions__question">Можно ли отредактировать визит после отправки отчёта?</span>
+													<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+													</svg>
+												</summary>
+												<div class="help-questions__answer">
+													<p class="help-questions__text">
+														После отправки отчёт закрыт для правки. Если нужно исправить данные, напишите менеджеру — он вернёт визит
+														на доработку.
+													</p>
+													<a class="help-questions__link" href="#">Читать статью полностью →</a>
+												</div>
+											</details>
+											<details class="help-questions__item">
+												<summary class="help-questions__summary">
+													<span class="help-questions__question">Кто подтверждает выполнение задачи?</span>
+													<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+													</svg>
+												</summary>
+												<div class="help-questions__answer">
+													<p class="help-questions__text">
+														Задачу подтверждает тот, кто её поставил. До подтверждения она в статусе «Ждёт подтверждения».
+													</p>
+													<a class="help-questions__link" href="#">Читать статью полностью →</a>
+												</div>
+											</details>
+											<details class="help-questions__item">
+												<summary class="help-questions__summary">
+													<span class="help-questions__question">Как сменить закреплённого менеджера у аптеки?</span>
+													<svg class="icon help-questions__chevron" aria-hidden="true" focusable="false">
+														<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+													</svg>
+												</summary>
+												<div class="help-questions__answer">
+													<p class="help-questions__text">
+														Откройте карточку аптеки, в блоке «Менеджер» нажмите «Изменить» и выберите нового менеджера. Прежний
+														увидит изменение в истории.
+													</p>
+													<a class="help-questions__link" href="#">Читать статью полностью →</a>
+												</div>
+											</details>
+										</div>
+									</section>
+								</div>
 							</div>
-						</section>
+						</div>
 					</div>
 				</div>
 			</main>
