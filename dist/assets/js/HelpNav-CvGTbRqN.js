@@ -1,0 +1,1 @@
+function e(e){let t=window.matchMedia(`(min-width: 1280px)`),n=()=>{e.open=t.matches};n();let r=requestAnimationFrame(()=>e.classList.add(`is-ready`));return t.addEventListener(`change`,n),()=>{cancelAnimationFrame(r),t.removeEventListener(`change`,n)}}export{e as default};

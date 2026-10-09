@@ -22,6 +22,30 @@
 		}
 	}
 
+	// Список плавно раскрывается по высоте — где браузер умеет (::details-content, interpolate-size),
+	// иначе открывается сразу; как раскрывающиеся блоки на ag-site
+	.help-nav {
+		interpolate-size: allow-keywords;
+	}
+
+	.help-nav::details-content {
+		display: flow-root;
+		height: 0;
+		overflow: clip;
+		transition:
+			height $transition-default,
+			content-visibility $transition-default allow-discrete;
+	}
+
+	.help-nav[open]::details-content {
+		height: auto;
+	}
+
+	// Пока скрипт не расставил открыт/свёрнут по ширине — без анимации (не мелькает при загрузке)
+	.help-nav:not(.is-ready)::details-content {
+		transition: none;
+	}
+
 	.help-nav__summary {
 		@include text("m-500");
 
