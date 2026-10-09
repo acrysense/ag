@@ -110,7 +110,14 @@ $colors: (
     // Только кабинет: оценки «жёлтой» категории (на сайте "yellow" — другой цвет)
     "rating-yellow": #ffcc00,
     // Только кабинет: светло-зелёный фон (на сайте близкий "bg-green" — #e8f6ee)
-    "green-light": #e8f5e9
+    "green-light": #e8f5e9,
+    // Только кабинет: плашка-объявление сверху — фон «Инфо», «Важно» (значок и полоса — свой
+    // цвет) и «Критично»
+    "notice-info-bg": #e6f2ff,
+    "notice-warning": #ff9f0a,
+    "notice-warning-bg": #fff5e0,
+    "notice-critical": #e5484d,
+    "notice-critical-bg": #fdecea
 );
 
 @function palette($name) {

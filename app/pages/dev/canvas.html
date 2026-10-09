@@ -206,9 +206,21 @@
 				{{/state}}
 			{{/story}}
 
-			{{#> story id="top-notice" group="Компоненты" title="Плашка сверху" backend='app/components/components/TopNotice/ — текст правит админ; закрытая не показывается до нового key'}}
-				{{#> state label="Обычное"}}
-					{{> components/TopNotice/TopNotice props=(obj key="story-notice" html='Сообщение-растяжка для всех сотрудников компании. У нас важные <a href="#">новости</a>.')}}
+			{{#> story id="top-notice" group="Компоненты" title="Плашка сверху" backend='app/components/components/TopNotice/ — текст правит админ; вид: инфо, важно (--warning), критично (--critical); закрытая не показывается до конца дня или до нового key'}}
+				{{#> state label="Инфо"}}
+					{{> components/TopNotice/TopNotice props=(obj key="story-notice-info" text="Сообщение-растяжка для всех сотрудников компании. У нас для вас важные новости." link=(obj url="#"))}}
+				{{/state}}
+				{{#> state label="Важно"}}
+					{{> components/TopNotice/TopNotice props=(obj key="story-notice-warning" type="warning" label="Важно:" text="сдача отчётов по визитам переносится на 10 октября. Проверьте свои планы." link=(obj url="#"))}}
+				{{/state}}
+				{{#> state label="Критично, без ссылки"}}
+					{{> components/TopNotice/TopNotice props=(obj key="story-notice-critical" type="critical" label="Плановые работы:" text="7 октября с 22:00 до 02:00 CRM будет недоступна. Сохраните данные заранее.")}}
+				{{/state}}
+				{{#> state label="Длинный текст"}}
+					{{> components/TopNotice/TopNotice props=(obj key="story-notice-long" type="warning" label="Важно:" text="сдача отчётов по визитам переносится на 10 октября, а планы на ноябрь нужно согласовать с менеджером до конца недели — после этого изменения в CRM будут закрыты для всех аптек сети." link=(obj url="#"))}}
+				{{/state}}
+				{{#> state label="Старая разметка бэка (ссылка в тексте)"}}
+					{{> components/TopNotice/TopNotice props=(obj key="story-notice-legacy" html='Сообщение-растяжка для всех сотрудников компании. У нас важные <a href="#">новости</a>.')}}
 				{{/state}}
 			{{/story}}
 

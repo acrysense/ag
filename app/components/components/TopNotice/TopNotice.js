@@ -46,8 +46,10 @@ export default (root) => {
 	}
 	btn?.addEventListener('click', onCloseClick)
 
+	// Следим за содержимым, а не за самой плашкой: она сжата до --h, и если смонтирована скрытой
+	// (высота 0), её размер не меняется — высота так и осталась бы нулевой
 	const ro = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(() => setH())
-	ro?.observe(root)
+	ro?.observe(root.querySelector('.top-notice__container') || root)
 	window.addEventListener('resize', setH, { passive: true })
 
 	return () => {

@@ -7,8 +7,9 @@
 	<body class="bg-light">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
 		{{> components/TopNotice/TopNotice props=(obj
-			key='2025-11-19'
-			html='Сообщение-растяжка для всех сотрудников компании. У нас важные <a href="#">новости</a>.'
+			key='2026-10-10'
+			text='Сообщение-растяжка для всех сотрудников компании. У нас для вас важные новости.'
+			link=(obj url='#' text='Подробнее')
 		)}}
 		<div class="wrapper">
 			{{> layouts/SiteHeader/SiteHeader props=site.header }}
