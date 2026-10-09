@@ -1,8 +1,8 @@
 @use "@/assets/styles/site/mixins" as *;
 @use "@/assets/styles/site/vars" as *;
 
-// Белая карточка, поля 40, скругление 20, рамка и тень блока, всё через 20: заголовок H0
-// Black.TXT, описание L/400 Dark-grey, поле поиска, «Часто ищут:» M/400 Dark-grey и «таблетки»
+// Белая карточка, поля 20, скругление 20, рамка и тень блока, всё через 20: заголовок H0
+// Black.TXT, описание L/400 Dark-grey, «Часто ищут:» M/400 Dark-grey и «таблетки»
 // через 8 (BG.Info, поля 4/12, скругление 14, S/400 Main Blue). До 1024 — белый блок во всю
 // ширину, поля 20/10, заголовок H1, описание M/400.
 @layer components {
@@ -17,7 +17,7 @@
 
 		@include up(desktop) {
 			gap: 20px;
-			padding: 40px;
+			padding: 20px;
 			border: 1px solid palette("block-border");
 			border-radius: $radius-content-block;
 			box-shadow: $shadow-content-block;

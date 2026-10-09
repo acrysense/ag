@@ -47,7 +47,6 @@ window.fetch = async (input, init = {}) => {
 	if (url.pathname === '/__mock/search-count') return mockSearchCount(url, init)
 	if (url.pathname === '/__mock/search-suggest') return mockSearchSuggest(url, init)
 	if (url.pathname === '/__mock/search-filters') return mockSearchFilters(url, init)
-	if (url.pathname === '/__mock/help-suggest') return mockHelpSuggest(url, init)
 	if (url.pathname !== '/__mock/select') return realFetch(input, init)
 	console.info('[mock-select]', url.search || '(без параметров)')
 	await new Promise((resolve, reject) => {
@@ -508,46 +507,6 @@ async function mockSearchSuggest(url, init) {
 		return { url: '#', type, image, titleHtml, meta }
 	})
 	return new Response(JSON.stringify({ count: kept.length, items }), {
-		headers: { 'Content-Type': 'application/json' },
-	})
-}
-
-// 7) Поиск по Помощи. GET /__mock/help-suggest?q=&section=help&where=crm → { count, items } — до 5
-// подсказок, все совпадения в <mark>; count — «все результаты» (больше, чем подсказок).
-const helpData = [
-	['Создать задачу', 'Статья · Задачи', 'article'],
-	['Как назначить задачу нескольким сотрудникам?', 'Вопрос · Задачи', 'question'],
-	['Назначить задачу сотруднику', 'Статья · Задачи', 'article'],
-	['Создать задачу → Статусы задачи', 'Раздел статьи · Задачи', 'section'],
-	['Где найти завершённые и старые задачи?', 'Вопрос · Задачи', 'question'],
-	['Запланировать визит', 'Статья · Визиты', 'article'],
-	['Отчёт по визиту', 'Статья · Визиты', 'article'],
-	['Можно ли отредактировать визит после отправки отчёта?', 'Вопрос · Визиты', 'question'],
-	['Экспорт в Excel', 'Статья · Отчёты и экспорт', 'article'],
-	['Как выгрузить список сотрудников в Excel?', 'Вопрос · Сотрудники', 'question'],
-	['Перевести сотрудника в другую аптеку', 'Статья · Сотрудники', 'article'],
-	['Запросить доступ к разделу', 'Статья · Доступ и настройки', 'article'],
-]
-
-async function mockHelpSuggest(url, init) {
-	console.info('[mock-help-suggest]', url.search)
-	await wait(300, init.signal)
-	const q = (url.searchParams.get('q') || '').trim().toLowerCase()
-	// Как поиск по основе слова: «задача» находит «задачу», «задачи»
-	const stem = q.length > 4 ? q.slice(0, -1) : q
-	const found = helpData.filter(([title]) => title.toLowerCase().includes(stem))
-	const items = found.slice(0, 5).map(([title, meta, type]) => {
-		const lower = title.toLowerCase()
-		let html = ''
-		let from = 0
-		for (let at = lower.indexOf(stem); at !== -1; at = lower.indexOf(stem, at + stem.length)) {
-			html += escapeMock(title.slice(from, at)) + `<mark>${escapeMock(title.slice(at, at + stem.length))}</mark>`
-			from = at + stem.length
-		}
-		return { url: '#', type, titleHtml: html + escapeMock(title.slice(from)), meta }
-	})
-	const count = found.length ? found.length * 3 : 0
-	return new Response(JSON.stringify({ count, items }), {
 		headers: { 'Content-Type': 'application/json' },
 	})
 }
