@@ -247,10 +247,9 @@
 				{{/state}}
 			{{/story}}
 
-			{{#> story id="help-hero" group="Помощь" title="Шапка и поиск" backend='app/components/sections/help/HelpHero/ — заголовок, поиск по Помощи (GET-форма + подсказки JSON), «Часто ищут»; docs/bitrix/HELP.md'}}
+			{{#> story id="help-hero" group="Помощь" title="Шапка" backend='app/components/sections/help/HelpHero/ — заголовок, описание, «Часто ищут»; поиск — в шапке сайта; docs/bitrix/HELP.md'}}
 				{{#> state label="Обычное" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.hero}}</div>{{/state}}
-				{{#> state label="Без поиска и «Часто ищут»" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.heroPlain}}</div>{{/state}}
-				{{#> state label="Подсказки: загрузка, ничего не найдено, ошибка" note="Наберите в поле «задача», «визит» или «xyz»: подсказки через 300 мс; ошибка сервера — окно не открывается, Enter ведёт на страницу результатов"}}{{/state}}
+				{{#> state label="Без «Часто ищут»" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.heroPlain}}</div>{{/state}}
 			{{/story}}
 
 			{{#> story id="help-categories" group="Помощь" title="Разделы" backend='app/components/sections/help/HelpCategories/ — разделы Помощи: значок, число статей, описание, до 3 статей'}}
