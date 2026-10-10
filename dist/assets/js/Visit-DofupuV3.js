@@ -1,4 +1,4 @@
-import{n as e}from"./app-j_bShyrm.js";import{t}from"./comment-limits-UxSF7hZ1.js";var n=e=>String(e).replace(/&/g,`&amp;`).replace(/"/g,`&quot;`).replace(/</g,`&lt;`),r=e=>String(e).replace(/&/g,`&amp;`).replace(/</g,`&lt;`),i=`<div class="task-comment" data-q-comment-editor>
+import{n as e}from"./app-BHX79pbv.js";import{t}from"./comment-limits-UxSF7hZ1.js";var n=e=>String(e).replace(/&/g,`&amp;`).replace(/"/g,`&quot;`).replace(/</g,`&lt;`),r=e=>String(e).replace(/&/g,`&amp;`).replace(/</g,`&lt;`),i=`<div class="task-comment" data-q-comment-editor>
 	<textarea class="task-comment__input" name="q-comment" data-q-comment-input rows="1" data-autosize maxlength="500" placeholder="Комментарий" autocomplete="off"></textarea>
 	<div class="task-comment__actions">
 		<button type="button" class="task-comment__btn task-comment__btn--save" data-q-comment-save aria-label="Сохранить"><svg aria-hidden="true" focusable="false" width="14" height="14"><use href="${e(`check`)}"></use></svg></button>

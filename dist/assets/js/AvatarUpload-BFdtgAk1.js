@@ -1,4 +1,4 @@
-import{n as e}from"./app-j_bShyrm.js";import{t}from"./scroll-lock-D4dlW757.js";var n=200;function r(r){return new Promise(i=>{if(!r)return i(null);let a=URL.createObjectURL(r),o=document.createElement(`div`);o.className=`avatar-crop-modal`,o.innerHTML=`
+import{n as e}from"./app-BHX79pbv.js";import{t}from"./scroll-lock-D4dlW757.js";var n=200;function r(r){return new Promise(i=>{if(!r)return i(null);let a=URL.createObjectURL(r),o=document.createElement(`div`);o.className=`avatar-crop-modal`,o.innerHTML=`
 			<div class="avatar-crop-modal__overlay"></div>
 			<div class="avatar-crop-modal__content" role="dialog" aria-modal="true" aria-label="Кадрирование фото">
 				<div class="avatar-crop-modal__top">
