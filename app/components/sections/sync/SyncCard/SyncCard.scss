@@ -1,0 +1,478 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Карточка обмена с 1С.
+// С 1024: белая карточка без рамки, поля 20, скругление 20; у ошибки — красная рамка. Шапка: название H4,
+// статус, «?» и стрелка через 12. Через 16 — «Последний запуск» (виден и у свёрнутой); раскрытая:
+// источник и логи (строки через 4), черта, «Элементов в обмене» и счётчики, черта, «Ручной
+// запуск» — части через 16. До 1024: плоская строка списка — поля 16 сверху и снизу, черта
+// снизу, части через 14, строки 14/20, поле и кнопка 46 во всю ширину.
+@layer components {
+	.sync-card {
+		position: relative;
+		min-width: 0;
+		padding-block: 16px;
+		border-bottom: 1px solid palette("form-border");
+
+		@include up(desktop) {
+			padding: 20px;
+			background: palette("white");
+			border: 0;
+			border-radius: $radius-content-block;
+		}
+	}
+
+	// Ошибка — красная рамка 1px внутрь: высота карточки не меняется
+	.sync-card--error {
+		@include up(desktop) {
+			box-shadow: inset 0 0 0 1px palette("red");
+		}
+	}
+
+	// Раскрытие плавное по высоте — где браузер умеет (::details-content, interpolate-size), как
+	// в «Частых вопросах»; где нет — сразу
+	.sync-card__details {
+		interpolate-size: allow-keywords;
+	}
+
+	.sync-card__details::details-content {
+		display: flow-root;
+		height: 0;
+		overflow: clip;
+		transition:
+			height $transition-default,
+			content-visibility $transition-default allow-discrete;
+	}
+
+	.sync-card__details[open]::details-content {
+		height: auto;
+	}
+
+	.sync-card__summary {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		cursor: pointer;
+		list-style: none;
+
+		@include up(desktop) {
+			gap: 16px;
+		}
+
+		&::-webkit-details-marker {
+			display: none;
+		}
+	}
+
+	// Место под «?» (кнопка вне summary — кнопка в кнопке недопустима) — перед стрелкой
+	.sync-card__head {
+		display: flex;
+		gap: 12px;
+		align-items: center;
+		min-width: 0;
+	}
+
+	.sync-card__title {
+		@include text("h4-360");
+
+		flex: 1 1 auto;
+		min-width: 0;
+		margin: 0;
+		color: palette("black-txt");
+		overflow-wrap: anywhere;
+		transition: color $transition-default;
+
+		@include up(desktop) {
+			@include text("h4");
+		}
+	}
+
+	.sync-card__summary:hover .sync-card__title,
+	.sync-card__summary:focus-visible .sync-card__title {
+		color: palette("blue-txt");
+	}
+
+	.sync-card__chevron {
+		flex: none;
+		width: 16px;
+		height: 16px;
+		margin-left: 28px;
+		padding: 4px 2px;
+		color: palette("black-txt");
+		transition: transform $transition-default;
+	}
+
+	.sync-card__details[open] .sync-card__chevron {
+		transform: rotate(180deg);
+	}
+
+	// Строки «подпись: значение»
+	.sync-card__row {
+		@include text("m-400-360");
+
+		display: block;
+		margin: 0;
+		color: palette("black-txt");
+		overflow-wrap: anywhere;
+
+		@include up(desktop) {
+			@include text("m-400");
+		}
+	}
+
+	.sync-card__label {
+		color: palette("dark-grey-txt");
+	}
+
+	.sync-card__link {
+		color: palette("blue-txt");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("main-blue");
+		}
+	}
+
+	// Раскрытая часть: строки «Последнего запуска» продолжаются через 4, дальше части через 14/16
+	// и черты между ними
+	.sync-card__body {
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding-top: 4px;
+
+		@include up(desktop) {
+			gap: 16px;
+		}
+
+		> * + * {
+			padding-top: 14px;
+			border-top: 1px solid palette("block-border");
+
+			@include up(desktop) {
+				padding-top: 16px;
+			}
+		}
+	}
+
+	// Не запускался (нет «Последнего запуска») — от шапки, как между частями
+	.sync-card__summary:not(:has(.sync-card__row)) + .sync-card__body {
+		padding-top: 14px;
+
+		@include up(desktop) {
+			padding-top: 16px;
+		}
+	}
+
+	.sync-card__meta {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.sync-card__stats {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	.sync-card__counters {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 24px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.sync-counter {
+		@include text("m-400");
+
+		display: flex;
+		gap: 8px;
+		align-items: center;
+		color: palette("black-txt");
+		white-space: nowrap;
+	}
+
+	.sync-counter__value {
+		padding: 1px 8px;
+		border-radius: 6px;
+
+		&--new {
+			color: palette("green");
+			background: palette("bg-green");
+		}
+
+		&--updated {
+			color: palette("blue-txt");
+			background: palette("bg-blue");
+		}
+
+		&--deleted {
+			color: palette("red");
+			background: palette("bg-purple");
+		}
+	}
+
+	.sync-card__run {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+
+	.sync-card__run-label {
+		@include text("s-400");
+
+		margin: 0;
+		color: palette("dark-grey-txt");
+	}
+
+	.sync-card__controls {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+	}
+
+	// Поле периода: 46 до 1024, 36 с 1024; выключено (идёт обмен) — фон BG.Info, текст Dark-grey
+	.sync-card__select-wrap {
+		position: relative;
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	.sync-card__select {
+		@include text("m-400");
+
+		width: 100%;
+		height: 46px;
+		padding: 0 38px 0 15px;
+		overflow: hidden;
+		color: palette("black-txt");
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		cursor: pointer;
+		background: palette("white");
+		border: 1px solid palette("form-border");
+		border-radius: 7px;
+		outline: none;
+		appearance: none;
+		transition: border-color $transition-default;
+
+		// Поле на телефоне — 16px, иначе iOS увеличивает страницу
+		@include down(desktop) {
+			font-size: 16px;
+		}
+
+		@include up(desktop) {
+			height: 36px;
+		}
+
+		&:hover:not(:disabled) {
+			border-color: palette("icon-grey");
+		}
+
+		&:focus-visible {
+			border-color: palette("form-focus");
+		}
+
+		&:disabled {
+			color: palette("dark-grey-txt");
+			cursor: default;
+			background: palette("bg-info");
+		}
+	}
+
+	.sync-card__select-icon {
+		position: absolute;
+		top: 50%;
+		right: 12px;
+		width: 16px;
+		height: 16px;
+		padding: 4px 2px;
+		color: palette("black-txt");
+		pointer-events: none;
+		transform: translateY(-50%);
+	}
+
+	// Кнопка: до 1024 — General M во всю ширину строки; с 1024 — высота 36, поля 8/12, ширина 110
+	.btn.sync-card__button {
+		flex: 1 1 0;
+		min-width: 0;
+
+		@include up(desktop) {
+			flex: none;
+			min-width: 110px;
+			height: 36px;
+			padding: 8px 12px;
+		}
+
+		&:disabled:not(.is-loading) {
+			cursor: default;
+			background: palette("icon-grey");
+		}
+	}
+
+	// Идёт обмен — только значок загрузки; подпись остаётся для скринридера
+	.btn.sync-card__button.is-loading .btn__text {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.sync-card__message {
+		@include text("s-400");
+
+		margin: 0;
+		color: palette("black-txt");
+		overflow-wrap: anywhere;
+
+		&:empty {
+			display: none;
+		}
+
+		&--success {
+			color: palette("green");
+		}
+
+		&--error {
+			color: palette("red");
+		}
+	}
+
+	.sync-card__timer {
+		@include text("s-600");
+
+		color: palette("blue-txt");
+		font-variant-numeric: tabular-nums;
+	}
+
+	// «?» — на месте в шапке перед стрелкой (16 + 12 от правого края полей)
+	.sync-card__help {
+		position: absolute;
+		top: 12px;
+		right: 20px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		padding: 0;
+		color: palette("black-txt");
+		cursor: pointer;
+		background: none;
+		border: 0;
+		border-radius: 50%;
+		transition: color $transition-default;
+
+		@include up(desktop) {
+			top: 16px;
+			right: 40px;
+		}
+
+		&:hover,
+		&:focus-visible,
+		&[aria-expanded="true"] {
+			color: palette("main-blue");
+		}
+	}
+
+	.sync-card__help-icon {
+		width: 16px;
+		height: 16px;
+	}
+
+	// Подсказка о скрипте: тёмная, 320, поля 16/14, скругление 10; под «?», по правому краю
+	.sync-card__tip {
+		position: absolute;
+		top: 48px;
+		right: 0;
+		z-index: 20;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		width: 320px;
+		max-width: calc(100vw - 20px);
+		padding: 14px 16px;
+		background: palette("black-txt");
+		border-radius: 10px;
+		box-shadow: $shadow-tooltip;
+
+		@include up(desktop) {
+			top: 52px;
+			right: 20px;
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	.sync-card__tip-script {
+		@include text("s-400");
+
+		margin: 0;
+		color: palette("icon-grey");
+		overflow-wrap: anywhere;
+	}
+
+	.sync-card__tip-text {
+		@include text("m-400");
+
+		margin: 0;
+		color: palette("white");
+		overflow-wrap: anywhere;
+	}
+
+	.sync-card__tip-link {
+		@include text("m-400");
+
+		align-self: flex-start;
+		color: palette("main-blue");
+		transition: color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("white");
+		}
+	}
+
+	// Статус обмена: S/600 12, поля 2/10, скругление 12
+	.sync-status {
+		@include text("s-600");
+
+		flex: none;
+		padding: 2px 10px;
+		white-space: nowrap;
+		border-radius: 12px;
+
+		&--running {
+			color: palette("blue-txt");
+			background: palette("status-running-bg");
+		}
+
+		&--queue {
+			color: palette("status-queue");
+			background: palette("status-queue-bg");
+		}
+
+		&--success {
+			color: palette("status-success");
+			background: palette("status-success-bg");
+		}
+
+		&--never {
+			color: palette("status-never");
+			background: palette("status-never-bg");
+		}
+
+		&--error {
+			color: palette("red");
+			background: palette("status-error-bg");
+		}
+	}
+}

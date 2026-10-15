@@ -1,0 +1,95 @@
+{{!--
+	Карточка обмена с 1С. Сворачивается (details, без скрипта), «?» — подсказка о скрипте.
+	props: id (уникальный, по нему карточка обновляется после обмена), title, state (running —
+	выполняется, queue — в очереди, success — успешно, never — не запускался, error — ошибка),
+	statusText (по умолчанию по state), open, lastLabel («Последний запуск:», у выполняющегося —
+	«Запущен:»), last («14.10.2026 в 12:51»), startedAt (ISO, начало обмена для таймера у running;
+	нет — время считается с открытия страницы), source,
+	scriptLog, cronLog (ссылки), total, counters { new, updated, deleted },
+	run { url (POST), method (по умолчанию POST; GET — только для демо со статичным JSON),
+	statusUrl (GET), buttonText, select { name, label, options [{ value, text,
+	selected }] } }, message { type (success, error), text, link { url, text } },
+	help { script, text, url (документация) }. Нет run.url — блока «Ручной запуск» нет.
+--}}
+<article class="sync-card sync-card--{{default props.state 'never'}}" id="sync-{{props.id}}"
+    data-module="SyncCard" data-path="sections/sync"
+    data-state="{{default props.state 'never'}}"
+    {{#if props.startedAt}}data-started="{{props.startedAt}}"{{/if}}
+    {{#if props.run.url}}data-run-href="{{props.run.url}}"{{/if}}
+    {{#if props.run.method}}data-run-method="{{props.run.method}}"{{/if}}
+    {{#if props.run.statusUrl}}data-status-href="{{props.run.statusUrl}}"{{/if}}
+>
+    <details class="sync-card__details"{{#if props.open}} open{{/if}}>
+        <summary class="sync-card__summary">
+            <span class="sync-card__head">
+                <h2 class="sync-card__title">{{props.title}}</h2>
+                <span class="sync-status sync-status--{{default props.state 'never'}}" data-sync-status>
+                    {{#if props.statusText}}{{props.statusText}}{{else if (eq props.state 'running')}}Выполняется{{else if (eq props.state 'queue')}}В очереди{{else if (eq props.state 'success')}}Успешно{{else if (eq props.state 'error')}}Ошибка{{else}}Не запускался{{/if}}
+                </span>
+                {{> components/Icon/Icon name="chevron-down" class="sync-card__chevron"}}
+            </span>
+            {{#if props.last}}
+                <span class="sync-card__row">
+                    <span class="sync-card__label">{{default props.lastLabel "Последний запуск:"}}</span>
+                    <span class="sync-card__value">{{props.last}}</span>
+                </span>
+            {{/if}}
+        </summary>
+        <div class="sync-card__body">
+            {{#if (or props.source props.scriptLog props.cronLog)}}
+                <div class="sync-card__meta">
+                    {{#if props.source}}<p class="sync-card__row"><span class="sync-card__label">Источник:</span> <span class="sync-card__value">{{props.source}}</span></p>{{/if}}
+                    {{#if props.scriptLog}}<p class="sync-card__row"><span class="sync-card__label">Лог скрипта:</span> <a class="sync-card__link" href="{{props.scriptLog}}" target="_blank" rel="noopener noreferrer">Открыть</a></p>{{/if}}
+                    {{#if props.cronLog}}<p class="sync-card__row"><span class="sync-card__label">Лог Cron:</span> <a class="sync-card__link" href="{{props.cronLog}}" target="_blank" rel="noopener noreferrer">Открыть</a></p>{{/if}}
+                </div>
+            {{/if}}
+            {{#if (or props.total props.counters)}}
+                <div class="sync-card__stats">
+                    {{#if props.total}}<p class="sync-card__row"><span class="sync-card__label">Элементов в обмене:</span> <span class="sync-card__value">{{props.total}}</span></p>{{/if}}
+                    {{#if props.counters}}
+                        <ul class="sync-card__counters" role="list">
+                            <li class="sync-counter">Новые <span class="sync-counter__value sync-counter__value--new">{{default props.counters.new 0}}</span></li>
+                            <li class="sync-counter">Обновлено <span class="sync-counter__value sync-counter__value--updated">{{default props.counters.updated 0}}</span></li>
+                            <li class="sync-counter">Удалено <span class="sync-counter__value sync-counter__value--deleted">{{default props.counters.deleted 0}}</span></li>
+                        </ul>
+                    {{/if}}
+                </div>
+            {{/if}}
+            {{#if props.run.url}}
+                <div class="sync-card__run">
+                    <p class="sync-card__run-label">Ручной запуск</p>
+                    <div class="sync-card__controls">
+                        {{#if props.run.select.options.length}}
+                            <span class="sync-card__select-wrap">
+                                <select class="sync-card__select" name="{{default props.run.select.name 'period'}}" aria-label="{{default props.run.select.label 'Период обмена'}}" data-sync-select{{#if (or (eq props.state 'running') (eq props.state 'queue'))}} disabled{{/if}}>
+                                    {{#each props.run.select.options}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{text}}</option>{{/each}}
+                                </select>
+                                {{> components/Icon/Icon name="chevron-down" class="sync-card__select-icon"}}
+                            </span>
+                        {{/if}}
+                        <button class="btn btn--general btn--m sync-card__button{{#if (eq props.state 'running')}} is-loading{{/if}}" type="button" data-sync-run{{#if (or (eq props.state 'running') (eq props.state 'queue'))}} disabled{{/if}}>
+                            <span class="btn__text">{{default props.run.buttonText "Запустить"}}</span>
+                        </button>
+                    </div>
+                    <p class="sync-card__message{{#if props.message.type}} sync-card__message--{{props.message.type}}{{/if}}" data-sync-message aria-live="polite">
+                        {{#if (eq props.state 'running')}}
+                            Идёт обмен с 1С, дождитесь окончания. Время: <b class="sync-card__timer" data-sync-timer>00:00:00</b>
+                        {{else}}
+                            {{props.message.text}}{{#if props.message.link.url}} <a class="sync-card__link" href="{{props.message.link.url}}" target="_blank" rel="noopener noreferrer">{{default props.message.link.text "Открыть лог"}}</a>{{/if}}
+                        {{/if}}
+                    </p>
+                </div>
+            {{/if}}
+        </div>
+    </details>
+    {{#if props.help.text}}
+        <button class="sync-card__help" type="button" aria-expanded="false" aria-controls="sync-{{props.id}}-tip" aria-label="О скрипте: {{props.title}}" data-sync-help>
+            {{> components/Icon/Icon name="help" class="sync-card__help-icon"}}
+        </button>
+        <div class="sync-card__tip" id="sync-{{props.id}}-tip" role="region" aria-label="О скрипте: {{props.title}}" hidden data-sync-tip>
+            {{#if props.help.script}}<p class="sync-card__tip-script">Скрипт: {{props.help.script}}</p>{{/if}}
+            <p class="sync-card__tip-text">{{props.help.text}}</p>
+            {{#if props.help.url}}<a class="sync-card__tip-link" href="{{props.help.url}}" target="_blank" rel="noopener noreferrer">Документация</a>{{/if}}
+        </div>
+    {{/if}}
+</article>

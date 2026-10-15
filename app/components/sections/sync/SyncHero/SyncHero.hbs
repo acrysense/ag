@@ -1,0 +1,8 @@
+{{!--
+	Шапка «Обмена с 1С»: заголовок и описание (описание — с 1024).
+	props: title, text.
+--}}
+<section class="sync-hero" aria-labelledby="sync-hero-title">
+    <h1 class="sync-hero__title" id="sync-hero-title">{{default props.title "Обмен с 1С"}}</h1>
+    {{#if props.text}}<p class="sync-hero__text">{{props.text}}</p>{{/if}}
+</section>

@@ -74,3 +74,8 @@
 @forward '@/components/sections/help/HelpNav/HelpNav';
 @forward '@/components/sections/help/HelpSection/HelpSection';
 @forward '@/components/sections/help/HelpInline/HelpInline';
+
+// Обмен с 1С (sections/sync): стили сайта (assets/styles/site)
+@forward '@/components/sections/sync/SyncBoard/SyncBoard';
+@forward '@/components/sections/sync/SyncHero/SyncHero';
+@forward '@/components/sections/sync/SyncCard/SyncCard';

@@ -259,6 +259,248 @@
 			],
 			"id": "story-help-categories-one"
 		},
+		"syncStory": {
+			"groups": [
+				{
+					"label": "Состояния",
+					"items": [
+						{
+							"id": "story-running",
+							"title": "Аптеки",
+							"state": "running",
+							"last": "14.10.2026 в 12:55",
+							"open": true,
+							"lastLabel": "Запущен:",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "436",
+							"counters": {
+								"new": 5,
+								"updated": 1240,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"help": {
+								"script": "/sync/pharmacies.php",
+								"text": "Получает из 1С список аптек: адреса, режим работы, категорию и подразделение. Вызывает процедуру API GetPharmacies().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "story-queue",
+							"title": "Сотрудники",
+							"state": "queue",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Владислава Митрофановна",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "2314",
+							"counters": {
+								"new": 12,
+								"updated": 2368,
+								"deleted": 3
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"help": {
+								"script": "/sync/employees.php",
+								"text": "Получает из 1С список сотрудников: ФИО, должность, подразделение и закреплённую аптеку. Вызывает процедуру API GetEmployees().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "story-success",
+							"title": "Сотрудники",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Владислава Митрофановна",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "2314",
+							"counters": {
+								"new": 12,
+								"updated": 2368,
+								"deleted": 3
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/employees.php",
+								"text": "Получает из 1С список сотрудников: ФИО, должность, подразделение и закреплённую аптеку. Вызывает процедуру API GetEmployees().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "story-error",
+							"title": "Показатели продаж",
+							"state": "error",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "12 480",
+							"counters": {
+								"new": 0,
+								"updated": 12,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json",
+								"select": {
+									"name": "period",
+									"label": "Период обмена",
+									"options": [
+										{
+											"value": "month",
+											"text": "За текущий месяц",
+											"selected": true
+										},
+										{
+											"value": "prev",
+											"text": "За прошлый месяц"
+										},
+										{
+											"value": "quarter",
+											"text": "За квартал"
+										}
+									]
+								}
+							},
+							"message": {
+								"type": "error",
+								"text": "Ошибка: 1С не ответила за 60 сек.",
+								"link": {
+									"url": "#",
+									"text": "Открыть лог"
+								}
+							},
+							"help": {
+								"script": "/sync/sales.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						}
+					]
+				},
+				{
+					"label": "Ещё",
+					"items": [
+						{
+							"id": "story-never",
+							"title": "Сотрудники",
+							"state": "never",
+							"open": true,
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"help": {
+								"script": "/sync/employees.php",
+								"text": "Получает из 1С список сотрудников: ФИО, должность, подразделение и закреплённую аптеку. Вызывает процедуру API GetEmployees().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "story-collapsed",
+							"title": "Сотрудники",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"open": false,
+							"source": "Владислава Митрофановна",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "2314",
+							"counters": {
+								"new": 12,
+								"updated": 2368,
+								"deleted": 3
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/employees.php",
+								"text": "Получает из 1С список сотрудников: ФИО, должность, подразделение и закреплённую аптеку. Вызывает процедуру API GetEmployees().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "story-long",
+							"title": "Остатки товаров по аптекам и складам с учётом резервов и перемещений",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Владислава Митрофановна Константинопольская-Щедрина",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 234 567",
+							"counters": {
+								"new": 12345,
+								"updated": 1234567,
+								"deleted": 12345
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/employees.php",
+								"text": "Получает из 1С список сотрудников: ФИО, должность, подразделение и закреплённую аптеку. Вызывает процедуру API GetEmployees().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "story-readonly",
+							"title": "Сотрудники",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Владислава Митрофановна",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "2314",
+							"counters": {
+								"new": 12,
+								"updated": 2368,
+								"deleted": 3
+							}
+						}
+					]
+				}
+			]
+		},
 		"faq": {
 			"id": "story-help-faq",
 			"title": "Частые вопросы",

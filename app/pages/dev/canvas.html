@@ -259,6 +259,11 @@
 				{{/state}}
 			{{/story}}
 
+			{{#> story id="sync" group="Обмен с 1С" title="Карточки обменов" how='С 1024 — карточки колонками по группам, до 1024 — строки списка. Шапка карточки раскрывает её (details), «?» — подсказка о скрипте: нажатием, наведением, Esc закрывает. «Запустить» — запрос на бэк; в витрине ответ — пример JSON: «Выполняется» и таймер.' backend='app/components/sections/sync/ · docs/bitrix/SYNC.md'}}
+				{{#> state label="Все состояния" bg="page"}}<div class="wrapper__wide">{{> sections/sync/SyncBoard/SyncBoard props=data.syncStory}}</div>{{/state}}
+				{{#> state label="Нет обменов" note="Блок не выводится; пустая группа тоже"}}{{/state}}
+			{{/story}}
+
 			{{#> story id="help-hero" group="Помощь" title="Шапка" backend='app/components/sections/help/HelpHero/ — заголовок, описание, «Часто ищут»; поиск — в шапке сайта; docs/bitrix/HELP.md'}}
 				{{#> state label="Обычное" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.hero}}</div>{{/state}}
 				{{#> state label="Без «Часто ищут»" bg="page"}}<div class="wrapper__wide">{{> sections/help/HelpHero/HelpHero props=data.heroPlain}}</div>{{/state}}
