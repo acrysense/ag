@@ -149,7 +149,10 @@
     }
 
     // --- Create-task form ---
+    // Открывается проявлением со сдвигом (раскрытие по высоте обрезало бы выпадающие списки)
     .task-form {
+        @include appear-when('&:not([hidden])');
+
         position: relative;
         @include prop-vw(margin-top, 10, xl);
         @include prop-vw(padding-top, 10, xl);
@@ -1024,12 +1027,14 @@
                 }
             }
         }
+        // Открывается проявлением со сдвигом, как выпадающие списки сайта
         &__panel {
+            @include appear-when('.actions-menu.is-open &', flex);
+
             position: absolute;
             top: calc(100% + 6px);
             right: 0;
             z-index: 20;
-            display: none;
             flex-direction: column;
             @include prop-vw(min-width, 179, xl);
             @include prop-vw(padding-block, 7.5, xl);
@@ -1051,9 +1056,6 @@
         // lift the whole open menu above the rows below it
         &.is-open {
             z-index: 50;
-        }
-        &.is-open &__panel {
-            display: flex;
         }
         &__item {
             display: flex;

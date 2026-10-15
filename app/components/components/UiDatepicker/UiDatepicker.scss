@@ -61,7 +61,10 @@
                 @include prop-vw(padding-right, 44, sm);
             }
         }
+        // Открывается проявлением со сдвигом, как выпадающие списки сайта
         &__pop {
+            @include appear-when('&:not([hidden])');
+
             position: absolute;
             top: calc(100% + 8px);
             right: 0;
@@ -72,9 +75,6 @@
             @include border-all(1, solid, $color-border, xl);
             @include prop-vw(border-radius, 16, xl);
             box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.12);
-            &[hidden] {
-                display: none;
-            }
 
             @include only(desktop) {
                 @include prop-vw(width, 280, lg);

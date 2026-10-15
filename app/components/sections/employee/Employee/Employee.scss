@@ -631,12 +631,14 @@
                 transform: rotate(180deg);
             }
         }
+        // Открывается проявлением со сдвигом, как выпадающие списки сайта
         &__sort-panel {
+            @include appear-when('.employee-kpi__sort.is-open &', flex);
+
             position: absolute;
             top: calc(100% + 6px);
             left: 0;
             z-index: 10;
-            display: none;
             flex-direction: column;
             width: 100%;
             @include prop-vw(padding, 6, sm);
@@ -644,9 +646,6 @@
             @include border-all(1, solid, $color-border, sm);
             @include prop-vw(border-radius, 12, sm);
             box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.14);
-        }
-        &__sort.is-open &__sort-panel {
-            display: flex;
         }
         &__sort-option {
             @include prop-vw(padding-block, 10, sm);

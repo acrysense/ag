@@ -624,12 +624,14 @@
         &.is-open &__trigger > svg {
             transform: rotate(180deg);
         }
+        // Открывается проявлением со сдвигом, как выпадающие списки сайта (открывается вверх — сдвиг снизу)
         &__panel {
+            @include appear-when('.page-size.is-open &', flex, translateY(4px));
+
             position: absolute;
             bottom: calc(100% + 6px);
             right: 0;
             z-index: 20;
-            display: none;
             flex-direction: column;
             @include prop-vw(min-width, 72, xl);
             @include prop-vw(padding, 6, xl);
@@ -648,9 +650,6 @@
                 @include prop-vw(padding, 6, sm);
                 @include prop-vw(border-radius, 12, sm);
             }
-        }
-        &.is-open &__panel {
-            display: flex;
         }
         &__option {
             @include prop-vw(padding-block, 8, xl);
