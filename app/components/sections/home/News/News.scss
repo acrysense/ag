@@ -1,5 +1,6 @@
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
+@use '@/assets/styles/site/mixins' as site;
 
 @layer components {
     .news {
@@ -264,9 +265,10 @@
                 @include prop-vw(margin-top, 10, sm);
             }
         }
+        // С планшета дата — по середине кнопок рядом (не зависит от размера шрифта)
         &__controls ~ &__date {
             @include up(tablet) {
-                @include prop-vw(padding-top, 11, xl);
+                align-self: center;
             }
         }
         &__control {
@@ -370,19 +372,13 @@
                 @include prop-vw(height, 16, sm);
             }
         }
+        // Дата — XS/400 11 на всех ширинах, как в карточке новости на сайте
         &__date {
+            @include site.text("xs-400");
+
             display: block;
             width: fit-content;
-            @include prop-vw(font-size, 14, xl);
-            font-weight: normal;
             color: $color-dark-grey;
-            
-            @include only(desktop) {
-                @include prop-vw(font-size, 14, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(font-size, 14, sm);
-            }
         }
     }
 
