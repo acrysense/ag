@@ -1,0 +1,10 @@
+{
+	"nav": {
+		"group": "Пустые состояния и ошибки",
+		"title": "Ошибка 1С",
+		"order": 695
+	},
+	"data": {
+		"syncError": "[SoapFault] Неизвестная ошибка. {WebСервис.wsKPI.Модуль(314)}: Ошибка при вызове метода контекста (ЗаписатьJSON) по причине: Передано значение недопустимого типа (0) /var/www/sync/include/SyncManager.php:71 #0: SoapClient->__call(string, array) /var/www/sync/include/SyncManager.php:71 #1: SyncManager::getEmployee(string, string, string) /var/www/erp/employee/detail.php:54"
+	}
+}

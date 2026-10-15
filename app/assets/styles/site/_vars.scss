@@ -243,6 +243,27 @@ $text-styles: (
 			size: 38,
 			line-height: 32,
 		),
+	// 360/HEADER/H2
+	"h2-360": (
+			family: heading,
+			weight: 700,
+			size: 24,
+			line-height: normal,
+		),
+	// Код на системной странице 1920: «404» (RF Rufo Bold 198, блок 240)
+	"error-code": (
+			family: heading,
+			weight: 700,
+			size: 198,
+			line-height: 240,
+		),
+	// Код на системной странице 360 (RF Rufo Bold 120, блок 120)
+	"error-code-360": (
+			family: heading,
+			weight: 700,
+			size: 120,
+			line-height: 120,
+		),
 	// PC/HEADER/H2
 	"h2": (
 			family: heading,

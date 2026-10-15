@@ -1,27 +1,31 @@
-<section class="not-found" data-module="NotFound" data-path="sections/error">
-    {{#if notFound.error}}
-        <span class="not-found__decor">NO DATA</span>
+{{!--
+	Системная страница: крупный код («404», «NO DATA», «1С ERROR»), заголовок, пояснение, кнопка.
+	Классы — как у такого же блока на сайте (ag-site). Старая разметка (заголовок в span, кнопка
+	без модификаторов) выглядит так же.
+	notFound: error — «Нет данных для отображения»; sync — ошибка 1С (text — текст ошибки; карточка
+	шире — not-found--wide).
+--}}
+<section class="not-found{{#if notFound.sync}} not-found--wide{{/if}}" aria-labelledby="not-found-title">
+    {{#if notFound.sync}}
+        <span class="not-found__decor" aria-hidden="true">1С ERROR</span>
         <div class="not-found__wrapper">
-            <span class="not-found__title">Нет данных для отображения</span>
-            <p class="not-found__description">
-                Вероятно, информация в этом разделе пока есть только для сотрудников аптек.
-            </p>
-            {{> components/Button/Button props=(obj
-                class='not-found__btn'
-                href="/"
-                text='На главную'
-            )}}
+            <h1 class="visually-hidden" id="not-found-title">Ошибка 1С</h1>
+            <p class="not-found__description">{{notFound.text}}</p>
+            <a class="btn btn--general btn--m not-found__btn" href="/">На главную</a>
+        </div>
+    {{else if notFound.error}}
+        <span class="not-found__decor" aria-hidden="true">NO DATA</span>
+        <div class="not-found__wrapper">
+            <h1 class="not-found__title" id="not-found-title">Нет данных для отображения</h1>
+            <p class="not-found__description">Вероятно, информация в этом разделе пока есть только для сотрудников аптек.</p>
+            <a class="btn btn--general btn--m not-found__btn" href="/">На главную</a>
         </div>
     {{else}}
-        <span class="not-found__decor">404</span>
+        <span class="not-found__decor" aria-hidden="true">404</span>
         <div class="not-found__wrapper">
-            <span class="not-found__title">Страница не найдена</span>
-            <p class="not-found__description">Возможно, страница устарела или изменился её адрес.</p>
-            {{> components/Button/Button props=(obj
-                class='not-found__btn'
-                href="/"
-                text='На главную'
-            )}}
+            <h1 class="not-found__title" id="not-found-title">Страница не найдена</h1>
+            <p class="not-found__description">Возможно, страница устарела или изменился её адрес.</p>
+            <a class="btn btn--general btn--m not-found__btn" href="/">На главную</a>
         </div>
     {{/if}}
 </section>
