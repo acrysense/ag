@@ -21,13 +21,18 @@
     "file": "assets/js/announce-D3OkgBby.js",
     "name": "announce"
   },
-  "_app-DVK3xDF2.js": {
-    "file": "assets/js/app-DVK3xDF2.js",
+  "_app-BV5JcFP_.css": {
+    "file": "assets/css/app-BV5JcFP_.css",
+    "src": "_app-BV5JcFP_.css"
+  },
+  "_app-Bt8Shp_N.js": {
+    "file": "assets/js/app-Bt8Shp_N.js",
     "name": "app",
     "dynamicImports": [
       "components/components/Accordion/Accordion.js",
       "components/components/AvatarUpload/AvatarUpload.js",
       "components/components/Calendar/Calendar.js",
+      "components/components/Celebration/Celebration.js",
       "components/components/Chart/Chart.js",
       "components/components/DataTable/DataTable.js",
       "components/components/DateRange/DateRange.js",
@@ -65,15 +70,11 @@
       "components/sections/visit/Visit/Visit.js"
     ],
     "css": [
-      "assets/css/app-Dk3fnCGg.css"
+      "assets/css/app-BV5JcFP_.css"
     ],
     "assets": [
       "assets/images/ag-m2GDsMwR.svg"
     ]
-  },
-  "_app-Dk3fnCGg.css": {
-    "file": "assets/css/app-Dk3fnCGg.css",
-    "src": "_app-Dk3fnCGg.css"
   },
   "_comment-limits-UxSF7hZ1.js": {
     "file": "assets/js/comment-limits-UxSF7hZ1.js",
@@ -110,11 +111,11 @@
     "file": "assets/js/skeleton-DMqi15X8.js",
     "name": "skeleton"
   },
-  "_swiper-DFWeiAGs.js": {
-    "file": "assets/js/swiper-DFWeiAGs.js",
+  "_swiper-SG90yqy2.js": {
+    "file": "assets/js/swiper-SG90yqy2.js",
     "name": "swiper",
     "imports": [
-      "_app-DVK3xDF2.js"
+      "_app-Bt8Shp_N.js"
     ],
     "dynamicImports": [
       "../node_modules/swiper/swiper.mjs",
@@ -204,23 +205,29 @@
     "isDynamicEntry": true
   },
   "components/components/AvatarUpload/AvatarUpload.js": {
-    "file": "assets/js/AvatarUpload-BNOLYjlW.js",
+    "file": "assets/js/AvatarUpload-B2_wvw4F.js",
     "name": "AvatarUpload",
     "src": "components/components/AvatarUpload/AvatarUpload.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_scroll-lock-D4dlW757.js"
     ]
   },
   "components/components/Calendar/Calendar.js": {
-    "file": "assets/js/Calendar-BspCll9X.js",
+    "file": "assets/js/Calendar-CV9Pkh3B.js",
     "name": "Calendar",
     "src": "components/components/Calendar/Calendar.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js"
+      "_app-Bt8Shp_N.js"
     ]
+  },
+  "components/components/Celebration/Celebration.js": {
+    "file": "assets/js/Celebration-hCPWpT_q.js",
+    "name": "Celebration",
+    "src": "components/components/Celebration/Celebration.js",
+    "isDynamicEntry": true
   },
   "components/components/Chart/Chart.js": {
     "file": "assets/js/Chart-DDvj1RXz.js",
@@ -229,24 +236,24 @@
     "isDynamicEntry": true
   },
   "components/components/DataTable/DataTable.js": {
-    "file": "assets/js/DataTable-DaQC1wHc.js",
+    "file": "assets/js/DataTable-Bpv27AJ6.js",
     "name": "DataTable",
     "src": "components/components/DataTable/DataTable.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_tableUrl-BGvGjdv8.js",
       "_scoreTone-DvNibRQL.js",
       "_skeleton-DMqi15X8.js"
     ]
   },
   "components/components/DateRange/DateRange.js": {
-    "file": "assets/js/DateRange-DMo107Uj.js",
+    "file": "assets/js/DateRange-ROaYq5Xx.js",
     "name": "DateRange",
     "src": "components/components/DateRange/DateRange.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "components/components/Calendar/Calendar.js",
       "_sheet-DAwJtyGB.js"
     ]
@@ -258,12 +265,12 @@
     "isDynamicEntry": true
   },
   "components/components/HeaderSearch/HeaderSearch.js": {
-    "file": "assets/js/HeaderSearch-Dh3ZtmtD.js",
+    "file": "assets/js/HeaderSearch-Btf0SnMA.js",
     "name": "HeaderSearch",
     "src": "components/components/HeaderSearch/HeaderSearch.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_tableUrl-BGvGjdv8.js",
       "_remoteOptions-AEG8G4Ln.js"
     ]
@@ -291,12 +298,12 @@
     "isDynamicEntry": true
   },
   "components/components/Select/Select.js": {
-    "file": "assets/js/Select-CjWJvCg1.js",
+    "file": "assets/js/Select-eZ6DrjPf.js",
     "name": "Select",
     "src": "components/components/Select/Select.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_sheet-DAwJtyGB.js",
       "_dist-CvNamJ92.js",
       "_announce-D3OkgBby.js"
@@ -312,24 +319,24 @@
     ]
   },
   "components/components/TasksPanel/TasksPanel.js": {
-    "file": "assets/js/TasksPanel-CZEW_YUP.js",
+    "file": "assets/js/TasksPanel-BGG_Pkw_.js",
     "name": "TasksPanel",
     "src": "components/components/TasksPanel/TasksPanel.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_skeleton-DMqi15X8.js",
       "_datepicker-DFwYs2Ar.js",
       "_comment-limits-UxSF7hZ1.js"
     ]
   },
   "components/components/Toasts/Toasts.js": {
-    "file": "assets/js/Toasts-DZO4nqZn.js",
+    "file": "assets/js/Toasts-Btp-BI9R.js",
     "name": "Toasts",
     "src": "components/components/Toasts/Toasts.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js"
+      "_app-Bt8Shp_N.js"
     ]
   },
   "components/components/TopNotice/TopNotice.js": {
@@ -349,23 +356,23 @@
     ]
   },
   "components/components/VisitsCalendar/VisitsCalendar.js": {
-    "file": "assets/js/VisitsCalendar-CG58QDiP.js",
+    "file": "assets/js/VisitsCalendar-wMLUNvuU.js",
     "name": "VisitsCalendar",
     "src": "components/components/VisitsCalendar/VisitsCalendar.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_scoreTone-DvNibRQL.js",
       "_skeleton-DMqi15X8.js"
     ]
   },
   "components/components/VisitsPanel/VisitsPanel.js": {
-    "file": "assets/js/VisitsPanel-JHb_COdB.js",
+    "file": "assets/js/VisitsPanel-91hzPTsS.js",
     "name": "VisitsPanel",
     "src": "components/components/VisitsPanel/VisitsPanel.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_tabs-BFzzcOtp.js"
     ]
   },
@@ -406,12 +413,12 @@
     "isDynamicEntry": true
   },
   "components/layouts/SiteSearch/SiteSearch.js": {
-    "file": "assets/js/SiteSearch-BHM-n_JD.js",
+    "file": "assets/js/SiteSearch-CXuy1dbM.js",
     "name": "SiteSearch",
     "src": "components/layouts/SiteSearch/SiteSearch.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_scroll-lock-D4dlW757.js",
       "_skeleton-DMqi15X8.js",
       "_announce-D3OkgBby.js"
@@ -442,12 +449,12 @@
     "isDynamicEntry": true
   },
   "components/sections/manager/StaffSwitcher/StaffSwitcher.js": {
-    "file": "assets/js/StaffSwitcher-BK69INbX.js",
+    "file": "assets/js/StaffSwitcher-D_ej0bd3.js",
     "name": "StaffSwitcher",
     "src": "components/sections/manager/StaffSwitcher/StaffSwitcher.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js"
+      "_app-Bt8Shp_N.js"
     ]
   },
   "components/sections/motivation/Motivation/Motivation.js": {
@@ -460,13 +467,13 @@
     ]
   },
   "components/sections/news/NewsInner/NewsInner.js": {
-    "file": "assets/js/NewsInner-ByOFOC5q.js",
+    "file": "assets/js/NewsInner-CJBIyf6V.js",
     "name": "NewsInner",
     "src": "components/sections/news/NewsInner/NewsInner.js",
     "isDynamicEntry": true,
     "imports": [
       "_scroll-lock-D4dlW757.js",
-      "_swiper-DFWeiAGs.js"
+      "_swiper-SG90yqy2.js"
     ]
   },
   "components/sections/package/Package/Package.js": {
@@ -491,12 +498,12 @@
     "isDynamicEntry": true
   },
   "components/sections/shared/Promo/Promo.js": {
-    "file": "assets/js/Promo-60CJ_7mt.js",
+    "file": "assets/js/Promo-Das_Kas3.js",
     "name": "Promo",
     "src": "components/sections/shared/Promo/Promo.js",
     "isDynamicEntry": true,
     "imports": [
-      "_swiper-DFWeiAGs.js"
+      "_swiper-SG90yqy2.js"
     ]
   },
   "components/sections/sync/SyncCard/SyncCard.js": {
@@ -509,12 +516,12 @@
     ]
   },
   "components/sections/visit/Visit/Visit.js": {
-    "file": "assets/js/Visit-B3avIJof.js",
+    "file": "assets/js/Visit-Dh5SIEYI.js",
     "name": "Visit",
     "src": "components/sections/visit/Visit/Visit.js",
     "isDynamicEntry": true,
     "imports": [
-      "_app-DVK3xDF2.js",
+      "_app-Bt8Shp_N.js",
       "_comment-limits-UxSF7hZ1.js"
     ]
   }

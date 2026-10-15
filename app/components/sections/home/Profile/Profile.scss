@@ -107,7 +107,12 @@
             justify-content: space-between;
             width: 100%;
         }
-        &__topping + &__info {
+        // Метка «С днём рождения!» (components/Celebration) — под ФИО, только в день рождения
+        &__celebration {
+            margin-top: 12px;
+        }
+        &__topping + &__info,
+        &__celebration + &__info {
             @include prop-vw(margin-top, 20, xl);
             
             @include only(desktop) {
