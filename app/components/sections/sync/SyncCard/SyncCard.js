@@ -24,7 +24,9 @@ export default function init(root) {
 	const controller = new AbortController()
 	const { signal } = controller
 	const runButton = root.querySelector('[data-sync-run]')
-	const select = root.querySelector('[data-sync-select]')
+	// Поле периода — выпадающий список ЛК (components/Select); на время обмена выключено (inert)
+	const selectWrap = root.querySelector('[data-sync-select]')
+	const select = selectWrap?.querySelector('select')
 	const message = root.querySelector('[data-sync-message]')
 	const help = root.querySelector('[data-sync-help]')
 	const tip = root.querySelector('[data-sync-tip]')
@@ -134,7 +136,7 @@ export default function init(root) {
 		if (!url || runButton.disabled) return
 		runButton.disabled = true
 		runButton.classList.add('is-loading')
-		if (select) select.disabled = true
+		if (selectWrap) selectWrap.inert = true
 		root.setAttribute('aria-busy', 'true')
 
 		const body = new FormData()
@@ -164,7 +166,7 @@ export default function init(root) {
 			if (signal.aborted) return
 			runButton.disabled = false
 			runButton.classList.remove('is-loading')
-			if (select) select.disabled = false
+			if (selectWrap) selectWrap.inert = false
 			setMessage(error.message || 'Не удалось запустить обмен. Попробуйте ещё раз.', 'error')
 		} finally {
 			root.removeAttribute('aria-busy')

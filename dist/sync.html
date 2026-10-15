@@ -170,8 +170,8 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="Обмен с 1С — CRM" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-5ikzXwAt.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-DCJWrGcS.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-DNhAQNzz.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-YClJQqmw.css" />
 	</head>
 	<body class="bg-light">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
@@ -1695,16 +1695,26 @@
 												<div class="sync-card__run">
 													<p class="sync-card__run-label">Ручной запуск</p>
 													<div class="sync-card__controls">
-														<span class="sync-card__select-wrap">
-															<select class="sync-card__select" name="period" aria-label="Период обмена" data-sync-select>
-																<option value="month" selected>За текущий месяц</option>
-																<option value="prev">За прошлый месяц</option>
-																<option value="quarter">За квартал</option>
-															</select>
-															<svg class="icon sync-card__select-icon" aria-hidden="true" focusable="false">
-																<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
-															</svg>
-														</span>
+														<div
+															class="select sync-card__select"
+															data-module="Select"
+															data-path="components"
+															data-select-sheet-title="Период обмена"
+															data-sync-select
+														>
+															<label class="select__field">
+																<span class="select__label visually-hidden">Период обмена</span>
+																<span class="select__value" aria-hidden="true" data-select-value>За текущий месяц</span>
+																<select class="select__control" name="period">
+																	<option value="month" selected>За текущий месяц</option>
+																	<option value="prev">За прошлый месяц</option>
+																	<option value="quarter">За квартал</option>
+																</select>
+																<svg class="icon select__icon" aria-hidden="true" focusable="false">
+																	<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-down"></use>
+																</svg>
+															</label>
+														</div>
 														<button class="btn btn--general btn--m sync-card__button" type="button" data-sync-run>
 															<span class="btn__text">Запустить</span>
 														</button>

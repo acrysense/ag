@@ -60,12 +60,20 @@
                     <p class="sync-card__run-label">Ручной запуск</p>
                     <div class="sync-card__controls">
                         {{#if props.run.select.options.length}}
-                            <span class="sync-card__select-wrap">
-                                <select class="sync-card__select" name="{{default props.run.select.name 'period'}}" aria-label="{{default props.run.select.label 'Период обмена'}}" data-sync-select{{#if (or (eq props.state 'running') (eq props.state 'queue'))}} disabled{{/if}}>
-                                    {{#each props.run.select.options}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{text}}</option>{{/each}}
-                                </select>
-                                {{> components/Icon/Icon name="chevron-down" class="sync-card__select-icon"}}
-                            </span>
+                            {{!-- Выпадающий список ЛК (components/Select): без JS — системный; подпись — для
+                            скринридера и заголовок нижнего листа на телефоне. Идёт обмен — inert --}}
+                            <div class="select sync-card__select" data-module="Select" data-path="components"
+                                data-select-sheet-title="{{default props.run.select.label 'Период обмена'}}" data-sync-select
+                                {{#if (or (eq props.state 'running') (eq props.state 'queue'))}}inert{{/if}}>
+                                <label class="select__field">
+                                    <span class="select__label visually-hidden">{{default props.run.select.label "Период обмена"}}</span>
+                                    <span class="select__value" aria-hidden="true" data-select-value>{{#each props.run.select.options}}{{#if selected}}{{text}}{{/if}}{{/each}}</span>
+                                    <select class="select__control" name="{{default props.run.select.name 'period'}}">
+                                        {{#each props.run.select.options}}<option value="{{value}}"{{#if selected}} selected{{/if}}>{{text}}</option>{{/each}}
+                                    </select>
+                                    {{> components/Icon/Icon name="chevron-down" class="select__icon"}}
+                                </label>
+                            </div>
                         {{/if}}
                         <button class="btn btn--general btn--m sync-card__button{{#if (eq props.state 'running')}} is-loading{{/if}}" type="button" data-sync-run{{#if (or (eq props.state 'running') (eq props.state 'queue'))}} disabled{{/if}}>
                             <span class="btn__text">{{default props.run.buttonText "Запустить"}}</span>
