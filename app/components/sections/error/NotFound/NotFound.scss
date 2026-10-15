@@ -1,113 +1,122 @@
-@use '@/assets/styles/base/mixins' as *;
-@use '@/assets/styles/base/vars' as *;
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
 
+// Как на сайте. До 1024: на фоне страницы, всё по центру через 20 — код 120 BG.Grey, заголовок
+// H2 360, текст M/400 360, кнопка General M. С 1024: от шапки 100, код 198 (блок 240), под ним
+// через 10 белая карточка 500 (у ошибки 1С — 790) с полями 40 — заголовок H2, через 10 текст
+// L/400, через 40 кнопка.
 @layer components {
-    .not-found {
-        @include prop-vw(padding-top, 100, xl);
+	.not-found {
+		display: flex;
+		flex-direction: column;
+		gap: 20px;
+		align-items: center;
+		padding-top: 40px;
+		text-align: center;
 
-        @include only(desktop) {
-            @include prop-vw(padding-top, 100, lg);
-        }
-        @include only(mobile) {
-            @include prop-vw(padding-top, 40, sm);
-        }
+		@include up(desktop) {
+			gap: 10px;
+			padding-block: 80px 60px;
+		}
 
-        &__decor {
-            display: block;
-            margin-right: auto;
-            @include prop-vw(margin-bottom, 30, xl);
-            margin-left: auto;
-            width: fit-content;
-            font-family: $font-secondary;
-            @include prop-vw(font-size, 198, xl);
-            font-weight: bold;
-            text-transform: uppercase;
-            color: $color-grey;
+		&__decor {
+			@include text("error-code-360");
 
-            @include only(desktop) {
-                @include prop-vw(margin-bottom, 30, lg);
-                @include prop-vw(font-size, 198, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(margin-bottom, 20, sm);
-                @include prop-vw(font-size, 100, sm);
-            }
-        }
-        &__wrapper {
-            text-align: center;
-            width: 100%;
-            
-            @include up(tablet) {
-                margin-right: auto;
-                margin-left: auto;
-                @include prop-vw(padding, 40, xl);
-                @include prop-vw(max-width, 500, xl);
-                background: $color-white;
-                @include prop-vw(border-radius, 20, xl);
-                @include content-block-frame;
-            }
-        }
-        &__title {
-            display: block;
-            margin-right: auto;
-            margin-left: auto;
-            width: fit-content;
-            font-family: $font-secondary;
-            @include prop-vw(font-size, 26, xl);
-            font-weight: bold;
+			max-width: 100%;
+			color: palette("bg-grey");
+			overflow-wrap: anywhere;
 
-            @include only(desktop) {
-                @include prop-vw(font-size, 26, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(font-size, 24, sm);
-            }
-        }
-        &__description {
-            display: block;
-            @include prop-vw(margin-top, 10, xl);
-            width: 100%;
-            @include prop-vw(font-size, 16, xl);
-            font-weight: normal;
-            line-height: 1.5;
-            a {
-                display: inline;
-                color: $color-blue;
-                &:hover {
-                    color: $color-blue;
-                }
+			@include up(desktop) {
+				@include text("error-code");
+			}
+		}
 
-                @media screen and (hover: hover) {
-                    &:hover {
-                        color: $color-blue-hover;
-                    }
-                }
-            }
+		&__wrapper {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			align-items: center;
+			width: 100%;
+			min-width: 0;
 
-            @include only(desktop) {
-                @include prop-vw(margin-top, 10, lg);
-                @include prop-vw(font-size, 16, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(margin-top, 20, sm);
-                @include prop-vw(font-size, 14, sm);
-            }
-        }
-        &__btn {
-            @include prop-vw(margin-top, 40, xl);
-            margin-right: auto;
-            margin-left: auto;
-            @include prop-vw(min-width, 130, xl);
-            width: fit-content;
+			@include up(desktop) {
+				gap: 10px;
+				width: 500px;
+				max-width: 100%;
+				padding: 40px;
+				background: palette("white");
+				border: 1px solid palette("block-border");
+				border-radius: $radius-content-block;
+				box-shadow: $shadow-content-block;
+			}
+		}
 
-            @include only(desktop) {
-                @include prop-vw(margin-top, 40, lg);
-                @include prop-vw(min-width, 130, lg);
-            }
-            @include only(mobile) {
-                @include prop-vw(margin-top, 20, sm);
-                @include prop-vw(min-width, 130, sm);
-            }
-        }
-    }
+		&--wide &__wrapper {
+			@include up(desktop) {
+				width: 790px;
+			}
+		}
+
+		&__title {
+			@include text("h2-360");
+
+			margin: 0;
+			color: palette("black-h");
+			overflow-wrap: anywhere;
+
+			@include up(desktop) {
+				@include text("h2");
+			}
+		}
+
+		&__description {
+			@include text("m-400-360");
+
+			margin: 0;
+			color: palette("black-txt");
+			overflow-wrap: anywhere;
+
+			@include up(desktop) {
+				@include text("l-400");
+			}
+
+			a {
+				color: palette("main-blue");
+				transition: color $transition-default;
+
+				&:hover,
+				&:focus-visible {
+					color: palette("blue-hover");
+				}
+			}
+		}
+
+		&__btn {
+			@include up(desktop) {
+				margin-top: 30px;
+			}
+		}
+	}
+
+	// Старая разметка: кнопка без модификаторов (.btn.not-found__btn) — тот же вид, что General M
+	.btn.not-found__btn {
+		@include text("m-500");
+
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: 46px;
+		padding: 12px 24px;
+		color: palette("white");
+		white-space: nowrap;
+		background: palette("main-blue");
+		border-radius: $radius-button;
+		transition: background-color $transition-default;
+
+		&:hover,
+		&:focus-visible {
+			color: palette("white");
+			background: palette("blue-hover");
+		}
+	}
 }

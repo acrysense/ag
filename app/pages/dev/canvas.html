@@ -320,8 +320,20 @@
 				{{#> state label="Восстановление" bg="page"}}{{> sections/shared/Auth/Auth auth=(obj recovery=true)}}{{/state}}
 			{{/story}}
 
-			{{#> story id="not-found" group="Служебные" title="Страница не найдена" backend='app/components/sections/error/NotFound/'}}
-				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/error/NotFound/NotFound}}{{/page}}{{/state}}
+			{{#> story id="not-found" group="Служебные" title="Системные страницы" how='Как на сайте. С 1024 — код 198 и белая карточка 500 (у ошибки 1С — 790), до 1024 — на фоне страницы. Старая разметка (заголовок в span, кнопка без модификаторов) выглядит так же.' backend='app/components/sections/error/NotFound/ · docs/bitrix/SYSTEM-PAGES.md'}}
+				{{#> state label="404" bg="page"}}{{#> page}}{{> sections/error/NotFound/NotFound}}{{/page}}{{/state}}
+				{{#> state label="Нет данных" bg="page"}}{{#> page}}{{> sections/error/NotFound/NotFound notFound=(obj error=true)}}{{/page}}{{/state}}
+				{{#> state label="Ошибка 1С" bg="page"}}{{#> page}}{{> sections/error/NotFound/NotFound notFound=(obj sync=true text="[SoapFault] Неизвестная ошибка. {WebСервис.wsKPI.Модуль(314)}: Ошибка при вызове метода контекста (ЗаписатьJSON) по причине: Передано значение недопустимого типа (0) /var/www/sync/include/SyncManager.php:71 #0: SoapClient->__call(string, array) /var/www/sync/include/SyncManager.php:71 #1: SyncManager::getEmployee(string, string, string) /var/www/erp/employee/detail.php:54")}}{{/page}}{{/state}}
+				{{#> state label="Старая разметка" bg="page"}}{{#> page}}
+					<section class="not-found">
+						<span class="not-found__decor">404</span>
+						<div class="not-found__wrapper">
+							<span class="not-found__title">Страница не найдена</span>
+							<p class="not-found__description">Возможно, страница устарела или изменился её адрес.</p>
+							<a class="btn not-found__btn" href="/">На главную</a>
+						</div>
+					</section>
+				{{/page}}{{/state}}
 			{{/story}}
 		</main>
 	</body>
