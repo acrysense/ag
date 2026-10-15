@@ -56,6 +56,8 @@
 @forward '@/components/components/Calendar/Calendar';
 @forward '@/components/components/DateRange/DateRange';
 @forward '@/components/components/NumberRange/NumberRange';
+// Салют в день рождения — с ag-site, стили сайта (assets/styles/site)
+@forward '@/components/components/Celebration/Celebration';
 @forward '@/components/sections/search/SearchFilter/SearchFilter';
 @forward '@/components/layouts/SiteSearch/SiteSearch';
 @forward '@/components/layouts/SiteHeader/SiteHeader';
