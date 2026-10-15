@@ -94,15 +94,34 @@ export default (head) => {
 	const panelHome = document.createComment('staff-panel-home')
 	panel.before(panelHome)
 
+	// Закрытие плавное: класс is-closing — затемнение гаснет, лист уезжает вниз (Manager.scss),
+	// после анимации панель возвращается на место. Сразу — при «уменьшить движение» и при
+	// размонтировании
+	const CLOSE_MS = 200
+	const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 	let backdrop = null
-	const closeSheet = () => {
+	let closeTimer = 0
+	const finishClose = () => {
+		clearTimeout(closeTimer)
+		closeTimer = 0
 		if (!backdrop) return
-		panel.classList.remove('is-open')
+		panel.classList.remove('is-open', 'is-closing')
 		panelHome.after(panel)
 		backdrop.remove()
 		backdrop = null
 	}
+	const closeSheet = (immediate = false) => {
+		if (!backdrop || closeTimer) {
+			if (immediate) finishClose()
+			return
+		}
+		if (immediate === true || reducedMotion.matches) return finishClose()
+		backdrop.classList.add('is-closing')
+		panel.classList.add('is-closing')
+		closeTimer = setTimeout(finishClose, CLOSE_MS)
+	}
 	const openSheet = () => {
+		if (closeTimer) finishClose()
 		if (!isMobile() || panel.classList.contains('is-open')) return
 		backdrop = document.createElement('div')
 		backdrop.className = 'manager__staff-backdrop'
@@ -122,7 +141,7 @@ export default (head) => {
 	}
 	document.addEventListener('keydown', onKeydown)
 	disposers.push(() => document.removeEventListener('keydown', onKeydown))
-	disposers.push(closeSheet)
+	disposers.push(() => closeSheet(true))
 
 	// The grabber closes the sheet: a tap, or a downward pull past a threshold. Between
 	// those (a small deliberate drag that's then released) the sheet snaps back. During

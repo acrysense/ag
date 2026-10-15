@@ -1,3 +1,4 @@
+@use 'sass:list';
 @use '@/assets/styles/base/mixins' as *;
 @use '@/assets/styles/base/vars' as *;
 
@@ -509,13 +510,22 @@
                 }
             }
         }
+        // Раскрытие по высоте — как у <details> на сайте (0.25 с, ease-in-out; где браузер не умеет
+        // анимировать height: auto — сразу). Свёрнутые строки недоступны с клавиатуры
         &__row-group {
             overflow: hidden;
-            max-height: 0;
-            // раскрытие по высоте — как на сайте (0.25 с, ease-in-out)
-            transition: max-height $transition-default;
+            height: 0;
+            visibility: hidden;
+            interpolate-size: allow-keywords;
+            transition:
+                height $transition-default,
+                visibility 0s linear list.nth($transition-default, 1);
             &.is--open {
-                max-height: var(--dropdown-height);
+                height: auto;
+                visibility: visible;
+                transition:
+                    height $transition-default,
+                    visibility 0s;
             }
             .n-package-table {
                 &__item {

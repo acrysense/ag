@@ -861,6 +861,18 @@
             overflow-y: auto;
             background: rgba(245, 248, 250, 0.6);
             backdrop-filter: blur(2.5px);
+            // Появление и скрытие — как у нижних листов: затемнение проявляется за $duration-overlay,
+            // закрытие (is-closing ставит StaffSwitcher) — в полтора раза быстрее
+            transition: opacity $duration-overlay $ease-out;
+
+            @starting-style {
+                opacity: 0;
+            }
+
+            &.is-closing {
+                opacity: 0;
+                transition-duration: $duration-overlay * 0.67;
+            }
         }
         .data-panel.manager__staff.is-open {
             display: flex;
@@ -881,6 +893,17 @@
             padding-bottom: 0; // Закрыть's own backing provides the bottom spacing
             @include prop-vw(padding-inline, 10, sm);
             box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.15);
+            // Лист выезжает снизу и уезжает вниз при закрытии
+            transition: transform $duration-overlay $ease-out;
+
+            @starting-style {
+                transform: translateY(100%);
+            }
+
+            &.is-closing {
+                transform: translateY(100%);
+                transition-duration: $duration-overlay * 0.67;
+            }
             // .data-panel draws a grey separator strip above itself — meaningless
             // for a sheet, and it would sit over the rounded top edge
             &::before {

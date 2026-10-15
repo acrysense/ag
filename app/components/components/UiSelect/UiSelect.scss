@@ -85,12 +85,14 @@
         &.is-open &__caret {
             transform: rotate(180deg);
         }
+        // Открывается проявлением со сдвигом, как выпадающие списки сайта
         &__panel {
+            @include appear-when('.ui-select.is-open &', flex);
+
             position: absolute;
             top: calc(100% + 6px);
             left: 0;
             z-index: 30;
-            display: none;
             flex-direction: column;
             width: 100%;
             @include prop-vw(padding, 6, xl);
@@ -118,9 +120,6 @@
                 @include prop-vw(padding, 6, sm);
                 @include prop-vw(border-radius, 12, sm);
             }
-        }
-        &.is-open &__panel {
-            display: flex;
         }
         &__option {
             @include prop-vw(padding-block, 10, xl);
