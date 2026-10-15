@@ -1,0 +1,16 @@
+{{!--
+	Обмены с 1С по группам (аптеки, сотрудники, показатели): с 1024 группа — колонка карточек,
+	до 1024 — один список строк по порядку групп.
+	props: groups [{ label (для скринридера), items [SyncCard] }]. Пустая группа не выводится.
+--}}
+{{#if props.groups.length}}
+    <div class="sync-board">
+        {{#each props.groups}}
+            {{#if items.length}}
+                <section class="sync-board__group"{{#if label}} aria-label="{{label}}"{{/if}}>
+                    {{#each items}}{{> sections/sync/SyncCard/SyncCard props=this}}{{/each}}
+                </section>
+            {{/if}}
+        {{/each}}
+    </div>
+{{/if}}

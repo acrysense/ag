@@ -1,0 +1,46 @@
+@use "@/assets/styles/site/mixins" as *;
+@use "@/assets/styles/site/vars" as *;
+
+// Страница «Обмен с 1С» (внутри wrapper__wide).
+// До 1024: один белый блок — крошки, через 10 заголовок, через 10 список строк с чертой сверху;
+// поля 40/10. С 1024: на фоне страницы — крошки, через 20 белая шапка, через 20 группы карточек
+// колонками (от 320: три — примерно с 1366, на 1920 по 470; уже — две) через 20, карточки в колонке через 20.
+@layer components {
+	.sync-page {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		min-width: 0;
+		padding: 40px 10px;
+		background: palette("white");
+
+		@include up(desktop) {
+			gap: 20px;
+			padding: 0;
+			background: none;
+		}
+	}
+
+	.sync-board {
+		border-top: 1px solid palette("form-border");
+
+		@include up(desktop) {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+			gap: 20px;
+			align-items: start;
+			border-top: 0;
+		}
+	}
+
+	.sync-board__group {
+		display: contents;
+
+		@include up(desktop) {
+			display: flex;
+			flex-direction: column;
+			gap: 20px;
+			min-width: 0;
+		}
+	}
+}

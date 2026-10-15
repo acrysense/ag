@@ -123,7 +123,16 @@ $colors: (
 	// Значок папки в документах
 	"folder-icon": #1f1f1f,
 	// Фон просмотра фото
-	"viewer-bg": #121417
+	"viewer-bg": #121417,
+	// ЛК, «Обмен с 1С»: статусы обмена — фон и текст
+	"status-running-bg": #ecf3ff,
+	"status-queue-bg": #fff4e2,
+	"status-queue": #cc6b00,
+	"status-success-bg": #eaf7ec,
+	"status-success": #1a8c45,
+	"status-never-bg": #f3f3f3,
+	"status-never": #666e78,
+	"status-error-bg": #fbe9e9
 );
 
 // layout
@@ -145,6 +154,8 @@ $shadow-dropdown: 0 8px 24px rgb(15 26 36 / 12%);
 
 // Всплывающие панели комментариев (выбор реакции, меню модерации)
 $shadow-popover: 0 8px 12px rgb(18 23 33 / 14%);
+// Тёмная подсказка (ЛК, «Обмен с 1С»)
+$shadow-tooltip: 0 8px 12px rgb(15 26 36 / 16%);
 // Подсветка поля правки комментария
 $shadow-field-focus: 0 0 0 3px rgb(0 129 255 / 16%);
 // Мягкая тень подтверждения удаления комментария

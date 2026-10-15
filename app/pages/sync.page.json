@@ -1,0 +1,381 @@
+{
+	"title": "Обмен с 1С — CRM",
+	"nav": {
+		"group": "ERP",
+		"title": "Обмен с 1С",
+		"order": 305
+	},
+	"data": {
+		"breadcrumbs": [
+			{
+				"title": "CRM",
+				"url": "/pharmacies.html"
+			},
+			{
+				"title": "Обмен с 1С"
+			}
+		],
+		"hero": {
+			"title": "Обмен с 1С",
+			"text": "Статус обменов данными между CRM и 1С, логи скриптов и ручной запуск синхронизации."
+		},
+		"board": {
+			"groups": [
+				{
+					"label": "Аптеки",
+					"items": [
+						{
+							"id": "pharmacies",
+							"title": "Аптеки",
+							"state": "running",
+							"last": "14.10.2026 в 12:55",
+							"open": true,
+							"lastLabel": "Запущен:",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "436",
+							"counters": {
+								"new": 5,
+								"updated": 1240,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"help": {
+								"script": "/sync/pharmacies.php",
+								"text": "Получает из 1С список аптек: адреса, режим работы, категорию и подразделение. Вызывает процедуру API GetPharmacies().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "pharmacy-categories",
+							"title": "Категории аптек",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/pharmacy-categories.php",
+								"text": "Получает из 1С категории аптек (A–D) и пересчитывает их в карточках аптек. Вызывает процедуру API GetPharmacyCategories().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "departments",
+							"title": "Подразделения",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/departments.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						},
+						{
+							"id": "positions",
+							"title": "Должности",
+							"state": "success",
+							"last": "14.10.2026 в 11:02",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/positions.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						}
+					]
+				},
+				{
+					"label": "Сотрудники",
+					"items": [
+						{
+							"id": "employees",
+							"title": "Сотрудники",
+							"state": "success",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Владислава Митрофановна",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "2314",
+							"counters": {
+								"new": 12,
+								"updated": 2368,
+								"deleted": 3
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/employees.php",
+								"text": "Получает из 1С список сотрудников: ФИО, должность, подразделение и закреплённую аптеку. Вызывает процедуру API GetEmployees().",
+								"url": "#"
+							}
+						},
+						{
+							"id": "managers",
+							"title": "Менеджеры и закрепления",
+							"state": "success",
+							"last": "14.10.2026 в 09:30",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/managers.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						},
+						{
+							"id": "absences",
+							"title": "Отпуска и больничные",
+							"state": "success",
+							"last": "14.10.2026 в 08:15",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/absences.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						}
+					]
+				},
+				{
+					"label": "Показатели",
+					"items": [
+						{
+							"id": "sales",
+							"title": "Показатели продаж",
+							"state": "error",
+							"last": "14.10.2026 в 12:51",
+							"open": true,
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "12 480",
+							"counters": {
+								"new": 0,
+								"updated": 12,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json",
+								"select": {
+									"name": "period",
+									"label": "Период обмена",
+									"options": [
+										{
+											"value": "month",
+											"text": "За текущий месяц",
+											"selected": true
+										},
+										{
+											"value": "prev",
+											"text": "За прошлый месяц"
+										},
+										{
+											"value": "quarter",
+											"text": "За квартал"
+										}
+									]
+								}
+							},
+							"message": {
+								"type": "error",
+								"text": "Ошибка: 1С не ответила за 60 сек.",
+								"link": {
+									"url": "#",
+									"text": "Открыть лог"
+								}
+							},
+							"help": {
+								"script": "/sync/sales.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						},
+						{
+							"id": "coefficients",
+							"title": "Коэффициенты",
+							"state": "success",
+							"last": "14.10.2026 в 07:45",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/coefficients.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						},
+						{
+							"id": "packages",
+							"title": "Пакеты",
+							"state": "success",
+							"last": "14.10.2026 в 07:00",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"message": {
+								"type": "success",
+								"text": "Обмен завершён. Ошибок нет"
+							},
+							"help": {
+								"script": "/sync/packages.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						},
+						{
+							"id": "motivation",
+							"title": "Мотивация",
+							"state": "running",
+							"last": "14.10.2026 в 13:02",
+							"lastLabel": "Запущен:",
+							"source": "Cron",
+							"scriptLog": "#",
+							"cronLog": "#",
+							"total": "1 024",
+							"counters": {
+								"new": 0,
+								"updated": 0,
+								"deleted": 0
+							},
+							"run": {
+								"url": "/data/sync-run.example.json",
+								"method": "get",
+								"statusUrl": "/data/sync-status.example.json"
+							},
+							"help": {
+								"script": "/sync/motivation.php",
+								"text": "Получает данные из 1С и обновляет их в CRM.",
+								"url": "#"
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}
