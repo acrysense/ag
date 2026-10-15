@@ -48,6 +48,11 @@
 		height: auto;
 	}
 
+	// Открыт список периода — не обрезать его краем раскрытой части (анимации в этот момент нет)
+	.sync-card__details[open]:has(.select.is-open)::details-content {
+		overflow: visible;
+	}
+
 	.sync-card__summary {
 		display: flex;
 		flex-direction: column;
@@ -235,65 +240,28 @@
 		align-items: center;
 	}
 
-	// Поле периода: 46 до 1024, 36 с 1024; выключено (идёт обмен) — фон BG.Info, текст Dark-grey
-	.sync-card__select-wrap {
-		position: relative;
+	// Поле периода — выпадающий список ЛК (components/Select): 46 до 1024, 36 с 1024, скругление 7,
+	// поля 15/12. Идёт обмен (inert) — фон BG.Info, текст Dark-grey
+	.sync-card__select {
 		flex: 1 1 0;
 		min-width: 0;
-	}
 
-	.sync-card__select {
-		@include text("m-400");
+		.select__field {
+			padding: 0 12px 0 15px;
+			border-radius: 7px;
 
-		width: 100%;
-		height: 46px;
-		padding: 0 38px 0 15px;
-		overflow: hidden;
-		color: palette("black-txt");
-		text-overflow: ellipsis;
-		white-space: nowrap;
-		cursor: pointer;
-		background: palette("white");
-		border: 1px solid palette("form-border");
-		border-radius: 7px;
-		outline: none;
-		appearance: none;
-		transition: border-color $transition-default;
-
-		// Поле на телефоне — 16px, иначе iOS увеличивает страницу
-		@include down(desktop) {
-			font-size: 16px;
+			@include up(desktop) {
+				height: 36px;
+			}
 		}
 
-		@include up(desktop) {
-			height: 36px;
-		}
-
-		&:hover:not(:disabled) {
-			border-color: palette("icon-grey");
-		}
-
-		&:focus-visible {
-			border-color: palette("form-focus");
-		}
-
-		&:disabled {
-			color: palette("dark-grey-txt");
-			cursor: default;
+		&[inert] .select__field {
 			background: palette("bg-info");
 		}
-	}
 
-	.sync-card__select-icon {
-		position: absolute;
-		top: 50%;
-		right: 12px;
-		width: 16px;
-		height: 16px;
-		padding: 4px 2px;
-		color: palette("black-txt");
-		pointer-events: none;
-		transform: translateY(-50%);
+		&[inert] .select__value {
+			color: palette("dark-grey-txt");
+		}
 	}
 
 	// Кнопка: до 1024 — General M во всю ширину строки; с 1024 — высота 36, поля 8/12, ширина 110
