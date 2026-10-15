@@ -16,8 +16,9 @@
                             </svg>
                         </a>
                     </div>
-                    {{!-- Только в день рождения: метка и салют (components/Celebration, docs/bitrix/BIRTHDAY.md) --}}
-                    {{#if birthday}}{{> components/Celebration/Celebration props=(obj key=birthday.key text=(default birthday.text "С днём рождения!") class="profile__celebration")}}{{/if}}
+                    {{!-- Только в день рождения: салют от фото (components/Celebration, docs/bitrix/BIRTHDAY.md);
+                    badge — запасной вид с меткой «С днём рождения!» под ФИО --}}
+                    {{#if birthday}}{{> components/Celebration/Celebration props=(obj key=birthday.key badge=birthday.badge text=(default birthday.text "С днём рождения!") origin=".profile__img" class="profile__celebration")}}{{/if}}
                     <div class="profile__info">
                         <span class="profile__info-item">
                             <svg aria-hidden="true" focusable="false" width="16" height="16">
