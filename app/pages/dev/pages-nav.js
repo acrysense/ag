@@ -76,6 +76,14 @@ async function mount(indexUrl) {
 	panel.append(foot)
 
 	root.append(panel, toggle)
+	// Тестовая кнопка салюта (components/Celebration) — только на демо-страницах с салютом: в разметку
+	// шаблона не входит, бэку её не переносить
+	if (document.querySelector('[data-module="Celebration"]')) {
+		const celebrate = make('button', 'pages-nav__toggle', 'Салют (тест)')
+		celebrate.type = 'button'
+		celebrate.dataset.celebrationPlay = ''
+		root.insertBefore(celebrate, toggle)
+	}
 	document.body.append(root)
 
 	let copyTimer = 0

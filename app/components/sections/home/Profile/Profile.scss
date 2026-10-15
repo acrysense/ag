@@ -107,7 +107,7 @@
             justify-content: space-between;
             width: 100%;
         }
-        // Метка «С днём рождения!» (components/Celebration) — под ФИО, только в день рождения
+        // Запасной вид салюта — метка «С днём рождения!» (components/Celebration, badge) под ФИО
         &__celebration {
             margin-top: 12px;
         }
