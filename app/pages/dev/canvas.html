@@ -219,9 +219,6 @@
 				{{#> state label="Длинный текст"}}
 					{{> components/TopNotice/TopNotice props=(obj key="story-notice-long" type="warning" label="Важно:" text="сдача отчётов по визитам переносится на 10 октября, а планы на ноябрь нужно согласовать с менеджером до конца недели — после этого изменения в CRM будут закрыты для всех аптек сети." link=(obj url="#"))}}
 				{{/state}}
-				{{#> state label="Старая разметка бэка (ссылка в тексте)"}}
-					{{> components/TopNotice/TopNotice props=(obj key="story-notice-legacy" html='Сообщение-растяжка для всех сотрудников компании. У нас важные <a href="#">новости</a>.')}}
-				{{/state}}
 			{{/story}}
 
 			{{#> story id="profile" group="Главная" title="Профиль" backend='app/components/sections/home/Profile/'}}
