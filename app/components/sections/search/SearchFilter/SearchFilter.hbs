@@ -5,10 +5,13 @@
 	searchPlaceholder, valueText, url; single — один вариант, name без []); date → DateRange
 	(nameFrom, nameTo, from, to, placeholder); number → NumberRange (label, nameFrom, nameTo, from,
 	to, placeholderFrom, placeholderTo) — во всю ширину сетки; single — одно число (name, value,
-	placeholder), в ячейке, как список.
+	placeholder), в ячейке, как список. Только в ЛК: text — свободный ввод (name, value, placeholder —
+	видимая подпись, «ФИО»), во всю ширину сетки: поиск по списку на странице CRM (name «q»).
 --}}
-<div class="search-filter{{#if (and (eq props.type 'number') (not props.single))}} search-filter--wide{{/if}}">
-    {{#if (eq props.type 'select')}}
+<div class="search-filter{{#if (or (eq props.type 'text') (and (eq props.type 'number') (not props.single)))}} search-filter--wide{{/if}}{{#if (eq props.type 'text')}} search-filter--text{{/if}}">
+    {{#if (eq props.type 'text')}}
+        <input class="search-filter__input" type="text" name="{{props.name}}" value="{{props.value}}" placeholder="{{props.placeholder}}" aria-label="{{props.placeholder}}" autocomplete="off" enterkeyhint="search" />
+    {{else if (eq props.type 'select')}}
         {{> components/Select/Select props=(obj name=props.name placeholder=props.placeholder options=props.options multiple=(not props.single) search=true searchPlaceholder=props.searchPlaceholder valueText=props.valueText url=props.url)}}
     {{else if (eq props.type 'date')}}
         {{> components/DateRange/DateRange props=props}}

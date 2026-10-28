@@ -75,6 +75,12 @@
 		@media (pointer: coarse) {
 			font-size: max(#{$field-font-size-min}, 1em);
 		}
+
+		// Только ЛК: раздел этой страницы — ввод в фильтрах, поле только открывает окно
+		.is-page-section & {
+			cursor: pointer;
+			caret-color: transparent;
+		}
 	}
 
 	.site-search__chip {

@@ -67,12 +67,12 @@
 				{{/state}}
 			{{/story}}
 
-			{{#> story id="site-search" group="Каркас" title="Поиск в шапке" backend='app/components/layouts/SiteSearch/ — разделы сайта и разделы CRM; данные site.search'}}
+			{{#> story id="site-search" group="Каркас" title="Поиск в шапке" how='Разделы сайта; на странице CRM — ещё её раздел (других страниц CRM нет). На своей странице раздел CRM — фильтр списка: поле в шапке ввод не принимает (набранное уходит в поле «ФИО» / «Найти» фильтров), оно фильтрует сразу, остальные фильтры — «Применить», «Сбросить все» — сразу. В витрине раздел открыт не на своей странице — поле не заблокировано; вживую — страницы Сотрудники, Аптеки, Менеджеры, Визиты, Задачи.' backend='app/components/layouts/SiteSearch/ · docs/bitrix/SEARCH.md — данные site.search'}}
 				{{#> state label="Пусто" bg="page"}}
 					<div class="story-search-field">{{> layouts/SiteSearch/SiteSearch props=site.search id="story-search"}}</div>
 				{{/state}}
-				{{#> state label="Раздел CRM" bg="page"}}
-					<div class="story-search-field">{{> layouts/SiteSearch/SiteSearch props=site.search id="story-search-crm" section="crm-pharmacies"}}</div>
+				{{#> state label="Раздел страницы CRM" bg="page"}}
+					<div class="story-search-field">{{> layouts/SiteSearch/SiteSearch props=site.search id="story-search-crm" section="crm-employees"}}</div>
 				{{/state}}
 			{{/story}}
 

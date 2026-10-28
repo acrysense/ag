@@ -2,7 +2,8 @@ import { spriteHref } from '@/utils/icon'
 // Фильтры списков ЛК из поиска в шапке (как на ag-site: layouts/SiteSearch). Разделы CRM поиска
 // («Аптеки», «Менеджеры», «Сотрудники аптек», «Визиты», «Задачи») ведут на страницы списков с
 // фильтрами в адресе; раздел этой же страницы поиск отдаёт событием site-search:apply — фильтры
-// применяются на месте, без перезагрузки. Применяет их к таблице, календарю визитов или задачам
+// применяются на месте, без перезагрузки. Поле поиска q в фильтрах раздела (ФИО) — событием
+// site-search:query: сразу при вводе меняется только запрос, остальные фильтры — по «Применить». Применяет их к таблице, календарю визитов или задачам
 // в том же виде, что старая панель фильтров (components/HeaderSearch): { query, filters:
 // [{ key, value, label, range? }] }, и рисует плашки над списком ([data-filter-chips]).
 //
@@ -74,6 +75,8 @@ export function initListFilters() {
 			} else el.value = values[0] || ''
 			el.dispatchEvent(new Event('change', { bubbles: true }))
 		})
+		// Поле q в фильтрах раздела уже выставлено выше — поле в шапке не трогаем
+		if (form.querySelector('.site-search__filter-list [name="q"]')) return
 		const input = form.querySelector('[name="q"]')
 		if (input && params.get('q')) input.value = params.get('q')
 	}
@@ -248,8 +251,7 @@ export function initListFilters() {
 			current.forEach((f) => f.names.forEach(([name, value]) => clearField(name, value)))
 			const section = params.get('section')
 			params = new URLSearchParams(section ? { section } : {})
-			const input = form.querySelector('[name="q"]')
-			if (input) input.value = ''
+			form.querySelectorAll('[name="q"]').forEach((input) => (input.value = ''))
 			writeUrl()
 			apply()
 		},
@@ -262,6 +264,19 @@ export function initListFilters() {
 		(event) => {
 			event.preventDefault()
 			params = new URLSearchParams(event.detail.params)
+			writeUrl()
+			apply()
+		},
+		{ signal }
+	)
+
+	// Поиск: поле q в фильтрах раздела этой страницы — только запрос, сразу при вводе
+	document.addEventListener(
+		'site-search:query',
+		(event) => {
+			const query = event.detail?.query || ''
+			if (query) params.set('q', query)
+			else params.delete('q')
 			writeUrl()
 			apply()
 		},

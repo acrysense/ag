@@ -12,4 +12,21 @@
 			grid-column: 1 / -1;
 		}
 	}
+
+	// Свободный ввод (только ЛК: «ФИО» на странице CRM) — как поле числа в фильтрах.
+	// Шрифт поля — 16, а не 14: иначе iOS увеличивает страницу
+	.search-filter__input {
+		@include control-box;
+
+		font: inherit;
+		font-size: $field-font-size-min;
+
+		&::placeholder {
+			color: palette("dark-grey-txt");
+		}
+
+		&:focus {
+			@include field-focus;
+		}
+	}
 }

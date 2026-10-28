@@ -359,9 +359,9 @@
 			},
 			{
 				"value": "crm-employees",
-				"text": "Сотрудники аптек",
+				"text": "Сотрудники",
 				"icon": "profile",
-				"where": "в Сотрудниках аптек",
+				"where": "в Сотрудниках",
 				"action": "/employees.html",
 				"crm": true
 			},
@@ -783,6 +783,11 @@
 			],
 			"crm-pharmacies": [
 				{
+					"type": "text",
+					"name": "q",
+					"placeholder": "Найти"
+				},
+				{
 					"type": "select",
 					"name": "employee[]",
 					"placeholder": "Сотрудник",
@@ -1014,6 +1019,11 @@
 				}
 			],
 			"crm-managers": [
+				{
+					"type": "text",
+					"name": "q",
+					"placeholder": "ФИО"
+				},
 				{
 					"type": "select",
 					"name": "employee[]",
@@ -1247,6 +1257,11 @@
 			],
 			"crm-employees": [
 				{
+					"type": "text",
+					"name": "q",
+					"placeholder": "ФИО"
+				},
+				{
 					"type": "select",
 					"name": "employee[]",
 					"placeholder": "Сотрудник",
@@ -1479,6 +1494,11 @@
 			],
 			"crm-visits": [
 				{
+					"type": "text",
+					"name": "q",
+					"placeholder": "Найти"
+				},
+				{
 					"type": "select",
 					"name": "employee[]",
 					"placeholder": "Сотрудник",
@@ -1710,6 +1730,11 @@
 				}
 			],
 			"crm-tasks": [
+				{
+					"type": "text",
+					"name": "q",
+					"placeholder": "Найти"
+				},
 				{
 					"type": "select",
 					"name": "assignee[]",
