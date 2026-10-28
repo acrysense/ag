@@ -17,6 +17,10 @@ import { skeleton, skeletonLines } from '@/utils/skeleton'
 // - Подсказки — JSON (рисуем сами: текст через textContent, в названии разрешён только <mark>)
 //   или HTML-фрагмент из шаблона компонента поиска на бэке (arturgolubev:search.title и т. п.)
 //   с пунктами .site-search__item — удобно для «Умного поиска» без отдельного API.
+// - Только ЛК: раздел этой страницы (data-action ведёт сюда же, страница CRM) с полем поиска q в
+//   фильтрах — поле в шапке ввод не принимает (ищут в фильтрах), подсказок нет. «Применить» и
+//   «Сбросить все» фильтруют список на месте (site-search:apply), поле q — сразу при вводе
+//   (site-search:query). Без поля q в фильтрах (старая разметка бэка) раздел работает как прежде.
 const DESKTOP = '(min-width: 1024px)'
 const MIN_CHARS = 2
 const DELAY = 300
@@ -81,6 +85,10 @@ export default function init(root) {
 	let items = []
 	let active = -1
 	let count = 0
+	let queryTimer = 0
+	let pageMode = false
+	let savedQuery = ''
+	const placeholder = input.placeholder
 
 	input.setAttribute('role', 'combobox')
 	input.setAttribute('aria-autocomplete', 'list')
@@ -92,6 +100,17 @@ export default function init(root) {
 	const query = () => input.value.trim()
 	const currentSection = () => form.querySelector('input[name="section"]:checked')
 	const sectionName = () => currentSection()?.dataset.label || ''
+	// Раздел ведёт на эту же страницу (у раздела ЛК своя страница-список)
+	const sectionUrl = () =>
+		new URL(
+			currentSection()?.dataset.action ||
+				form.getAttribute('action') ||
+				window.location.pathname,
+			window.location.href
+		)
+	const isHere = (url) =>
+		url.origin === window.location.origin && url.pathname === window.location.pathname
+	const pageQuery = () => filterList.querySelector('input[name="q"]')
 
 	// ---------- Фильтры: сколько выбрано, сводки ----------
 
@@ -107,6 +126,8 @@ export default function init(root) {
 		})
 
 	const filterText = (filter) => {
+		const text = filter.querySelector('.search-filter__input')
+		if (text) return `${text.placeholder}: ${text.value.trim()}`
 		const value = filter.querySelector('.select__value, .date-range__value')
 		if (value) return value.textContent.trim()
 		const fields = [...filter.querySelectorAll('input')].map((field) => field.value.trim())
@@ -129,12 +150,15 @@ export default function init(root) {
 	}
 
 	// Фильтры выбраны, а запроса нет — кнопка «Найти в разделе» (с запросом — «Все результаты»)
+	// В разделе этой страницы — всегда «Применить» (фильтры списка, как в CRM)
 	const updateApply = () => {
 		if (!apply) return
-		const show = query().length < MIN_CHARS && activeFilters().length > 0
+		const show = pageMode || (query().length < MIN_CHARS && activeFilters().length > 0)
 		apply.hidden = !show
 		if (show)
-			apply.firstElementChild.textContent = `Найти ${currentSection()?.dataset.where || `в разделе «${sectionName()}»`}`
+			apply.firstElementChild.textContent = pageMode
+				? 'Применить'
+				: `Найти ${currentSection()?.dataset.where || `в разделе «${sectionName()}»`}`
 	}
 
 	const resetFilters = () => {
@@ -148,7 +172,9 @@ export default function init(root) {
 			field.dispatchEvent(new Event('change', { bubbles: true }))
 		})
 		updateSummaries()
-		scheduleSuggest(0)
+		// Раздел этой страницы — сброс сразу показывает весь список, окно не закрывается
+		if (pageMode) applyHere(false)
+		else scheduleSuggest(0)
 	}
 
 	// ---------- Подсказки ----------
@@ -284,7 +310,7 @@ export default function init(root) {
 	}
 
 	const suggest = async () => {
-		if (query().length < MIN_CHARS || !suggestUrl) {
+		if (pageMode || query().length < MIN_CHARS || !suggestUrl) {
 			suggestRequest?.abort()
 			showResults(false)
 			return
@@ -382,9 +408,72 @@ export default function init(root) {
 				filterList.removeAttribute('aria-busy')
 			}
 		}
+		updatePageMode()
 		updateSummaries()
 		scheduleSuggest(0)
 	}
+
+	// ---------- Раздел этой страницы (ЛК): поиск — в фильтрах ----------
+
+	const updatePageMode = () => {
+		const on = isHere(sectionUrl()) && !!pageQuery()
+		if (on === pageMode) return
+		pageMode = on
+		root.classList.toggle('is-page-section', on)
+		input.readOnly = on
+		if (on) {
+			// Запрос по сайту — на потом: вернётся, если выбрать другой раздел
+			savedQuery = input.value
+			input.value = ''
+			input.removeAttribute('name')
+			input.placeholder = input.dataset.pagePlaceholder || ''
+			showResults(false)
+		} else {
+			input.name = 'q'
+			input.value = savedQuery
+			input.placeholder = placeholder
+		}
+		clear.hidden = !input.value
+		updateApply()
+	}
+
+	// Фильтры — списку на этой странице (список ЛК отменяет событие); closeAfter — закрыть окно
+	const applyHere = (closeAfter) => {
+		const url = sectionUrl()
+		url.search = params().toString()
+		if (!isHere(url)) return false
+		const handled = !root.dispatchEvent(
+			new CustomEvent('site-search:apply', {
+				bubbles: true,
+				cancelable: true,
+				detail: { url, params: new URLSearchParams(url.search) },
+			})
+		)
+		if (handled && closeAfter) {
+			close()
+			input.blur()
+		}
+		return handled
+	}
+
+	// Поле q в фильтрах — список фильтруется сразу при вводе (остальные фильтры — по «Применить»)
+	filterList.addEventListener(
+		'input',
+		(event) => {
+			if (!pageMode || event.target !== pageQuery()) return
+			updateSummaries()
+			clearTimeout(queryTimer)
+			queryTimer = setTimeout(() => {
+				root.dispatchEvent(
+					new CustomEvent('site-search:query', {
+						bubbles: true,
+						detail: { query: event.target.value.trim() },
+					})
+				)
+			}, DELAY)
+		},
+		{ signal }
+	)
 
 	// ---------- Открыть / закрыть ----------
 
@@ -480,6 +569,23 @@ export default function init(root) {
 	input.addEventListener(
 		'keydown',
 		(event) => {
+			// Поле в шапке не принимает ввод — набранное уходит в поле поиска раздела
+			if (pageMode) {
+				const field = pageQuery()
+				if (
+					field &&
+					event.key.length === 1 &&
+					!event.ctrlKey &&
+					!event.metaKey &&
+					!event.altKey
+				) {
+					event.preventDefault()
+					field.focus()
+					field.setRangeText(event.key, field.selectionStart, field.selectionEnd, 'end')
+					field.dispatchEvent(new Event('input', { bubbles: true }))
+				}
+				return
+			}
 			const options = list.querySelectorAll('[role="option"]')
 			if (event.key === 'ArrowDown' && options.length) {
 				event.preventDefault()
@@ -532,25 +638,9 @@ export default function init(root) {
 		'submit',
 		(event) => {
 			event.preventDefault()
-			const url = new URL(
-				currentSection()?.dataset.action || form.getAttribute('action') || window.location.pathname,
-				window.location.href
-			)
+			if (applyHere(true)) return
+			const url = sectionUrl()
 			url.search = params().toString()
-			if (url.origin === window.location.origin && url.pathname === window.location.pathname) {
-				const handled = !root.dispatchEvent(
-					new CustomEvent('site-search:apply', {
-						bubbles: true,
-						cancelable: true,
-						detail: { url, params: new URLSearchParams(url.search) },
-					})
-				)
-				if (handled) {
-					close()
-					input.blur()
-					return
-				}
-			}
 			release?.()
 			release = null
 			window.location.assign(url)
@@ -572,16 +662,24 @@ export default function init(root) {
 		{ signal }
 	)
 
+	updatePageMode()
 	clear.hidden = !input.value
 	updateSummaries()
 
 	return () => {
 		controller.abort()
 		clearTimeout(suggestTimer)
+		clearTimeout(queryTimer)
 		suggestRequest?.abort()
 		filtersRequest?.abort()
 		release?.()
-		root.classList.remove('is-open', 'is-filters-open', 'has-query', 'has-filters')
+		root.classList.remove(
+			'is-open',
+			'is-filters-open',
+			'has-query',
+			'has-filters',
+			'is-page-section'
+		)
 		root.closest('.header')?.classList.remove('has-search-open')
 	}
 }
