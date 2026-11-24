@@ -3,8 +3,8 @@
 @use "@/assets/styles/base/vars" as *;
 
 // Конкурс со шкалами шагов. С 1024 — белая карточка (поля 20, скругление 20), внутри заголовок,
-// «аквариум» со шагами и факт по бренду. До 1024 — без карточки: заголовок и факт на белом,
-// аквариум на всю ширину. Цвета шага — переменные --step-* (нечётный шаг бирюзовый, чётный
+// «аквариум» со шагами и факт по бренду (голубой, как аквариум). До 1024 — без карточки:
+// заголовок на белом, аквариум и факт на всю ширину. Цвета шага — переменные --step-* (нечётный шаг бирюзовый, чётный
 // оранжевый); шкалу рисует Contest.js и красит этими переменными.
 $contest: (
 	text: #1f2b36,
@@ -12,10 +12,11 @@ $contest: (
 	tick-minor: #c5ced8,
 	cell-border: #cbd9e6,
 	legend-border: #d3deea,
-	leader: #b8c2cc,
 	divider: #bfe0ec,
 	aquarium-top: #f1fafd,
 	aquarium-bottom: #d3edf7,
+	facts: #e4f4fa,
+	facts-leader: #a7c3d0,
 	wave-back: rgb(255 255 255 / 55%),
 	wave-front: rgb(185 226 240 / 70%),
 	gold: #e9a600,
@@ -826,11 +827,11 @@ $contest: (
 		gap: 12px;
 		margin: 0;
 		padding: 16px 15px;
-		background: palette("white");
+		// Голубой, как аквариум над ним (середина его градиента)
+		background: c(facts);
 
 		@include up(desktop) {
 			padding: 20px 24px;
-			background: palette("bg-info");
 			border-radius: 20px;
 		}
 	}
@@ -847,7 +848,7 @@ $contest: (
 			min-width: 12px;
 			height: 14px;
 			content: "";
-			border-bottom: 1px dashed c(leader);
+			border-bottom: 1px dashed c(facts-leader);
 		}
 	}
 
