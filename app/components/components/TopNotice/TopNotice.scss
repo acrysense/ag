@@ -9,7 +9,6 @@
 // значок 22 (13), текст 14/20, «Подробнее →» Bold отдельной строкой через 4, крестик сверху справа.
 @layer components {
 	.top-notice {
-		--h: 0px;
 		--notice-accent: #{palette("main-blue")};
 		position: relative;
 		z-index: 1000;
@@ -17,10 +16,12 @@
 		width: 100%;
 		color: palette("black-txt");
 		background: palette("notice-info-bg");
-		max-height: var(--h);
 		opacity: 1;
 		transition: max-height $transition-default, opacity $transition-default;
 
+		// Видна с первой отрисовки, без раскрытия из нуля — страница не съезжает, когда загрузится
+		// скрипт. Закрыли — скрипт задаёт --h (высота) и сворачивает до 0
+		&.is-closing { max-height: var(--h); }
 		&.is-hidden { max-height: 0 !important; opacity: 0; pointer-events: none; }
 	}
 
