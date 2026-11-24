@@ -313,6 +313,16 @@
 				{{#> state label="Пусто" bg="page"}}{{#> page}}{{> sections/package/Package/Package package=(obj empty=true)}}{{/page}}{{/state}}
 			{{/story}}
 
+			{{#> story id="contest" group="Кабинет" title="Конкурс со шкалами" backend='app/components/sections/contest/Contest/ — шаги: data-plan и data-fact; шкалу и итог строит Contest.js'}}
+				{{#> state label="В процессе" bg="page"}}{{#> page}}{{> sections/contest/Contest/Contest contest=data.contestProgress}}{{/page}}{{/state}}
+				{{#> state label="Шаг 1 выполнен" bg="page"}}{{#> page}}{{> sections/contest/Contest/Contest contest=data.contestStepDone}}{{/page}}{{/state}}
+				{{#> state label="Старт (продаж нет)" bg="page"}}{{#> page}}{{> sections/contest/Contest/Contest contest=data.contestStart}}{{/page}}{{/state}}
+				{{#> state label="Обе цели достигнуты" bg="page"}}{{#> page}}{{> sections/contest/Contest/Contest contest=data.contestDone}}{{/page}}{{/state}}
+				{{#> state label="Нет данных (ответ 1С пустой или ошибка)" bg="page"}}{{#> page}}{{> sections/contest/Contest/Contest contest=data.contestEmpty}}{{/page}}{{/state}}
+				{{#> state label="Длинный текст, 3 шага, крупный план" bg="page"}}{{#> page}}{{> sections/contest/Contest/Contest contest=data.contestLong}}{{/page}}{{/state}}
+				{{#> state label="Загрузка" note="не применимо: данные приходят вместе со страницей"}}{{/state}}
+			{{/story}}
+
 			{{#> story id="profile-edit" group="Кабинет" title="Редактирование профиля" backend='app/components/sections/profile/ProfileEdit/'}}
 				{{#> state label="Обычное" bg="page"}}{{#> page}}{{> sections/profile/ProfileEdit/ProfileEdit}}{{/page}}{{/state}}
 			{{/story}}

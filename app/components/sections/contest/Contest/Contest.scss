@@ -1,0 +1,901 @@
+@use "sass:map";
+@use "@/assets/styles/base/mixins" as *;
+@use "@/assets/styles/base/vars" as *;
+
+// Конкурс со шкалами шагов. С 1024 — белая карточка (поля 20, скругление 20), внутри заголовок,
+// «аквариум» со шагами и факт по бренду. До 1024 — без карточки: заголовок и факт на белом,
+// аквариум на всю ширину. Цвета шага — переменные --step-* (нечётный шаг бирюзовый, чётный
+// оранжевый); шкалу рисует Contest.js и красит этими переменными.
+$contest: (
+	text: #1f2b36,
+	tick: #9aa6b2,
+	tick-minor: #c5ced8,
+	cell-border: #cbd9e6,
+	legend-border: #d3deea,
+	leader: #b8c2cc,
+	divider: #bfe0ec,
+	aquarium-top: #f1fafd,
+	aquarium-bottom: #d3edf7,
+	wave-back: rgb(255 255 255 / 55%),
+	wave-front: rgb(185 226 240 / 70%),
+	gold: #e9a600,
+	gold-light: #ffe070,
+	gold-glow: #ffed99,
+	gold-sparkle: #f2b705,
+	gold-chip: #fff4cc,
+	gold-text: #8a6200,
+);
+
+@function c($name) {
+	@return map.get($contest, $name);
+}
+
+@layer components {
+	.contest {
+		--contest-text: #{c(text)};
+	}
+
+	.contest__card {
+		display: flex;
+		flex-direction: column;
+
+		@include up(desktop) {
+			gap: 30px;
+			padding: 20px;
+			background: palette("white");
+			border-radius: 20px;
+			@include content-block-frame;
+		}
+	}
+
+	// Заголовок и период
+	.contest__head {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+
+		@include only(mobile) {
+			padding: 20px 15px;
+			background: palette("white");
+		}
+
+		@include up(desktop) {
+			gap: 14px;
+		}
+	}
+
+	.contest__title {
+		font-family: $font-secondary;
+		font-size: 24px;
+		font-weight: 700;
+		line-height: normal;
+		color: palette("black-h");
+		overflow-wrap: anywhere;
+
+		@include up(desktop) {
+			font-size: 32px;
+		}
+	}
+
+	.contest__period {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px 14px;
+		align-items: center;
+		font-size: 13px;
+		color: palette("dark-grey-txt");
+
+		@include only(mobile) {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+
+		@include up(desktop) {
+			font-size: 14px;
+		}
+	}
+
+	.contest__dates {
+		display: flex;
+		gap: 20px;
+		align-items: center;
+		font-size: 14px;
+		line-height: 20px;
+		color: palette("black-txt");
+	}
+
+	.contest__date {
+		display: inline-flex;
+		gap: 5px;
+		align-items: center;
+		white-space: nowrap;
+	}
+
+	.contest__date-icon {
+		flex: none;
+		color: palette("icon-grey");
+	}
+
+	.contest__dash {
+		width: 15px;
+		height: 1px;
+		background: palette("icon-grey");
+	}
+
+	.contest__empty {
+		font-size: 14px;
+		line-height: 20px;
+		color: palette("black-txt");
+
+		@include only(mobile) {
+			padding: 0 15px 20px;
+			margin-top: -10px;
+			background: palette("white");
+		}
+	}
+
+	// Аквариум: градиент, волны снизу, пузырьки по краям
+	.contest__aquarium {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 22px;
+		padding: 20px 15px 40px;
+		overflow: hidden;
+		background: linear-gradient(c(aquarium-top), c(aquarium-bottom));
+		isolation: isolate;
+
+		@include up(desktop) {
+			gap: 32px;
+			padding: 30px 35px 56px;
+			border-radius: 20px;
+		}
+	}
+
+	.contest__waves {
+		position: absolute;
+		inset: auto 0 0;
+		z-index: -1;
+		height: 30px;
+		pointer-events: none;
+		background:
+			url("@/assets/images/contest/wave-front.svg") 0 100% / 520px 16px repeat-x,
+			url("@/assets/images/contest/wave-back.svg") 0 100% / 520px 25px repeat-x;
+		animation: contest-waves 18s linear infinite;
+
+		@include up(desktop) {
+			height: 48px;
+			background-size:
+				520px 26px,
+				520px 40px;
+		}
+	}
+
+	@keyframes contest-waves {
+		to {
+			background-position:
+				-520px 100%,
+				520px 100%;
+		}
+	}
+
+	.contest__bubbles {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+
+		i {
+			position: absolute;
+			width: var(--size, 10px);
+			height: var(--size, 10px);
+			background: rgb(255 255 255 / 45%);
+			border: 1.5px solid rgb(255 255 255 / 90%);
+			border-radius: 50%;
+			animation: contest-bubble var(--time, 9s) ease-in infinite var(--delay, 0s);
+
+			&:nth-child(1) {
+				--size: 14px;
+				--time: 9s;
+				--delay: -2s;
+				top: 130px;
+				left: 8px;
+			}
+			&:nth-child(2) {
+				--size: 7px;
+				--time: 7s;
+				--delay: -5s;
+				top: 160px;
+				left: 18px;
+			}
+			&:nth-child(3) {
+				--size: 12px;
+				--time: 10s;
+				--delay: -1s;
+				top: 118px;
+				right: 22px;
+			}
+			&:nth-child(4) {
+				--size: 6px;
+				--time: 8s;
+				--delay: -6s;
+				top: 146px;
+				right: 19px;
+			}
+			&:nth-child(5) {
+				--size: 18px;
+				--time: 11s;
+				--delay: -3s;
+				top: 72%;
+				right: 20px;
+			}
+			&:nth-child(6) {
+				--size: 10px;
+				--time: 9s;
+				--delay: -7s;
+				top: 70%;
+				left: 10px;
+			}
+			&:nth-child(7) {
+				--size: 6px;
+				--time: 7.5s;
+				--delay: -4s;
+				top: 76%;
+				left: 22px;
+			}
+
+			@include only(mobile) {
+				&:nth-child(1) {
+					--size: 8px;
+					top: 150px;
+					left: 4px;
+				}
+				&:nth-child(2),
+				&:nth-child(4),
+				&:nth-child(7) {
+					display: none;
+				}
+				&:nth-child(3) {
+					--size: 7px;
+					top: 120px;
+					right: 7px;
+				}
+				&:nth-child(5) {
+					--size: 10px;
+					top: 83%;
+					right: 10px;
+				}
+				&:nth-child(6) {
+					--size: 6px;
+					top: 60%;
+					left: 6px;
+				}
+			}
+		}
+	}
+
+	// Пузырёк медленно всплывает на 60 и исчезает, потом появляется на месте
+	@keyframes contest-bubble {
+		0% {
+			opacity: 0;
+			transform: translateY(12px) scale(0.8);
+		}
+		15% {
+			opacity: 1;
+		}
+		70% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			transform: translateY(-60px) scale(1.05);
+		}
+	}
+
+	// Шаг
+	.contest-step {
+		--step-main: #12b5cb;
+		--step-dark: #0a8297;
+		--step-soft: #d7f3f8;
+		--step-fill-top: #6be0ee;
+		--step-fill-bottom: #0faac2;
+		--step-fish-top: #4fd6e6;
+		--step-fish-bottom: #0a9db5;
+
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		min-width: 0;
+
+		&:nth-of-type(even) {
+			--step-main: #ff9a2e;
+			--step-dark: #c8650a;
+			--step-soft: #ffebd3;
+			--step-fill-top: #ffc774;
+			--step-fill-bottom: #ff861a;
+			--step-fish-top: #ffc061;
+			--step-fish-bottom: #f07a12;
+		}
+
+		& + & {
+			padding-top: 22px;
+			border-top: 1px solid c(divider);
+		}
+
+		@include up(desktop) {
+			gap: 14px;
+
+			& + & {
+				padding-top: 32px;
+			}
+		}
+	}
+
+	.contest-step__title {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 6px 10px;
+		align-items: center;
+	}
+
+	.contest-step__badge {
+		flex: none;
+		padding: 3px 10px;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--step-dark);
+		background: var(--step-soft);
+		border-radius: 20px;
+
+		@include up(desktop) {
+			padding: 4px 12px;
+			font-size: 14px;
+		}
+	}
+
+	.contest-step__name {
+		min-width: 0;
+		font-family: $font-secondary;
+		font-size: 20px;
+		font-weight: 700;
+		color: palette("black-txt");
+		overflow-wrap: anywhere;
+
+		@include up(desktop) {
+			font-size: 24px;
+		}
+	}
+
+	.contest-step__text {
+		font-size: 13px;
+		line-height: 18px;
+		color: var(--contest-text);
+		overflow-wrap: anywhere;
+
+		@include up(desktop) {
+			font-size: 14px;
+			line-height: 20px;
+		}
+	}
+
+	// Шкала: высота задаёт скрипт по ширине (телефон 100, с 1024 — 132)
+	.contest-step__scale {
+		position: relative;
+		min-height: 100px;
+		touch-action: manipulation;
+		user-select: none;
+		-webkit-tap-highlight-color: transparent;
+
+		@include up(desktop) {
+			min-height: 132px;
+		}
+
+		svg {
+			display: block;
+			overflow: visible;
+		}
+	}
+
+	// Итог шага: «Выполнено …» и «Осталось …» слева, цена деления справа (до 1024 — ниже)
+	.contest-step__summary {
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+		min-height: 28px;
+
+		@include up(desktop) {
+			flex-direction: row;
+			flex-wrap: wrap;
+			gap: 10px 14px;
+			align-items: center;
+			justify-content: space-between;
+		}
+
+		&:empty {
+			display: none;
+		}
+	}
+
+	.contest-step__status {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px 10px;
+		align-items: center;
+
+		@include up(desktop) {
+			gap: 8px 12px;
+		}
+	}
+
+	.contest-step__chip {
+		display: inline-flex;
+		gap: 6px;
+		align-items: center;
+		padding: 5px 12px;
+		font-size: 13px;
+		font-weight: 600;
+		color: var(--step-dark);
+		white-space: nowrap;
+		background: palette("white");
+		border: 1.5px solid var(--step-main);
+		border-radius: 20px;
+
+		@include up(desktop) {
+			padding: 6px 14px;
+			font-size: 14px;
+		}
+
+		svg {
+			flex: none;
+		}
+	}
+
+	.contest-step__chip--reached {
+		color: c(gold-text);
+		background: c(gold-chip);
+		border-color: c(gold);
+	}
+
+	.contest-step__rest,
+	.contest-step__legend {
+		font-size: 13px;
+		color: palette("dark-grey-txt");
+		white-space: nowrap;
+	}
+
+	.contest-step__rest {
+		@include up(desktop) {
+			font-size: 14px;
+		}
+	}
+
+	.contest-step__legend {
+		display: inline-flex;
+		gap: 6px;
+		align-items: center;
+		font-size: 12px;
+
+		@include up(desktop) {
+			font-size: 13px;
+		}
+
+		&::before {
+			width: 14px;
+			height: 10px;
+			content: "";
+			background: palette("white");
+			border: 1px solid c(legend-border);
+			border-radius: 4px;
+
+			@include up(desktop) {
+				width: 16px;
+				height: 12px;
+			}
+		}
+	}
+
+	// Шкала (SVG из Contest.js)
+	.contest-scale__cell {
+		fill: palette("white");
+		stroke: c(cell-border);
+		stroke-width: 1;
+	}
+
+	.contest-scale__stop-top {
+		stop-color: var(--step-fill-top);
+	}
+
+	.contest-scale__stop-bottom {
+		stop-color: var(--step-fill-bottom);
+	}
+
+	.contest-scale__shine {
+		fill: none;
+		stroke: rgb(255 255 255 / 55%);
+		stroke-linecap: round;
+	}
+
+	// Блик медленно переливается: светлая полоса проходит по заливке
+	.contest-scale__glint {
+		animation: contest-glint 5s ease-in-out infinite;
+	}
+
+	@keyframes contest-glint {
+		0% {
+			transform: translateX(-160px);
+			opacity: 0;
+		}
+		20% {
+			opacity: 1;
+		}
+		60% {
+			opacity: 1;
+		}
+		80%,
+		100% {
+			transform: translateX(var(--glint-to, 1000px));
+			opacity: 0;
+		}
+	}
+
+	.contest-scale__tick {
+		fill: c(tick);
+	}
+
+	.contest-scale__tick--minor {
+		fill: c(tick-minor);
+	}
+
+	.contest-scale__label {
+		font-family: $font-base;
+		font-size: 11px;
+		fill: palette("dark-grey-txt");
+		text-anchor: middle;
+
+		@include up(desktop) {
+			font-size: 14px;
+		}
+	}
+
+	// Рыбка: покачивание, хвост, пузырьки за хвостом
+	.contest-fish {
+		transition: opacity 0.4s ease;
+	}
+
+	.contest-fish__bob {
+		animation: contest-bob 2.6s ease-in-out infinite;
+	}
+
+	@keyframes contest-bob {
+		0%,
+		100% {
+			transform: translateY(0) rotate(0deg);
+		}
+		50% {
+			transform: translateY(-2.5px) rotate(-2deg);
+		}
+	}
+
+	.contest-fish__tail {
+		transform-box: fill-box;
+		transform-origin: 100% 50%;
+		animation: contest-tail 0.9s ease-in-out infinite alternate;
+	}
+
+	.contest-fish.is-swimming .contest-fish__tail {
+		animation-duration: 0.25s;
+	}
+
+	@keyframes contest-tail {
+		from {
+			transform: scaleY(1) rotate(-5deg);
+		}
+		to {
+			transform: scaleY(0.82) rotate(6deg);
+		}
+	}
+
+	.contest-fish__body-top {
+		stop-color: var(--step-fish-top);
+	}
+
+	.contest-fish__body-bottom {
+		stop-color: var(--step-fish-bottom);
+	}
+
+	.contest-fish__fin {
+		fill: var(--step-fish-bottom);
+	}
+
+	.contest-fish__trail {
+		fill: rgb(255 255 255 / 55%);
+		stroke: var(--step-main);
+		stroke-opacity: 0.7;
+		transform-box: fill-box;
+		transform-origin: 50% 50%;
+		animation: contest-trail 2.4s ease-out infinite;
+
+		&:nth-of-type(2) {
+			animation-delay: -0.8s;
+		}
+		&:nth-of-type(3) {
+			animation-delay: -1.6s;
+		}
+	}
+
+	@keyframes contest-trail {
+		0% {
+			opacity: 0;
+			transform: translate(4px, 6px) scale(0.6);
+		}
+		20% {
+			opacity: 1;
+		}
+		100% {
+			opacity: 0;
+			transform: translate(-6px, -14px) scale(1.1);
+		}
+	}
+
+	// Облачко с фактом над рыбкой
+	.contest-scale__cloud {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		pointer-events: none;
+		transform: translate(calc(var(--x, 0px) - 50%), calc(var(--y, 0px) - 100%));
+		transition: opacity 0.3s ease;
+
+		&::after {
+			width: 10px;
+			height: 6px;
+			margin-top: -1px;
+			content: "";
+			background: var(--step-dark);
+			clip-path: polygon(0 0, 100% 0, 50% 100%);
+		}
+
+		&.is-hidden {
+			opacity: 0;
+		}
+	}
+
+	.contest-scale__pill {
+		padding: 2px 8px;
+		font-size: 12px;
+		font-weight: 600;
+		font-variant-numeric: tabular-nums;
+		color: palette("white");
+		white-space: nowrap;
+		background: var(--step-dark);
+		border-radius: 12px;
+
+		@include up(desktop) {
+			padding: 3px 10px;
+			font-size: 13px;
+		}
+	}
+
+	// Кнопка поверх рыбки: «поплавать» (с клавиатуры тоже)
+	.contest-scale__fish-btn {
+		position: absolute;
+		top: 0;
+		left: 0;
+		z-index: 2;
+		width: var(--w, 64px);
+		height: var(--h, 46px);
+		padding: 0;
+		cursor: pointer;
+		background: none;
+		border: 0;
+		border-radius: 50%;
+		transform: translate(calc(var(--x, 0px) - 50%), calc(var(--y, 0px) - 50%));
+
+		&:focus-visible {
+			outline: 2px solid palette("form-focus");
+			outline-offset: 2px;
+		}
+
+		&[hidden] {
+			display: none;
+		}
+	}
+
+	// Корм: крошки падают к волне
+	.contest-scale__food {
+		fill: #c98a4b;
+		stroke: #8a5a2b;
+		stroke-width: 0.6;
+		transition: opacity 0.25s ease;
+	}
+
+	// Цель: пунктирный круг, пока шкала не заполнена; достигнута — свечение и блёстки
+	.contest-goal__ring {
+		fill: rgb(255 255 255 / 70%);
+		stroke: c(gold);
+		stroke-width: 2;
+		transition: opacity 0.5s ease;
+	}
+
+	.contest-goal__glow {
+		opacity: 0;
+		transition: opacity 0.6s ease;
+	}
+
+	.contest-goal__glow-stop {
+		stop-color: c(gold-glow);
+	}
+
+	.contest-goal__sparkle {
+		fill: c(gold-sparkle);
+		opacity: 0;
+		transform-box: fill-box;
+		transform-origin: 50% 50%;
+	}
+
+	.contest-goal__fish {
+		transform-box: fill-box;
+		transform-origin: 50% 50%;
+		transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+	}
+
+	.contest-goal__body-top {
+		stop-color: c(gold-light);
+	}
+
+	.contest-goal__body-bottom {
+		stop-color: c(gold);
+	}
+
+	.contest-goal__fin {
+		fill: c(gold);
+	}
+
+	.contest-step.is-reached {
+		.contest-goal__ring {
+			opacity: 0;
+		}
+
+		.contest-goal__glow {
+			opacity: 1;
+			animation: contest-glow 3.2s ease-in-out infinite;
+		}
+
+		.contest-goal__fish {
+			transform: scale(1.2);
+		}
+
+		.contest-goal__bob {
+			animation: contest-bob 2.6s ease-in-out infinite;
+		}
+
+		.contest-goal__sparkle {
+			animation: contest-sparkle 2.4s ease-in-out infinite;
+
+			&:nth-of-type(2) {
+				animation-delay: -0.6s;
+			}
+			&:nth-of-type(3) {
+				animation-delay: -1.2s;
+			}
+			&:nth-of-type(4) {
+				animation-delay: -1.8s;
+			}
+		}
+
+		.contest-fish {
+			opacity: 0;
+		}
+	}
+
+	@keyframes contest-glow {
+		0%,
+		100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.08);
+		}
+	}
+
+	@keyframes contest-sparkle {
+		0%,
+		100% {
+			opacity: 0.25;
+			transform: scale(0.6) rotate(0deg);
+		}
+		50% {
+			opacity: 1;
+			transform: scale(1.1) rotate(45deg);
+		}
+	}
+
+	.contest-goal__glow {
+		transform-box: fill-box;
+		transform-origin: 50% 50%;
+	}
+
+	// Факт по бренду
+	.contest__facts {
+		display: flex;
+		flex-direction: column;
+		gap: 12px;
+		margin: 0;
+		padding: 16px 15px;
+		background: palette("white");
+
+		@include up(desktop) {
+			padding: 20px 24px;
+			background: palette("bg-info");
+			border-radius: 20px;
+		}
+	}
+
+	.contest__fact {
+		display: flex;
+		gap: 8px;
+		align-items: flex-end;
+		min-width: 0;
+
+		&::after {
+			flex: 1 1 0;
+			order: 1;
+			min-width: 12px;
+			height: 14px;
+			content: "";
+			border-bottom: 1px dashed c(leader);
+		}
+	}
+
+	.contest__fact-label {
+		flex: 0 1 auto;
+		min-width: 0;
+		font-size: 13px;
+		color: palette("dark-grey-txt");
+
+		@include up(desktop) {
+			font-size: 14px;
+		}
+	}
+
+	.contest__fact-value {
+		flex: none;
+		order: 2;
+		margin: 0;
+		font-size: 14px;
+		font-weight: 500;
+		color: palette("black-txt");
+		white-space: nowrap;
+
+		@include up(desktop) {
+			font-size: 16px;
+		}
+	}
+
+	// Без движения — всё сразу на местах
+	@media (prefers-reduced-motion: reduce) {
+		.contest__waves,
+		.contest__bubbles i,
+		.contest-scale__glint,
+		.contest-fish__bob,
+		.contest-fish__tail,
+		.contest-fish__trail,
+		.contest-step.is-reached .contest-goal__glow,
+		.contest-step.is-reached .contest-goal__bob,
+		.contest-step.is-reached .contest-goal__sparkle {
+			animation: none;
+		}
+
+		.contest-scale__glint {
+			display: none;
+		}
+
+		.contest-step.is-reached .contest-goal__sparkle {
+			opacity: 1;
+		}
+	}
+}
