@@ -530,6 +530,56 @@
         width: 20px;
         height: 20px;
     }
+    // Пока задачи грузятся (data-tasks-src), пустой список с сервера — та же заготовка, что
+    // скелетон скрипта (4 строки по 43, на телефоне по 69): место занято с первой отрисовки, без
+    // скачка, когда скрипт подменяет его своим скелетоном. Разметку бэку менять не нужно
+    .tasks-panel[data-tasks-src] > .tasks-list:empty {
+        // Строка: высота, верх полоски задачи и полоски срока (12 в высоту)
+        --row: 43px;
+        --task-y: 15px;
+        --date-y: 15px;
+        --date-x: 100%;
+        --skeleton: #{palette("skeleton")};
+
+        height: calc(var(--row) * 4);
+        margin-top: 0;
+        background-image:
+            linear-gradient(to bottom, transparent var(--task-y), var(--skeleton) var(--task-y) calc(var(--task-y) + 12px), transparent calc(var(--task-y) + 12px)),
+            linear-gradient(to bottom, transparent var(--date-y), var(--skeleton) var(--date-y) calc(var(--date-y) + 12px), transparent calc(var(--date-y) + 12px)),
+            linear-gradient(to bottom, transparent calc(var(--row) - 1px), #{$color-border} calc(var(--row) - 1px));
+        background-repeat: repeat-y;
+        background-position: 36px 0, var(--date-x) 0, 0 0;
+        background-size: 52% var(--row), 90px var(--row), 100% var(--row);
+
+        // Кружки статуса — один и его копии тенью
+        &::before {
+            top: 11px;
+            left: 0;
+            right: auto;
+            width: 20px;
+            height: 20px;
+            background: var(--skeleton);
+            border-radius: 50%;
+            box-shadow:
+                0 var(--row) 0 var(--skeleton),
+                0 calc(var(--row) * 2) 0 var(--skeleton),
+                0 calc(var(--row) * 3) 0 var(--skeleton);
+        }
+
+        // Телефон: срок под задачей
+        @include only(mobile) {
+            --row: 69px;
+            --task-y: 18px;
+            --date-y: 42px;
+            --date-x: 36px;
+
+            background-size: 56% var(--row), 90px var(--row), 100% var(--row);
+
+            &::before {
+                top: 14px;
+            }
+        }
+    }
     .tasks-list {
 
         @include only(desktop) {
