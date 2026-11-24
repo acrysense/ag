@@ -1,0 +1,60 @@
+{{!--
+	Конкурс со шкалами шагов («О! МЕГАтур»).
+	contest: title, periodLabel, start, finish, empty, emptyText,
+	steps [{ num, name, text, plan, fact }], facts [{ label, value }].
+	Шкалу, «Выполнено … из …», «Осталось …» и цену деления строит скрипт из data-plan и data-fact.
+--}}
+<section class="contest" data-module="Contest" data-path="sections/contest" aria-labelledby="contest-title">
+    <div class="contest__card">
+        <header class="contest__head">
+            <h1 class="contest__title" id="contest-title">{{contest.title}}</h1>
+            {{#if contest.start}}
+                <p class="contest__period">
+                    <span class="contest__period-label">{{default contest.periodLabel "Период проведения конкурса:"}}</span>
+                    <span class="contest__dates">
+                        <span class="contest__date">
+                            <svg class="contest__date-icon" aria-hidden="true" focusable="false" width="15" height="15"><use href="{{@root.sprite}}#icon-calendar"></use></svg>
+                            {{contest.start}}
+                        </span>
+                        <span class="contest__dash" aria-hidden="true"></span>
+                        <span class="contest__date">
+                            <svg class="contest__date-icon" aria-hidden="true" focusable="false" width="15" height="15"><use href="{{@root.sprite}}#icon-calendar"></use></svg>
+                            {{contest.finish}}
+                        </span>
+                    </span>
+                </p>
+            {{/if}}
+        </header>
+
+        {{#if contest.empty}}
+            <p class="contest__empty">{{default contest.emptyText "Нет данных для отображения. Попробуйте зайти еще раз через некоторое время."}}</p>
+        {{else}}
+            <div class="contest__aquarium">
+                {{#each contest.steps}}
+                    <section class="contest-step" data-contest-step data-plan="{{plan}}" data-fact="{{fact}}" aria-labelledby="contest-step-{{num}}">
+                        <h2 class="contest-step__title" id="contest-step-{{num}}">
+                            <span class="contest-step__badge">Шаг {{num}}</span>
+                            <span class="contest-step__name">{{name}}</span>
+                        </h2>
+                        {{#if text}}<p class="contest-step__text">{{text}}</p>{{/if}}
+                        <div class="contest-step__scale" data-contest-scale></div>
+                        <div class="contest-step__summary" data-contest-summary></div>
+                    </section>
+                {{/each}}
+                <span class="contest__bubbles" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                <span class="contest__waves" aria-hidden="true"></span>
+            </div>
+
+            {{#if contest.facts.length}}
+                <dl class="contest__facts">
+                    {{#each contest.facts}}
+                        <div class="contest__fact">
+                            <dt class="contest__fact-label">{{label}}</dt>
+                            <dd class="contest__fact-value">{{value}}</dd>
+                        </div>
+                    {{/each}}
+                </dl>
+            {{/if}}
+        {{/if}}
+    </div>
+</section>
