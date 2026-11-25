@@ -552,7 +552,10 @@
         .data-table.is-cards-view {
             display: block;
             width: 100%;
-            min-width: 0;
+            // !important: in auto-width mode the script writes the table-view
+            // min-width (sum of column widths) and per-column widths inline; cards
+            // must ignore them, or the list caption's underline stops at 180px
+            min-width: 0 !important;
             table-layout: auto;
 
             // keep the first column's heading (e.g. «Сотрудник» / «Аптека») as a
@@ -566,7 +569,7 @@
             }
             .data-table__th:first-child {
                 display: block;
-                width: auto;
+                width: auto !important; // inline table-view width, see above
                 @include prop-vw(padding-block, 20.25, sm);
                 @include prop-vw(padding-inline, 10, sm);
                 @include prop-vw(font-size, 14, sm);
