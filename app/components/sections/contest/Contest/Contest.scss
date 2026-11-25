@@ -123,6 +123,7 @@ $contest: (
 		background: palette("icon-grey");
 	}
 
+	// Старая разметка «Нет данных» (сейчас вместо неё заглушка NO DATA)
 	.contest__empty {
 		font-size: 14px;
 		line-height: 20px;
