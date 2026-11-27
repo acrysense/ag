@@ -170,8 +170,8 @@
 		<meta name="twitter:card" content="summary_large_image" />
 		<meta name="twitter:title" content="AG" />
 		<meta name="twitter:description" content="Стартовый проект на Vite: быстрый и гибкий старт." />
-		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-Ct7WFWds.js"></script>
-		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-CyBuN1Kb.css" />
+		<script type="module" crossorigin src="/bitrix/templates/auth/assets/js/app-B9_fWqty.js"></script>
+		<link rel="stylesheet" crossorigin href="/bitrix/templates/auth/assets/css/app-DkEka0-Q.css" />
 	</head>
 	<body class="bg-light">
 		<div class="app-loader" data-app-loader aria-hidden="true"><span class="app-loader__spinner"></span></div>
@@ -955,12 +955,20 @@
 						<p class="main-menu__role">Заведующая аптекой</p>
 						<a class="main-menu__profile-link" href="/index.html">Моя страница</a>
 					</div>
-					<button class="main-menu__logout" type="button" data-modal-open="main-menu-logout">
-						<span class="visually-hidden">Выйти из аккаунта</span>
-						<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
-							<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-exit"></use>
-						</svg>
-					</button>
+					<div class="main-menu__profile-actions">
+						<a class="main-menu__settings" href="/edit.html">
+							<span class="visually-hidden">Настройки</span>
+							<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-settings"></use>
+							</svg>
+						</a>
+						<button class="main-menu__logout" type="button" data-modal-open="main-menu-logout">
+							<span class="visually-hidden">Выйти из аккаунта</span>
+							<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-exit"></use>
+							</svg>
+						</button>
+					</div>
 				</div>
 
 				<p class="main-menu__label">CRM</p>
@@ -1122,6 +1130,15 @@
 							<svg class="icon main-menu__row-arrow" aria-hidden="true" focusable="false">
 								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-chevron-right"></use>
 							</svg>
+						</a>
+					</li>
+					<li>
+						<a class="main-menu__row" href="?api_nocache&#x3D;1">
+							<svg class="icon main-menu__icon" aria-hidden="true" focusable="false">
+								<use href="/bitrix/templates/auth/assets/icons/sprite.svg#icon-site-refresh"></use>
+							</svg>
+
+							<span class="main-menu__row-text">Сбросить кеш</span>
 						</a>
 					</li>
 				</ul>
