@@ -132,7 +132,8 @@
 			"name": "Владислава Митрофановна",
 			"role": "Заведующая аптекой",
 			"url": "/index.html",
-			"urlText": "Моя страница"
+			"urlText": "Моя страница",
+			"settingsUrl": "/edit.html"
 		},
 		"logout": {
 			"url": "/login.html",
@@ -141,12 +142,7 @@
 		},
 		"groups": [
 			{
-				"key": "crm",
 				"label": "CRM",
-				"title": "CRM",
-				"icon": "case",
-				"meta": "8 разделов",
-				"expanded": true,
 				"items": [
 					{
 						"icon": "home",
@@ -191,12 +187,7 @@
 				]
 			},
 			{
-				"key": "cabinet",
 				"label": "Личный кабинет",
-				"title": "Личный кабинет",
-				"icon": "profile",
-				"meta": "5 разделов",
-				"expanded": true,
 				"items": [
 					{
 						"icon": "edu",
@@ -222,6 +213,12 @@
 						"icon": "apple",
 						"text": "Конкурсы",
 						"url": "/contests.html"
+					},
+					{
+						"icon": "refresh",
+						"text": "Сбросить кеш",
+						"url": "?api_nocache=1",
+						"action": true
 					}
 				]
 			}
@@ -235,24 +232,51 @@
 					"url": "#"
 				},
 				{
-					"icon": "news",
-					"text": "Новости",
-					"url": "#"
+					"icon": "building",
+					"text": "О холдинге",
+					"children": [
+						{
+							"text": "Структура",
+							"url": "#"
+						},
+						{
+							"text": "Справочник",
+							"url": "#"
+						}
+					]
 				},
 				{
-					"icon": "directory",
-					"text": "Справочник сотрудников",
+					"icon": "news",
+					"text": "Новости",
+					"children": [
+						{
+							"text": "Новости холдинга",
+							"url": "#"
+						},
+						{
+							"text": "HR-дайджест",
+							"url": "#"
+						}
+					]
+				},
+				{
+					"icon": "case",
+					"text": "Карьера",
 					"url": "#"
 				},
 				{
 					"icon": "wiki",
 					"text": "База знаний",
-					"url": "#"
-				},
-				{
-					"icon": "case",
-					"text": "Вакансии",
-					"url": "#"
+					"children": [
+						{
+							"text": "Учебный портал",
+							"url": "#"
+						},
+						{
+							"text": "Нормативные документы",
+							"url": "#"
+						}
+					]
 				},
 				{
 					"icon": "gallery",

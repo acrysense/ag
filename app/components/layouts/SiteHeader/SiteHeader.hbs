@@ -61,6 +61,9 @@
                     {{!-- Меню под аватаром. Пункт: { label, url, icon }
                     или { divider: true }; modal — id окна, которое пункт открывает (выход) --}}
                     <div class="header__user-menu" data-user-menu>
+                        {{!-- До 1024 аватар — сразу ссылка на «Моя страница» (меню профиля — в мобильном меню),
+                        с 1024 — кнопка с меню под аватаром --}}
+                        <a class="header__user header__user--page" href="{{props.user.url}}">{{> headerUserInner user=props.user}}<span class="visually-hidden"> — моя страница</span></a>
                         <button class="header__user" type="button" aria-expanded="false" aria-controls="{{default props.id 'header'}}-user-menu" data-user-menu-toggle>
                             {{> headerUserInner user=props.user}}
                             <span class="visually-hidden">— меню профиля</span>
