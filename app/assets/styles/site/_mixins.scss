@@ -461,6 +461,12 @@ $alias-bp: (
 		object-fit: cover;
 	}
 
+	// Не загрузилось (utils/broken-images) — прячем значок битой картинки, видны инициалы. На сайте
+	// это общее правило base (img.is-broken); в ЛК — только у аватаров, чтобы не задеть страницы ЛК
+	img.is-broken {
+		opacity: 0;
+	}
+
 	// Фото загрузилось (utils/broken-images.js) — инициалы прячем: у фото с прозрачным фоном
 	// (PNG) они бы просвечивали
 	&:has(> img.is-loaded) > :not(img) {

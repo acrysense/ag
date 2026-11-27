@@ -358,4 +358,10 @@
 	.main-menu__list.is-animating {
 		overflow: hidden;
 	}
+
+	// Только ЛК: плашка-объявление (components/TopNotice) стоит над всем (z-index 1000) — пока меню
+	// открыто, она уходит под него, как на сайте
+	body:has(.main-menu[open]) .top-notice {
+		z-index: auto;
+	}
 }
