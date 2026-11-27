@@ -92,6 +92,9 @@
 				{{#> state label="Открыто" bg="page"}}
 					{{> layouts/MainMenu/MainMenu props=(obj title=site.mainMenu.title user=site.mainMenu.user logout=site.mainMenu.logout groups=site.mainMenu.groups portal=site.mainMenu.portal join=site.mainMenu.join id="story-menu" logoutId="story-menu-logout" open=true)}}
 				{{/state}}
+				{{#> state label="Новости раскрыты" bg="page"}}
+					{{> layouts/MainMenu/MainMenu props=(obj title=site.mainMenu.title user=site.mainMenu.user logout=site.mainMenu.logout groups=site.mainMenu.groups portal=data.mainMenuPortalOpen join=site.mainMenu.join id="story-menu-sub" logoutId="story-menu-sub-logout" open=true)}}
+				{{/state}}
 			{{/story}}
 
 			{{#> story id="tab-bar" widths="360 768" group="Каркас" title="Нижняя панель" backend='app/components/layouts/TabBar/ — необязательна: без неё ЛК работает как раньше'}}
