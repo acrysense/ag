@@ -2,6 +2,7 @@ import 'virtual:svg-icons-register'
 import '@/assets/styles/main.scss'
 import { mount, unmount } from '@/core/mount'
 import { autosize } from '@/utils/autosize'
+import { watchBrokenImages } from '@/utils/broken-images'
 import { watchCheckedLabels, watchHasFallbacks } from '@/utils/has-fallback'
 import { initListFilters } from '@/utils/listFilters'
 
@@ -22,6 +23,8 @@ function init() {
 	mount(document)
 	autosize(document)
 	watchHasFallbacks()
+	// Фото аватара не загрузилось — видны инициалы (как на сайте)
+	watchBrokenImages()
 	watchCheckedLabels()
 
 	const lifecycleObserver = new MutationObserver((mutations) => {
