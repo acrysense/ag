@@ -2,6 +2,14 @@
 @use '@/assets/styles/base/vars' as *;
 
 @layer base {
+	// Панель администратора Битрикса (#bx-panel: в ядре z-index 995 !important) закрывала меню и поиск
+	// на телефоне. Пока открыто наше окно поверх страницы (utils/scroll-lock ставит body.is-locked:
+	// меню, поиск, шторки, просмотр фото, окна), панель уходит под него. !important в слое сильнее
+	// !important ядра без слоя
+	body.is-locked #bx-panel {
+		z-index: 0 !important;
+	}
+
 	// Переключатель для vw-clamp (_mixins): 0 — планшет и телефон, 1 — десктоп (от 1024, размеры
 	// без масштаба)
 	:root {
